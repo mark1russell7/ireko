@@ -10,15 +10,24 @@ import type { Direction } from "../strategy.ts";
 import type { Context, Normalized } from "./types.ts";
 
 /** This function gives the routed edges. It adds its findings to `issues`. */
-export function route(norm: Normalized, nodes: readonly PlacedNode[], ctx: Context, issues: Issue[], direction: readonly (Direction | undefined)[] = []): PlacedEdge[] {
+export function route(
+  norm: Normalized,
+  nodes: readonly PlacedNode[],
+  ctx: Context,
+  issues: Issue[],
+  hints: { readonly direction: readonly (Direction | undefined)[]; readonly flow: readonly (Direction | undefined)[]; readonly owner: readonly number[] } = { direction: [], flow: [], owner: [] },
+): PlacedEdge[] {
   const out: PlacedEdge[] = [];
   const ids = new Set<string>();
   const { router, treeEdges } = ctx.options;
   const near = router.obstacles === true ? obstaclesOf(norm, nodes) : undefined;
 
-  const add = (id: string, kind: PlacedEdge["kind"], s: number, t: number, extra?: { label?: string; data?: unknown }): void => {
-    // A tree edge goes in the direction of the strategy of its parent.
-    const dir = kind === "tree" ? direction[s] : undefined;
+  const add = (id: string, kind: PlacedEdge["kind"], s: number, t: number, extra?: { label?: string; data?: unknown; index?: number }): void => {
+    // A tree edge goes in the direction of the strategy of its parent. An extra edge between two children of a flow goes
+    // in the direction of the flow, if its target is forward of its source.
+    const owner = extra?.index === undefined ? -1 : (hints.owner[extra.index] ?? -1);
+    const flow = owner >= 0 ? hints.flow[owner] : undefined;
+    const dir = kind === "tree" ? hints.direction[s] : flow !== undefined && forward(at(nodes, s), at(nodes, t), flow) ? flow : undefined;
     const source = at(nodes, s);
     const target = at(nodes, t);
     let unique = id;
@@ -43,13 +52,28 @@ export function route(norm: Normalized, nodes: readonly PlacedNode[], ctx: Conte
       if (treeEdges === "all" || parent.mode === "linked") add(`${parent.id}->${node.id}`, "tree", node.parent, i);
     });
   }
-  for (const e of norm.edges) {
+  norm.edges.forEach((e, index) => {
     add(e.id, "extra", e.source, e.target, {
+      index,
       ...(typeof e.spec.label === "string" ? { label: e.spec.label } : {}),
       ...(e.spec.data === undefined ? {} : { data: e.spec.data }),
     });
-  }
+  });
   return out;
+}
+
+/** This function tells if the box `b` is forward of the box `a` in the direction `d`: below, above, or on a side. */
+function forward(a: Rect, b: Rect, d: Direction): boolean {
+  switch (d) {
+    case "down":
+      return b.y >= a.y + a.height;
+    case "up":
+      return b.y + b.height <= a.y;
+    case "right":
+      return b.x >= a.x + a.width;
+    case "left":
+      return b.x + b.width <= a.x;
+  }
 }
 
 /** The largest number of obstacles of one edge. The nearest boxes count. */

@@ -8,7 +8,7 @@ import { rectAt, union, unionAll, type Point, type Rect, type Size } from "../ge
 import type { Issue, NodeSpec } from "../model.ts";
 import { resolveOptions } from "../options.ts";
 import { grid } from "../strategies/grid.ts";
-import type { AnyStrategy, Arrangement, Direction, MeasuredChild, Shape } from "../strategy.ts";
+import type { AnyStrategy, Arrangement, ChildEdge, Direction, MeasuredChild, Shape } from "../strategy.ts";
 import { boxShape, joinShapes, moveShape } from "./shape.ts";
 import type { Context, Normalized, Placement } from "./types.ts";
 
@@ -28,6 +28,10 @@ export interface Measurement {
   readonly options: readonly unknown[];
   /** The direction of the tree edges of each node, from its strategy. */
   readonly direction: readonly (Direction | undefined)[];
+  /** The direction of the edges between the children of each node, from its strategy. */
+  readonly flow: readonly (Direction | undefined)[];
+  /** For each extra edge, the node with the children that it connects, or -1. */
+  readonly owner: readonly number[];
   readonly gap: readonly number[];
 }
 
@@ -43,6 +47,7 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
   const layout: string[] = [];
   const options: unknown[] = [];
   const direction: (Direction | undefined)[] = Array.from({ length: n }, () => undefined);
+  const flow: (Direction | undefined)[] = Array.from({ length: n }, () => undefined);
   const gaps: number[] = [];
   const { spacing, nodeSize } = ctx.options;
 
@@ -55,6 +60,7 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
     if (p >= 0) needsShape[i] = wantsShapes(p) || (at(needsShape, p) && at(norm.nodes, p).mode === "linked");
   }
   const shapes: (Shape | undefined)[] = Array.from({ length: n }, () => undefined);
+  const { between, owner } = edgesBetweenChildren(norm);
 
   for (let i = n - 1; i >= 0; i--) {
     const node = at(norm.nodes, i);
@@ -84,10 +90,11 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
     });
     // In the nested mode, a container without a size in its spec has no smallest size: its content sets the size.
     const self = node.mode === "linked" ? own.size : own.explicit;
-    const arranged = arrangeSafely(atKey(ctx.strategies, node.layout), node, { self, children, gap }, issues);
+    const arranged = arrangeSafely(atKey(ctx.strategies, node.layout), node, { self, children, gap, edges: at(between, i) }, issues);
     layout[i] = arranged.layout;
     options[i] = arranged.options;
     direction[i] = arranged.arrangement.direction;
+    flow[i] = arranged.arrangement.flow;
     const offsets = arranged.arrangement.offsets;
 
     if (node.mode === "linked") {
@@ -148,7 +155,7 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
     if (at(needsShape, i)) shapes[i] = boxShape(size);
   }
 
-  return { box, extent, placement, layout, options, direction, gap: gaps };
+  return { box, extent, placement, layout, options, direction, flow, owner, gap: gaps };
 }
 
 /** The size of the box of a node: from its spec, then from `measure`, then from the default node size. */
@@ -195,14 +202,14 @@ interface Arranged {
 function arrangeSafely(
   strategy: AnyStrategy,
   node: Normalized["nodes"][number],
-  input: { readonly self: Size; readonly children: readonly MeasuredChild[]; readonly gap: number },
+  input: { readonly self: Size; readonly children: readonly MeasuredChild[]; readonly gap: number; readonly edges: readonly ChildEdge[] },
   issues: Issue[],
 ): Arranged {
   const context = { node: node.id, layout: strategy.type, ignore: COMMON_OPTIONS };
   const options = resolveOptions(strategy.options, node.rawLayout, context, issues);
   let problem: string | undefined;
   try {
-    const arrangement = strategy.arrange({ id: node.id, mode: node.mode, self: input.self, children: input.children, options, gap: input.gap, depth: node.depth });
+    const arrangement = strategy.arrange({ id: node.id, mode: node.mode, self: input.self, children: input.children, options, gap: input.gap, depth: node.depth, edges: input.edges });
     problem = check(arrangement, input.children.length);
     if (problem === undefined) return { arrangement, layout: strategy.type, options };
   } catch (error) {
@@ -222,4 +229,33 @@ function check(arrangement: Arrangement, count: number): string | undefined {
   const c = arrangement.content;
   if (c !== undefined && ![c.x, c.y, c.width, c.height].every(Number.isFinite)) return "It gave a content area that is not finite.";
   return undefined;
+}
+
+/**
+ * This function gives, for each node, the extra edges between the subtrees of two of its children. An edge belongs to
+ * the lowest common ancestor of its ends. An edge with an end at that ancestor connects no two children, so it is in no list.
+ */
+function edgesBetweenChildren(norm: Normalized): { between: ChildEdge[][]; owner: number[] } {
+  const n = norm.nodes.length;
+  const out: ChildEdge[][] = Array.from({ length: n }, () => []);
+  const owner: number[] = norm.edges.map(() => -1);
+  if (norm.edges.length === 0) return { between: out, owner };
+  // The place of each node among the children of its parent.
+  const place = new Int32Array(n);
+  for (const node of norm.nodes) node.children.forEach((c, k) => (place[c] = k));
+  norm.edges.forEach((e, index) => {
+    // Each ancestor of the source, with the node below it on the path from the source (-1 for the source).
+    const below = new Map<number, number>();
+    for (let x = e.source, prev = -1; x >= 0; prev = x, x = at(norm.nodes, x).parent) below.set(x, prev);
+    for (let y = e.target, prev = -1; y >= 0; prev = y, y = at(norm.nodes, y).parent) {
+      const fromChild = below.get(y);
+      if (fromChild === undefined) continue;
+      if (fromChild >= 0 && prev >= 0) {
+        at(out, y).push({ from: at(place, fromChild), to: at(place, prev) });
+        owner[index] = y;
+      }
+      break;
+    }
+  });
+  return { between: out, owner };
 }

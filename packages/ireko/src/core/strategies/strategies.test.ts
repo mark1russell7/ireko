@@ -7,6 +7,7 @@ import { defineStrategy, type MeasuredChild } from "../strategy.ts";
 import { grid, type GridOptions } from "./grid.ts";
 import { radial, type RadialOptions } from "./radial.ts";
 import { tree, type TreeOptions } from "./tree.ts";
+import { layers, type LayersOptions } from "./layers.ts";
 
 const leaf = (id: string, width = 100, height = 50): MeasuredChild => ({ id, box: { width, height }, extent: { x: 0, y: 0, width, height }, mode: "linked" });
 const gridOf = (options: Partial<GridOptions>, mode: "nested" | "linked", children: MeasuredChild[]) =>
@@ -257,5 +258,109 @@ describe("tree", () => {
     engine.layout({ root: { id: "r", layout: "without", children: [{ id: "a" }] } });
     expect(seen).toEqual([true, false]);
     expect(depthOfA).toBeGreaterThan(48);
+  });
+});
+
+const layersOf = (options: Partial<LayersOptions>, mode: "nested" | "linked", children: MeasuredChild[], edges: { from: number; to: number }[]) =>
+  layers.arrange({ id: "p", mode, self: { width: 100, height: 50 }, children, options: { ...defaultsOf(layers.options), ...options }, gap: 10, depth: 0, edges });
+
+describe("layers", () => {
+
+  it("puts a diamond in three layers, in the direction of its edges", () => {
+    const out = layersOf({}, "nested", [leaf("a"), leaf("b"), leaf("c"), leaf("d")], [
+      { from: 0, to: 1 },
+      { from: 0, to: 2 },
+      { from: 1, to: 3 },
+      { from: 2, to: 3 },
+    ]);
+    const y = out.offsets.map((o) => o.y);
+    expect(y).toEqual([0, 70, 70, 140]);
+    expect(out.offsets[1]?.x).toBeLessThan(out.offsets[2]?.x ?? 0);
+    expect(out.flow).toBe("down");
+  });
+
+  it("orders a layer by its neighbors, so two edges do not cross", () => {
+    // The edges go 0 -> 3 and 1 -> 2. In the order of the input, they cross.
+    const out = layersOf({}, "nested", [leaf("x"), leaf("y"), leaf("u"), leaf("v")], [
+      { from: 0, to: 3 },
+      { from: 1, to: 2 },
+    ]);
+    expect(out.offsets[3]?.x).toBeLessThan(out.offsets[2]?.x ?? 0);
+  });
+
+  it("turns a cycle around, and puts each child in a layer", () => {
+    const out = layersOf({}, "nested", [leaf("a"), leaf("b"), leaf("c")], [
+      { from: 0, to: 1 },
+      { from: 1, to: 2 },
+      { from: 2, to: 0 },
+      { from: 1, to: 1 },
+      { from: 7, to: 0 },
+    ]);
+    expect(out.offsets.map((o) => o.y)).toEqual([0, 70, 140]);
+  });
+
+  it("puts the layers on each side, aligns them, and goes to the side of a linked node", () => {
+    const children = [leaf("a"), leaf("b"), leaf("c")];
+    const edges = [{ from: 0, to: 1 }, { from: 0, to: 2 }];
+    expect(layersOf({ side: "top" }, "nested", children, edges).offsets.map((o) => o.y)).toEqual([70, 0, 0]);
+    expect(layersOf({ side: "right" }, "nested", children, edges).offsets.map((o) => o.x)).toEqual([0, 120, 120]);
+    expect(layersOf({ side: "left" }, "nested", children, edges).offsets.map((o) => o.x)).toEqual([120, 0, 0]);
+    expect(layersOf({ align: "start" }, "nested", children, edges).offsets[0]).toEqual({ x: 0, y: 0 });
+    expect(layersOf({ align: "end" }, "nested", children, edges).offsets[0]).toEqual({ x: 110, y: 0 });
+    const linked = layersOf({}, "linked", children, edges);
+    expect(linked.direction).toBe("down");
+    // The first layer is centered in a block 210 wide, and the block is centered on the node: (100 - 210) / 2 + 55 = 0.
+    expect(linked.offsets[0]).toEqual({ x: 0, y: 50 + 20 });
+    expect(layersOf({ side: "top" }, "linked", children, edges).offsets[0]?.y).toBe(-20 - 50);
+    expect(layersOf({ side: "right" }, "linked", children, edges).offsets[0]?.x).toBe(100 + 20);
+    // On the left side, the first layer is the nearest to the node: from -120 to -20.
+    expect(layersOf({ side: "left" }, "linked", children, edges).offsets[0]?.x).toBe(-120);
+    expect(layersOf({}, "nested", children, []).offsets.map((o) => o.y)).toEqual([0, 0, 0]);
+  });
+
+  it("gets the edges between its children from the engine, and draws a flowchart with no defect", () => {
+    const got: { from: number; to: number }[][] = [];
+    const spy = defineStrategy<Record<string, never>>({
+      type: "spy",
+      description: "A test strategy.",
+      options: {},
+      arrange: ({ children, edges = [] }) => {
+        got.push([...edges]);
+        return { offsets: children.map((_, i) => ({ x: i * 300, y: 200 })) };
+      },
+    });
+    createEngine({ strategies: [spy] }).layout({
+      root: { id: "r", layout: "spy", children: [{ id: "a", children: [{ id: "a1" }] }, { id: "b" }, { id: "c" }] },
+      edges: [
+        { source: "a1", target: "c" },
+        { source: "b", target: "a" },
+        { source: "r", target: "b" },
+        { source: "a", target: "a1" },
+      ],
+    });
+    // a1 -> c connects the children 0 and 2, and b -> a the children 1 and 0. r -> b and a -> a1 connect no two children of r.
+    expect(got).toEqual([[{ from: 0, to: 2 }, { from: 1, to: 0 }]]);
+
+    const out = layout(
+      {
+        root: { id: "ci", layout: "layers", mode: "nested", children: ["push", "lint", "test", "pack", "deploy"].map((id) => ({ id })) },
+        edges: [
+          { source: "push", target: "lint" },
+          { source: "push", target: "test" },
+          { source: "lint", target: "pack" },
+          { source: "test", target: "pack" },
+          { source: "pack", target: "deploy" },
+          { source: "deploy", target: "push" },
+        ],
+      },
+      { router: "orthogonal" },
+    );
+    expect(out.issues).toEqual([]);
+    expect(defectsOf(out)).toEqual([]);
+    // A forward edge leaves the bottom of its source. The edge of the cycle does not get the direction.
+    const edge = (id: string) => out.edges.find((e) => `${e.source}-${e.target}` === id);
+    const push = out.nodes.find((n) => n.id === "push");
+    expect(edge("push-lint")?.points[0]?.y).toBe((push?.y ?? 0) + (push?.height ?? 0));
+    expect(edge("deploy-push")?.points.length).toBeGreaterThanOrEqual(2);
   });
 });

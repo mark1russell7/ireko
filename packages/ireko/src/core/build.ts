@@ -13,6 +13,7 @@ import type { Fit, LayoutRef, NodeSpec } from "./model.ts";
 import type { GridOptions } from "./strategies/grid.ts";
 import type { RadialOptions } from "./strategies/radial.ts";
 import type { TreeOptions } from "./strategies/tree.ts";
+import type { LayersOptions } from "./strategies/layers.ts";
 
 /** A child of a builder call: a node, or the identifier of a leaf. */
 export type Child = NodeSpec | string;
@@ -80,6 +81,8 @@ export const grid: Builder<GridOptions> = builder<GridOptions>("grid");
 export const radial: Builder<RadialOptions> = builder<RadialOptions>("radial");
 /** The builder of the strategy `tree`. */
 export const tree: Builder<TreeOptions> = builder<TreeOptions>("tree");
+/** The builder of the strategy `layers`. */
+export const layers: Builder<LayersOptions> = builder<LayersOptions>("layers");
 
 function toNode(c: Child): NodeSpec {
   return typeof c === "string" ? { id: c } : c;

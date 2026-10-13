@@ -15,6 +15,7 @@ A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other ver
 ## Unreleased
 
 - **The strategy `tree`.** It puts the children in one row and packs the subtrees by their shapes, so a small subtree fits under the edge of a large one (a tidy tree). The builder has `tree`, and the text language knows the word `tree`.
+- **The strategy `layers`.** It puts the children in layers in the direction of the edges between them: a flowchart. Each strategy gets the extra edges between its children (`edges`), and an arrangement can give the direction of these edges (`flow`) to the router.
 - **Shapes.** A strategy with `shapes: true` gets the shape of each child: bands on each axis that cover each box of its subtree.
 - **The direction of tree edges.** An arrangement can give the direction of its tree edges. Grid and tree give it from their side. The orthogonal router then draws the edges of an organization chart. This changes the routes of the tree edges of the orthogonal router.
 - **The router `avoid`.** It draws horizontal and vertical segments that go around the other boxes. A router with `obstacles: true` gets the boxes near each edge. On random trees with extra edges, it gives 95 % fewer crossings than the orthogonal router.

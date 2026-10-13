@@ -1,0 +1,388 @@
+{
+  "nodes": [
+    {
+      "id": "ci",
+      "label": "CI pipeline",
+      "x": 0,
+      "y": 0,
+      "width": 328,
+      "height": 368,
+      "depth": 0,
+      "mode": "nested",
+      "layout": "layers",
+      "scale": 1,
+      "clip": false,
+      "childCount": 7
+    },
+    {
+      "id": "push",
+      "label": "git push",
+      "x": 120,
+      "y": 24,
+      "width": 88,
+      "height": 32,
+      "parent": "ci",
+      "container": "ci",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "lint",
+      "label": "Lint",
+      "x": 16,
+      "y": 88,
+      "width": 88,
+      "height": 32,
+      "parent": "ci",
+      "container": "ci",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "test",
+      "label": "Test",
+      "x": 120,
+      "y": 88,
+      "width": 88,
+      "height": 32,
+      "parent": "ci",
+      "container": "ci",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "build",
+      "label": "Build",
+      "x": 224,
+      "y": 88,
+      "width": 88,
+      "height": 32,
+      "parent": "ci",
+      "container": "ci",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "pack",
+      "label": "Package",
+      "x": 120,
+      "y": 152,
+      "width": 88,
+      "height": 32,
+      "parent": "ci",
+      "container": "ci",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "review",
+      "label": "Review",
+      "x": 44,
+      "y": 216,
+      "width": 240,
+      "height": 72,
+      "parent": "ci",
+      "container": "ci",
+      "depth": 1,
+      "mode": "nested",
+      "layout": "layers",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "approve",
+      "label": "Approve",
+      "x": 60,
+      "y": 240,
+      "width": 88,
+      "height": 32,
+      "parent": "review",
+      "container": "review",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "stage",
+      "label": "Stage",
+      "x": 180,
+      "y": 240,
+      "width": 88,
+      "height": 32,
+      "parent": "review",
+      "container": "review",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "deploy",
+      "label": "Deploy",
+      "x": 120,
+      "y": 320,
+      "width": 88,
+      "height": 32,
+      "parent": "ci",
+      "container": "ci",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-0",
+      "source": "push",
+      "target": "lint",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 164,
+          "y": 56
+        },
+        {
+          "x": 164,
+          "y": 78
+        },
+        {
+          "x": 60,
+          "y": 78
+        },
+        {
+          "x": 60,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "edge-1",
+      "source": "push",
+      "target": "test",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 164,
+          "y": 56
+        },
+        {
+          "x": 164,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "edge-2",
+      "source": "push",
+      "target": "build",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 164,
+          "y": 56
+        },
+        {
+          "x": 164,
+          "y": 78
+        },
+        {
+          "x": 268,
+          "y": 78
+        },
+        {
+          "x": 268,
+          "y": 88
+        }
+      ]
+    },
+    {
+      "id": "edge-3",
+      "source": "lint",
+      "target": "pack",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 60,
+          "y": 120
+        },
+        {
+          "x": 60,
+          "y": 142
+        },
+        {
+          "x": 164,
+          "y": 142
+        },
+        {
+          "x": 164,
+          "y": 152
+        }
+      ]
+    },
+    {
+      "id": "edge-4",
+      "source": "test",
+      "target": "pack",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 164,
+          "y": 120
+        },
+        {
+          "x": 164,
+          "y": 152
+        }
+      ]
+    },
+    {
+      "id": "edge-5",
+      "source": "build",
+      "target": "pack",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 268,
+          "y": 120
+        },
+        {
+          "x": 268,
+          "y": 142
+        },
+        {
+          "x": 164,
+          "y": 142
+        },
+        {
+          "x": 164,
+          "y": 152
+        }
+      ]
+    },
+    {
+      "id": "edge-6",
+      "source": "pack",
+      "target": "approve",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 164,
+          "y": 184
+        },
+        {
+          "x": 164,
+          "y": 230
+        },
+        {
+          "x": 104,
+          "y": 230
+        },
+        {
+          "x": 104,
+          "y": 240
+        }
+      ]
+    },
+    {
+      "id": "edge-7",
+      "source": "approve",
+      "target": "stage",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 148,
+          "y": 256
+        },
+        {
+          "x": 180,
+          "y": 256
+        }
+      ]
+    },
+    {
+      "id": "edge-8",
+      "source": "stage",
+      "target": "deploy",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 224,
+          "y": 272
+        },
+        {
+          "x": 224,
+          "y": 310
+        },
+        {
+          "x": 164,
+          "y": 310
+        },
+        {
+          "x": 164,
+          "y": 320
+        }
+      ]
+    },
+    {
+      "id": "edge-9",
+      "source": "deploy",
+      "target": "push",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 208,
+          "y": 336
+        },
+        {
+          "x": 322,
+          "y": 336
+        },
+        {
+          "x": 322,
+          "y": 40
+        },
+        {
+          "x": 208,
+          "y": 40
+        }
+      ],
+      "label": "next"
+    }
+  ],
+  "bounds": {
+    "x": 0,
+    "y": 0,
+    "width": 328,
+    "height": 368
+  },
+  "issues": []
+}

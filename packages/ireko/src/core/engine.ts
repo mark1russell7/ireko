@@ -16,6 +16,7 @@ import { avoid } from "./avoid.ts";
 import { grid } from "./strategies/grid.ts";
 import { radial } from "./strategies/radial.ts";
 import { tree } from "./strategies/tree.ts";
+import { layers } from "./strategies/layers.ts";
 import type { AnyStrategy } from "./strategy.ts";
 
 export type { Limits } from "./engine/types.ts";
@@ -43,7 +44,7 @@ export interface Engine {
 }
 
 /** The built-in strategies. */
-export const builtinStrategies: readonly AnyStrategy[] = [grid, radial, tree];
+export const builtinStrategies: readonly AnyStrategy[] = [grid, radial, tree, layers];
 /** The built-in routers. */
 export const builtinRouters: readonly Router[] = [straight, orthogonal, avoid];
 /** The default limits. */
@@ -105,7 +106,7 @@ function run(
   trace?.({ phase: "measure", data: m });
   const placed = place(norm, m, ctx);
   trace?.({ phase: "place", data: placed });
-  const edges = route(norm, placed.nodes, ctx, issues, m.direction);
+  const edges = route(norm, placed.nodes, ctx, issues, m);
   trace?.({ phase: "route", data: edges });
   if (resolved.audit) {
     audit(norm, m, placed, ctx, issues);

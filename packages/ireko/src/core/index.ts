@@ -12,6 +12,7 @@ export { avoid } from "./avoid.ts";
 export { grid as gridStrategy, type GridOptions } from "./strategies/grid.ts";
 export { radial as radialStrategy, type RadialOptions } from "./strategies/radial.ts";
 export { tree as treeStrategy, type TreeOptions } from "./strategies/tree.ts";
+export { layers as layersStrategy, type LayersOptions } from "./strategies/layers.ts";
 export { BUILTIN_STRATEGY_NAMES } from "./strategies/names.ts";
-export { builder, grid, node, radial, tree, type Builder, type BuildOptions, type Child, type ContainerOptions } from "./build.ts";
+export { builder, grid, layers, node, radial, tree, type Builder, type BuildOptions, type Child, type ContainerOptions } from "./build.ts";
 export { createEngine, layout, builtinStrategies, builtinRouters, defaultLimits, type Engine, type EngineConfig, type Limits } from "./engine.ts";

@@ -41,6 +41,12 @@ export interface MeasuredChild {
   readonly shape?: Shape;
 }
 
+/** An edge between the subtrees of two children of a node, as the indexes of the two children. */
+export interface ChildEdge {
+  readonly from: number;
+  readonly to: number;
+}
+
 /** The input of `Strategy.arrange`. */
 export interface ArrangeInput<O> {
   /** The identifier of the node. */
@@ -55,6 +61,11 @@ export interface ArrangeInput<O> {
   readonly gap: number;
   /** The depth of the node. The root has the depth 0. */
   readonly depth: number;
+  /**
+   * The extra edges between the subtrees of two different children, in the order of the input. A layered strategy
+   * uses them. The engine always gives this list, so a strategy that gets no list gets it from a test or from the user.
+   */
+  readonly edges?: readonly ChildEdge[];
 }
 
 /** The direction from a node to its children: below, above, on the left or on the right. */
@@ -67,6 +78,11 @@ export interface Arrangement {
    * A router uses it for the tree edges of the node: the orthogonal router then draws the edges of an organization chart.
    */
   readonly direction?: Direction;
+  /**
+   * The direction of the edges between the children, for a strategy that puts them in a flow (layers).
+   * A router uses it for each extra edge between two children that goes forward in this direction.
+   */
+  readonly flow?: Direction;
   /**
    * The top-left corner of each child box, in the order of the children.
    * In the linked mode, the coordinates are relative to the top-left corner of the node box.

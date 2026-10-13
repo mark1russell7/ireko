@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16 -16 360 400" width="360" height="400" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>Flowchart</title>
+<rect class="ireko-background" x="-16" y="-16" width="360" height="400" fill="#f5f6f9"/>
+<g class="ireko-containers">
+<g class="ireko-container" data-id="ci">
+<rect x="0" y="0" width="328" height="368" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="8" y="19" font-size="13" fill="#5f6880">CI pipeline</text>
+</g>
+<g class="ireko-container" data-id="review">
+<rect x="44" y="216" width="240" height="72" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="52" y="235" font-size="13" fill="#5f6880">Review</text>
+</g>
+</g>
+<g class="ireko-edges" fill="none">
+<polyline class="ireko-edge" data-id="edge-0" points="164,56 164,78 60,78 60,88" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-1" points="164,56 164,88" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-2" points="164,56 164,78 268,78 268,88" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-3" points="60,120 60,142 164,142 164,152" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-4" points="164,120 164,152" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-5" points="268,120 268,142 164,142 164,152" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-6" points="164,184 164,230 104,230 104,240" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-7" points="148,256 180,256" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-8" points="224,272 224,310 164,310 164,320" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-9" points="208,336 322,336 322,40 208,40" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="push">
+<rect x="120" y="24" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="164" y="40" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">git push</text>
+</g>
+<g class="ireko-node" data-id="lint">
+<rect x="16" y="88" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="60" y="104" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Lint</text>
+</g>
+<g class="ireko-node" data-id="test">
+<rect x="120" y="88" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="164" y="104" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Test</text>
+</g>
+<g class="ireko-node" data-id="build">
+<rect x="224" y="88" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="268" y="104" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Build</text>
+</g>
+<g class="ireko-node" data-id="pack">
+<rect x="120" y="152" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="164" y="168" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Package</text>
+</g>
+<g class="ireko-node" data-id="approve">
+<rect x="60" y="240" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="104" y="256" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Approve</text>
+</g>
+<g class="ireko-node" data-id="stage">
+<rect x="180" y="240" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="224" y="256" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Stage</text>
+</g>
+<g class="ireko-node" data-id="deploy">
+<rect x="120" y="320" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="164" y="336" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Deploy</text>
+</g>
+</g>
+<g class="ireko-edge-labels" text-anchor="middle" dominant-baseline="central" fill="#5f6880" stroke="#f5f6f9" stroke-width="4" stroke-linejoin="round" paint-order="stroke">
+<text class="ireko-edge-label" data-id="edge-9" x="322" y="188" font-size="11.05">next</text>
+</g>
+</svg>
