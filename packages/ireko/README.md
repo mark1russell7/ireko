@@ -6,7 +6,7 @@
 
 [Guide](https://mark1russell7.github.io/ireko/learn/tour/) · [Playground](https://mark1russell7.github.io/ireko/playground/) · [Gallery](https://mark1russell7.github.io/ireko/gallery/) · [API](https://mark1russell7.github.io/ireko/reference/api/) · [React Flow](https://mark1russell7.github.io/ireko/guides/react-flow/)
 
-ireko (入れ子) is the Japanese word for a set of boxes that fit inside each other. The library lays out trees of nested boxes: a grid of rings of trees, an architecture diagram, an organization chart or React Flow sub-flows. It has no runtime dependencies. The core is approximately 9 kB after minification and gzip.
+ireko (入れ子) is the Japanese word for a set of boxes that fit inside each other. The library lays out trees of nested boxes: a grid of rings of trees, an architecture diagram, a tidy organization chart or React Flow sub-flows. It has no runtime dependencies. The core is approximately 10 kB after minification and gzip.
 
 ## Install
 
@@ -36,7 +36,7 @@ document.body.innerHTML = toSVG(result);
 
 Each node with children selects two things:
 
-- **A strategy:** how to arrange its children. `grid` puts them in rows and columns. `radial` puts them on a ring. You can add your own strategy.
+- **A strategy:** how to arrange its children. `grid` puts them in rows and columns. `radial` puts them on a ring. `tree` makes a tidy tree, for example an organization chart. You can add your own strategy.
 - **A mode:** where its children go. In the `linked` mode, they are around the node, and edges connect them. In the `nested` mode, they are inside the box of the node.
 
 The two choices apply to one node only, so each container has its own layout. The engine measures each subtree before it places it, so no two subtrees overlap. Each layout examines itself, and puts each problem in `issues`.

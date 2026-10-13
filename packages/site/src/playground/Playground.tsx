@@ -283,7 +283,7 @@ export default function Playground(): ReactElement {
 }
 a -> b "edge label"`}</pre>
             <p className="pg-hint">
-              Strategies: <code>grid</code>, <code>radial</code>. Modes: <code>linked</code>, <code>nested</code>. Fit: <code>grow</code>, <code>scale</code>, <code>clip</code>.{" "}
+              Strategies: <code>grid</code>, <code>radial</code>, <code>tree</code>. Modes: <code>linked</code>, <code>nested</code>. Fit: <code>grow</code>, <code>scale</code>, <code>clip</code>.{" "}
               <a href={href("learn/text-language/")}>The full guide</a>.
             </p>
           </section>

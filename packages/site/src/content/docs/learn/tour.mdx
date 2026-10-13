@@ -62,7 +62,7 @@ export const edges = `app nested grid(columns: 2) {
 cart -> orders "checkout"
 web -> api`;
 
-export const yours = `# Change a word: grid, radial, nested, linked.
+export const yours = `# Change a word: grid, radial, tree, nested, linked.
 shop nested grid(columns: 2) {
   front radial nested { home search cart account }
   back { orders stock payments }
@@ -92,7 +92,7 @@ Each node selects where its children go. In the `linked` mode (the default), the
 
 ## The second idea: a strategy for each node
 
-Each node also selects how to arrange its children. The built-in strategies are `grid` and `radial`. You can [add your own](/learn/custom-strategy/).
+Each node also selects how to arrange its children. The built-in strategies are `grid`, `radial` and `tree`. You can [add your own](/learn/custom-strategy/).
 
 <Morph client:visible title="The strategy of the root" states={strategies} />
 

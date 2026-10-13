@@ -104,10 +104,10 @@ The parser stops at the first error and gives its line, its column and its lengt
 ## Parse and print
 
 ```ts
-import { layout } from "ireko";
+import { BUILTIN_STRATEGY_NAMES, layout } from "ireko";
 import { parse, print } from "ireko/text";
 
-const parsed = parse(text, { strategies: ["grid", "radial", "spiral"] });
+const parsed = parse(text, { strategies: [...BUILTIN_STRATEGY_NAMES, "spiral"] });
 if (parsed.ok) {
   const result = layout(parsed.input);
 } else {

@@ -1,7 +1,7 @@
 ---
 title: Strategies
-seoTitle: "Layout strategies: grid and radial, with all options"
-description: The grid strategy puts children in rows and columns. The radial strategy puts them on a ring. Try each option live, and see the text and the TypeScript code.
+seoTitle: "Layout strategies: grid, radial and tidy tree, live"
+description: The grid strategy puts children in rows and columns, the radial strategy puts them on a ring, and the tree strategy makes a tidy tree. Try each option live.
 ---
 
 import Configurator from "../../../components/Configurator.tsx";
@@ -22,6 +22,17 @@ export const sides = [
   { label: "left, 2 columns", source: "root grid(side: left, columns: 2) { a b c d }", note: "side: left, with two columns." },
 ];
 
+export const tidy = `ceo {
+  cto { platform { infra { network storage compute } } web { ui api } }
+  cfo { finance }
+  coo { ops { warehouse { north south east west } } support }
+}`;
+
+export const tidyStates = [
+  { label: "grid", source: tidy, options: { router: "orthogonal" }, note: "Linked grids: each column is as wide as the extent of its subtree." },
+  { label: "tree", source: tidy.replaceAll("{", "tree {"), options: { router: "orthogonal" }, note: "The tree strategy packs each subtree by its shape. The small teams fit under the edges of the large ones." },
+];
+
 export const rings = `hub radial nested {
   tiny
   big radial nested { a b c d e f }
@@ -36,7 +47,7 @@ export const sweeps = [
   { label: "90°", source: "root radial(sweep: 90, startAngle: 0) { a b c d e }", note: "sweep: 90: a fan." },
 ];
 
-A strategy arranges the children of one node. It gets the size of each child and the extent of its subtree, and it gives an offset for each child. The engine does all other work: the recursion, the padding, the fit and the absolute positions. Thus a strategy is a small function, and you can [write your own](/learn/custom-strategy/).
+ireko has three strategies: `grid`, `radial` and `tree`. A strategy arranges the children of one node. It gets the size of each child and the extent of its subtree, and it gives an offset for each child. The engine does all other work: the recursion, the padding, the fit and the absolute positions. Thus a strategy is a small function, and you can [write your own](/learn/custom-strategy/).
 
 ## Try each option
 
@@ -73,6 +84,18 @@ With `sweep` less than 360, the children go on an arc. Each child is at the midd
 <Morph client:visible title="The sweep of a ring" height="16rem" states={sweeps} />
 
 <OptionsTable strategy="radial" />
+
+## tree
+
+The tree strategy puts the children in one row, on one side of the node, like the linked grid. The grid keeps the extents of the subtrees apart: the rectangles that hold each subtree. The tree strategy keeps their shapes apart. Thus a subtree that is narrow at the top fits under the edge of its neighbor. This layout is a tidy tree.
+
+<Morph client:visible title="An organization chart: grid or tree" height="20rem" states={tidyStates} />
+
+The strategy packs the row two times: from the first child to the last, and from the last to the first. Then it takes the mean of the two places of each child. Both packings keep each pair of subtrees apart, so the mean keeps them apart too. The small subtrees go to the middle of their space.
+
+The tree strategy gives the direction of its edges to the router. With the `orthogonal` router, the edges make the buses of an organization chart. The [gallery](/gallery/tidy-tree/) has this chart with labels.
+
+<OptionsTable strategy="tree" />
 
 ## Options of each container
 

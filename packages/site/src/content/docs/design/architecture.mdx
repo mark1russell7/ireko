@@ -62,7 +62,7 @@ Each contract is small, so an extension is a small module. A strategy does not k
 
 The first version broke most of these rules. Its strategies read global singletons, and its routers depended on the render layer. The engine made its registry of strategies again at each run, so a custom strategy had no effect. The audit compared each child with its parent only, so it missed all overlaps between siblings.
 
-The rewrite started from the data model, not from the old classes. The [two passes](/design/two-passes/) fixed the overlaps. The small contracts made the strategies short: `grid` and `radial` together are fewer than 300 lines, with their comments.
+The rewrite started from the data model, not from the old classes. The [two passes](/design/two-passes/) fixed the overlaps. The small contracts made the strategies short: `grid`, `radial` and `tree` together are fewer than 400 lines, with their comments.
 
 ## Tests
 

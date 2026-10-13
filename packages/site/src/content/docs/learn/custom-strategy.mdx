@@ -16,7 +16,7 @@ galaxy spiral nested {
   i j k
 }`;
 
-The built-in strategies are `grid` and `radial`. A strategy of your own gets the same treatment. The engine measures, places, routes and audits its output. The text language and the builder work with it.
+The built-in strategies are `grid`, `radial` and `tree`. A strategy of your own gets the same treatment. The engine measures, places, routes and audits its output. The text language and the builder work with it.
 
 ## The contract
 
@@ -40,8 +40,9 @@ interface Strategy<O> {
 | `mode` | `linked`: give offsets relative to the top-left corner of the node box, and keep the children outside it. `nested`: the offsets are free, and the engine moves the content into the box. |
 | `options` | The defaults of the schema, merged with the options of the node. The engine examined each value. |
 | `gap` | The distance to keep between two subtrees. |
+| `children[i].shape` | Only for a strategy with `shapes: true`: bands that cover each box of the subtree, on each axis. The `tree` strategy uses them to put subtrees closer than their extents permit. |
 
-The output is `{ offsets }`, one point for each child, in the order of the children. In the nested mode, an optional `content` rectangle makes the container larger than its children.
+The output is `{ offsets }`, one point for each child, in the order of the children. In the nested mode, an optional `content` rectangle makes the container larger than its children. In the linked mode, an optional `direction` (`"down"`, `"up"`, `"left"` or `"right"`) tells the router where the children are. The orthogonal router then draws the edges of an organization chart.
 
 ## An example: spiral
 

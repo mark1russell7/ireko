@@ -30,7 +30,7 @@ import { href } from "../../lib/site.ts";
 
 ireko (入れ子) is the Japanese word for a set of boxes that fit inside each other. A diagram is a tree of nodes. Each node selects two things for its children:
 
-- **The strategy:** how to arrange the children. The built-in strategies are `grid` and `radial`, and you can add your own.
+- **The strategy:** how to arrange the children. The built-in strategies are `grid`, `radial` and `tree` (a tidy tree), and you can add your own.
 - **The mode:** where the children go. In the `nested` mode, the children are inside the box of the node. In the `linked` mode, they are around it, and edges connect them.
 
 One layout gives plain data: boxes, routed edges and findings. Any renderer can draw it.
@@ -42,7 +42,7 @@ One layout gives plain data: boxes, routed edges and findings. Any renderer can 
 <CardGrid>
   <LinkCard title="Why two passes" description="The first version beside ireko, and 2000 random trees laid out in your browser." href={href("design/two-passes/")} />
   <LinkCard title="The pipeline, step by step" description="Watch the engine measure from the leaves up, then place from the root down." href={href("design/pipeline/")} />
-  <LinkCard title="Try each strategy" description="Sliders for each option of grid and radial, with the text and the TypeScript code." href={href("learn/strategies/")} />
+  <LinkCard title="Try each strategy" description="Sliders for each option of grid, radial and tree, with the text and the TypeScript code." href={href("learn/strategies/")} />
   <LinkCard title="The gallery" description="Org charts, mind maps, architectures, rings of rings and fractals. Each one is live." href={href("gallery/")} />
 </CardGrid>
 

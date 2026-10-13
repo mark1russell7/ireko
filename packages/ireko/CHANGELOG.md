@@ -14,6 +14,12 @@ A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other ver
 
 ## Unreleased
 
+- **The strategy `tree`.** It puts the children in one row and packs the subtrees by their shapes, so a small subtree fits under the edge of a large one (a tidy tree). The builder has `tree`, and the text language knows the word `tree`.
+- **Shapes.** A strategy with `shapes: true` gets the shape of each child: bands on each axis that cover each box of its subtree.
+- **The direction of tree edges.** An arrangement can give the direction of its tree edges. Grid and tree give it from their side. The orthogonal router then draws the edges of an organization chart. This changes the routes of the tree edges of the orthogonal router.
+- **A faster audit.** The audit sweeps along the axis where the boxes overlap less. A deep linked chain no longer costs a time that grows with the square of its length.
+- `BUILTIN_STRATEGY_NAMES` gives the names of the built-in strategies.
+
 ## 0.1.0
 
 The first version. It needs Node.js 22.12 or later, or a current browser. It is ESM only, and it has no runtime dependencies.

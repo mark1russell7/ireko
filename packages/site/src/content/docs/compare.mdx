@@ -22,7 +22,7 @@ ireko does one thing: it lays out a **tree of containers**, with a different lay
 
 | | ireko | dagre | ELK (elkjs) | d3-hierarchy | Cytoscape.js | Graphviz (WASM) |
 | --- | --- | --- | --- | --- | --- | --- |
-| Main algorithm | grid, radial, yours, in each container | layered | layered and 10 more | tidy tree, treemap, pack | many, as extensions | dot, neato, osage and more |
+| Main algorithm | grid, radial, tidy tree, yours, in each container | layered | layered and 10 more | tidy tree, treemap, pack | many, as extensions | dot, neato, osage and more |
 | Nested containers | yes, each with its own strategy and mode | clusters, with settings for each cluster (3.1) | yes, from the leaves up | treemap and pack only | yes (compound nodes) | clusters |
 | Your own algorithm | a small `arrange` function | no | Java or a fork | no | an extension | no |
 | Edge routes | straight, orthogonal, yours | polyline | orthogonal, polyline, splines | no | by the renderer | splines, orthogonal |

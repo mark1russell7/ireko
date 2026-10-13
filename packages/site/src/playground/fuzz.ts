@@ -24,8 +24,9 @@ export function randomTree(seed: number): NodeSpec {
   const make = (depth: number): NodeSpec => {
     const id = `n${String(count++)}`;
     const children = depth > 0 && next() < 0.75 ? Array.from({ length: 1 + Math.floor(next() * 4) }, () => make(depth - 1)) : [];
-    const strategy = pick(["grid", "radial"] as const);
-    const options = strategy === "grid" ? (next() < 0.3 ? { type: "grid", columns: 1 + Math.floor(next() * 3) } : "grid") : next() < 0.3 ? { type: "radial", sweep: 120 + Math.floor(next() * 200) } : "radial";
+    const strategy = pick(["grid", "radial", "tree"] as const);
+    const options =
+      strategy === "grid" ? (next() < 0.3 ? { type: "grid", columns: 1 + Math.floor(next() * 3) } : "grid") : strategy === "radial" ? (next() < 0.3 ? { type: "radial", sweep: 120 + Math.floor(next() * 200) } : "radial") : "tree";
     return { id, ...(children.length > 0 ? { layout: options, mode: pick(["nested", "linked"] as const), children } : {}) };
   };
   return make(3);

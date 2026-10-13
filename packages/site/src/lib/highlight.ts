@@ -2,6 +2,7 @@
  * The highlighter of the text language for the editors of the site. It gives the parts of a text with a class for each
  * part. It does not check the syntax: the parser of ireko does that.
  */
+import { BUILTIN_STRATEGY_NAMES } from "ireko";
 import { KEYWORDS } from "ireko/text";
 
 /** A part of a highlighted text. */
@@ -14,7 +15,7 @@ const SIZE = /^(\d+(?:\.\d+)?|_)x(\d+(?:\.\d+)?|_)$/;
 const STARTS = new Set(["{", "}", ",", ";", "->"]);
 
 /** This function splits a text into parts for the highlighter. */
-export function highlight(text: string, strategies: ReadonlySet<string> = new Set(["grid", "radial"])): Part[] {
+export function highlight(text: string, strategies: ReadonlySet<string> = new Set(BUILTIN_STRATEGY_NAMES)): Part[] {
   const out: Part[] = [];
   const pattern = /(#[^\n]*|\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*"?)|('(?:[^'\\\n]|\\.)*'?)|(->|[{}(),:;])|([A-Za-z0-9_.@$+-]+)|(\s+)|(.)/g;
   // A word is an identifier at the start of a statement: at the start of the text, after a line break, or after { } , ; ->
