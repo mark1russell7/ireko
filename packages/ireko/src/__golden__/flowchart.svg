@@ -18,7 +18,7 @@
 <polyline class="ireko-edge" data-id="edge-3" points="60,120 60,142 164,142 164,152" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
 <polyline class="ireko-edge" data-id="edge-4" points="164,120 164,152" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
 <polyline class="ireko-edge" data-id="edge-5" points="268,120 268,142 164,142 164,152" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
-<polyline class="ireko-edge" data-id="edge-6" points="164,184 164,230 104,230 104,240" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-6" points="164,184 164,212 104,212 104,240" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
 <polyline class="ireko-edge" data-id="edge-7" points="148,256 180,256" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
 <polyline class="ireko-edge" data-id="edge-8" points="224,272 224,310 164,310 164,320" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
 <polyline class="ireko-edge" data-id="edge-9" points="208,336 322,336 322,40 208,40" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>

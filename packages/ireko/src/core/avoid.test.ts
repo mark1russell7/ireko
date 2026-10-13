@@ -85,8 +85,13 @@ describe("the router avoid", () => {
       const n = out.nodes.find((x) => x.id === id);
       return `${String(n?.x)},${String(n?.y)}`;
     };
-    // The obstacles of a -> c: the box b. Not a and c (the ends), and not g and r (they hold an end).
-    expect(seen).toEqual([[at("b")]]);
+    // The obstacles of a -> c: the box b, and the labels of g and r. Not a and c (the ends), and not the boxes of g and r
+    // (they hold an end): the edge goes inside them.
+    const label = (id: string) => {
+      const n = out.nodes.find((x) => x.id === id);
+      return `${String((n?.x ?? 0) + 4)},${String((n?.y ?? 0) + 2)}`;
+    };
+    expect(seen).toEqual([[at("b"), label("r"), label("g")]]);
     expect(layout({ root: { id: "r", children: [{ id: "a" }] } }, { router: "orthogonal" }).edges).toHaveLength(1);
   });
 

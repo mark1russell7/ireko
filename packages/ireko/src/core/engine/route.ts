@@ -3,6 +3,7 @@
  */
 import { at } from "../at.ts";
 import { clean, type Point, type Rect } from "../geometry.ts";
+import { estimateWidth } from "../text.ts";
 import type { Issue, PlacedEdge, PlacedNode } from "../model.ts";
 import { straight } from "../routers.ts";
 import type { Router } from "../router.ts";
@@ -98,14 +99,29 @@ function obstaclesOf(norm: Normalized, nodes: readonly PlacedNode[]): (s: number
     const b = at(nodes, t);
     const middle = { x: (a.x + a.width / 2 + b.x + b.width / 2) / 2, y: (a.y + a.height / 2 + b.y + b.height / 2) / 2 };
     const found: { r: Rect; d: number }[] = [];
+    // The label of a container that holds an end is an obstacle too: the edge goes inside the container, not over its label.
+    const labels: Rect[] = [];
     for (let i = 0; i < n; i++) {
-      if (i === s || i === t || holds(i, s) || holds(i, t) || holds(s, i) || holds(t, i)) continue;
+      if (i === s || i === t || holds(s, i) || holds(t, i)) continue;
       const r = at(nodes, i);
+      if (holds(i, s) || holds(i, t)) {
+        labels.push(labelBoxOf(r));
+        continue;
+      }
       const d = Math.hypot(r.x + r.width / 2 - middle.x, r.y + r.height / 2 - middle.y);
       found.push({ r: { x: r.x, y: r.y, width: r.width, height: r.height }, d });
     }
-    return found.toSorted((p, q) => p.d - q.d).slice(0, MAX_OBSTACLES).map((f) => f.r);
+    return [...found.toSorted((p, q) => p.d - q.d).slice(0, MAX_OBSTACLES).map((f) => f.r), ...labels];
   };
+}
+
+/**
+ * This function gives the box of the label of a container: at its top-left corner, as the renderers draw it.
+ * The width is the estimate of `fitText` for the font size of the themes (13 pixels), at the scale of the container.
+ */
+function labelBoxOf(c: PlacedNode): Rect {
+  const size = 13 * c.scale;
+  return { x: c.x + 4 * c.scale, y: c.y + 2 * c.scale, width: Math.min(c.width - 8 * c.scale, estimateWidth(c.label, size) + 8 * c.scale), height: size + 8 * c.scale };
 }
 
 function routeSafely(router: Router, input: Parameters<Router["route"]>[0], issues: Issue[]): Point[] {
