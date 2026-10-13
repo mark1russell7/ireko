@@ -1,0 +1,55 @@
+---
+/**
+ * The page of one example: a live editor with the text of the example, and its input as JSON and as a builder call.
+ * The server renders the layout as a static SVG, so the page shows it before its script runs.
+ */
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import { Code } from "@astrojs/starlight/components";
+import { layout } from "ireko";
+import { examples, type Example } from "ireko/examples";
+import { print } from "ireko/text";
+import Try from "../../components/Try.tsx";
+
+export function getStaticPaths() {
+  return examples.map((example) => ({ params: { name: example.name }, props: { example } }));
+}
+
+interface Props {
+  readonly example: Example;
+}
+
+const { example } = Astro.props;
+const out = layout(example.input, example.options);
+const text = `# ${example.title}\n${print(example.input)}`;
+const json = JSON.stringify(example.input, null, 2);
+const options = example.options === undefined ? undefined : JSON.stringify(example.options);
+const code = `import { layout } from "ireko";
+
+const input = ${json};
+
+const result = layout(input${options === undefined ? "" : `, ${options}`});`;
+---
+
+<StarlightPage
+  frontmatter={{
+    title: example.title,
+    seoTitle: `${example.title}: an ireko layout example`,
+    description: `${example.description} An example of ireko, with a live editor.`,
+  }}
+  headings={[
+    { depth: 2, slug: "edit-it", text: "Edit it" },
+    { depth: 2, slug: "the-input", text: "The input" },
+  ]}
+>
+  <p>{example.description}</p>
+  <p class="ik-gallery-meta not-content">
+    <span class="ik-chip">{out.nodes.length} boxes</span>
+    <span class="ik-chip">{out.edges.length} edges</span>
+    <span class="ik-chip" data-state={out.issues.length === 0 ? "pass" : "fail"}>{out.issues.length} findings</span>
+  </p>
+  <h2 id="edit-it">Edit it</h2>
+  <Try client:visible source={text} options={{ spacing: 24, header: 24, nodeSize: { width: 120, height: 48 }, ...example.options }} title={example.title} height="30rem" />
+  <h2 id="the-input">The input</h2>
+  <p>The same layout in TypeScript. The input is plain data, so it can come from JSON.</p>
+  <Code code={code} lang="ts" title={`${example.name}.ts`} />
+</StarlightPage>

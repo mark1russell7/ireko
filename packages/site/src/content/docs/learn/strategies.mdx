@@ -1,6 +1,95 @@
 ---
-title: STUB learn/strategies
-description: STUB.
+title: Strategies
+seoTitle: "Layout strategies: grid and radial, with all options"
+description: The grid strategy puts children in rows and columns. The radial strategy puts them on a ring. Try each option live, and see the text and the TypeScript code.
 ---
 
-STUB
+import Configurator from "../../../components/Configurator.tsx";
+import Figure from "../../../components/Figure.astro";
+import Morph from "../../../components/Morph.tsx";
+import OptionsTable from "../../../components/OptionsTable.astro";
+
+export const tracks = `row {
+  small
+  large { a b c d e }
+  medium { x y }
+}`;
+
+export const sides = [
+  { label: "bottom", source: "root { a b c }", note: "side: bottom, the default." },
+  { label: "right", source: "root grid(side: right) { a b c }", note: "side: right. The children make one column." },
+  { label: "top", source: "root grid(side: top) { a b c }", note: "side: top." },
+  { label: "left, 2 columns", source: "root grid(side: left, columns: 2) { a b c d }", note: "side: left, with two columns." },
+];
+
+export const rings = `hub radial nested {
+  tiny
+  big radial nested { a b c d e f }
+  mid nested { x y z }
+  tiny2
+  tiny3
+}`;
+
+export const sweeps = [
+  { label: "360°", source: "root radial { a b c d e }", note: "sweep: 360, a full ring. The first child is at the top (startAngle: -90)." },
+  { label: "180°", source: "root radial(sweep: 180, startAngle: 0) { a b c d e }", note: "sweep: 180 from the right: a half ring below the root." },
+  { label: "90°", source: "root radial(sweep: 90, startAngle: 0) { a b c d e }", note: "sweep: 90: a fan." },
+];
+
+A strategy arranges the children of one node. It gets the size of each child and the extent of its subtree, and it gives an offset for each child. The engine does all other work: the recursion, the padding, the fit and the absolute positions. Thus a strategy is a small function, and you can [write your own](/learn/custom-strategy/).
+
+## Try each option
+
+The controls come from the option schema of each strategy. The engine uses the same schema to examine the options of a node.
+
+<Configurator client:visible />
+
+## grid
+
+The grid strategy puts the children in rows and columns. Each column is as wide as its widest child, and each row is as tall as its tallest child. A child counts with its whole subtree, so a large subtree gets a large cell.
+
+<Figure source={tracks} caption="A linked grid: the column of the subtree large is wide. The other columns stay narrow." height="14rem" />
+
+The number of columns depends on the mode:
+
+- In the `linked` mode, the default is one row. Then no edge crosses a sibling box. With `side: left` or `side: right`, the default is one column.
+- In the `nested` mode, the default is an approximately square grid.
+- Set `columns` to select a number.
+
+In the linked mode, `side` selects where the children go:
+
+<Morph client:visible title="The side of a linked grid" height="14rem" states={sides} />
+
+<OptionsTable strategy="grid" />
+
+## radial
+
+The radial strategy puts the children on a ring. Each child subtree fits in a circle around the center of its box. Two neighbors need an angle that keeps their circles apart by the gap. On a full ring, the strategy finds the smallest radius at which these angles fill the ring. Thus a small child takes less of the ring than a large child.
+
+<Figure source={rings} caption="A ring with children of different sizes. The large child gets a large part of the ring." height="20rem" />
+
+With `sweep` less than 360, the children go on an arc. Each child is at the middle of an equal part of the arc, and the largest circle sets the radius.
+
+<Morph client:visible title="The sweep of a ring" height="16rem" states={sweeps} />
+
+<OptionsTable strategy="radial" />
+
+## Options of each container
+
+Each strategy also has `gap`, `padding` and `header`. The engine reads them, not the strategy. [Modes and fit](/learn/modes/#gap-padding-and-header) explains them.
+
+## Write the options
+
+The text language puts the options in parentheses after the name of the strategy. The builder takes them in an object. Plain objects use `layout: { type, ...options }`.
+
+```text
+team grid(columns: 3, uniform: true) nested { a b c d e }
+```
+
+```ts
+grid.nested("team", { columns: 3, uniform: true }, "a", "b", "c", "d", "e");
+
+const same = { id: "team", mode: "nested", layout: { type: "grid", columns: 3, uniform: true }, children: [/* ... */] };
+```
+
+An option with a wrong type or out of its range gives the finding [`INVALID_OPTION`](/reference/issues/#invalid_option), and the strategy uses the default.

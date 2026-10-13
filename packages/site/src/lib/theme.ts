@@ -55,3 +55,16 @@ export function useReducedMotion(): boolean {
   }, []);
   return reduced;
 }
+
+/** This hook gives the theme of the page as a word: "light" or "dark". React Flow uses it for its own colors. */
+export function useColorMode(): "light" | "dark" {
+  const [mode, setMode] = useState<"light" | "dark">("light");
+  useEffect(() => {
+    const update = (): void => setMode(document.documentElement.dataset["theme"] === "dark" ? "dark" : "light");
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
+  return mode;
+}

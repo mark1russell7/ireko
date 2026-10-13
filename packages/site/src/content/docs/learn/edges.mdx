@@ -1,6 +1,123 @@
 ---
-title: STUB learn/edges
-description: STUB.
+title: Edges and routers
+seoTitle: "Edges and routers: tree edges, extra edges, labels and routing"
+description: The tree gives the edges of the linked children, and extra edges connect any two nodes. A router draws each edge, straight or orthogonal, with an optional label.
 ---
 
-STUB
+import Figure from "../../../components/Figure.astro";
+import Morph from "../../../components/Morph.tsx";
+
+export const kinds = `shop nested grid(columns: 2) {
+  web { home cart }
+  api nested { orders payments }
+}
+cart -> orders "checkout"
+orders -> payments`;
+
+export const tree = `org {
+  eng nested { web api }
+  ops { sre data }
+}`;
+
+export const treeEdges = [
+  { label: "linked", source: tree, note: "treeEdges: linked (the default). An edge goes to each linked child." },
+  { label: "all", source: tree, options: { treeEdges: "all" }, note: "treeEdges: all. An edge also goes to each nested child." },
+  { label: "none", source: tree, options: { treeEdges: "none" }, note: "treeEdges: none. Only the extra edges stay." },
+];
+
+export const routed = `root grid(columns: 3) nested {
+  a b c
+  d e f
+}
+a -> f
+c -> d
+b -> e "down"`;
+
+export const routers = [
+  { label: "straight", source: routed, note: "straight: one segment from border to border, on the line between the centers." },
+  { label: "orthogonal", source: routed, options: { router: "orthogonal" }, note: "orthogonal: horizontal and vertical segments. The edge turns at the middle of the gap." },
+];
+
+export const linkedTree = `ceo {
+  cto { web mobile }
+  cfo { audit }
+  coo { ops hr sales }
+}`;
+
+The layout has two kinds of edges. Both kinds are in `Layout.edges`, with a route from the border of the source to the border of the target.
+
+| Kind | Comes from | `kind` |
+| --- | --- | --- |
+| Tree edges | The tree: a parent and its linked children | `"tree"` |
+| Extra edges | `LayoutInput.edges`, or the edge statements of the text language | `"extra"` |
+
+<Figure source={kinds} caption="The solid edges come from the tree. The dashed edges are extra edges, between any two nodes, in any container." height="16rem" />
+
+## Tree edges
+
+The option `treeEdges` selects the tree edges of the output. The default gives an edge to each linked child. A nested child is inside its parent, so it gets no edge by default.
+
+<Morph client:visible title="The tree edges" height="15rem" states={treeEdges} />
+
+## Extra edges
+
+An extra edge connects two nodes of the tree, at any depth and in any container. Give the edges in the input:
+
+```ts
+layout({
+  root,
+  edges: [
+    { source: "cart", target: "orders", label: "checkout" },
+    { id: "pay", source: "orders", target: "payments", data: { weight: 3 } },
+  ],
+});
+```
+
+- `id` is optional. The default is `edge-N`, where N is the place of the edge in the list, from 0. A tree edge has the identifier `parent->child`.
+- `label` is optional. Each renderer draws it at the middle of the route.
+- `data` is optional. The engine copies it to the output and does not read it.
+
+An edge to a node that is not in the tree gives the finding [`UNKNOWN_EDGE_END`](/reference/issues/#unknown_edge_end), and an edge from a node to itself gives [`SELF_LOOP`](/reference/issues/#self_loop). The engine skips both.
+
+## Routers
+
+The router draws each edge after the engine places all boxes. The option `router` selects the router for the layout.
+
+<Morph client:visible title="The router" height="18rem" states={routers} />
+
+| Router | Route |
+| --- | --- |
+| `straight` (default) | One segment between the borders of the boxes, on the line between their centers. |
+| `orthogonal` | Horizontal and vertical segments. The edge leaves the side of the source that faces the target, and turns at the middle of the gap. When the boxes overlap on that axis, the router draws a straight edge. |
+
+An edge between a container and a node inside it goes from center to center, because the two boxes have no clear border between them.
+
+<Figure source={linkedTree} options={{ router: "orthogonal" }} caption="A linked tree with the orthogonal router: the usual form of an organization chart." height="15rem" />
+
+## Write a router
+
+A router is an object with a type, a description and a `route` function. The function gets the absolute rectangles of the two boxes, and gives the points of the edge.
+
+```ts
+import { borderPoint, createEngine, defineRouter } from "ireko";
+
+const curved = defineRouter({
+  type: "curved",
+  description: "The curved router adds a point to the side of the line between the centers.",
+  route({ source, target }) {
+    const a = { x: source.x + source.width / 2, y: source.y + source.height / 2 };
+    const b = { x: target.x + target.width / 2, y: target.y + target.height / 2 };
+    const bend = { x: (a.x + b.x) / 2 - (b.y - a.y) / 6, y: (a.y + b.y) / 2 + (b.x - a.x) / 6 };
+    return [borderPoint(source, bend), bend, borderPoint(target, bend)];
+  },
+});
+
+const engine = createEngine({ routers: [curved] });
+engine.layout(input, { router: "curved" });
+```
+
+The engine examines each route. A router that throws or gives fewer than two finite points gives the finding [`ROUTER_FAILED`](/reference/issues/#router_failed), and the engine uses `straight` for that edge. An unknown router name gives [`UNKNOWN_ROUTER`](/reference/issues/#unknown_router).
+
+## Draw the edges
+
+A route is a list of points. The renderers of ireko draw it as a polyline. To draw curves in your own renderer, use the points as control points. In React Flow, `PolylineEdge` draws the route of ireko, and React Flow keeps its markers and its labels.

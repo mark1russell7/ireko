@@ -1,6 +1,78 @@
 ---
-title: STUB design/architecture
-description: STUB.
+title: Architecture
+seoTitle: "The architecture of ireko: a DOM-free core with open registries"
+description: The modules of ireko, the rule of their dependencies, the plain-data model, and the three extension points - strategies, routers and renderers.
 ---
 
-STUB
+import Figure from "../../../components/Figure.astro";
+
+export const modules = `ireko "The modules of ireko" nested grid(columns: 1, gap: 18) {
+  adapters "Adapters" nested { react "ireko/react" xyflow "ireko/xyflow" }
+  renderers "Renderers" nested { svg "ireko/svg" dom "ireko/dom" canvas "ireko/canvas" }
+  shared "Shared" nested { render "ireko/render" text "ireko/text" examples "ireko/examples" }
+  core "The core: ireko (no DOM)" nested grid(columns: 5) { model engine strategies routers builder }
+}
+react -> svg
+xyflow -> render
+svg -> render
+dom -> render
+canvas -> render
+render -> model
+text -> model
+examples -> model`;
+
+This page explains how ireko is built, and why. The [review of the project](https://github.com/mark1russell7/ireko/blob/main/docs/REVIEW.md) has the full analysis and the plan.
+
+## The modules
+
+<Figure source={modules} options={{ nodeSize: { width: 104, height: 30 }, router: "orthogonal" }} code={false} caption="This figure is an ireko layout too. Each arrow is an import. No arrow goes up." height="26rem" />
+
+Each module is an entry point of the package, so an application imports only what it uses.
+
+| Entry point | Contents | Imports |
+| --- | --- | --- |
+| `ireko` | The model, the engine, the strategies, the routers and the builder | nothing |
+| `ireko/text` | `parse` and `print` | the core |
+| `ireko/render` | The theme, the viewport, the animation and `mount` | the core |
+| `ireko/svg`, `ireko/dom`, `ireko/canvas` | The renderers | `ireko/render` |
+| `ireko/react` | `useLayout`, `LayoutSvg`, `LayoutView` | the renderers, React |
+| `ireko/xyflow` | `toXYFlow`, `layoutFlow`, `PolylineEdge`, `GroupNode` | the core, `ireko/render`, React Flow |
+| `ireko/examples` | The examples of the gallery | the core |
+
+## The rules
+
+1. **The core has no DOM.** A separate TypeScript project compiles `src/core` without the types of the DOM. The core operates in a browser, a worker, Node.js and a build step.
+2. **Dependencies go down.** A renderer imports the core. The core does not import a renderer. Oxlint finds import cycles.
+3. **The data is plain.** The input and the output are JSON. The output has absolute positions, so a renderer does no layout work.
+4. **The engine does not change.** `createEngine` gives a frozen engine, and `extend` gives a new one. Two parts of an application can have different strategies without a conflict.
+5. **Each layout examines itself.** The audit operates after each layout, and its findings are a part of the output.
+6. **Same input, same output.** The engine uses no random numbers and no clock. A golden file for each example holds its layout, and a test compares them.
+
+## Three extension points
+
+| Extension | Contract | Register it with |
+| --- | --- | --- |
+| A strategy | `arrange(children) → offsets`, with an option schema | `createEngine({ strategies })` |
+| A router | `route(source, target) → points` | `createEngine({ routers })` |
+| A renderer | Read `Layout`, or give a `Surface` to `mount` | nothing |
+
+Each contract is small, so an extension is a small module. A strategy does not know about recursion, padding, fit or absolute positions. A router does not know about the tree. A renderer does not know about the strategies. The guides show a [strategy](/learn/custom-strategy/), a [router](/learn/edges/#write-a-router) and a [renderer](/learn/renderers/#write-a-renderer).
+
+## Why these choices
+
+The first version broke most of these rules. Its strategies read global singletons, and its routers depended on the render layer. The engine made its registry of strategies again at each run, so a custom strategy had no effect. The audit compared each child with its parent only, so it missed all overlaps between siblings.
+
+The rewrite started from the data model, not from the old classes. The [two passes](/design/two-passes/) fixed the overlaps. The small contracts made the strategies short: `grid` and `radial` together are fewer than 300 lines, with their comments.
+
+## Tests
+
+| Test | What it examines |
+| --- | --- |
+| Unit tests | Each function of the core, the parser and each renderer |
+| Property tests | Random trees, strategies, modes, sizes, fit policies and options. The audit and a second, independent check must find nothing. |
+| Golden files | The layout and the SVG of each example |
+| Parity | SVG, DOM and Canvas draw the same boxes, to 0.001 pixels |
+| Round trip | `parse(print(input))` gives the input again |
+| Site | Each page loads with no console error, the playground works, and axe finds no serious problem in both themes |
+
+The coverage gate of the library is 98 % of the lines and 96 % of the branches. At this time, the tests cover more than 99 % of the lines.

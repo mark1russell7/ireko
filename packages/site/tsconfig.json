@@ -26,5 +26,8 @@
     "src/content.config.ts",
     "dist",
     ".astro"
+  ],
+  "files": [
+    ".astro/types.d.ts"
   ]
 }

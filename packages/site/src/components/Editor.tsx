@@ -13,10 +13,12 @@ interface Props {
   readonly strategies?: ReadonlySet<string>;
   readonly label: string;
   readonly className?: string;
+  /** The identifier of the element that shows the error. The default is "ik-editor-error". */
+  readonly errorId?: string;
 }
 
 /** The editor. Tab adds two spaces. */
-export default function Editor({ value, onChange, error, strategies, label, className }: Props): ReactElement {
+export default function Editor({ value, onChange, error, strategies, label, className, errorId = "ik-editor-error" }: Props): ReactElement {
   const pre = useRef<HTMLPreElement>(null);
   const parts = useMemo(() => withError(highlight(value, strategies), error), [value, strategies, error]);
 
@@ -55,7 +57,7 @@ export default function Editor({ value, onChange, error, strategies, label, clas
           }
         }}
         aria-invalid={error === undefined ? undefined : true}
-        aria-errormessage={error === undefined ? undefined : "ik-editor-error"}
+        aria-errormessage={error === undefined ? undefined : errorId}
       />
     </div>
   );

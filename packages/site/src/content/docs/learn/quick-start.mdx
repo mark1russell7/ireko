@@ -1,6 +1,172 @@
 ---
-title: STUB learn/quick-start
-description: STUB.
+title: Quick start
+seoTitle: "Quick start: install ireko and draw a nested layout"
+description: Install ireko from npm, and draw a nested graph layout in a web page, in React, in React Flow or on a Node.js server.
 ---
 
-STUB
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import Figure from "../../../components/Figure.astro";
+
+export const first = `system nested {
+  web radial nested { home cart search }
+  api { auth orders }
+}`;
+
+## Install
+
+```sh
+npm install ireko
+```
+
+ireko has no runtime dependencies. The core is approximately 9 KB after minification and gzip. React and React Flow are optional peer dependencies: install them only for `ireko/react` and `ireko/xyflow`.
+
+## Make a layout
+
+A layout starts from a tree. Use the builder, the text language or plain objects. The three forms give the same input.
+
+<Tabs syncKey="input">
+<TabItem label="Builder">
+
+```ts
+import { grid, layout, radial } from "ireko";
+
+const root = grid.nested("system",
+  radial.nested("web", "home", "cart", "search"),
+  grid("api", "auth", "orders"),
+);
+const result = layout({ root });
+```
+
+</TabItem>
+<TabItem label="Text">
+
+```ts
+import { layout } from "ireko";
+import { parse } from "ireko/text";
+
+const parsed = parse(`
+  system nested {
+    web radial nested { home cart search }
+    api { auth orders }
+  }
+`);
+if (!parsed.ok) throw new Error(parsed.error.message);
+const result = layout(parsed.input);
+```
+
+</TabItem>
+<TabItem label="Objects">
+
+```ts
+import { layout, type NodeSpec } from "ireko";
+
+const root: NodeSpec = {
+  id: "system",
+  mode: "nested",
+  children: [
+    { id: "web", layout: "radial", mode: "nested", children: [{ id: "home" }, { id: "cart" }, { id: "search" }] },
+    { id: "api", children: [{ id: "auth" }, { id: "orders" }] },
+  ],
+};
+const result = layout({ root });
+```
+
+</TabItem>
+</Tabs>
+
+<Figure source={first} caption="The layout of the three examples above." height="15rem" />
+
+The result has four parts:
+
+| Part | Contents |
+| --- | --- |
+| `nodes` | One box for each node, with an absolute position and size. A container comes before the boxes inside it. |
+| `edges` | One route for each edge: a list of points from the border of the source to the border of the target. |
+| `bounds` | The smallest rectangle that holds all boxes and edges. |
+| `issues` | The findings of the audit. For a correct input, the list is empty. |
+
+## Draw it
+
+<Tabs syncKey="renderer">
+<TabItem label="SVG string">
+
+```ts
+import { toSVG } from "ireko/svg";
+
+document.querySelector("#diagram")!.innerHTML = toSVG(result);
+```
+
+`toSVG` gives a standalone SVG document. It operates in the browser, in Node.js, in a worker and at build time.
+
+</TabItem>
+<TabItem label="Live renderer">
+
+```ts
+import { mountSvg } from "ireko/svg"; // or mountDom from "ireko/dom", mountCanvas from "ireko/canvas"
+
+const view = mountSvg(document.querySelector("#diagram")!);
+view.update(result); // the first layout fills the element
+view.update(next);   // the boxes move to their new places
+```
+
+A live renderer has pan, zoom, selection and animation. The [renderers page](/learn/renderers/) compares the three.
+
+</TabItem>
+<TabItem label="React">
+
+```tsx
+import { useLayout, LayoutView } from "ireko/react";
+
+// Keep the input in a memo or a state: the hook makes a new layout when the input object changes.
+export function Diagram({ input }) {
+  const result = useLayout(input);
+  return <LayoutView layout={result} style={{ height: 400 }} onPick={(id) => console.log(id)} />;
+}
+```
+
+`LayoutSvg` draws a static SVG with no effects, so it works in server rendering. `LayoutView` adds a live renderer in the browser.
+
+</TabItem>
+<TabItem label="React Flow">
+
+```tsx
+import { ReactFlow } from "@xyflow/react";
+import { edgeTypes, layoutFlow, nodeTypes } from "ireko/xyflow";
+
+const { nodes, edges } = layoutFlow(myNodes, myEdges, { rootLayout: "grid" });
+
+<ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes} fitView />;
+```
+
+A node with `parentId` children becomes a group with a size that holds them. The [React Flow guide](/guides/react-flow/) has a live demo.
+
+</TabItem>
+</Tabs>
+
+## Check the result
+
+The engine examines its own output. It finds overlaps, boxes outside their container and bad options, and puts them in `issues`. In tests and in CI, use the strict mode: the engine then throws an `IrekoError` for each error.
+
+```ts
+import { IrekoError, layout } from "ireko";
+
+try {
+  layout(input, { strict: true });
+} catch (error) {
+  if (error instanceof IrekoError) console.error(error.issues);
+}
+```
+
+The [findings reference](/reference/issues/) explains each code.
+
+## Requirements
+
+- A current browser, or Node.js 22.12 or later.
+- ESM. The package has no CommonJS build.
+- The package includes its types. The core does not need the types of the DOM. Only the renderers need them.
+
+## Next steps
+
+- [Modes and fit](/learn/modes/) and [strategies](/learn/strategies/) explain the options of a container.
+- The [text language](/learn/text-language/) has the full grammar.
+- The [playground](/playground/) has all options with a live layout.

@@ -1,6 +1,96 @@
 ---
-title: STUB learn/custom-strategy
-description: STUB.
+title: Write a strategy
+seoTitle: "Write a custom layout strategy for ireko"
+description: A strategy is one small function that arranges the measured children of a node. Write one, register it in an engine, and use it in the builder and the text language.
 ---
 
-STUB
+import { Code } from "@astrojs/starlight/components";
+import SpiralTry from "../../../components/SpiralTry.tsx";
+import spiralSource from "../../../lib/spiral.ts?raw";
+
+export const spiralText = `# The strategy spiral comes from the code below.
+galaxy spiral nested {
+  sol spiral { mercury venus earth mars }
+  a b c d e f g h
+  core nested { x y z }
+  i j k
+}`;
+
+The built-in strategies are `grid` and `radial`. A strategy of your own gets the same treatment. The engine measures, places, routes and audits its output. The text language and the builder work with it.
+
+## The contract
+
+The engine uses `arrange` once for each node with children, after it knows the size of each child subtree. The function gives the top-left corner of each child box. It does not recurse, does not add padding and does not know the absolute positions.
+
+```ts
+interface Strategy<O> {
+  readonly type: string;              // the name in a NodeSpec and in the text language
+  readonly description: string;       // one sentence for the reference
+  readonly options: OptionSchema<O>;  // the type, the default and the range of each option
+  arrange(input: ArrangeInput<O>): Arrangement;
+  audit?(input: AuditInput<O>): readonly Issue[];
+}
+```
+
+| Input | Meaning |
+| --- | --- |
+| `children[i].box` | The size of the box of child `i`. |
+| `children[i].extent` | The rectangle that holds child `i` and its whole subtree, relative to the top-left corner of its box. Keep the extents apart, not only the boxes. |
+| `self` | The size of the box of the node. |
+| `mode` | `linked`: give offsets relative to the top-left corner of the node box, and keep the children outside it. `nested`: the offsets are free, and the engine moves the content into the box. |
+| `options` | The defaults of the schema, merged with the options of the node. The engine examined each value. |
+| `gap` | The distance to keep between two subtrees. |
+
+The output is `{ offsets }`, one point for each child, in the order of the children. In the nested mode, an optional `content` rectangle makes the container larger than its children.
+
+## An example: spiral
+
+This strategy puts the children on a spiral. It keeps the circle around each subtree away from all circles before it.
+
+<Code code={spiralSource} lang="ts" title="spiral.ts" />
+
+Change the text below. The editor uses an engine with the strategy `spiral`.
+
+<SpiralTry client:visible source={spiralText} />
+
+## Register it
+
+An engine holds its strategies. `createEngine` gives a new engine with the built-in strategies and yours. An engine does not change after you make it: `extend` gives a new engine.
+
+```ts
+import { builder, createEngine } from "ireko";
+import { parse } from "ireko/text";
+import { spiral, type SpiralOptions } from "./spiral.ts";
+
+const engine = createEngine({ strategies: [spiral] });
+
+// The builder: a typed function for the new strategy.
+const spiralOf = builder<SpiralOptions>("spiral");
+const root = spiralOf.nested("galaxy", { growth: 2 }, "a", "b", "c", "d");
+engine.layout({ root });
+
+// The text language: give the names of the strategies to the parser.
+const parsed = parse("galaxy spiral(growth: 2) nested { a b c d }", { strategies: [...engine.strategies.keys()] });
+```
+
+A strategy with the type of a built-in strategy replaces it.
+
+## Check it
+
+The engine examines the output of each strategy:
+
+- A strategy that throws, gives the wrong number of offsets or gives an offset that is not a finite number gives the finding [`STRATEGY_FAILED`](/reference/issues/#strategy_failed). The engine uses `grid` for that node.
+- The audit finds overlaps between sibling subtrees, and boxes outside their container. A strategy that ignores the extents gives [`OVERLAP`](/reference/issues/#overlap).
+- An optional `audit` function adds findings of the strategy.
+
+The test suite of ireko uses random trees to examine the built-in strategies. Do the same for yours. The strict mode throws for each error, and the audit gives an overlap as a warning, so examine `issues` too.
+
+```ts
+import { createEngine } from "ireko";
+
+const engine = createEngine({ strategies: [spiral] });
+for (let seed = 0; seed < 1000; seed++) {
+  const out = engine.layout({ root: randomTree(seed, "spiral") }, { strict: true });
+  expect(out.issues.filter((i) => i.code === "OVERLAP" || i.code === "ESCAPE")).toEqual([]);
+}
+```

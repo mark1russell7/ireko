@@ -1,6 +1,139 @@
 ---
-title: STUB learn/text-language
-description: STUB.
+title: The text language
+seoTitle: "The text language of ireko: write a nested diagram in a few lines"
+description: The grammar of the text language of ireko. Nodes, labels, strategies with options, modes, fit, sizes, edges and comments, with a live editor.
 ---
 
-STUB
+import Figure from "../../../components/Figure.astro";
+import Try from "../../../components/Try.tsx";
+
+export const all = `# A comment starts with # or //.
+shop "The shop" nested grid(columns: 2) {
+  front radial nested { home search cart account }
+  back { orders stock payments }
+  'data store' nested 220x_ { sql cache queue }
+  ops radial(sweep: 180, startAngle: 0) { logs alerts }
+}
+cart -> orders "checkout"
+back -> 'data store'`;
+
+export const statements = `root nested {
+  a; b; c
+  d, e
+  f
+  a -> f
+}`;
+
+The text language is a short way to write the input of a layout. The [playground](/playground/) uses it, and the guide uses it for each figure. `parse` gives the same input as the builder and plain objects. `print` writes an input as text.
+
+<Try client:visible title="The text language" height="24rem" source={all} />
+
+## Nodes
+
+A node statement is an identifier, then optional parts, then an optional block of children.
+
+```text
+id "label" strategy(options) mode fit WxH { children }
+```
+
+The parts after the identifier can come in any order. Each part can occur one time.
+
+| Part | Example | Meaning |
+| --- | --- | --- |
+| Identifier | `web`, `'data store'` | Letters, digits and `_ . @ $ + -`. Single quotes let you use any text. Each node of a tree has a different identifier. |
+| Label | `"The shop"` | The text that a renderer shows. The default is the identifier. |
+| Strategy | `grid`, `radial(sweep: 180)` | The name of a strategy, with optional options in parentheses. The default is `grid`. |
+| Mode | `nested`, `linked` | Where the children go. The default is `linked`. |
+| Fit | `grow`, `scale`, `clip` | The policy of a nested container with a size. The default is `grow`. |
+| Size | `120x48`, `220x_` | The size of a leaf, or the smallest size of a container. `_` is a free dimension. |
+| Block | `{ a b c }` | The children. |
+
+A word after the identifier is a part of the node only if it is a keyword, a size or the name of a strategy. Thus `{ home search cart }` has three leaves, and needs no commas.
+
+## Options
+
+Options go in parentheses after the name of the strategy, as `name: value` pairs with commas between them.
+
+```text
+grid(columns: 3, side: right, uniform: true, gap: 4)
+```
+
+A value is a number, `true`, `false`, a word or a text in double quotes. The schema of the strategy examines each value. The [strategies page](/learn/strategies/) lists the options.
+
+## Statements and separators
+
+A line break, a comma or a semicolon ends a statement. A block can be on one line or on many lines.
+
+<Figure source={statements} caption="Separators: a semicolon, a comma and a line break do the same thing. An edge statement can be in a block too." height="13rem" />
+
+## Edges
+
+An edge statement is `source -> target`, with an optional label in double quotes. Both ends are identifiers of nodes in the tree, at any depth. An edge statement can be at the top level or in a block.
+
+```text
+cart -> orders "checkout"
+back -> 'data store'
+```
+
+The tree gives the edges of the linked children. Do not write them again.
+
+## Comments
+
+A comment starts with `#` or `//` and goes to the end of the line.
+
+## The document
+
+A document has exactly one root node, and any number of edge statements. To show more than one tree, put them in one root, for example a nested grid:
+
+```text
+all nested { first { a b } second { c d } }
+```
+
+## Errors
+
+The parser stops at the first error and gives its line, its column and its length. The editors of this site underline it. Each message tells you what to write.
+
+| Text | Message |
+| --- | --- |
+| `a { b c` | The block has no closing brace. |
+| `a b` | The document has 2 root nodes. Put them in one root node. |
+| `a grid(columns 3)` | The option "columns" needs a colon and a value, for example: columns: 3 |
+| `a nested linked` | The node "a" has two modes. |
+| `a -> ` | The edge from "a" has no target. Write: a -> target |
+
+## Parse and print
+
+```ts
+import { layout } from "ireko";
+import { parse, print } from "ireko/text";
+
+const parsed = parse(text, { strategies: ["grid", "radial", "spiral"] });
+if (parsed.ok) {
+  const result = layout(parsed.input);
+} else {
+  const { message, line, column, offset, length } = parsed.error;
+}
+
+print(input); // the canonical text: two spaces of indentation, and a block of leaves on one line
+```
+
+`parse` does not throw for a syntax error. It gives `{ ok: false, error }`. Give the names of your own strategies in `strategies`, so the parser knows them as strategies and not as identifiers.
+
+`parse(print(input))` gives the input again. It loses only the `data` of the nodes and the identifiers of the edges.
+
+## Grammar
+
+```text
+document   = { statement | separator }    (exactly one node statement at the top level)
+statement  = node | edge
+node       = identifier { label | strategy | mode | fit | size } [ "{" { statement | separator } "}" ]
+edge       = identifier "->" identifier [ label ]
+strategy   = name [ "(" option { "," option } ")" ]
+option     = word ":" ( word | label )
+mode       = "nested" | "linked"
+fit        = "grow" | "scale" | "clip"
+size       = ( number | "_" ) "x" ( number | "_" )
+identifier = word | "'" text "'"
+label      = '"' text '"'
+separator  = line break | "," | ";"
+```

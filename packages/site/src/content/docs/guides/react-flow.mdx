@@ -1,6 +1,125 @@
 ---
-title: STUB guides/react-flow
-description: STUB.
+title: Auto layout for React Flow sub-flows
+seoTitle: "React Flow auto layout for nested sub-flows and groups, with ireko"
+description: Lay out React Flow nodes, groups and sub-flows with one function. ireko sizes each group to hold its children, and routes the edges. A live demo with xyflow 12.
 ---
 
-STUB
+import FlowDemo from "../../../components/FlowDemo.tsx";
+
+React Flow has groups (sub-flows): a node with `parentId` is inside its parent node. React Flow does not lay out the nodes, and its layout guide lists dagre, d3-hierarchy, d3-force and ELK. A group needs a size that holds its children, and the children need positions inside it. `layoutFlow` gives both, with one strategy for each group.
+
+<FlowDemo client:visible />
+
+Drag a node: its edges go straight between the handles. Select **Lay out** to put the nodes back on their routes.
+
+## Install
+
+```sh
+npm install ireko @xyflow/react
+```
+
+`ireko/xyflow` needs `@xyflow/react` 12. The core of ireko does not.
+
+## layoutFlow
+
+Give `layoutFlow` your nodes and edges. It gives new nodes with positions, new groups with sizes, and new edges with routes. It keeps all other properties of your nodes and edges.
+
+```tsx
+import "@xyflow/react/dist/style.css";
+import { ReactFlow, type Edge, type Node } from "@xyflow/react";
+import { edgeTypes, layoutFlow, nodeTypes } from "ireko/xyflow";
+
+const nodes: Node[] = [
+  { id: "server", type: "group", data: { label: "server" }, position: { x: 0, y: 0 } },
+  { id: "api", parentId: "server", extent: "parent", data: { label: "api" }, position: { x: 0, y: 0 }, width: 84, height: 34 },
+  { id: "auth", parentId: "server", extent: "parent", data: { label: "auth" }, position: { x: 0, y: 0 }, width: 84, height: 34 },
+  { id: "web", data: { label: "web" }, position: { x: 0, y: 0 }, width: 84, height: 34 },
+];
+const edges: Edge[] = [
+  { id: "web-api", source: "web", target: "api" },
+  { id: "api-auth", source: "api", target: "auth" },
+];
+
+const laid = layoutFlow(nodes, edges, {
+  rootLayout: "grid",
+  nodeSpec: (n) => (n.id === "server" ? { layout: "radial" } : undefined),
+});
+
+export function Diagram() {
+  return <ReactFlow nodes={laid.nodes} edges={laid.edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes} fitView />;
+}
+```
+
+### How it reads the flow
+
+- A node with children (through `parentId`) becomes a nested container. Its size holds its children.
+- A node with no children keeps its size: `measured`, then `width` and `height`, then the `nodeSize` option.
+- With `hierarchy: "edges"` (the default), an edge between two nodes of the same group also makes a tree. The target becomes a linked child of the source, if it has no parent yet. With `hierarchy: "parent"`, only `parentId` makes the tree.
+- The other edges are extra edges. They connect nodes in different groups.
+- The nodes with no parent go into an invisible root, with the strategy `rootLayout`.
+
+### Options
+
+`layoutFlow` takes all [layout options](/reference/options/), and these:
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `rootLayout` | `"grid"` | The strategy of the nodes with no parent. |
+| `nodeSpec` | none | A function that gives the strategy, the mode and the fit of a node. |
+| `hierarchy` | `"edges"` | `"edges"`: the edges in a group make a tree. `"parent"`: only `parentId` makes the tree. |
+| `engine` | the default engine | An engine with your strategies. |
+| `edgeType` | `"ireko"` | The type of the edges that get a route. |
+
+## The edge type and the group type
+
+- `edgeTypes` registers `PolylineEdge` as the type `ireko`. It draws the route of ireko. React Flow keeps its markers, its labels and its selection. Without a route, the edge is a straight line between the handles.
+- `nodeTypes` registers `GroupNode` as the type `group`. It draws the label of the group, and has hidden handles, so an edge can end on a group.
+
+Keep `nodeTypes` and `edgeTypes` outside your components. A new object on each render makes React Flow draw each node again, and React Flow gives a warning.
+
+## Measured sizes
+
+React Flow measures each node after the first render. For nodes with content of a variable size, lay out again after the measurement:
+
+```tsx
+import { useNodesInitialized, useReactFlow } from "@xyflow/react";
+
+function AutoLayout() {
+  const ready = useNodesInitialized();
+  const flow = useReactFlow();
+  useEffect(() => {
+    if (!ready) return;
+    const laid = layoutFlow(flow.getNodes(), flow.getEdges());
+    flow.setNodes(laid.nodes);
+    flow.setEdges(laid.edges);
+    flow.fitView();
+  }, [ready, flow]);
+  return null;
+}
+```
+
+## From a layout to React Flow
+
+To draw a layout that you made with the core, use `toXYFlow`. It gives the nodes (a parent before its children, positions relative to the container) and the edges with routes.
+
+```tsx
+import { layout } from "ireko";
+import { toXYFlow, nodeTypes, edgeTypes } from "ireko/xyflow";
+
+const { nodes, edges } = toXYFlow(layout(input));
+<ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes} fitView />;
+```
+
+The [playground](/playground/) uses `toXYFlow` for its React Flow view.
+
+## Compared with dagre and ELK
+
+| | ireko | dagre | ELK (elkjs) |
+| --- | --- | --- | --- |
+| Groups (sub-flows) | Yes, each group with its own strategy | Clusters, with known problems for sub-flows | Yes, with many options |
+| Strategies | grid, radial, yours | layered | layered, stress, tree, radial, force and more |
+| Edge routes | straight, orthogonal, yours | polyline | orthogonal, splines, polyline |
+| API | synchronous | synchronous | asynchronous |
+| Size (min + gzip) | approximately 9 KB | approximately 17 KB | approximately 470 KB |
+
+For a large directed graph with layers, use dagre or ELK. For nested groups with a layout for each group, use ireko. The [comparison page](/compare/) has more detail.

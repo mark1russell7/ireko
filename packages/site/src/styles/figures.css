@@ -1,0 +1,423 @@
+/*
+ * The large live figures of the guide: the configurator, the fuzz meter, the pipeline, the renderers side by side,
+ * the comparison with the first version and React Flow.
+ */
+
+/* The configurator of the strategies page. */
+.ik-config-body {
+  display: grid;
+  grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr);
+  height: 22rem;
+}
+.ik-config-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3);
+  overflow: auto;
+  border: 0;
+  border-right: 1px solid var(--color-rule);
+  font-size: var(--text-sm);
+}
+.ik-config-options legend {
+  float: left;
+  margin-bottom: var(--space-1);
+  color: var(--color-ink-secondary);
+  font-weight: 600;
+}
+.ik-config-field {
+  display: grid;
+  gap: 0.15rem;
+  color: var(--color-ink-secondary);
+}
+.ik-config-field:has(input[type="checkbox"]) {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+.ik-config-field output {
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+}
+.ik-config-stage {
+  height: 100%;
+}
+.ik-config-code {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  border-top: 1px solid var(--color-rule);
+}
+.ik-config-code > .ik-source + .ik-source {
+  border-left: 1px solid var(--color-rule);
+}
+.ik-toolbar input[type="checkbox"],
+.ik-config-field input[type="checkbox"] {
+  accent-color: var(--color-accent);
+}
+.ik-try-hint {
+  color: var(--color-ink-muted);
+  font-size: var(--text-xs);
+}
+
+/* The fuzz meter of the page "Why two passes". */
+.ik-fuzz-body {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  min-height: 15rem;
+}
+.ik-fuzz-bars {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-right: 1px solid var(--color-rule);
+}
+.ik-fuzz-row {
+  display: grid;
+  grid-template-columns: 9.5rem minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: var(--space-3);
+  align-items: center;
+  font-size: var(--text-sm);
+}
+.ik-fuzz-name {
+  grid-row: span 2;
+  color: var(--color-ink-secondary);
+  font-weight: 600;
+}
+.ik-fuzz-bar {
+  position: relative;
+  display: block;
+  height: 0.9rem;
+  overflow: hidden;
+  border: 1px solid var(--color-rule-strong);
+  border-radius: 999px;
+  background: var(--color-surface-sunken);
+}
+.ik-fuzz-bar > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  transition: width 120ms linear;
+}
+.ik-fuzz-bar[data-kind="old"] > span {
+  background: repeating-linear-gradient(45deg, var(--color-mark) 0 3px, var(--color-mark-wash) 3px 6px);
+}
+.ik-fuzz-bar[data-kind="new"] > span:first-child {
+  z-index: 1;
+  background: var(--color-mark);
+}
+.ik-fuzz-progress {
+  background: color-mix(in srgb, var(--status-good) 35%, transparent);
+}
+.ik-fuzz-value {
+  color: var(--color-ink-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.ik-fuzz-note {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-xs);
+}
+.ik-fuzz-stage {
+  height: 100%;
+  min-height: 15rem;
+}
+
+/* The pipeline of the engine. */
+.ik-pipeline-phases {
+  display: flex;
+  border-bottom: 1px solid var(--color-rule);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.ik-pipeline-phases span {
+  flex: 1;
+  padding: var(--space-2);
+  border-right: 1px solid var(--color-rule);
+  color: var(--color-ink-muted);
+  text-align: center;
+  transition:
+    background 200ms,
+    color 200ms;
+}
+.ik-pipeline-phases span:last-child {
+  border-right: 0;
+}
+.ik-pipeline-phases span[data-done="true"] {
+  color: var(--color-ink-secondary);
+}
+.ik-pipeline-phases span[data-active="true"] {
+  background: var(--color-accent-wash);
+  color: var(--color-accent-strong);
+  font-weight: 700;
+}
+.ik-pipeline-body {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(14rem, 2fr);
+}
+.ik-pipeline-art {
+  display: block;
+  width: 100%;
+  height: 22rem;
+}
+.ik-pipeline-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-left: 1px solid var(--color-rule);
+  font-size: var(--text-sm);
+}
+.ik-pipeline-step {
+  min-height: 6.5em;
+  margin: 0;
+  color: var(--color-ink-secondary);
+}
+.ik-pipeline-tree {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-xs);
+}
+.ik-pipeline-tree li {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 0.1rem;
+  color: var(--color-ink-muted);
+}
+.ik-pipeline-tree li[data-measured="true"] {
+  color: var(--color-ink-secondary);
+}
+.ik-pipeline-tree li[data-placed="true"] {
+  color: var(--color-ink);
+}
+.ik-pipeline-tree li[data-focus="true"] code {
+  background: var(--color-accent-wash);
+  color: var(--color-accent-strong);
+}
+.ik-pipeline-size {
+  font-family: var(--font-mono);
+}
+.ik-pipeline-range {
+  width: 100%;
+}
+.ik-pipe-ghost {
+  fill: none;
+  stroke: var(--color-ink-muted);
+  stroke-dasharray: 3 3;
+}
+.ik-pipe-extent rect {
+  fill: var(--color-accent-wash);
+  fill-opacity: 0.45;
+  stroke: var(--color-accent);
+  stroke-dasharray: 6 4;
+}
+.ik-pipe-extent text {
+  fill: var(--color-accent-strong);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.ik-pipe-placed {
+  animation: ik-pop 260ms ease-out;
+}
+.ik-pipe-placed.ireko-node rect {
+  fill: var(--color-surface);
+  stroke: var(--color-ink-secondary);
+}
+.ik-pipe-placed.ireko-container rect {
+  fill: color-mix(in srgb, var(--color-surface-sunken) 80%, transparent);
+  stroke: var(--color-rule-strong);
+}
+.ik-pipe-placed text {
+  fill: var(--color-ink);
+}
+.ik-pipe-edges polyline {
+  stroke: var(--color-control-border);
+  stroke-dasharray: 400;
+  animation: ik-draw 700ms ease-out;
+}
+.ik-pipe-edges polyline[stroke-dasharray="4 3"] {
+  stroke: var(--color-accent);
+  animation: none;
+}
+.ik-pipe-arrow {
+  fill: var(--color-control-border);
+}
+.ik-pipe-stamp text {
+  fill: var(--status-good-ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  dominant-baseline: hanging;
+}
+@keyframes ik-pop {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes ik-draw {
+  from {
+    stroke-dashoffset: 400;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* One layout in three renderers. */
+.ik-parity-body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  height: 16rem;
+}
+.ik-parity-pane {
+  position: relative;
+  border-right: 1px solid var(--color-rule);
+}
+.ik-parity-pane:last-child {
+  border-right: 0;
+}
+.ik-parity-pane > .ik-stage {
+  height: 100%;
+}
+.ik-parity-label {
+  position: absolute;
+  z-index: 2;
+  top: var(--space-2);
+  left: var(--space-2);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-small);
+  background: var(--color-surface);
+  color: var(--color-ink-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  pointer-events: none;
+}
+.ik-parity-notes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+/* The first version and ireko, side by side. */
+.ik-before-after-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.ik-before-after-pane + .ik-before-after-pane {
+  border-left: 1px solid var(--color-rule);
+}
+.ik-before-after-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-rule);
+  font-size: var(--text-sm);
+}
+.ik-before-after-art {
+  padding: var(--space-2);
+}
+.ik-before-after-art svg {
+  display: block;
+  width: 100%;
+  height: 22rem;
+}
+.ik-before-after .ireko-node rect {
+  fill: color-mix(in srgb, var(--color-surface) 85%, transparent);
+  stroke: var(--color-ink-secondary);
+}
+.ik-before-after .ireko-container rect {
+  fill: color-mix(in srgb, var(--color-surface-sunken) 60%, transparent);
+  stroke: var(--color-rule-strong);
+}
+.ik-before-after text {
+  fill: var(--color-ink);
+}
+.ik-before-after .ireko-edges polyline {
+  stroke: var(--color-control-border);
+}
+.ik-hatch-line {
+  stroke: var(--color-mark);
+  stroke-width: 2.5;
+}
+.ik-overlaps rect {
+  stroke: var(--color-mark);
+  stroke-width: 0.75;
+}
+
+/* React Flow with layoutFlow. */
+.ik-flow-stage {
+  height: 26rem;
+}
+.ik-flow .react-flow__node-group {
+  border-color: var(--color-rule-strong);
+  background: color-mix(in srgb, var(--color-surface-sunken) 80%, transparent);
+}
+.ik-flow .react-flow__node-default {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 12px;
+}
+
+/* The gallery. */
+.ik-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: var(--space-4);
+  margin-block: var(--space-5);
+}
+.ik-gallery-card .ik-card-art {
+  height: 12rem;
+  padding: var(--space-2);
+}
+.ik-gallery-card .ik-card-body h2 {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-lg);
+  color: var(--color-ink);
+}
+.ik-gallery-card .ik-card-body p + p {
+  margin-top: var(--space-2);
+}
+.ik-gallery-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* A small screen: the parts go one above the other. */
+@media (max-width: 50rem) {
+  .ik-config-body,
+  .ik-fuzz-body,
+  .ik-pipeline-body,
+  .ik-before-after-body,
+  .ik-parity-body,
+  .ik-parity-notes,
+  .ik-config-code {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+  }
+  .ik-config-options,
+  .ik-fuzz-bars,
+  .ik-before-after-pane + .ik-before-after-pane,
+  .ik-pipeline-side {
+    border-right: 0;
+    border-left: 0;
+    border-top: 1px solid var(--color-rule);
+  }
+  .ik-config-stage,
+  .ik-parity-pane {
+    height: 16rem;
+  }
+  .ik-parity-pane {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+}

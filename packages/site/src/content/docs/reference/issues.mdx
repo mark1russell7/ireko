@@ -1,6 +1,111 @@
 ---
-title: STUB reference/issues
-description: STUB.
+title: Findings
+seoTitle: "The findings of ireko: each issue code, its cause and its fix"
+description: Each code that a layout can have in its issues - duplicate identifiers, unknown strategies, bad options, limits, failed strategies and routers, overlaps and escapes.
 ---
 
-STUB
+The engine does not throw for a bad input. It gives a layout, and puts each problem in `Layout.issues`. Each finding has a `code`, a `severity`, a `message`, and the `node` or the `edge` when it applies. The `detail` object has the values that caused it.
+
+```ts
+interface Issue {
+  code: IssueCode;
+  severity: "error" | "warning";
+  message: string;
+  node?: string;
+  edge?: string;
+  detail?: Record<string, unknown>;
+}
+```
+
+- An **error** changed the output: the engine skipped a node or an edge, or used a default.
+- A **warning** did not change the output, or changed it only to make it valid.
+- With `strict: true`, the engine throws an `IrekoError` with all errors. Warnings do not throw.
+
+| Code | Severity | Phase |
+| --- | --- | --- |
+| [`EMPTY_ID`](#empty_id) | error | normalize |
+| [`DUPLICATE_ID`](#duplicate_id) | error (nodes), warning (edges) | normalize, route |
+| [`UNKNOWN_LAYOUT`](#unknown_layout) | error | normalize |
+| [`UNKNOWN_ROUTER`](#unknown_router) | error | options |
+| [`INVALID_OPTION`](#invalid_option) | warning | options, measure |
+| [`INVALID_SIZE`](#invalid_size) | error, or warning | options, normalize, measure |
+| [`UNKNOWN_EDGE_END`](#unknown_edge_end) | error | normalize |
+| [`SELF_LOOP`](#self_loop) | warning | normalize |
+| [`LIMIT_NODES`](#limit_nodes), [`LIMIT_DEPTH`](#limit_depth), [`LIMIT_CHILDREN`](#limit_children) | error | normalize |
+| [`STRATEGY_FAILED`](#strategy_failed) | error (arrange), warning (audit) | measure, audit |
+| [`ROUTER_FAILED`](#router_failed) | error | route |
+| [`OVERLAP`](#overlap) | warning | audit |
+| [`ESCAPE`](#escape) | warning | audit |
+
+## `EMPTY_ID`
+
+A node has no identifier, or a child is not an object. The engine skips the node and its subtree. Give each node a non-empty `id`.
+
+## `DUPLICATE_ID`
+
+Two nodes have the same identifier. The engine keeps the first node, and skips the second node and its subtree. For edges, the engine renames the second edge `id#2` and keeps it (a warning). Identifiers of nodes must be unique in the whole tree, not only in one container.
+
+## `UNKNOWN_LAYOUT`
+
+A node uses a strategy that the engine does not have. The engine uses `grid` for it. The message lists the registered strategies. Register your strategy with `createEngine({ strategies })`, and check the spelling. In the text language, give the names of your strategies to `parse`.
+
+## `UNKNOWN_ROUTER`
+
+The `router` option names a router that the engine does not have. The engine uses `straight`. Register your router with `createEngine({ routers })`.
+
+## `INVALID_OPTION`
+
+An option has the wrong type or is out of its range, or the strategy has no option with that name. A `mode` or a `fit` that is not a known word, and a layout object with no `type`, give it too. The engine uses the default. The `detail` has the strategy, the option and the value. The schema of each strategy is in [the options reference](/reference/options/). This finding also applies to `spacing`, `header`, `gap` and `padding`.
+
+## `INVALID_SIZE`
+
+- A `size` of a node is not a finite number more than 0 (an error). The engine uses the default for that dimension.
+- The `nodeSize` option is not a valid size (an error). The engine uses 120 by 48.
+- A fixed size of a container is smaller than its padding and header (a warning). The engine makes the box large enough to hold one pixel of content.
+
+## `UNKNOWN_EDGE_END`
+
+An edge connects a node that is not in the tree. The engine skips the edge. Check the identifiers. A node that the engine skipped for another finding (for example `DUPLICATE_ID`) is not in the tree either.
+
+## `SELF_LOOP`
+
+An edge connects a node to itself. The engine skips the edge.
+
+## `LIMIT_NODES`
+
+The tree has more nodes than the limit of the engine (the default is 100000). The engine skips the other nodes. Change the limit with `createEngine({ limits: { maxNodes } })`.
+
+## `LIMIT_DEPTH`
+
+The tree is deeper than the limit (the default is 10000 levels). The engine skips the deeper nodes. The engine uses no recursion, so the limit protects the time of the layout, not the stack.
+
+## `LIMIT_CHILDREN`
+
+A node has more children than the limit (the default is 10000). The engine skips the other children.
+
+## `STRATEGY_FAILED`
+
+- The `arrange` function of a strategy threw, gave the wrong number of offsets, or gave an offset that is not a finite number (an error). The engine uses `grid` for that node, so the layout stays valid.
+- The `audit` function of a strategy threw (a warning). The engine ignores that audit.
+
+The message has the name of the strategy and the problem. Refer to [Write a strategy](/learn/custom-strategy/).
+
+## `ROUTER_FAILED`
+
+A router threw, or gave fewer than two points, or a point that is not finite. The engine uses `straight` for that edge.
+
+## `OVERLAP`
+
+Two boxes overlap, and neither box holds the other through the nested mode. The built-in strategies do not make overlaps, so look for a custom strategy that uses the boxes of the children, not their extents.
+
+A box inside a container with the fit `clip` counts only for its visible part, because the renderers cut the rest.
+
+The audit gives at most 100 overlaps. Then it gives one more finding with the full count in `detail.count`.
+
+## `ESCAPE`
+
+A box is not inside the nested container that holds it. The built-in strategies do not make this. A custom strategy with a `content` rectangle that is too small can.
+
+## Findings of a strategy
+
+The `audit` function of a strategy can give its own findings, with its own codes. `IssueCode` accepts any string for this reason.

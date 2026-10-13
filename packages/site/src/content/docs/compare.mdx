@@ -1,6 +1,59 @@
 ---
-title: STUB compare
-description: STUB.
+title: Compare
+seoTitle: "ireko compared with dagre, ELK, d3-hierarchy, Cytoscape and Graphviz"
+description: When to use ireko, and when to use dagre, elkjs, d3-hierarchy, d3-flextree, Cytoscape.js, Graphviz or Mermaid. An honest comparison of nested graph layout libraries.
 ---
 
-STUB
+ireko does one thing: it lays out a **tree of containers**, with a different layout for each container. Other libraries do other things better. This page helps you select one.
+
+## The short answer
+
+| You have | Use |
+| --- | --- |
+| Nested groups, and each group needs its own arrangement (a grid of rings of trees) | **ireko** |
+| React Flow sub-flows that need sizes and positions | **ireko** (`layoutFlow`), or ELK |
+| A large directed graph with layers (a flow chart, a dependency graph) | dagre, or ELK `layered` |
+| Ports, edge labels with their own space, and many options | ELK |
+| One tree, with tidy layers and nodes of different sizes | d3-flextree |
+| A network with no hierarchy | d3-force, Cytoscape.js with fCoSE, or ELK `stress` |
+| A diagram from a text in Markdown | Mermaid, or Graphviz |
+
+## Feature table
+
+| | ireko | dagre | ELK (elkjs) | d3-hierarchy | Cytoscape.js | Graphviz (WASM) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Main algorithm | grid, radial, yours, in each container | layered | layered and 10 more | tidy tree, treemap, pack | many, as extensions | dot, neato, osage and more |
+| Nested containers | yes, each with its own strategy and mode | clusters, with settings for each cluster (3.1) | yes, from the leaves up | treemap and pack only | yes (compound nodes) | clusters |
+| Your own algorithm | a small `arrange` function | no | Java or a fork | no | an extension | no |
+| Edge routes | straight, orthogonal, yours | polyline | orthogonal, polyline, splines | no | by the renderer | splines, orthogonal |
+| Audit of the output | yes, in each layout | no | no | no | no | no |
+| Text language | yes | no | no (JSON) | no | no | DOT |
+| Renderers | SVG, DOM, Canvas, React, React Flow | no | no | no | its own | SVG |
+| API | synchronous | synchronous | asynchronous (worker) | synchronous | synchronous | asynchronous (WASM) |
+| Size, min + gzip | 9 KB | 17 KB | 467 KB | 6 KB | not measured | not measured (WASM) |
+| License | MIT | MIT | EPL-2.0 | ISC | MIT | EPL-1.0 (Graphviz) |
+
+The sizes are measurements of the minified bundle after gzip, in October 2026: ireko 0.1, `@dagrejs/dagre` 3.1.1, `elkjs` 0.12.0 (`elk.bundled.js`) and `d3-hierarchy` 3.1.2.
+
+## How each library treats nested groups
+
+Good layout engines for nested graphs do the same thing at the core. They lay out the inside of each group first, then the group. ireko does that too, with [two passes](/design/two-passes/). The difference is the unit of choice.
+
+- **ELK** has `elk.algorithm` on each compound node, and lays out from the leaves up by default. It has a very large set of options, and its JSON model has ports and label space. The React Flow guide names it the most configurable layout library, and also the most complex.
+- **dagre** 3.1 has settings for each cluster: direction and spacing. The algorithm is always layered.
+- **Graphviz `osage`** lays out each cluster first, then packs the clusters. Each cluster can set its own packing.
+- **Cytoscape.js** sizes a compound node from its children. To use a different layout for each compound, you lay out each subset by hand.
+- **ireko** makes the strategy and the mode two settings of each node, and nothing more. A grid container can hold a ring that holds a tree. Each strategy is a function of one level, so a new strategy is short.
+
+## What ireko does not do
+
+- **No layered layout.** ireko has no crossing reduction and no layers. For a flow chart with long chains, use dagre or ELK.
+- **No ports.** An edge starts at the border of a box, on the line to the other box.
+- **No edge label space.** A label goes at the middle of its route, on top of the line. The layout does not keep space for it.
+- **No obstacle routing.** An edge can cross a box. The orthogonal router does not go around other boxes.
+
+The [plan of the project](https://github.com/mark1russell7/ireko/blob/main/docs/REVIEW.md) has a tree strategy, a stack strategy and an obstacle router as next steps.
+
+## Use them together
+
+A strategy is a function of one level, so a strategy can wrap another library. For example, a `layered` strategy can give the children of one container to dagre, and give back the offsets. The other containers keep grid and radial. The [strategy guide](/learn/custom-strategy/) has the contract.

@@ -1,0 +1,46 @@
+---
+/**
+ * The gallery: a card for each example of ireko/examples. The build lays out each example, so each card is a static
+ * SVG of real output.
+ */
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import { layout } from "ireko";
+import { examples } from "ireko/examples";
+import { LayoutSvg } from "ireko/react";
+import { href } from "../../lib/site.ts";
+
+const cards = examples.map((example) => {
+  const out = layout(example.input, example.options);
+  return { example, out, boxes: out.nodes.length, edges: out.edges.length };
+});
+---
+
+<StarlightPage
+  frontmatter={{
+    title: "Gallery",
+    seoTitle: "Gallery: nested graph layouts made with ireko",
+    description: "Org charts, mind maps, architecture diagrams, rings of rings and fractals. Each example is a live layout that you can edit, with its text and its JSON.",
+    tableOfContents: false,
+  }}
+>
+  <p>Each example shows one idea of ireko. The tests of the library lay out each example and compare it with a golden file, so these pictures are the real output of the engine. Select an example to edit it.</p>
+  <div class="ik-gallery not-content">
+    {
+      cards.map(({ example, out, boxes, edges }) => (
+        <a class="ik-card ik-gallery-card" href={href(`gallery/${example.name}/`)}>
+          <div class="ik-card-art ik-svg ik-paper" aria-hidden="true">
+            <LayoutSvg layout={out} padding={12} />
+          </div>
+          <div class="ik-card-body">
+            <h2>{example.title}</h2>
+            <p>{example.description}</p>
+            <p class="ik-gallery-meta">
+              <span class="ik-chip">{boxes} boxes</span>
+              <span class="ik-chip">{edges} edges</span>
+            </p>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</StarlightPage>

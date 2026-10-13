@@ -1,6 +1,135 @@
 ---
-title: STUB learn/modes
-description: STUB.
+title: Modes and fit
+seoTitle: "Modes and fit: nested containers and linked trees in ireko"
+description: A node puts its children inside its box (nested) or around it (linked). A nested container with a fixed size grows, scales or clips its content.
 ---
 
-STUB
+import Figure from "../../../components/Figure.astro";
+import Morph from "../../../components/Morph.tsx";
+
+export const modes = [
+  {
+    label: "linked",
+    source: `team {
+  design { ana ben }
+  build { cy dee eli }
+}`,
+    note: "linked: each node is a box, and an edge goes to each child.",
+  },
+  {
+    label: "nested root",
+    source: `team nested {
+  design { ana ben }
+  build { cy dee eli }
+}`,
+    note: "The root is a container. Its children are two linked trees inside it.",
+  },
+  {
+    label: "all nested",
+    source: `team nested {
+  design nested { ana ben }
+  build nested { cy dee eli }
+}`,
+    note: "Containers in a container: the edges of the tree go away.",
+  },
+];
+
+export const fits = [
+  {
+    label: "grow",
+    source: `frame nested grow 180x90 {
+  a b c d e f g h
+}`,
+    note: "grow (the default): the box is at least 180 by 90, and it grows to hold its content.",
+  },
+  {
+    label: "scale",
+    source: `frame nested scale 180x90 {
+  a b c d e f g h
+}`,
+    note: "scale: the box keeps its size, and the content becomes smaller.",
+  },
+  {
+    label: "clip",
+    source: `frame nested clip 180x90 {
+  a b c d e f g h
+}`,
+    note: "clip: the box keeps its size, and the renderer cuts the content at its edge.",
+  },
+];
+
+export const spacing = [
+  { label: "defaults", source: "box nested { a b c d }", note: "The gap and the padding come from the spacing option of the layout." },
+  { label: "gap: 2", source: "box nested grid(gap: 2) { a b c d }", note: "gap: the distance between two children." },
+  { label: "padding: 30", source: "box nested grid(padding: 30) { a b c d }", note: "padding: the space inside the edge of the container." },
+  { label: "header: 50", source: "box nested grid(header: 50) { a b c d }", note: "header: the smallest space above the content, for the label." },
+];
+
+export const mixed = `org nested grid(columns: 2) {
+  sales radial { north south east west }
+  support nested { tier1 tier2 }
+  product nested {
+    web radial nested { ui api }
+    mobile { ios android }
+  }
+  ops
+}`;
+
+Each node with children has a **mode**. The mode tells where the children go.
+
+| Mode | The children are | Edges of the tree |
+| --- | --- | --- |
+| `linked` (default) | around the box of the node, on one side or on a ring | yes, one to each child |
+| `nested` | inside the box of the node. The node becomes a container. | no |
+
+## Linked and nested
+
+The mode applies to the children of one node. A linked child of a nested container is a tree inside the container. A nested child of a linked node is a container at the end of an edge.
+
+<Morph client:visible title="The modes of a team" height="17rem" states={modes} />
+
+In the text language, the words `linked` and `nested` set the mode. In the builder, `grid(...)` makes a linked node and `grid.nested(...)` makes a container. In plain objects, set `mode: "nested"`.
+
+## The size of a container
+
+A container is as large as its content, plus the padding and the header. Give a size to make it larger:
+
+```text
+frame nested 300x200 { a b c }
+```
+
+A size is `WIDTH x HEIGHT`. Use `_` for a free dimension: `300x_` sets only the width. In plain objects, use `size: { width: 300 }`.
+
+## Fit: a container with a fixed size
+
+When the content needs more space than the size, the **fit** of the container decides what happens.
+
+<Morph client:visible title="The fit of a container" height="16rem" states={fits} />
+
+- `grow` keeps the content at its size. The size of the box is only a minimum.
+- `scale` makes the content smaller, so it fits the box. The text gets smaller too. Each box in the output has a `scale`, and the renderers use it for the text and the lines.
+- `clip` keeps the content at its size and gives the container `clip: true`. The renderers cut the content at the edge of the box. The content starts at the top-left corner of the box, so the first children stay visible.
+
+The fit applies only to a nested container with a size. A container without a size always fits its content.
+
+## Gap, padding and header
+
+Three options of each container set its spacing. They come from the `spacing` option of the layout (the default is 24), and each container can replace them.
+
+<Morph client:visible title="The spacing of a container" height="14rem" states={spacing} />
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `gap` | `spacing` | The distance between two children. |
+| `padding` | `spacing` | The space inside the edge of a nested container. |
+| `header` | the `header` option of the layout (24) | The smallest space above the content of a nested container. The padding counts as a part of it. |
+
+These options belong to the engine, not to a strategy. Thus each strategy has them, also a [strategy that you add](/learn/custom-strategy/).
+
+```ts
+grid.nested("box", { gap: 2, padding: 30 }, "a", "b", "c", "d");
+```
+
+## Mix the modes
+
+<Figure source={mixed} caption="An organization: linked rings and trees, and containers in containers, in one layout." height="20rem" />

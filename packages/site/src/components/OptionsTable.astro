@@ -1,0 +1,47 @@
+---
+/**
+ * The options of a strategy, from its option schema. The table and the engine read the same schema, so the reference
+ * cannot differ from the code.
+ */
+import { createEngine, type OptionSpec } from "ireko";
+
+interface Props {
+  /** The type of the strategy, for example "grid". */
+  readonly strategy: string;
+}
+
+const { strategy } = Astro.props;
+const s = createEngine().strategies.get(strategy);
+if (s === undefined) throw new Error(`OptionsTable: no strategy "${strategy}".`);
+
+const typeOf = (spec: OptionSpec): string => {
+  if (spec.type === "enum") return spec.values.map((v) => `"${v}"`).join(" | ");
+  if (spec.type === "number") {
+    const range = spec.min !== undefined && spec.max !== undefined ? ` (${spec.min} to ${spec.max})` : spec.min !== undefined ? ` (${spec.min} or more)` : "";
+    return `${spec.integer === true ? "integer" : "number"}${range}`;
+  }
+  return "boolean";
+};
+const rows = Object.entries(s.options).map(([name, spec]) => ({ name, type: typeOf(spec), def: JSON.stringify(spec.default), description: spec.description }));
+---
+
+<div class="ik-table-wrap not-content">
+  <table class="ik-table">
+    <caption class="ik-sr">The options of the strategy {strategy}</caption>
+    <thead>
+      <tr><th scope="col">Option</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((r) => (
+          <tr>
+            <td><code>{r.name}</code></td>
+            <td><code>{r.type}</code></td>
+            <td><code>{r.def}</code></td>
+            <td>{r.description}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

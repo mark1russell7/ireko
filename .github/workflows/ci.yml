@@ -1,6 +1,7 @@
 # The gates of each change.
 #   check   the type check, Oxlint, the tests and the prose lint, on each supported Node.js version
 #   legacy  the build of the old Jqy playground, until the new core reaches parity (docs/REVIEW.md, P2)
+#   site    the type check and the build of the site, the share cards and the browser tests
 #   ci-ok   the one check that a pull request must pass
 # release.yml calls this workflow before it builds a release.
 name: CI
@@ -70,10 +71,57 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @ireko/legacy build
 
+  site:
+    name: Site
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # The whole history: the sitemap gets the date of each page from its last commit.
+          fetch-depth: 0
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # The generated types of Astro (astro sync), then the type check of the site and of its browser tests
+      - run: pnpm --filter @ireko/site typecheck
+      - name: Build the site
+        run: pnpm --filter @ireko/site build
+        env:
+          SITE_BASE: ireko
+          ASTRO_TELEMETRY_DISABLED: "1"
+      - name: The version of Playwright
+        id: playwright
+        run: echo "version=$(node -p "require('./packages/site/node_modules/@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+      # Chromium and its system libraries. The share cards and the browser tests use it.
+      - run: pnpm --filter @ireko/site exec playwright install --with-deps chromium
+      # One share card (1200 by 630) for each page, in dist/og
+      - run: pnpm --filter @ireko/site og
+      # The smoke tests, the head of each page, axe in both themes and the budgets (packages/site/e2e)
+      - run: pnpm --filter @ireko/site test:e2e
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            packages/site/playwright-report
+            packages/site/test-results
+          retention-days: 7
+
   ci-ok:
     name: CI OK
     if: always()
-    needs: [check, legacy]
+    needs: [check, legacy, site]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     permissions: {}

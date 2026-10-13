@@ -5,9 +5,10 @@
  */
 import { layout, type Layout } from "ireko";
 import { LayoutSvg, LayoutView } from "ireko/react";
-import { createViewport, easeInOut, type View } from "ireko/render";
+import { createViewport } from "ireko/render";
 import { parse } from "ireko/text";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactElement } from "react";
+import { useFollowFit } from "../lib/follow.ts";
 import { href } from "../lib/site.ts";
 import { useReducedMotion } from "../lib/theme.ts";
 
@@ -105,40 +106,7 @@ export default function LiveHero(): ReactElement {
   const running = playing && !reduced;
 
   // The view moves with the boxes: it fits each step, with the same easing as the animation of the layout.
-  useEffect(() => {
-    const element = stage.current;
-    const target = layouts[step];
-    if (element === null || !ready || target === undefined) return undefined;
-    const goal = (): View => {
-      const probe = createViewport();
-      probe.fit(target.bounds, element.clientWidth, element.clientHeight, 22);
-      return probe.get();
-    };
-    const from = viewport.get();
-    const to = goal();
-    const first = from.k === 1 && from.x === 0 && from.y === 0;
-    if (first || reduced) {
-      viewport.set(to);
-    } else {
-      const start = performance.now();
-      let raf = 0;
-      const tick = (now: number): void => {
-        const t = easeInOut(Math.min(1, (now - start) / 750));
-        viewport.set({ x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t, k: from.k + (to.k - from.k) * t });
-        if (t < 1) raf = requestAnimationFrame(tick);
-      };
-      raf = requestAnimationFrame(tick);
-      const observer = new ResizeObserver(() => viewport.set(goal()));
-      observer.observe(element);
-      return () => {
-        cancelAnimationFrame(raf);
-        observer.disconnect();
-      };
-    }
-    const observer = new ResizeObserver(() => viewport.set(goal()));
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [layouts, step, viewport, ready, reduced]);
+  useFollowFit(viewport, stage, layouts[step]?.bounds, { padding: 22, duration: reduced ? 0 : 750, enabled: ready });
 
   // The animation stops when the panel is not on the screen.
   const [visible, setVisible] = useState(true);

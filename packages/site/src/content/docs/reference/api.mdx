@@ -1,6 +1,201 @@
 ---
-title: STUB reference/api
-description: STUB.
+title: API
+seoTitle: "The API of ireko: each export of each entry point"
+description: The functions, components and types of each entry point of ireko - the core, the text language, the renderers, React and React Flow - with their signatures.
 ---
 
-STUB
+Each section is one entry point of the package. The [options reference](/reference/options/) has the fields of each options object.
+
+## ireko
+
+The core: the model, the engine, the strategies, the routers and the builder. It imports nothing.
+
+### Layout
+
+```ts
+function layout(input: LayoutInput, options?: LayoutOptions): Layout;
+function createEngine(config?: EngineConfig): Engine;
+
+interface Engine {
+  layout(input: LayoutInput, options?: LayoutOptions): Layout;
+  extend(config: EngineConfig): Engine;
+  readonly strategies: ReadonlyMap<string, AnyStrategy>;
+  readonly routers: ReadonlyMap<string, Router>;
+  readonly limits: Limits;
+}
+
+class IrekoError extends Error {
+  readonly issues: readonly Issue[]; // the findings with the severity "error"
+}
+```
+
+`layout` uses a shared engine with the built-in strategies and routers. It throws only in the strict mode, or for an input that is not an object with a root.
+
+### The builder
+
+```ts
+const grid: Builder<GridOptions>;
+const radial: Builder<RadialOptions>;
+function builder<O>(type: string): Builder<O>; // a builder for a strategy that you register
+function node(id: string, options?: { label?; size?; fit?; data? }): NodeSpec;
+
+interface Builder<O> {
+  (id: string, ...children: (NodeSpec | string)[]): NodeSpec;                         // a linked node
+  (id: string, options: BuildOptions<O>, ...children: (NodeSpec | string)[]): NodeSpec;
+  nested: Builder<O>;                                                                 // a container
+}
+```
+
+A string child is a leaf with that identifier. The options object of a builder has the options of the strategy, and `label`, `size`, `fit`, `data`, `gap`, `padding` and `header`.
+
+### Strategies and routers
+
+```ts
+function defineStrategy<O>(strategy: Strategy<O>): Strategy<O>;
+function defineRouter(router: Router): Router;
+const gridStrategy: Strategy<GridOptions>;
+const radialStrategy: Strategy<RadialOptions>;
+const straight: Router;
+const orthogonal: Router;
+const builtinStrategies: readonly AnyStrategy[];
+const builtinRouters: readonly Router[];
+const defaultLimits: Limits; // { maxNodes: 100000, maxDepth: 10000, maxChildren: 10000 }
+
+function borderPoint(box: Rect, toward: Point): Point; // where the line to a point leaves a box
+function defaultsOf<O>(schema: OptionSchema<O>): O;
+```
+
+[Write a strategy](/learn/custom-strategy/) has the contract of `Strategy`, and [edges](/learn/edges/#write-a-router) has the contract of `Router`.
+
+### The model
+
+```ts
+interface LayoutInput { root: NodeSpec; edges?: EdgeSpec[] }
+interface NodeSpec { id; label?; layout?; mode?; fit?; size?; children?; data? }
+interface EdgeSpec { source; target; id?; label?; data? }
+
+interface Layout {
+  nodes: PlacedNode[];  // in paint order: each container before the boxes inside it
+  edges: PlacedEdge[];
+  bounds: Rect;
+  issues: Issue[];
+}
+interface PlacedNode extends Rect {
+  id; label; parent?; container?; depth; mode; layout; scale; clip; childCount; data?;
+}
+interface PlacedEdge { id; source; target; kind: "tree" | "extra"; points: Point[]; label?; data? }
+```
+
+All types are plain data. JSON holds each value with no loss.
+
+### Geometry
+
+`Point`, `Size` and `Rect`, and small functions on them: `centerOf`, `union`, `unionAll`, `translate`, `inflate`, `overlaps`, `contains`, `rectAt`.
+
+## ireko/text
+
+```ts
+function parse(text: string, options?: { strategies?: string[] }): ParseResult;
+function print(input: LayoutInput, options?: { strategies?: string[]; width?: number }): string;
+const KEYWORDS: ReadonlySet<string>; // nested, linked, grow, scale, clip
+
+type ParseResult = { ok: true; input: LayoutInput } | { ok: false; error: SyntaxIssue };
+interface SyntaxIssue { message; offset; length; line; column }
+```
+
+Refer to [the text language](/learn/text-language/).
+
+## ireko/svg
+
+```ts
+function toSVG(layout: Layout, options?: SvgOptions): string;
+function mountSvg(container: HTMLElement, options?: RendererOptions): Renderer;
+function svgSurface(host: HTMLElement, theme: Theme): Surface;
+```
+
+## ireko/dom
+
+```ts
+function mountDom(container: HTMLElement, options?: RendererOptions): Renderer;
+function domSurface(host: HTMLElement, theme: Theme): Surface;
+```
+
+## ireko/canvas
+
+```ts
+function mountCanvas(container: HTMLElement, options?: RendererOptions): Renderer;
+function canvasSurface(host: HTMLElement, theme: Theme): Surface;
+function drawFrame(ctx: Context2D, frame: Frame, view: View, theme: Theme, screen: Screen): void;
+```
+
+`drawFrame` draws on any object with the methods of `Context2D`, for example a canvas on a server.
+
+## ireko/render
+
+The parts that the live renderers share.
+
+```ts
+interface Renderer {
+  readonly element: HTMLElement;
+  readonly viewport: Viewport;
+  update(layout: Layout): void;
+  fit(padding?: number): void;
+  select(ids: Iterable<string>): void;
+  pick(point: Point): string | undefined;
+  destroy(): void;
+}
+
+function mount(container: HTMLElement, create: (host, theme) => Surface, options?: RendererOptions): Renderer;
+
+function createViewport(options?: { minZoom?: number; maxZoom?: number }): Viewport;
+interface Viewport {
+  get(): View;                 // { x, y, k }
+  set(view: Partial<View>): void;
+  zoom(factor: number, at: Point): void;
+  pan(dx: number, dy: number): void;
+  fit(bounds: Rect, width: number, height: number, padding?: number): void;
+  subscribe(listener: (view: View) => void): () => void;
+  attach(element: HTMLElement): () => void; // pan and zoom with the pointer and the wheel
+}
+
+const lightTheme: Theme;
+const darkTheme: Theme;
+function themeOf(partial: Partial<Theme> | undefined, base?: Theme): Theme;
+
+function frameOf(layout: Layout): Frame;
+function interpolate(from: Frame, to: Layout, t: number): Frame;
+function easeInOut(t: number): number;
+function labelAt(points: Point[]): Point; // the middle of a route, for its label
+```
+
+## ireko/react
+
+```tsx
+function useLayout(input: LayoutInput, options?: LayoutOptions, engine?: Engine): Layout;
+function LayoutSvg(props: { layout; theme?; padding?; title?; className?; style? }): ReactElement;
+function LayoutView(props: { layout; renderer?; theme?; viewport?; duration?; interactive?; selected?; onPick?; className?; style? }): ReactElement;
+```
+
+`useLayout` makes the layout again only when `input`, `options` or `engine` change, so keep them in a memo or a state. `LayoutSvg` has no state and no effects. `LayoutView` mounts a live renderer in an effect.
+
+## ireko/xyflow
+
+```tsx
+function layoutFlow<N extends Node, E extends Edge>(nodes: N[], edges: E[], options?: LayoutFlowOptions): { nodes: N[]; edges: E[]; layout: Layout };
+function toXYFlow(layout: Layout, options?: { nodeType?; edgeType? }): { nodes: IrekoNode[]; edges: IrekoEdge[] };
+function PolylineEdge(props: EdgeProps): ReactElement;
+function GroupNode(props: NodeProps): ReactElement;
+const edgeTypes: { ireko: typeof PolylineEdge };
+const nodeTypes: { group: typeof GroupNode };
+```
+
+Refer to [the React Flow guide](/guides/react-flow/).
+
+## ireko/examples
+
+```ts
+const examples: readonly Example[];
+interface Example { name; title; description; input: LayoutInput; options?: LayoutOptions }
+```
+
+The [gallery](/gallery/) shows each example.

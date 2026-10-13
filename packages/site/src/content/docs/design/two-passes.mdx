@@ -1,6 +1,66 @@
 ---
-title: STUB design/two-passes
-description: STUB.
+title: Why two passes
+seoTitle: "Why two passes: how ireko lays out nested graphs with no overlaps"
+description: The first version placed children before it knew their sizes, and half of all random trees had overlaps. ireko measures each subtree first. Test it in your browser.
 ---
 
-STUB
+import BeforeAfter from "../../../components/BeforeAfter.astro";
+import Figure from "../../../components/Figure.astro";
+import FuzzMeter from "../../../components/FuzzMeter.tsx";
+
+export const extents = `r {
+  a { a1 a2 a3 a4 }
+  b
+  c radial { c1 c2 c3 c4 c5 }
+}`;
+
+The engine of the first version of this project (Jqy, 2025) went once from the root down. Each node placed its children, then each child placed its own children. This page shows why that fails, and how ireko fixes it.
+
+## The problem
+
+A node that places its children must know how much space each child needs. In one pass from the root down, it does not know. The child has not placed its own children yet. The old engine gave each child the space of one box. A child with a large subtree then covered its neighbors.
+
+<BeforeAfter />
+
+The old engine had an audit, but the audit compared each child with its parent only. It did not compare siblings, so it found none of these overlaps.
+
+## The fix: measure, then place
+
+User interface toolkits had this problem a long time ago. Their solution is the same in each toolkit:
+
+| Toolkit | First pass | Second pass |
+| --- | --- | --- |
+| Flutter | Sizes go up | The parent sets the position |
+| WPF | `Measure` | `Arrange` |
+| SwiftUI | `sizeThatFits` | `placeSubviews` |
+| CSS Grid | Track sizing from the content | Placement in the tracks |
+
+ireko does the same with two passes over the tree.
+
+1. **Measure, from the leaves up.** Each node gets its size after its children have theirs. The strategy of the node arranges the measured children. The engine then knows the **extent** of the node: the rectangle that holds the node and its whole subtree.
+2. **Place, from the root down.** The root is at the origin. Each node adds the offsets of its children to its own position. A strategy does not know absolute positions, so a strategy cannot get them wrong.
+
+<Figure source={extents} caption="Each column of the root is as wide as the extent of its child. The ring of c needs a wide column, and b needs a narrow one." height="17rem" />
+
+A strategy sees the extents, not only the boxes. The grid makes each column as wide as the widest extent in it. The radial strategy puts each subtree in a circle, and keeps the circles apart. The [pipeline page](/design/pipeline/) shows the two passes step by step.
+
+## Test it
+
+You can examine this claim yourself. Your browser can lay out 2000 random trees at this time, with the engine of this page. The audit of each layout looks for overlapping boxes and for boxes outside their container.
+
+<FuzzMeter client:visible />
+
+The property tests of ireko do the same for each change, with all strategies, both modes, all fit policies, random options and both routers. The audit and a second, independent check must find nothing. A longer run with 20000 random inputs found no overlap and no box outside its container.
+
+## Faster too
+
+The two passes visit each node two times. The audit uses a sweep line, so it does not compare each pair of boxes.
+
+| Tree | First version | ireko |
+| --- | --- | --- |
+| 1111 nodes, grid | 469 ms | 6.6 ms |
+| 1111 nodes, mixed strategies | 896 ms | 8.6 ms |
+| 11111 nodes, grid | 8.1 s | 58 ms |
+| 11111 nodes, mixed strategies | 9.1 s | 48 ms |
+
+These times include the audit. The measurements are from one machine, so compare the ratio, not the numbers. The [review of the project](https://github.com/mark1russell7/ireko/blob/main/docs/REVIEW.md) has the method.

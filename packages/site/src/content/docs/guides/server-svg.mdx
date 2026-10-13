@@ -1,6 +1,107 @@
 ---
-title: STUB guides/server-svg
-description: STUB.
+title: SVG on the server
+seoTitle: "Make SVG diagrams on the server or at build time with ireko"
+description: Make an SVG diagram in Node.js, in a build step, or in server rendering, with no browser. Measure the labels, set the theme, and keep the output stable for tests.
 ---
 
-STUB
+import Figure from "../../../components/Figure.astro";
+
+export const pipeline = `build "CI" nested grid(columns: 4) {
+  checkout lint test deploy
+}
+checkout -> lint
+lint -> test
+test -> deploy`;
+
+The core of ireko and `toSVG` need no DOM. A layout and its SVG are pure functions of the input. Thus you can make diagrams on a server, in a build step, in a worker or in a test.
+
+## A file from a script
+
+```ts
+// diagram.ts: node diagram.ts > diagram.svg
+import { layout } from "ireko";
+import { toSVG } from "ireko/svg";
+import { parse } from "ireko/text";
+
+const parsed = parse(`
+  build "CI" nested grid(columns: 4) { checkout lint test deploy }
+  checkout -> lint
+  lint -> test
+  test -> deploy
+`);
+if (!parsed.ok) throw new Error(parsed.error.message);
+
+process.stdout.write(toSVG(layout(parsed.input), { title: "The CI pipeline" }));
+```
+
+<Figure source={pipeline} caption="The output of the script, as this site draws it." height="9rem" />
+
+## In server rendering
+
+`LayoutSvg` from `ireko/react` has no state and no effects, so React renders it on the server. This site uses it for each figure: the HTML has the diagram before any script runs.
+
+```tsx
+// An Astro page, a Next.js server component or renderToString
+import { layout } from "ireko";
+import { LayoutSvg } from "ireko/react";
+
+export function Architecture({ input }) {
+  return <LayoutSvg layout={layout(input)} title="The architecture" className="diagram" />;
+}
+```
+
+## Measure the labels
+
+Without a size, each leaf gets the `nodeSize` of the layout (120 by 48). For labels of different lengths, give a `measure` function. It gets each leaf, and gives its size or `undefined`.
+
+```ts
+import { layout } from "ireko";
+
+// An estimate with no font engine: 7 pixels for each character, and 24 pixels of padding.
+const result = layout(input, {
+  measure: (node) => ({ width: Math.max(60, 7 * (node.label ?? node.id).length + 24), height: 32 }),
+});
+```
+
+In a browser, measure the real text with a canvas: `ctx.measureText(label).width`. On a server, use the metrics of your font, or a library that reads them. A leaf with a `size` in its spec keeps that size.
+
+## Theme and styles
+
+`toSVG` writes the colors as attributes, so the file looks correct alone. It also writes classes, so a page can change the colors with CSS:
+
+```ts
+toSVG(result, {
+  theme: { background: "transparent", fontFamily: "Inter, sans-serif", accent: "#d43c3c" },
+  padding: 24,
+  labels: true,
+  background: false,
+});
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `theme` | `lightTheme` | The colors and fonts. A partial theme replaces only its values. |
+| `padding` | `16` | The space around the layout, in pixels. |
+| `title` | none | The title of the image, for assistive technology. Give one. |
+| `labels` | `true` | With `false`, the output has no text. |
+| `background` | `true` | With `false`, the output has no background rectangle. |
+
+## Stable output
+
+The same input and options give the same SVG, byte for byte. The engine uses no random numbers and no clock, and `toSVG` writes each number with three decimals or fewer. Thus a snapshot test of a diagram is stable:
+
+```ts
+import { expect, it } from "vitest";
+
+it("draws the architecture", async () => {
+  await expect(toSVG(layout(input))).toMatchFileSnapshot("./architecture.svg");
+});
+```
+
+The tests of ireko do the same for each example of the [gallery](/gallery/).
+
+## Other formats
+
+- **PNG:** draw the SVG with a headless browser, or with an SVG library, for example `resvg`.
+- **JSON:** the layout is JSON. Store it, and draw it later in any renderer.
+- **Canvas on a server:** `drawFrame` from `ireko/canvas` draws on any 2D context with the methods of `Context2D`, for example the canvas of a Node.js library.

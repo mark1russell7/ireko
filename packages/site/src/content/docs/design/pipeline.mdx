@@ -1,6 +1,63 @@
 ---
-title: STUB design/pipeline
-description: STUB.
+title: The pipeline
+seoTitle: "The layout pipeline of ireko: normalize, measure, place, route, audit"
+description: Step through the five phases of the engine on a live example. See the extents of the measure pass, the positions of the place pass, the routes and the audit.
 ---
 
-STUB
+import PipelineScrubber from "../../../components/PipelineScrubber.tsx";
+
+The engine makes a layout in five phases. Each phase reads the output of the phase before it, and no phase changes that output. Select **Play**, or move the slider.
+
+<PipelineScrubber client:visible />
+
+The figure shows each box at its final place in all steps. The engine knows the positions only after the place pass. Before that, it knows only the sizes.
+
+## The phases
+
+| Phase | Order | It gives |
+| --- | --- | --- |
+| **normalize** | The tree, once | A flat list of nodes in pre-order. Each node has its strategy, its mode, its fit and its size, with the defaults. The phase finds duplicate identifiers, unknown strategies, bad sizes and edges to unknown nodes, and applies the limits. |
+| **measure** | From the leaves up | The size of each box and the extent of each subtree. The strategy of each node arranges its measured children, and the engine adds the padding, the header and the fit. |
+| **place** | From the root down | The absolute position and the scale of each box. |
+| **route** | Each edge, once | The points of each edge, from the router. |
+| **audit** | All boxes | The findings: overlaps between sibling subtrees, boxes outside their container, and the findings of each strategy. |
+
+The output of the last three phases is the layout: `nodes`, `edges`, `bounds` and `issues`.
+
+## The trace option
+
+The `trace` option gives a function the output of each phase. This page uses it.
+
+```ts
+layout(input, {
+  trace: ({ phase, data }) => console.log(phase, data),
+});
+```
+
+The data of a phase is the internal form of the engine. It can change in a minor version, so use it to learn and to find defects, not in production code.
+
+## No recursion
+
+Each phase uses a loop, not recursion. A tree of 10000 levels does not overflow the stack. The measure pass goes through the list from the last node to the first, so each child comes before its parent. The place pass goes from the first node to the last, so each parent comes before its children.
+
+## Limits
+
+An engine has limits, so a bad input cannot stop a page:
+
+| Limit | Default | Finding |
+| --- | --- | --- |
+| `maxNodes` | 100000 | [`LIMIT_NODES`](/reference/issues/#limit_nodes): the engine skips the other nodes. |
+| `maxDepth` | 10000 | [`LIMIT_DEPTH`](/reference/issues/#limit_depth): the engine skips the deeper nodes. |
+| `maxChildren` | 10000 | [`LIMIT_CHILDREN`](/reference/issues/#limit_children): the engine skips the other children. |
+
+```ts
+const engine = createEngine({ limits: { maxNodes: 5000 } });
+```
+
+## Errors and the strict mode
+
+The engine does not throw for a bad input. It gives a layout of the valid part, and puts each problem in `issues`. A finding with the severity `error` changed the output, for example a skipped edge. A `warning` did not change it, for example an overlap.
+
+With `strict: true`, the engine throws an `IrekoError` when it finds an error. The error holds all findings with the severity `error`. The [findings reference](/reference/issues/) explains each code.
+
+The audit gives at most 100 overlaps, so a very bad layout does not give a very long list. The detail of the last overlap gives the full count.

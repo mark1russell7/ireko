@@ -1,0 +1,98 @@
+---
+/**
+ * The same tree in the first version and in ireko. The first version placed the children of a node before it knew
+ * their sizes. The red areas are the overlaps. src/data/legacy-demo.json holds the output of the old engine for its
+ * default demo, with the same box size and spacing.
+ */
+import { borderPoint, layout, type Rect } from "ireko";
+import { examples } from "ireko/examples";
+import { LayoutSvg } from "ireko/react";
+import legacy from "../data/legacy-demo.json";
+
+const demo = examples.find((e) => e.name === "jqy-demo");
+if (demo === undefined) throw new Error("BeforeAfter: the example jqy-demo is missing.");
+// The same settings as the old demo: boxes of 110 by 54, and a spacing of 24.
+const fresh = layout(demo.input, { nodeSize: { width: 110, height: 54 }, spacing: 24 });
+
+const byId = new Map(legacy.nodes.map((n) => [n.id, n]));
+const containers = new Set(legacy.nodes.flatMap((n) => (n.nested && n.parent !== null ? [n.parent] : [])));
+const overlapAreas: Rect[] = legacy.overlaps.flatMap(([a, b]) => {
+  const p = byId.get(a ?? "");
+  const q = byId.get(b ?? "");
+  if (p === undefined || q === undefined) return [];
+  const x = Math.max(p.x, q.x);
+  const y = Math.max(p.y, q.y);
+  const w = Math.min(p.x + p.width, q.x + q.width) - x;
+  const h = Math.min(p.y + p.height, q.y + q.height) - y;
+  return w > 0 && h > 0 ? [{ x, y, width: w, height: h }] : [];
+});
+const center = (r: Rect) => ({ x: r.x + r.width / 2, y: r.y + r.height / 2 });
+const oldEdges = legacy.edges.flatMap((e) => {
+  const s = byId.get(e.source);
+  const t = byId.get(e.target);
+  if (s === undefined || t === undefined) return [];
+  const a = borderPoint(s, center(t));
+  const b = borderPoint(t, center(s));
+  return [{ id: `${e.source}-${e.target}`, a, b }];
+});
+const pad = 16;
+const lb = legacy.bounds;
+---
+
+<figure class="ik-frame ik-before-after not-content">
+  <div class="ik-before-after-body">
+    <div class="ik-before-after-pane">
+      <p class="ik-before-after-head">
+        <strong>The first version</strong>
+        <span class="ik-chip" data-state="fail">{legacy.overlaps.length} overlapping pairs</span>
+      </p>
+      <div class="ik-svg ik-paper ik-before-after-art">
+        <svg viewBox={`${lb.x - pad} ${lb.y - pad} ${lb.width + 2 * pad} ${lb.height + 2 * pad}`} role="img" aria-label={`The old engine: ${legacy.overlaps.length} pairs of boxes overlap. The rings of A and C cover the root and the tree of B.`}>
+          <defs>
+            <pattern id="ik-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="6" class="ik-hatch-line" />
+            </pattern>
+          </defs>
+          {
+            legacy.nodes
+              .filter((n) => containers.has(n.id))
+              .map((n) => (
+                <g class="ireko-container">
+                  <rect x={n.x} y={n.y} width={n.width} height={n.height} rx="4" />
+                  <text x={n.x + 8} y={n.y + 18} font-size="13">
+                    {n.label}
+                  </text>
+                </g>
+              ))
+          }
+          <g class="ireko-edges" fill="none">{oldEdges.map((e) => <polyline points={`${e.a.x},${e.a.y} ${e.b.x},${e.b.y}`} stroke-width="1.25" />)}</g>
+          {
+            legacy.nodes
+              .filter((n) => !containers.has(n.id))
+              .map((n) => (
+                <g class="ireko-node">
+                  <rect x={n.x} y={n.y} width={n.width} height={n.height} rx="4" />
+                  <text x={n.x + n.width / 2} y={n.y + n.height / 2} font-size="13" text-anchor="middle" dominant-baseline="central">
+                    {n.label}
+                  </text>
+                </g>
+              ))
+          }
+          <g class="ik-overlaps">{overlapAreas.map((r) => <rect x={r.x} y={r.y} width={r.width} height={r.height} fill="url(#ik-hatch)" />)}</g>
+        </svg>
+      </div>
+    </div>
+    <div class="ik-before-after-pane">
+      <p class="ik-before-after-head">
+        <strong>ireko</strong>
+        <span class="ik-chip" data-state="pass">{fresh.issues.filter((i) => i.code === "OVERLAP").length} overlapping pairs</span>
+      </p>
+      <div class="ik-svg ik-paper ik-before-after-art">
+        <LayoutSvg layout={fresh} padding={pad} title="ireko: the same tree with no overlaps. The rings of A and C get their own cells next to the tree of B." />
+      </div>
+    </div>
+  </div>
+  <figcaption class="ik-caption">
+    The default demo of the first version: a root with two rings (A, C) and a tree (B). Both engines use boxes of 110 by 54 and a spacing of 24. The red hatches are the overlapping areas. The audit of the first version found none of them.
+  </figcaption>
+</figure>

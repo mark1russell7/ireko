@@ -8,6 +8,7 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
+import { examples } from "../ireko/src/examples/index.ts";
 import rehypeBase from "./scripts/rehype-base.mjs";
 
 /**
@@ -91,6 +92,8 @@ export default defineConfig({
         "./src/styles/theme.css",
         "./src/styles/widgets.css",
         "./src/styles/home.css",
+        "./src/styles/docs.css",
+        "./src/styles/figures.css",
       ],
       components: { Hero: "./src/components/Hero.astro" },
       expressiveCode: { defaultProps: { wrap: true } },
@@ -100,7 +103,11 @@ export default defineConfig({
         { label: "Start", items: ["learn/tour", "learn/quick-start", { label: "Playground", link: "/playground/" }] },
         { label: "Learn", items: ["learn/modes", "learn/strategies", "learn/text-language", "learn/edges", "learn/renderers", "learn/custom-strategy"] },
         { label: "How it works", items: ["design/two-passes", "design/pipeline", "design/architecture"] },
-        { label: "Gallery", items: [{ label: "All examples", link: "/gallery/" }] },
+        {
+          label: "Gallery",
+          collapsed: true,
+          items: [{ label: "All examples", link: "/gallery/" }, ...examples.map((e) => ({ label: e.title, link: `/gallery/${e.name}/` }))],
+        },
         { label: "Guides", items: ["guides/react-flow", "guides/server-svg"] },
         { label: "Compare", items: ["compare"] },
         { label: "Reference", items: ["reference/api", "reference/options", "reference/issues"] },

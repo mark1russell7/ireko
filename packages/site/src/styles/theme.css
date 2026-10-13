@@ -63,6 +63,11 @@ header.header {
 .ik-svg polyline.ireko-edge[stroke-dasharray] {
   stroke: var(--color-accent);
 }
+.ik-svg .ireko-edge-labels,
+.ik-svg .ireko-edge-label {
+  fill: var(--color-ink-muted);
+  stroke: var(--color-surface);
+}
 .ik-svg svg {
   background: transparent !important;
   font-family: var(--font-sans);

@@ -1,6 +1,100 @@
 ---
-title: STUB learn/renderers
-description: STUB.
+title: Renderers
+seoTitle: "Renderers: draw an ireko layout with SVG, the DOM, Canvas or React"
+description: One layout, many renderers. Export SVG on a server, or draw a live view with pan, zoom, selection and animation in SVG, the DOM, Canvas, React or React Flow.
 ---
 
-STUB
+import RendererParity from "../../../components/RendererParity.tsx";
+
+A layout is plain data, so any code can draw it. ireko has renderers for the usual targets. They use the same theme, the same paint order and the same frames, so they give the same picture.
+
+<RendererParity client:visible />
+
+## Select a renderer
+
+| Entry point | Function | Use it for |
+| --- | --- | --- |
+| `ireko/svg` | `toSVG(layout, options)` | A standalone SVG string: files, servers, build steps, e-mail and tests. |
+| `ireko/react` | `<LayoutSvg layout />` | A static SVG element in React. It has no state and no effects, so server rendering works. |
+| `ireko/svg` | `mountSvg(element, options)` | A live view: one SVG element for each box. CSS can style it, and the browser can search its text. |
+| `ireko/dom` | `mountDom(element, options)` | A live view: one `div` for each box. Put your own HTML in the boxes. |
+| `ireko/canvas` | `mountCanvas(element, options)` | A live view on one canvas. Use it for thousands of boxes. |
+| `ireko/react` | `<LayoutView layout renderer />` | One of the three live views in React. |
+| `ireko/xyflow` | `toXYFlow(layout)`, `layoutFlow(nodes, edges)` | React Flow: nodes, groups and routed edges. See the [React Flow guide](/guides/react-flow/). |
+
+Each entry point imports only what it needs. `ireko/svg` with `toSVG` adds approximately 1.5 KB after gzip.
+
+## A live view
+
+A live renderer draws a layout into an element, and draws the next layout with an animation.
+
+```ts
+import { layout } from "ireko";
+import { mountCanvas } from "ireko/canvas";
+
+const view = mountCanvas(document.querySelector("#diagram")!, { duration: 320 });
+view.update(layout(input));      // the first layout fills the element
+view.update(layout(nextInput));  // the boxes move to their new places
+
+view.select(["api"]);            // mark boxes
+view.pick({ x: 120, y: 80 });    // the identifier of the box at a point, or undefined
+view.fit();                      // fill the element again
+view.destroy();
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `theme` | `lightTheme` | The colors and fonts. A partial theme replaces only its values. |
+| `viewport` | a new viewport | The pan and the zoom. Give one viewport to two views to move them together. |
+| `interactive` | `true` | Pan with the pointer, zoom with the wheel. |
+| `duration` | `320` | The time of the animation, in milliseconds. With `0`, or when the reader prefers reduced motion, the view changes at once. |
+| `fit` | `true` | The first layout fills the element. |
+
+### The animation
+
+When a layout changes, each box moves from its old place to its new place. A new box grows from the place of its parent, and a removed box fades out. The renderers use `interpolate` from `ireko/render` for this. You can use it too:
+
+```ts
+import { frameOf, interpolate, easeInOut } from "ireko/render";
+
+const frame = interpolate(frameOf(before), after, easeInOut(0.5)); // the frame at the middle of the change
+```
+
+## Themes
+
+`lightTheme` and `darkTheme` are in `ireko/render`. Give a partial theme to change some values:
+
+```ts
+mountSvg(element, { theme: { ...darkTheme, accent: "#ff5c8a", fontFamily: "Inter, sans-serif" } });
+toSVG(result, { theme: { background: "transparent" } });
+```
+
+The SVG renderers also give each element a class: `ireko-container`, `ireko-node`, `ireko-edge`, `ireko-edge-label` and `ireko-selected`. A CSS rule is stronger than an SVG attribute, so a style sheet can give the SVG output two themes with no script. This site does that:
+
+```css
+.diagram .ireko-node rect { fill: var(--surface); stroke: var(--ink); }
+.diagram .ireko-edges polyline { stroke: var(--rule); }
+```
+
+## Two views, one viewport
+
+```ts
+import { createViewport } from "ireko/render";
+
+const viewport = createViewport({ minZoom: 0.1, maxZoom: 8 });
+mountSvg(left, { viewport }).update(result);
+mountCanvas(right, { viewport }).update(result);
+```
+
+A pan or a zoom in one view moves the other view. The figure at the top of this page uses this.
+
+## Write a renderer
+
+A layout is JSON. To draw it in another library, read `nodes` and `edges`:
+
+- Draw the boxes in the order of `nodes`. A container comes before the boxes inside it.
+- A box with `clip: true` cuts the boxes inside it at its border.
+- A box with `scale` less than 1 is inside a container with the fit `scale`. Make its text and its lines smaller by the same factor.
+- An edge has `points` from border to border. Draw a polyline, or use the points as control points of a curve.
+
+For a live renderer with animation, give a `Surface` to `mount` from `ireko/render`. The surface draws one frame with a view, and `mount` adds the animation, the viewport, the pointer and the selection.

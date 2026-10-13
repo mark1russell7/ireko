@@ -49,6 +49,12 @@
   ],
   "overrides": [
     {
+      "files": ["packages/site/e2e/**", "packages/site/scripts/**"],
+      "rules": {
+        "eslint/no-await-in-loop": "off"
+      }
+    },
+    {
       "files": ["packages/site/*.mjs", "packages/site/scripts/**", "packages/site/src/content.config.ts"],
       "rules": {
         "typescript/no-unsafe-call": "off",

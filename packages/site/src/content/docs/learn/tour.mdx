@@ -1,6 +1,147 @@
 ---
-title: STUB learn/tour
-description: STUB.
+title: A tour of ireko
+seoTitle: "A tour of ireko: nested graph layout in five minutes"
+description: Learn the two ideas of ireko in five minutes. Each container selects a strategy and a mode, and the engine gives boxes and routed edges.
 ---
 
-STUB
+import Figure from "../../../components/Figure.astro";
+import Morph from "../../../components/Morph.tsx";
+import Try from "../../../components/Try.tsx";
+
+export const subtrees = `root {
+  a { a1 a2 a3 }
+  b
+  c { c1 c2 }
+}`;
+
+export const modes = [
+  { label: "linked", source: "root { a b c d }", note: "linked: the children are below the root, with an edge to each child." },
+  { label: "nested", source: "root nested { a b c d }", note: "nested: the root becomes a container, and the children are inside it." },
+];
+
+export const strategies = [
+  { label: "grid", source: "root nested { a b c d e f }", note: "grid: rows and columns. A nested grid is approximately square." },
+  { label: "radial", source: "root radial nested { a b c d e f }", note: "radial: a ring. The ring is large enough that no two children touch." },
+  { label: "radial, linked", source: "root radial { a b c d e f }", note: "A linked ring: the children are around the root box." },
+];
+
+export const mixes = [
+  {
+    label: "One grid",
+    source: `app nested {
+  web nested { home cart search account }
+  api nested { auth orders payments }
+  data nested { postgres redis kafka }
+}`,
+    note: "All containers use the default grid.",
+  },
+  {
+    label: "Mixed",
+    source: `app nested grid(columns: 2) {
+  web radial nested { home cart search account }
+  api { auth orders payments }
+  data nested { postgres redis kafka }
+}`,
+    note: "web is a ring, api is a linked tree, and data stays a grid.",
+  },
+  {
+    label: "Ring of rings",
+    source: `app radial nested {
+  web radial nested { home cart search account }
+  api radial { auth orders payments }
+  data radial nested { postgres redis kafka }
+}`,
+    note: "The root is a ring, and each child is a ring too.",
+  },
+];
+
+export const edges = `app nested grid(columns: 2) {
+  web radial nested { home cart search }
+  api { auth orders }
+}
+cart -> orders "checkout"
+web -> api`;
+
+export const yours = `# Change a word: grid, radial, nested, linked.
+shop nested grid(columns: 2) {
+  front radial nested { home search cart account }
+  back { orders stock payments }
+  data nested { sql cache queue }
+  ops radial { logs alerts }
+}
+cart -> orders
+back -> data`;
+
+This tour shows the two ideas of ireko with live figures. Each figure starts from a short text in the [text language](/learn/text-language/). Select **Open in the playground** on a figure to change it.
+
+## A tree of boxes
+
+A diagram in ireko is a tree. A node with no children is a box. A node with children puts its children on one side, and edges connect them.
+
+<Figure source="root { a b c }" caption="A root with three children. The default strategy is grid, and a linked grid is one row." height="12rem" />
+
+A child can have its own children. The engine gives each subtree the space that it needs, so no two subtrees overlap.
+
+<Figure source={subtrees} caption="Each column is as wide as its subtree." height="14rem" />
+
+## The first idea: a mode for each node
+
+Each node selects where its children go. In the `linked` mode (the default), the children are around the node. In the `nested` mode, the children are inside the box of the node. The box becomes a container.
+
+<Morph client:visible title="The mode of the root" states={modes} />
+
+## The second idea: a strategy for each node
+
+Each node also selects how to arrange its children. The built-in strategies are `grid` and `radial`. You can [add your own](/learn/custom-strategy/).
+
+<Morph client:visible title="The strategy of the root" states={strategies} />
+
+## Mix them
+
+The strategy and the mode apply to one node only. Each container selects its own. This is the reason for the name: 入れ子 (ireko) is a set of boxes that fit inside each other.
+
+<Morph client:visible title="Three forms of one system" height="22rem" states={mixes} />
+
+## Edges
+
+The tree gives the edges of the linked children. Other edges go between any two nodes, in all containers. An edge statement is `source -> target`, with an optional label.
+
+<Figure source={edges} caption="The dashed edges come from the edge statements. The router draws each edge from border to border." height="16rem" />
+
+## The same layout in TypeScript
+
+The text language is one way to write the input. The builder is another. Both give the same plain data.
+
+```ts
+import { grid, layout, radial } from "ireko";
+
+const root = grid.nested("app", { columns: 2 },
+  radial.nested("web", "home", "cart", "search"),
+  grid("api", "auth", "orders"),
+);
+const result = layout({
+  root,
+  edges: [
+    { source: "cart", target: "orders", label: "checkout" },
+    { source: "web", target: "api" },
+  ],
+});
+
+result.nodes;  // a box for each node: { id, x, y, width, height, container, depth, ... }
+result.edges;  // a route for each edge: { source, target, kind, points }
+result.issues; // the findings of the audit: [] for this input
+```
+
+The result is JSON. You can draw it with the [renderers of ireko](/learn/renderers/) (SVG, the DOM, Canvas and React Flow), or with your own code.
+
+## Your turn
+
+Change the text. The layout changes while you type. A syntax error gets a red underline, and the layout keeps the last text without errors.
+
+<Try client:visible title="Your layout" height="22rem" source={yours} />
+
+## Next steps
+
+- The [quick start](/learn/quick-start/) installs ireko and draws a layout in a page, in React, in React Flow or on a server.
+- [Modes and fit](/learn/modes/) and [strategies](/learn/strategies/) explain each option.
+- [Why two passes](/design/two-passes/) explains how the engine prevents overlaps.

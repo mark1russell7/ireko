@@ -1,0 +1,442 @@
+{
+  "source": "packages/legacy default demo (ParentChildLayoutsDemo), old engine",
+  "nodes": [
+    {
+      "id": "root",
+      "label": "root",
+      "parent": null,
+      "nested": false,
+      "x": 200,
+      "y": 60,
+      "width": 110,
+      "height": 54
+    },
+    {
+      "id": "A",
+      "label": "A",
+      "parent": "root",
+      "nested": false,
+      "x": 11,
+      "y": -72,
+      "width": 367,
+      "height": 367
+    },
+    {
+      "id": "B",
+      "label": "B",
+      "parent": "root",
+      "nested": false,
+      "x": 261,
+      "y": 84,
+      "width": 110,
+      "height": 54
+    },
+    {
+      "id": "C",
+      "label": "C",
+      "parent": "root",
+      "nested": false,
+      "x": -6,
+      "y": -23,
+      "width": 400,
+      "height": 400
+    },
+    {
+      "id": "A1",
+      "label": "A1",
+      "parent": "A",
+      "nested": true,
+      "x": 209,
+      "y": 41,
+      "width": 142,
+      "height": 142
+    },
+    {
+      "id": "A2",
+      "label": "A2",
+      "parent": "A",
+      "nested": true,
+      "x": 81,
+      "y": 115,
+      "width": 142,
+      "height": 142
+    },
+    {
+      "id": "A3",
+      "label": "A3",
+      "parent": "A",
+      "nested": true,
+      "x": 81,
+      "y": -34,
+      "width": 142,
+      "height": 142
+    },
+    {
+      "id": "B1",
+      "label": "B1",
+      "parent": "B",
+      "nested": false,
+      "x": 200,
+      "y": 108,
+      "width": 110,
+      "height": 54
+    },
+    {
+      "id": "B2",
+      "label": "B2",
+      "parent": "B",
+      "nested": false,
+      "x": 322,
+      "y": 108,
+      "width": 110,
+      "height": 54
+    },
+    {
+      "id": "B3",
+      "label": "B3",
+      "parent": "B",
+      "nested": false,
+      "x": 200,
+      "y": 174,
+      "width": 110,
+      "height": 54
+    },
+    {
+      "id": "B4",
+      "label": "B4",
+      "parent": "B",
+      "nested": false,
+      "x": 322,
+      "y": 174,
+      "width": 110,
+      "height": 54
+    },
+    {
+      "id": "C1",
+      "label": "C1",
+      "parent": "C",
+      "nested": true,
+      "x": 228,
+      "y": 108,
+      "width": 139,
+      "height": 139
+    },
+    {
+      "id": "C2",
+      "label": "C2",
+      "parent": "C",
+      "nested": true,
+      "x": 125,
+      "y": 211,
+      "width": 139,
+      "height": 139
+    },
+    {
+      "id": "C3",
+      "label": "C3",
+      "parent": "C",
+      "nested": true,
+      "x": 21,
+      "y": 108,
+      "width": 139,
+      "height": 139
+    },
+    {
+      "id": "C4",
+      "label": "C4",
+      "parent": "C",
+      "nested": true,
+      "x": 124,
+      "y": 4,
+      "width": 139,
+      "height": 139
+    }
+  ],
+  "edges": [
+    {
+      "source": "root",
+      "target": "A"
+    },
+    {
+      "source": "A",
+      "target": "A1"
+    },
+    {
+      "source": "A",
+      "target": "A2"
+    },
+    {
+      "source": "A",
+      "target": "A3"
+    },
+    {
+      "source": "root",
+      "target": "B"
+    },
+    {
+      "source": "B",
+      "target": "B1"
+    },
+    {
+      "source": "B",
+      "target": "B2"
+    },
+    {
+      "source": "B",
+      "target": "B3"
+    },
+    {
+      "source": "B",
+      "target": "B4"
+    },
+    {
+      "source": "root",
+      "target": "C"
+    },
+    {
+      "source": "C",
+      "target": "C1"
+    },
+    {
+      "source": "C",
+      "target": "C2"
+    },
+    {
+      "source": "C",
+      "target": "C3"
+    },
+    {
+      "source": "C",
+      "target": "C4"
+    }
+  ],
+  "overlaps": [
+    [
+      "root",
+      "A"
+    ],
+    [
+      "root",
+      "A1"
+    ],
+    [
+      "root",
+      "A3"
+    ],
+    [
+      "root",
+      "B"
+    ],
+    [
+      "root",
+      "B1"
+    ],
+    [
+      "root",
+      "C"
+    ],
+    [
+      "root",
+      "C1"
+    ],
+    [
+      "root",
+      "C4"
+    ],
+    [
+      "A",
+      "B"
+    ],
+    [
+      "A",
+      "B1"
+    ],
+    [
+      "A",
+      "B2"
+    ],
+    [
+      "A",
+      "B3"
+    ],
+    [
+      "A",
+      "B4"
+    ],
+    [
+      "A",
+      "C"
+    ],
+    [
+      "A",
+      "C1"
+    ],
+    [
+      "A",
+      "C2"
+    ],
+    [
+      "A",
+      "C3"
+    ],
+    [
+      "A",
+      "C4"
+    ],
+    [
+      "A1",
+      "A2"
+    ],
+    [
+      "A1",
+      "A3"
+    ],
+    [
+      "A1",
+      "B"
+    ],
+    [
+      "A1",
+      "B1"
+    ],
+    [
+      "A1",
+      "B2"
+    ],
+    [
+      "A1",
+      "B3"
+    ],
+    [
+      "A1",
+      "B4"
+    ],
+    [
+      "A1",
+      "C"
+    ],
+    [
+      "A1",
+      "C1"
+    ],
+    [
+      "A1",
+      "C4"
+    ],
+    [
+      "A2",
+      "B1"
+    ],
+    [
+      "A2",
+      "B3"
+    ],
+    [
+      "A2",
+      "C"
+    ],
+    [
+      "A2",
+      "C2"
+    ],
+    [
+      "A2",
+      "C3"
+    ],
+    [
+      "A2",
+      "C4"
+    ],
+    [
+      "A3",
+      "C"
+    ],
+    [
+      "A3",
+      "C4"
+    ],
+    [
+      "B",
+      "B1"
+    ],
+    [
+      "B",
+      "B2"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "B",
+      "C1"
+    ],
+    [
+      "B",
+      "C4"
+    ],
+    [
+      "B1",
+      "C"
+    ],
+    [
+      "B1",
+      "C1"
+    ],
+    [
+      "B1",
+      "C4"
+    ],
+    [
+      "B2",
+      "C"
+    ],
+    [
+      "B2",
+      "C1"
+    ],
+    [
+      "B3",
+      "C"
+    ],
+    [
+      "B3",
+      "C1"
+    ],
+    [
+      "B3",
+      "C2"
+    ],
+    [
+      "B4",
+      "C"
+    ],
+    [
+      "B4",
+      "C1"
+    ],
+    [
+      "C1",
+      "C2"
+    ],
+    [
+      "C1",
+      "C4"
+    ],
+    [
+      "C2",
+      "C3"
+    ],
+    [
+      "C3",
+      "C4"
+    ]
+  ],
+  "escapes": [],
+  "bounds": {
+    "x": -6,
+    "y": -72,
+    "width": 438,
+    "height": 449
+  }
+}

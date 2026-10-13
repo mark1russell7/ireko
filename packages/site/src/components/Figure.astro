@@ -1,0 +1,41 @@
+---
+/**
+ * A figure of the guide: a text of the text language and its layout. The build makes the layout, so the figure is a
+ * static SVG with no script. A link opens the same text in the playground.
+ */
+import type { LayoutOptions } from "ireko";
+import { LayoutSvg } from "ireko/react";
+import { DOC_OPTIONS, layoutOfText, playgroundHref } from "../lib/docs.ts";
+import SourceView from "./SourceView.tsx";
+
+interface Props {
+  /** The text of the layout, in the text language. */
+  readonly source: string;
+  /** The options of the layout. They replace the options of the figures (DOC_OPTIONS). */
+  readonly options?: LayoutOptions;
+  readonly caption?: string;
+  /** The title of the image, for assistive technology. The default is the caption. */
+  readonly title?: string;
+  /** If false, the figure shows only the layout. The default is true. */
+  readonly code?: boolean;
+  /** The largest height of the image, as a CSS length. The default is 20rem. */
+  readonly height?: string;
+}
+
+const { source, options, caption, title, code = true, height = "20rem" } = Astro.props;
+const out = layoutOfText(source, { ...DOC_OPTIONS, ...options });
+const alt = title ?? caption ?? "A layout of ireko";
+---
+
+<figure class:list={["ik-frame", "ik-figure", "not-content", { "ik-figure-code": code }]} style={`--ik-figure-height: ${height}`}>
+  <div class="ik-figure-body">
+    {code && <SourceView source={source} label="The source of the layout" className="ik-figure-source" />}
+    <div class="ik-figure-art ik-svg ik-paper">
+      <LayoutSvg layout={out} padding={14} title={alt} />
+    </div>
+  </div>
+  <figcaption class="ik-caption ik-figure-caption">
+    <span>{caption}</span>
+    <a href={playgroundHref(source)}>Open in the playground →</a>
+  </figcaption>
+</figure>

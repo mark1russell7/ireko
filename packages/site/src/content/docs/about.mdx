@@ -1,6 +1,59 @@
 ---
-title: STUB about
-description: STUB.
+title: About ireko
+seoTitle: "About ireko: the story, the name and the author"
+description: How a weekend React Flow experiment became a tested layout engine. The name, the history, the rewrite, the writing rules of the documentation, and the author.
 ---
 
-STUB
+import Figure from "../../components/Figure.astro";
+
+export const name = `ireko "入れ子" nested {
+  box nested {
+    box2 nested {
+      box3 nested { box4 }
+    }
+  }
+}`;
+
+## The name
+
+<Figure source={name} code={false} caption="入れ子 (ireko): a set of boxes that fit inside each other." height="12rem" />
+
+入れ子 (ireko) is the Japanese word for a set of boxes or bowls that fit inside each other. It also means nesting in programming. The library lays out trees of nested boxes, with a different arrangement in each box, so the name fits.
+
+## The story
+
+The project started in August 2025 as **Jqy**, with a React Flow page and one idea: a tree of nodes, drawn in two ways. In the first way, the children are inside their parent. In the second way, they are around it, with edges. Each node selects how it arranges its children.
+
+In a few weeks, Jqy got registries, strategies, a pipeline and three renderers. It also got problems. The engine went once from the root down, so a node placed its children before it knew their sizes. Half of all random trees had overlapping boxes, and the built-in audit found none of them. A commit removed a file that the build needed, and the code did not build for more than a year.
+
+In October 2026, a review measured the problems and planned a rewrite. The rewrite kept the idea and replaced the engine:
+
+- [Two passes](/design/two-passes/): measure from the leaves up, then place from the root down. No overlaps in 20000 random trees, and 70 to 190 times faster.
+- A plain-data model, a core with no DOM, and open registries for strategies and routers.
+- A text language, a typed builder, and renderers for SVG, the DOM, Canvas, React and React Flow.
+- Property tests, golden files, parity tests between the renderers, and more than 99 % coverage.
+
+The [review](https://github.com/mark1russell7/ireko/blob/main/docs/REVIEW.md) has the full analysis, the measurements and the plan.
+
+## The writing rules
+
+This documentation follows ASD-STE100 Simplified Technical English: short sentences, one meaning for each word, and the active voice. The aerospace industry uses it for maintenance manuals, so that each reader understands each sentence in the same way, also with a translation tool. A linter ([ste-lint](https://github.com/mark1russell7/ste-lint)) examines each page, the README files and the comments of the code in CI.
+
+## The site
+
+This site uses ireko for each figure. The build lays out each figure and writes it as SVG, so the pages show the diagrams with no script. The live widgets use the same engine in your browser. The share cards of the pages are ireko layouts too.
+
+The site uses [Astro](https://astro.build) and [Starlight](https://starlight.astro.build). Its fonts are Atkinson Hyperlegible Next and Mono, from the Braille Institute.
+
+## The author
+
+ireko is by [Mark Russell](https://github.com/mark1russell7). It is one of a family of TypeScript projects by the same author.
+
+## License
+
+ireko and this site are free software under the [MIT license](https://github.com/mark1russell7/ireko/blob/main/LICENSE).
+
+## Contribute
+
+- Report a defect or ask for a feature in the [issues](https://github.com/mark1russell7/ireko/issues). A link from the playground (the **Share** button) shows the problem best.
+- The [Fuzz](/playground/) button of the playground makes a random tree. If the audit finds a problem in one, the seed in the text makes a test.
