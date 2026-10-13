@@ -17,7 +17,7 @@ The project is in a rebuild. The plan is in [`docs/REVIEW.md`](./docs/REVIEW.md)
 | P0 | The template monorepo, pnpm, TypeScript 7, Oxlint, `ste-lint`, CI | done |
 | P1 | The new core: two passes, an open strategy registry, plain JSON output, SVG export | done |
 | P2 | The builder, the text language, and the SVG, DOM, Canvas, React and React Flow renderers | done |
-| P3 | More strategies, sizing policies and routers | in progress: `tree`, `layers` and the router `avoid` are done |
+| P3 | More strategies, routers, label sizes, benchmarks and mutation tests | done: `tree`, `layers`, `avoid`, `fitText`, the nightly benchmarks and mutation tests. Deferred: `stack` and `bundle` |
 | P4 | The site: the guide, the gallery, the playground and live figures | done |
 | P5 | The first release on npm | ready: the owner publishes 0.1.0 |
 

@@ -118,6 +118,8 @@ const engine = createEngine({ routers: [curved] });
 engine.layout(input, { router: "curved" });
 ```
 
+A router with `obstacles: true` also gets the boxes near the edge in `obstacles`. These are the 32 nearest boxes, and the labels of the containers that hold an end. The `avoid` router uses them. A tree edge also has its `direction`.
+
 The engine examines each route. A router that throws or gives fewer than two finite points gives the finding [`ROUTER_FAILED`](/reference/issues/#router_failed), and the engine uses `straight` for that edge. An unknown router name gives [`UNKNOWN_ROUTER`](/reference/issues/#unknown_router).
 
 ## Draw the edges
