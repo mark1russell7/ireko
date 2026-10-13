@@ -734,7 +734,7 @@ The research ranks these actions by effect:
 | P2 Surface | Done, with one change (§16.2) | The builder, the text language, the renderers for SVG, DOM and Canvas, the React bindings and the React Flow adapter. 169 tests. |
 | P3 Depth | not started | |
 | P4 Site | Done, with changes (§16.2) | `packages/site`: Astro 7 and Starlight. 18 pages of the guide, a gallery page for each example, the playground, 10 live figures, a share card for each page, `llms.txt`, 22 Playwright tests (smoke, head and SEO, axe in both themes, budgets), the site job of CI and `pages.yml`. The legacy package is gone. |
-| P5 Release | not started | |
+| P5 Release | Ready. The owner publishes 0.1.0 (§10.2, §10.3). | The `tsdown` build, `publint`, `attw`, `size-limit`, a smoke test of the tarball, the `package` job of CI, `release.yml`, the npm README and `CHANGELOG.md`. The public API of the core is an explicit list. |
 
 ### 16.2 Changes to the plan
 
@@ -779,4 +779,5 @@ The research ranks these actions by effect:
 - The core is 24 kB minified and 8.9 kB after gzip (esbuild, all exports). `toSVG` adds 1.5 kB, and the text language 2.8 kB.
 - In the browser, the fuzz meter of the site lays out 2000 random trees (26315 boxes) in 175 ms, with no overlap.
 - The home page of the site loads 117 kB of script after gzip. The playground lays out its first text in approximately 5 ms.
+- P5: the core is 8.1 kB after gzip for `layout`, and 8.7 kB for all of the core. The budget is 12 kB. The tarball has 43 files and no runtime dependencies.
 - The work on the site found three defects of the library. The first frame of an animation gave a negative size, because the time of a frame can come before its start. No renderer drew edge labels. The parser had parameter properties.

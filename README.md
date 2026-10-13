@@ -19,7 +19,7 @@ The project is in a rebuild. The plan is in [`docs/REVIEW.md`](./docs/REVIEW.md)
 | P2 | The builder, the text language, and the SVG, DOM, Canvas, React and React Flow renderers | done |
 | P3 | More strategies, sizing policies and routers | planned |
 | P4 | The site: the guide, the gallery, the playground and live figures | done |
-| P5 | The first release on npm | planned |
+| P5 | The first release on npm | ready: the owner publishes 0.1.0 |
 
 The code of Jqy is in the git history. The site compares its output with the output of ireko.
 
@@ -34,7 +34,7 @@ One layout gives plain data: boxes, edges and findings. Any renderer can draw it
 
 ## Use it
 
-The library is not on npm yet. In this repository, the package `ireko` is ready:
+The library is not on npm yet. The package `ireko` is ready for its first version. In this repository:
 
 ```ts
 import { layout } from "ireko";
