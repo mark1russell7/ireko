@@ -1,5 +1,5 @@
 {
-  "source": "packages/legacy default demo (ParentChildLayoutsDemo), old engine",
+  "source": "The default demo of Jqy 0.x (ParentChildLayoutsDemo in packages/legacy, commit e8ad381), laid out by the old engine",
   "nodes": [
     {
       "id": "root",

@@ -4,6 +4,10 @@
 
 ireko (入れ子) is the Japanese word for a set of boxes that fit inside each other. The project had the name Jqy before.
 
+**The guide, the gallery and the playground:** [mark1russell7.github.io/ireko](https://mark1russell7.github.io/ireko/)
+
+![A system architecture laid out by ireko: nested containers with services, and extra edges between them](./packages/ireko/src/__golden__/architecture.svg)
+
 ## Status
 
 The project is in a rebuild. The plan is in [`docs/REVIEW.md`](./docs/REVIEW.md).
@@ -14,10 +18,10 @@ The project is in a rebuild. The plan is in [`docs/REVIEW.md`](./docs/REVIEW.md)
 | P1 | The new core: two passes, an open strategy registry, plain JSON output, SVG export | done |
 | P2 | The builder, the text language, and the SVG, DOM, Canvas, React and React Flow renderers | done |
 | P3 | More strategies, sizing policies and routers | planned |
-| P4 | The site, with a live playground | planned |
+| P4 | The site: the guide, the gallery, the playground and live figures | done |
 | P5 | The first release on npm | planned |
 
-The code of Jqy is in [`packages/legacy`](./packages/legacy). It stays there until the new core does all that it does. Start its playground with `pnpm dev`.
+The code of Jqy is in the git history. The site compares its output with the output of ireko.
 
 ## The idea
 
@@ -92,14 +96,14 @@ web -> api "calls"
 | Package | Contents |
 |---|---|
 | [`ireko`](./packages/ireko) | The library: the engine, the builder, the text language, the renderers and the adapters |
-| [`@ireko/legacy`](./packages/legacy) | The engine and the playground of Jqy, until the new core reaches parity |
+| [`@ireko/site`](./packages/site) | The site: Astro and Starlight, with the playground, the gallery and the guide |
 | [`@ireko/cli`](./packages/cli) | The workspace commands of the template |
 
 ## Commands
 
 ```sh
 pnpm install
-pnpm dev             # the playground of Jqy
+pnpm dev             # the site, with the playground, at http://localhost:4321/ireko/
 pnpm typecheck       # the source and the tests of each package
 pnpm lint            # Oxlint, with the type-aware rules
 pnpm test            # the tests of each package

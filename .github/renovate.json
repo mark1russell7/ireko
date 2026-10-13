@@ -6,11 +6,6 @@
   "labels": ["dependencies"],
   "packageRules": [
     {
-      "description": "The old playground stays on React Flow 11 until the plan removes it (docs/REVIEW.md, P2).",
-      "matchFileNames": ["packages/legacy/package.json"],
-      "enabled": false
-    },
-    {
       "description": "One pull request for the GitHub Actions each week.",
       "matchManagers": ["github-actions"],
       "groupName": "GitHub Actions",

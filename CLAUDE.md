@@ -15,7 +15,7 @@ Write all prose of this repository in the style of ASD-STE100 Simplified Technic
 
 `docs/REVIEW.md` is the plan of record. Read it before a change to the architecture. Its §6 is the target design, and its §13 is the roadmap. Record each completed phase in its §16.
 
-The project was named Jqy. The new name is ireko. The code of Jqy is in `packages/legacy` until the new core reaches parity.
+The project was named Jqy. The new name is ireko. The code of Jqy is in the git history (the package `packages/legacy`, removed after commit `e8ad381`).
 
 ## Packages
 

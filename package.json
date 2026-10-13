@@ -8,7 +8,7 @@
     "node": ">=22.12"
   },
   "scripts": {
-    "dev": "pnpm --filter @ireko/legacy dev",
+    "dev": "pnpm --filter @ireko/site dev",
     "build": "pnpm -r run build",
     "package": "tsx packages/cli/src/index.ts package",
     "template": "tsx packages/cli/src/index.ts repo",
