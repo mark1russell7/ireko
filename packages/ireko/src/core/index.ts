@@ -8,6 +8,7 @@ export { defaultsOf, type BooleanOption, type EnumOption, type NumberOption, typ
 export * from "./strategy.ts";
 export { borderPoint, defineRouter, type RouteInput, type Router } from "./router.ts";
 export { straight, orthogonal } from "./routers.ts";
+export { avoid } from "./avoid.ts";
 export { grid as gridStrategy, type GridOptions } from "./strategies/grid.ts";
 export { radial as radialStrategy, type RadialOptions } from "./strategies/radial.ts";
 export { tree as treeStrategy, type TreeOptions } from "./strategies/tree.ts";

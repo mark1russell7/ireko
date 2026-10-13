@@ -13,6 +13,11 @@ export interface RouteInput {
   readonly target: Rect;
   /** For a tree edge, the direction from the parent to its children, if the strategy of the parent gives one. */
   readonly direction?: Direction;
+  /**
+   * The boxes that the edge must not cross: the boxes near the edge, without its two ends and the containers that hold
+   * them. The engine gives them only to a router with `obstacles: true`.
+   */
+  readonly obstacles?: readonly Rect[];
 }
 
 /** A router: one way to draw an edge between two boxes. */
@@ -21,6 +26,8 @@ export interface Router {
   readonly type: string;
   /** One sentence for the reference of the site. */
   readonly description: string;
+  /** If true, each input has its `obstacles`. The engine then does more work for each edge. */
+  readonly obstacles?: boolean;
   /** This function gives the points of the edge, from the source box to the target box. */
   route(input: RouteInput): readonly Point[];
 }

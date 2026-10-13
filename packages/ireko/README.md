@@ -6,7 +6,7 @@
 
 [Guide](https://mark1russell7.github.io/ireko/learn/tour/) · [Playground](https://mark1russell7.github.io/ireko/playground/) · [Gallery](https://mark1russell7.github.io/ireko/gallery/) · [API](https://mark1russell7.github.io/ireko/reference/api/) · [React Flow](https://mark1russell7.github.io/ireko/guides/react-flow/)
 
-ireko (入れ子) is the Japanese word for a set of boxes that fit inside each other. The library lays out trees of nested boxes: a grid of rings of trees, an architecture diagram, a tidy organization chart or React Flow sub-flows. It has no runtime dependencies. The core is approximately 10 kB after minification and gzip.
+ireko (入れ子) is the Japanese word for a set of boxes that fit inside each other. The library lays out trees of nested boxes: a grid of rings of trees, an architecture diagram, a tidy organization chart or React Flow sub-flows. It has no runtime dependencies. The core is approximately 11 kB after minification and gzip.
 
 ## Install
 
@@ -28,6 +28,7 @@ const result = layout({ root, edges: [{ source: "cart", target: "orders", label:
 
 result.nodes;  // a box for each node: { id, x, y, width, height, container, depth, ... }
 result.edges;  // a route for each edge: { source, target, kind, points, label }
+// The router avoid draws edges around the other boxes: layout(input, { router: "avoid" })
 result.issues; // the findings of the audit: [] for this input
 document.body.innerHTML = toSVG(result);
 ```

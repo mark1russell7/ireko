@@ -50,3 +50,34 @@ export function distanceToBorder(p: { x: number; y: number }, r: { x: number; y:
   if (dx > 0 || dy > 0) return Math.hypot(dx, dy);
   return -Math.min(p.x - r.x, r.x + r.width - p.x, p.y - r.y, r.y + r.height - p.y);
 }
+
+/**
+ * This function gives the edges that cross a box, as "edge/box" pairs. A box that is an end of the edge, or that holds an
+ * end or is in an end through nested containers, does not count. The check samples each segment, so it is slow.
+ */
+export function crossingsOf(layout: Layout): string[] {
+  const byId = new Map(layout.nodes.map((n) => [n.id, n]));
+  const holds = (a: string, b: string): boolean => {
+    for (let c = byId.get(b)?.container; c !== undefined; c = byId.get(c)?.container) if (c === a) return true;
+    return false;
+  };
+  const out: string[] = [];
+  for (const e of layout.edges) {
+    for (const n of layout.nodes) {
+      if (n.id === e.source || n.id === e.target || holds(n.id, e.source) || holds(n.id, e.target) || holds(e.source, n.id) || holds(e.target, n.id)) continue;
+      let hit = false;
+      for (let i = 1; i < e.points.length && !hit; i++) {
+        const p = e.points[i - 1];
+        const q = e.points[i];
+        if (p === undefined || q === undefined) continue;
+        for (let t = 0; t <= 32 && !hit; t++) {
+          const x = p.x + ((q.x - p.x) * t) / 32;
+          const y = p.y + ((q.y - p.y) * t) / 32;
+          hit = x > n.x + 1 && x < n.x + n.width - 1 && y > n.y + 1 && y < n.y + n.height - 1;
+        }
+      }
+      if (hit) out.push(`${e.id}/${n.id}`);
+    }
+  }
+  return out;
+}

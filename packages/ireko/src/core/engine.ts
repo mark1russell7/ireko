@@ -12,6 +12,7 @@ import { route } from "./engine/route.ts";
 import type { Context, Limits, Resolved } from "./engine/types.ts";
 import type { Router } from "./router.ts";
 import { orthogonal, straight } from "./routers.ts";
+import { avoid } from "./avoid.ts";
 import { grid } from "./strategies/grid.ts";
 import { radial } from "./strategies/radial.ts";
 import { tree } from "./strategies/tree.ts";
@@ -44,7 +45,7 @@ export interface Engine {
 /** The built-in strategies. */
 export const builtinStrategies: readonly AnyStrategy[] = [grid, radial, tree];
 /** The built-in routers. */
-export const builtinRouters: readonly Router[] = [straight, orthogonal];
+export const builtinRouters: readonly Router[] = [straight, orthogonal, avoid];
 /** The default limits. */
 export const defaultLimits: Limits = { maxNodes: 100_000, maxDepth: 10_000, maxChildren: 10_000 };
 
