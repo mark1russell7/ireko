@@ -160,7 +160,8 @@
 .ik-pipeline-art {
   display: block;
   width: 100%;
-  height: 22rem;
+  height: 100%;
+  min-height: 22rem;
 }
 .ik-pipeline-side {
   display: flex;
@@ -306,10 +307,10 @@
 /* The first version and ireko, side by side. */
 .ik-before-after-body {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
 }
 .ik-before-after-pane + .ik-before-after-pane {
-  border-left: 1px solid var(--color-rule);
+  border-top: 1px solid var(--color-rule);
 }
 .ik-before-after-head {
   display: flex;
@@ -328,6 +329,10 @@
   width: 100%;
   height: 22rem;
 }
+.ik-before-after-pane + .ik-before-after-pane .ik-before-after-art svg {
+  height: auto;
+  max-height: 18rem;
+}
 .ik-before-after .ireko-node rect {
   fill: color-mix(in srgb, var(--color-surface) 85%, transparent);
   stroke: var(--color-ink-secondary);
@@ -344,7 +349,8 @@
 }
 .ik-hatch-line {
   stroke: var(--color-mark);
-  stroke-width: 2.5;
+  stroke-width: 1.5;
+  stroke-opacity: 0.8;
 }
 .ik-overlaps rect {
   stroke: var(--color-mark);

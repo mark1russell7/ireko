@@ -27,8 +27,9 @@ const ZERO: Score = { done: 0, bad: 0, boxes: 0, ms: 0 };
 export default function FuzzMeter(): ReactElement {
   const [score, setScore] = useState<Score>(ZERO);
   const [running, setRunning] = useState(false);
-  const [last, setLast] = useState<Layout>(() => engine.layout({ root: randomTree(7) }, DOC_OPTIONS));
-  const [seed, setSeed] = useState(7);
+  // The seed 35 gives a tree of 20 boxes with all strategies and modes: a good first picture.
+  const [last, setLast] = useState<Layout>(() => engine.layout({ root: randomTree(35) }, DOC_OPTIONS));
+  const [seed, setSeed] = useState(35);
   const timer = useRef(0);
 
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -99,7 +100,7 @@ export default function FuzzMeter(): ReactElement {
           </div>
           <p className="ik-fuzz-note">
             {score.done === 0
-              ? "Each tree has up to four levels, with mixed strategies and modes. The audit of the engine examines each pair of boxes."
+              ? "Each tree has up to four levels, with mixed strategies and modes. The audit of each layout looks for overlaps and for boxes outside their container."
               : `${score.boxes.toLocaleString("en")} boxes in ${score.ms.toFixed(0)} ms: ${(score.ms / score.done).toFixed(2)} ms for each tree on this device.`}
           </p>
         </div>

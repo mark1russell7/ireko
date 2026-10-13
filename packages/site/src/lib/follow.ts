@@ -14,11 +14,13 @@ export interface FollowOptions {
   readonly duration?: number;
   /** If false, the hook does nothing. The default is true. */
   readonly enabled?: boolean;
+  /** The largest zoom, so a small layout does not fill a large element. The default is 2. */
+  readonly maxZoom?: number;
 }
 
 /** This hook moves the view of `viewport` to fit `bounds` in the element `stage`, after each change of `bounds`. */
 export function useFollowFit(viewport: Viewport, stage: RefObject<HTMLElement | null>, bounds: Rect | undefined, options: FollowOptions = {}): void {
-  const { padding = 20, duration = 320, enabled = true } = options;
+  const { padding = 20, duration = 320, enabled = true, maxZoom = 2 } = options;
   const x = bounds?.x;
   const y = bounds?.y;
   const width = bounds?.width;
@@ -28,7 +30,7 @@ export function useFollowFit(viewport: Viewport, stage: RefObject<HTMLElement | 
     const element = stage.current;
     if (!enabled || element === null || x === undefined || y === undefined || width === undefined || height === undefined) return undefined;
     const goal = (): View => {
-      const probe = createViewport();
+      const probe = createViewport({ maxZoom });
       probe.fit({ x, y, width, height }, element.clientWidth, element.clientHeight, padding);
       return probe.get();
     };
@@ -55,5 +57,5 @@ export function useFollowFit(viewport: Viewport, stage: RefObject<HTMLElement | 
       cancelAnimationFrame(raf);
       observer.disconnect();
     };
-  }, [viewport, stage, x, y, width, height, padding, duration, enabled]);
+  }, [viewport, stage, x, y, width, height, padding, duration, enabled, maxZoom]);
 }

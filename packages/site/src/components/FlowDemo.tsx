@@ -53,7 +53,8 @@ interface Settings {
 function optionsOf(s: Settings): LayoutFlowOptions {
   return {
     rootLayout: s.root === "grid" ? { type: "grid", columns: 3, gap: 40 } : "radial",
-    nodeSpec: (n) => (n.id === "server" ? { layout: s.server } : undefined),
+    // The strategy of the group server, and of the tree of api in it.
+    nodeSpec: (n) => (n.id === "server" || n.id === "api" ? { layout: s.server } : undefined),
     hierarchy: s.hierarchy,
     router: s.router,
     spacing: 18,
@@ -100,7 +101,7 @@ function Demo(): ReactElement {
           </select>
         </label>
         <label>
-          <span>server</span>
+          <span>In server</span>
           <select className="ik-select" value={settings.server} onChange={(e) => set({ server: e.target.value === "radial" ? "radial" : "grid" })}>
             <option value="grid">grid</option>
             <option value="radial">radial</option>
