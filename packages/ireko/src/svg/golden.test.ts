@@ -42,6 +42,12 @@ describe("toSVG", () => {
     expect(svg).toContain(`viewBox="0 0 ${String(out.bounds.width)} ${String(out.bounds.height)}"`);
   });
 
+  it("draws a layout that a user changed, with an edge to a box that is not in it", () => {
+    const out = layout({ root: { id: "r", children: [{ id: "a" }] } });
+    const svg = toSVG({ ...out, nodes: out.nodes.filter((n) => n.id === "r") });
+    expect(svg).toContain("<polyline");
+  });
+
   it("cuts the content of a clipped container", () => {
     const svg = toSVG(layout({ root: { id: "v w", mode: "nested", fit: "clip", size: { width: 100, height: 60 }, children: [{ id: "a" }, { id: "b" }] } }));
     expect(svg).toContain('<clipPath id="ireko-clip-v_20w">');

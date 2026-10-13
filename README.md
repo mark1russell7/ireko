@@ -12,7 +12,7 @@ The project is in a rebuild. The plan is in [`docs/REVIEW.md`](./docs/REVIEW.md)
 |---|---|---|
 | P0 | The template monorepo, pnpm, TypeScript 7, Oxlint, `ste-lint`, CI | done |
 | P1 | The new core: two passes, an open strategy registry, plain JSON output, SVG export | done |
-| P2 | The builder, the text language, and the SVG, DOM, Canvas, React and React Flow renderers | planned |
+| P2 | The builder, the text language, and the SVG, DOM, Canvas, React and React Flow renderers | done |
 | P3 | More strategies, sizing policies and routers | planned |
 | P4 | The site, with a live playground | planned |
 | P5 | The first release on npm | planned |
@@ -53,11 +53,45 @@ result.issues; // the findings: overlaps, bad options, limits
 const svg = toSVG(result);
 ```
 
+The builder gives the same data with less text:
+
+```ts
+import { grid, radial } from "ireko";
+
+const root = grid.nested("system", radial.nested("web", "home", "cart", "search"), grid("api", "auth", "orders"));
+```
+
+The text language gives it again, for the playground and for quick sketches:
+
+```ts
+import { parse } from "ireko/text";
+
+const result = parse(`
+system nested {
+  web radial nested { home cart search }
+  api { auth orders }
+}
+web -> api "calls"
+`);
+```
+
+| Subpath | Contents |
+|---|---|
+| `ireko` | The engine, the strategies, the routers, the audit and the builder |
+| `ireko/text` | `parse` and `print` for the text language |
+| `ireko/svg` | `toSVG` (a string) and `mountSvg` (a live renderer) |
+| `ireko/dom` | `mountDom`: a live renderer with elements |
+| `ireko/canvas` | `mountCanvas`: a live renderer on a canvas |
+| `ireko/render` | The viewport, the themes and the animations that the live renderers share |
+| `ireko/react` | `useLayout`, `LayoutSvg` and `LayoutView` |
+| `ireko/xyflow` | `toXYFlow`, `PolylineEdge` and `layoutFlow` for React Flow 12 |
+| `ireko/examples` | The examples of the gallery |
+
 ## Packages
 
 | Package | Contents |
 |---|---|
-| [`ireko`](./packages/ireko) | The engine, the strategies `grid` and `radial`, the routers, the audit and the SVG export |
+| [`ireko`](./packages/ireko) | The library: the engine, the builder, the text language, the renderers and the adapters |
 | [`@ireko/legacy`](./packages/legacy) | The engine and the playground of Jqy, until the new core reaches parity |
 | [`@ireko/cli`](./packages/cli) | The workspace commands of the template |
 

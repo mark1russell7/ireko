@@ -90,9 +90,12 @@ export function farthestCorner(from: Point, r: Rect): number {
   return Math.hypot(dx, dy);
 }
 
-/** This function changes `-0` to `0` and keeps each other number. JSON cannot hold `-0`. */
+/**
+ * This function changes `-0` and the noise of the trigonometry (a magnitude under 1e-9) to `0`.
+ * It keeps each other number. JSON cannot hold `-0`, and a CSS length cannot always hold an exponent.
+ */
 export function clean(v: number): number {
-  return v === 0 ? 0 : v;
+  return Math.abs(v) < 1e-9 ? 0 : v;
 }
 
 /** This function rounds a number to three decimals. It also changes `-0` to `0`. Exporters use it for short output. */
