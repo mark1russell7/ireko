@@ -1,29 +1,30 @@
 {
-  "name": "jqy",
+  "$schema": "https://json.schemastore.org/package",
+  "name": "ireko-monorepo",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "dump:src": "cd src && node ../external/concat-src/concat-src.js ../src-catalog.md --exclude=.spec.ts,.test.ts"
+  "packageManager": "pnpm@12.10.1",
+  "engines": {
+    "node": ">=22.12"
   },
-  "dependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "reactflow": "^11.11.4"
+  "scripts": {
+    "dev": "pnpm --filter @ireko/legacy dev",
+    "build": "pnpm -r run build",
+    "package": "tsx packages/cli/src/index.ts package",
+    "template": "tsx packages/cli/src/index.ts repo",
+    "test": "pnpm -r run test",
+    "typecheck": "pnpm -r run typecheck",
+    "lint": "oxlint",
+    "lint:ste": "ste-lint",
+    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm lint:ste",
+    "dump:src": "cd packages/legacy/src && node ../../../external/concat-src/concat-src.js ../../../src-catalog.md"
   },
   "devDependencies": {
-    "@eslint/js": "^9.33.0",
-    "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7",
-    "@vitejs/plugin-react": "^5.0.0",
-    "eslint": "^9.33.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.20",
-    "globals": "^16.3.0",
-    "vite": "^7.1.2"
+    "@mark1russell7/cue": "github:mark1russell7/cue",
+    "@mark1russell7/ste-lint": "github:mark1russell7/ste-lint",
+    "oxlint": "^1.87.0",
+    "oxlint-tsgolint": "^7.0.2004",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }

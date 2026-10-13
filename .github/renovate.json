@@ -1,0 +1,20 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigestsToSemver"],
+  "minimumReleaseAge": "14 days",
+  "rangeStrategy": "bump",
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "description": "The old playground stays on React Flow 11 until the plan removes it (docs/REVIEW.md, P2).",
+      "matchFileNames": ["packages/legacy/package.json"],
+      "enabled": false
+    },
+    {
+      "description": "One pull request for the GitHub Actions each week.",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "schedule": ["before 6am on monday"]
+    }
+  ]
+}
