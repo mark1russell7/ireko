@@ -612,6 +612,10 @@ Each workflow starts with `permissions: {}` and gives each job only what it need
 - Set the description, the homepage, the topics and the social preview image (§12).
 - Install the Renovate app.
 
+Status on 2026-10-13: the repository is `mark1russell7/ireko`, the default branch is `main`, and the Pages source is "GitHub Actions". The site is at https://mark1russell7.github.io/ireko/. The description, the homepage and the topics are set. The social preview image and the Renovate app are not done.
+
+Pages deploys a commit only one time. A second deployment of the same commit keeps the first build. After a change of the base path, deploy a new commit.
+
 ---
 
 ## 11. The site
