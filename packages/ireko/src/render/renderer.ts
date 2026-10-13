@@ -97,7 +97,8 @@ export function mount(container: HTMLElement, create: (host: HTMLElement, theme:
       }
       const start = performance.now();
       const step = (now: number): void => {
-        const t = Math.min(1, (now - start) / duration);
+        // The time of a frame can come before the start: the browser gives the start time of the frame.
+        const t = Math.min(1, Math.max(0, (now - start) / duration));
         frame = interpolate(from, next, easeInOut(t));
         draw();
         if (t < 1) raf = requestAnimationFrame(step);

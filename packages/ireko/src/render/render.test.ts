@@ -317,6 +317,23 @@ describe("live renderers", () => {
     r.destroy();
   });
 
+  it("gives no negative size when the time of a frame comes before the start", () => {
+    let now = 100;
+    const queue: FrameRequestCallback[] = [];
+    vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback) => queue.push(cb));
+    vi.stubGlobal("cancelAnimationFrame", () => undefined);
+    vi.spyOn(performance, "now").mockImplementation(() => now);
+    const r = mountDom(host(), { duration: 100, fit: false });
+    r.update(first);
+    r.update(second);
+    now = 90;
+    queue.shift()?.(now);
+    const c = r.element.querySelector<HTMLElement>('[data-id="c"]');
+    expect(Number.parseFloat(c?.style.width ?? "")).toBeGreaterThanOrEqual(0);
+    expect(Number.parseFloat(c?.style.height ?? "")).toBeGreaterThanOrEqual(0);
+    r.destroy();
+  });
+
   it("works without ResizeObserver, and with a container of size 0", () => {
     vi.stubGlobal("ResizeObserver", undefined);
     const el = document.createElement("div");
