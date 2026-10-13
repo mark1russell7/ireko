@@ -39,6 +39,13 @@ function props(data: Partial<IrekoEdgeData> | undefined): EdgeProps<Edge<Partial
 }
 
 describe("PolylineEdge", () => {
+  it("puts the label at the middle of the length of the route", () => {
+    // An L route of length 10 + 30: the middle is 10 units along the second segment.
+    const html = renderToStaticMarkup(<svg>{PolylineEdge({ ...props({ points: [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 10, y: 30 }] }), label: "calls" })}</svg>);
+    expect(html).toContain("calls");
+    expect(html).toContain('transform="translate(10 10)"');
+  });
+
   it("draws the route, or a straight line without a route", () => {
     expect(pathOf([{ x: 1, y: 2 }, { x: 3, y: 4 }])).toBe("M 1 2 L 3 4");
     expect(renderToStaticMarkup(<svg>{PolylineEdge(props({ points: [{ x: 0, y: 0 }, { x: 0, y: 9 }, { x: 5, y: 9 }] }))}</svg>)).toContain('d="M 0 0 L 0 9 L 5 9"');

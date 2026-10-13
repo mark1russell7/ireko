@@ -7,7 +7,7 @@
 import { BaseEdge, Handle, Position, type Edge, type EdgeProps, type Node, type NodeProps } from "@xyflow/react";
 import type { ReactElement } from "react";
 import { createEngine, type Engine, type LayoutOptions, type LayoutRef, type Mode, type Fit, type Layout, type NodeSpec, type PlacedEdge, type PlacedNode, type Point } from "../core/index.ts";
-import { at } from "../core/at.ts";
+import { labelAt } from "../render/label.ts";
 import { isContainer } from "../render/renderer.ts";
 
 /** The data of a node that `toXYFlow` makes. */
@@ -64,7 +64,8 @@ export function pathOf(points: readonly Point[]): string {
 /** This component draws the route of an ireko edge. Without a route, it draws a straight line between the handles. */
 export function PolylineEdge({ data, sourceX, sourceY, targetX, targetY, markerEnd, markerStart, style, label, interactionWidth }: EdgeProps<Edge<Partial<IrekoEdgeData>>>): ReactElement {
   const points = data?.points !== undefined && data.points.length >= 2 ? data.points : [{ x: sourceX, y: sourceY }, { x: targetX, y: targetY }];
-  const middle = at(points, Math.floor((points.length - 1) / 2));
+  // The label goes at the middle of the length of the route, as in the other renderers.
+  const middle = labelAt(points);
   return (
     <BaseEdge
       path={pathOf(points)}

@@ -7,10 +7,12 @@ import { Background, Controls, ReactFlow } from "@xyflow/react";
 import type { Layout } from "ireko";
 import { edgeTypes, nodeTypes, toXYFlow } from "ireko/xyflow";
 import { useMemo, type ReactElement } from "react";
+import { useColorMode } from "../lib/theme.ts";
 
 /** The pane. A change of the layout gives React Flow new positions. */
 export default function XYFlowPane({ layout, onPick }: { layout: Layout; onPick: (id: string | undefined) => void }): ReactElement {
   const flow = useMemo(() => toXYFlow(layout), [layout]);
+  const colorMode = useColorMode();
   return (
     <ReactFlow
       nodes={flow.nodes}
@@ -18,6 +20,7 @@ export default function XYFlowPane({ layout, onPick }: { layout: Layout; onPick:
       edgeTypes={edgeTypes}
       nodeTypes={nodeTypes}
       fitView
+      colorMode={colorMode}
       nodesConnectable={false}
       onNodeClick={(_, node) => onPick(node.id)}
       onPaneClick={() => onPick(undefined)}
