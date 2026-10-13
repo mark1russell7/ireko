@@ -71,8 +71,10 @@ interface Token {
 }
 
 class Failure extends Error {
-  constructor(readonly issue: SyntaxIssue) {
+  readonly issue: SyntaxIssue;
+  constructor(issue: SyntaxIssue) {
     super(issue.message);
+    this.issue = issue;
   }
 }
 
@@ -152,10 +154,13 @@ class Parser {
   /** The first token of each root node, for the error message of a document with more than one root. */
   private readonly starts: Token[] = [];
 
-  constructor(
-    private readonly list: readonly Token[],
-    private readonly strategies: ReadonlySet<string>,
-  ) {}
+  private readonly list: readonly Token[];
+  private readonly strategies: ReadonlySet<string>;
+
+  constructor(list: readonly Token[], strategies: ReadonlySet<string>) {
+    this.list = list;
+    this.strategies = strategies;
+  }
 
   document(): LayoutInput {
     const roots = this.statements("end");
