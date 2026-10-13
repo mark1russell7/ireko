@@ -45,11 +45,11 @@ describe("PolylineEdge", () => {
 
 describe("GroupNode", () => {
   it("draws the label and two handles", () => {
-    const props = { id: "g", data: { label: "Group" }, type: "group", selected: false, dragging: false, zIndex: 0, selectable: true, deletable: true, draggable: true, isConnectable: false, positionAbsoluteX: 0, positionAbsoluteY: 0 } as unknown as Parameters<typeof GroupNode>[0];
-    const html = renderToStaticMarkup(<ReactFlowProvider>{GroupNode(props)}</ReactFlowProvider>);
+    const nodeProps = { id: "g", data: { label: "Group" }, type: "group", selected: false, dragging: false, zIndex: 0, selectable: true, deletable: true, draggable: true, isConnectable: false, positionAbsoluteX: 0, positionAbsoluteY: 0 } as unknown as Parameters<typeof GroupNode>[0];
+    const html = renderToStaticMarkup(<ReactFlowProvider>{GroupNode(nodeProps)}</ReactFlowProvider>);
     expect(html).toContain("Group");
     expect(html.match(/react-flow__handle/g)?.length).toBeGreaterThanOrEqual(2);
-    const empty = renderToStaticMarkup(<ReactFlowProvider>{GroupNode({ ...props, data: {} })}</ReactFlowProvider>);
+    const empty = renderToStaticMarkup(<ReactFlowProvider>{GroupNode({ ...nodeProps, data: {} })}</ReactFlowProvider>);
     expect(empty).not.toContain("Group");
     expect(nodeTypes.group).toBe(GroupNode);
   });
