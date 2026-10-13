@@ -448,7 +448,7 @@ One published package with subpaths is simpler for the users and for the release
 | `d3-hierarchy` | 5.8 kB |
 | `d3-flextree` | 3.3 kB |
 
-The budget for the core of ireko is **12 kB gzip**. `size-limit` enforces it in CI.
+The budget for the core of ireko is **12 kB gzip**. `size-limit` enforces it in CI. (P3 changed it to 13 kB, §16.2.)
 
 ### 7.4 Positioning
 
@@ -736,7 +736,7 @@ The research ranks these actions by effect:
 | P0 Migrate | Done | The template monorepo, the legacy package and the CI workflow. `pnpm check` passes. |
 | P1 Core | Done | `packages/ireko/src/core` and `packages/ireko/src/svg`. 110 tests. The coverage gates pass. |
 | P2 Surface | Done, with one change (§16.2) | The builder, the text language, the renderers for SVG, DOM and Canvas, the React bindings and the React Flow adapter. 169 tests. |
-| P3 Depth | In progress | The strategy `tree` (a tidy tree), the shapes of subtrees for strategies, the direction of tree edges and the organization-chart elbow of the orthogonal router, a faster audit. Not done: `stack`, `layers`, `avoid`, `bundle`, label sizes, benchmarks, mutation tests. |
+| P3 Depth | In progress | The strategy `tree` (a tidy tree), the shapes of subtrees for strategies, the direction of tree edges and the organization-chart elbow of the orthogonal router, a faster audit. The router `avoid`. Not done: `stack`, `layers`, `bundle`, label sizes, benchmarks, mutation tests. |
 | P4 Site | Done, with changes (§16.2) | `packages/site`: Astro 7 and Starlight. 18 pages of the guide, a gallery page for each example, the playground, 10 live figures, a share card for each page, `llms.txt`, 22 Playwright tests (smoke, head and SEO, axe in both themes, budgets), the site job of CI and `pages.yml`. The legacy package is gone. |
 | P5 Release | Ready. The owner publishes 0.1.0 (§10.2, §10.3). | The `tsdown` build, `publint`, `attw`, `size-limit`, a smoke test of the tarball, the `package` job of CI, `release.yml`, the npm README and `CHANGELOG.md`. The public API of the core is an explicit list. |
 
@@ -760,6 +760,8 @@ The research ranks these actions by effect:
 | §11: IndexNow | Not done. | IndexNow needs a key file and a request after each deployment. Do it after the first deployment. |
 | (new) Edge labels | Each renderer draws the label of an edge at the middle of its route, with a halo. `toXYFlow` gives the label to React Flow. | The model and the text language had labels, but no renderer drew them. The guide found the gap. |
 | §13 P3: `tree` with tidy contours | The engine gives a shape to the children of a strategy with `shapes: true`: bands on each axis, at most 64. The strategy packs the row forward and backward and takes the mean. | The contract of §6.3 sees only extents, and a tidy tree needs more. The bands are a contour with a fixed cost for each node. |
+| §4: a budget of 12 kB for the core | 13 kB. The built-in router `avoid` and the strategy `tree` made the core 11.5 kB for `layout`. | Each built-in strategy and router is in each bundle, so `router: "avoid"` works by name in the text language and the playground. An opt-in router object keeps the core near 10 kB, but it makes the API less uniform. ireko stays smaller than dagre (17 kB). |
+| §5 `avoid`: A* on a sparse grid | The engine gives a router with `obstacles: true` the 32 nearest boxes of each edge, without the ends and their containers. The grid lines are the edges of the obstacles, grown by a margin. The search costs one bend as 40 pixels. | The obstacles of an edge are the boxes that it can cross. A limit of 32 keeps the cost of an edge fixed. |
 | (new) The direction of tree edges | An arrangement can give a direction. Grid and tree give it from their side. The orthogonal router uses it for tree edges. | The router chose its axis from the distance between the boxes. In a compact tree, edges then left the side of a box, or became diagonal. |
 | (new) Erasable syntax | `erasableSyntaxOnly` in `packages/ireko/tsconfig.json`. | Node.js strips types, but it does not transform parameter properties. The share-card script imports the source of the library in plain Node.js. |
 
@@ -785,6 +787,7 @@ The research ranks these actions by effect:
 - The core is 24 kB minified and 8.9 kB after gzip (esbuild, all exports). `toSVG` adds 1.5 kB, and the text language 2.8 kB.
 - In the browser, the fuzz meter of the site lays out 2000 random trees (26315 boxes) in 175 ms, with no overlap.
 - The home page of the site loads 117 kB of script after gzip. The playground lays out its first text in approximately 5 ms.
-- P3 (2026-10-13): the example tidy-tree is 712 px wide with the strategy `tree`, and 1128 px with linked grids. 20000 random inputs with grid, radial and tree give no defect. The audit of a linked chain of 10000 nodes takes 11 ms (658 ms before). A nested chain is still quadratic: each box overlaps all its containers. The core with `tree` is 9.8 kB after gzip.
+- P3 (2026-10-13): the example tidy-tree is 712 px wide with the strategy `tree`, and 1128 px with linked grids. 20000 random inputs with grid, radial and tree give no defect.
+- P3: the audit of a linked chain of 10000 nodes takes 11 ms (658 ms before). A nested chain is still quadratic: each box overlaps all its containers. The core with `tree` is 9.8 kB after gzip. The router `avoid`: 1164 random extra edges on 300 random trees cross boxes 36 times, against 662 times with `orthogonal`. It takes approximately 2.6 ms for each edge.
 - P5: the core is 8.1 kB after gzip for `layout`, and 8.7 kB for all of the core. The budget is 12 kB. The tarball has 43 files and no runtime dependencies.
 - The work on the site found three defects of the library. The first frame of an animation gave a negative size, because the time of a frame can come before its start. No renderer drew edge labels. The parser had parameter properties.

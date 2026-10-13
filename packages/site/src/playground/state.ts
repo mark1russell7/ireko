@@ -11,7 +11,7 @@ export type RendererKind = "svg" | "dom" | "canvas" | "xyflow";
 export interface PlaygroundState {
   readonly text: string;
   readonly renderer: RendererKind;
-  readonly router: "straight" | "orthogonal";
+  readonly router: "straight" | "orthogonal" | "avoid";
   readonly spacing: number;
 }
 
@@ -35,7 +35,7 @@ export async function readHash(hash: string, fallback: PlaygroundState): Promise
     return {
       text: typeof data.text === "string" ? data.text : fallback.text,
       renderer: RENDERERS.find((r) => r === data.renderer) ?? fallback.renderer,
-      router: data.router === "orthogonal" ? "orthogonal" : "straight",
+      router: data.router === "orthogonal" || data.router === "avoid" ? data.router : "straight",
       spacing: typeof data.spacing === "number" && Number.isFinite(data.spacing) ? Math.min(64, Math.max(0, data.spacing)) : fallback.spacing,
     };
   } catch {

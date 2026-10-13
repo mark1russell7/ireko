@@ -15,7 +15,7 @@ The second argument of `layout(input, options)` and `engine.layout(input, option
 | `spacing` | number | `24` | The base distance in pixels. The default gap and padding of each container come from it. |
 | `nodeSize` | `{ width, height }` | `120 × 48` | The size of a leaf with no size in its spec. |
 | `header` | number | `24` | The smallest space above the content of a nested container, for its label. The padding counts as a part of it. |
-| `router` | string | `"straight"` | The router of the edges: `straight`, `orthogonal` or a router that you register. |
+| `router` | string | `"straight"` | The router of the edges: `straight`, `orthogonal`, `avoid` or a router that you register. |
 | `treeEdges` | `"linked"`, `"all"`, `"none"` | `"linked"` | The tree edges of the output. See [edges](/learn/edges/#tree-edges). |
 | `origin` | `{ x, y }` | `{ x: 0, y: 0 }` | The top-left corner of the root box. |
 | `measure` | `(node) => size or undefined` | none | The size of a leaf. Use it to measure the labels. |

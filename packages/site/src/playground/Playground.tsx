@@ -54,6 +54,9 @@ function layoutOf(engine: Engine, strategies: readonly string[], text: string, o
   return { layout, input: parsed.input, ms: performance.now() - start };
 }
 
+/** This function gives a router of the playground for a name. Each other name gives straight. */
+const routerOf = (value: string): "straight" | "orthogonal" | "avoid" => (value === "orthogonal" || value === "avoid" ? value : "straight");
+
 /** This function gives the reader a file with the text. */
 function download(name: string, type: string, text: string): void {
   const url = URL.createObjectURL(new Blob([text], { type }));
@@ -134,7 +137,7 @@ export default function Playground(): ReactElement {
     if (example === undefined) return;
     setSelected(undefined);
     setText(`# ${example.title}: ${example.description}\n${print(example.input)}`);
-    update({ router: example.options?.router === "orthogonal" ? "orthogonal" : "straight", spacing: example.options?.spacing ?? 20 });
+    update({ router: routerOf(example.options?.router ?? "straight"), spacing: example.options?.spacing ?? 20 });
   };
 
   const fuzz = (): void => {
@@ -181,9 +184,10 @@ export default function Playground(): ReactElement {
         </div>
         <label className="pg-control">
           <span>Edges</span>
-          <select className="ik-select" value={state.router} onChange={(e) => update({ router: e.target.value === "orthogonal" ? "orthogonal" : "straight" })}>
+          <select className="ik-select" value={state.router} onChange={(e) => update({ router: routerOf(e.target.value) })}>
             <option value="straight">straight</option>
             <option value="orthogonal">orthogonal</option>
+            <option value="avoid">avoid</option>
           </select>
         </label>
         <label className="pg-control">

@@ -118,8 +118,8 @@ The [playground](/playground/) uses `toXYFlow` for its React Flow view.
 | --- | --- | --- | --- |
 | Groups (sub-flows) | Yes, each group with its own strategy | Clusters, with known problems for sub-flows | Yes, with many options |
 | Strategies | grid, radial, tidy tree, yours | layered | layered, stress, tree, radial, force and more |
-| Edge routes | straight, orthogonal, yours | polyline | orthogonal, splines, polyline |
+| Edge routes | straight, orthogonal, around boxes, yours | polyline | orthogonal, splines, polyline |
 | API | synchronous | synchronous | asynchronous |
-| Size (min + gzip) | approximately 9 KB | approximately 17 KB | approximately 470 KB |
+| Size (min + gzip) | approximately 11 KB | approximately 17 KB | approximately 470 KB |
 
 For a large directed graph with layers, use dagre or ELK. For nested groups with a layout for each group, use ireko. The [comparison page](/compare/) has more detail.

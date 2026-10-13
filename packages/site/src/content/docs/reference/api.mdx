@@ -60,6 +60,7 @@ const treeStrategy: Strategy<TreeOptions>;
 const BUILTIN_STRATEGY_NAMES: readonly string[]; // grid, radial, tree
 const straight: Router;
 const orthogonal: Router;
+const avoid: Router;      // around the other boxes
 const builtinStrategies: readonly AnyStrategy[];
 const builtinRouters: readonly Router[];
 const defaultLimits: Limits; // { maxNodes: 100000, maxDepth: 10000, maxChildren: 10000 }

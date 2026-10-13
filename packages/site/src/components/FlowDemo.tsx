@@ -47,7 +47,7 @@ interface Settings {
   readonly root: Choice;
   readonly server: Choice;
   readonly hierarchy: "edges" | "parent";
-  readonly router: "straight" | "orthogonal";
+  readonly router: "straight" | "orthogonal" | "avoid";
 }
 
 function optionsOf(s: Settings): LayoutFlowOptions {
@@ -116,9 +116,10 @@ function Demo(): ReactElement {
         </label>
         <label>
           <span>Edges</span>
-          <select className="ik-select" value={settings.router} onChange={(e) => set({ router: e.target.value === "orthogonal" ? "orthogonal" : "straight" })}>
+          <select className="ik-select" value={settings.router} onChange={(e) => set({ router: e.target.value === "orthogonal" || e.target.value === "avoid" ? e.target.value : "straight" })}>
             <option value="straight">straight</option>
             <option value="orthogonal">orthogonal</option>
+            <option value="avoid">avoid</option>
           </select>
         </label>
         <span className="ik-spacer" />

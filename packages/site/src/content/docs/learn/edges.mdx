@@ -36,6 +36,7 @@ b -> e "down"`;
 export const routers = [
   { label: "straight", source: routed, note: "straight: one segment from border to border, on the line between the centers." },
   { label: "orthogonal", source: routed, options: { router: "orthogonal" }, note: "orthogonal: horizontal and vertical segments. The edge turns at the middle of the gap." },
+  { label: "avoid", source: routed, options: { router: "avoid" }, note: "avoid: horizontal and vertical segments that go around the other boxes." },
 ];
 
 export const linkedTree = `ceo {
@@ -88,6 +89,7 @@ The router draws each edge after the engine places all boxes. The option `router
 | Router | Route |
 | --- | --- |
 | `straight` (default) | One segment between the borders of the boxes, on the line between their centers. |
+| `avoid` | Horizontal and vertical segments that go around the other boxes, with few bends. It searches a grid for each edge, so it is slower: approximately 3 ms for each edge. When no route exists, it gives the orthogonal route. |
 | `orthogonal` | Horizontal and vertical segments. The edge leaves the side of the source that faces the target, and turns at the middle of the gap. When the boxes overlap on that axis, the router draws a straight edge. A tree edge goes in the direction of the strategy of its parent: down for children below the parent. |
 
 An edge between a container and a node inside it goes from center to center, because the two boxes have no clear border between them.

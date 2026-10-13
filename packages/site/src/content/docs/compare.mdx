@@ -25,12 +25,12 @@ ireko does one thing: it lays out a **tree of containers**, with a different lay
 | Main algorithm | grid, radial, tidy tree, yours, in each container | layered | layered and 10 more | tidy tree, treemap, pack | many, as extensions | dot, neato, osage and more |
 | Nested containers | yes, each with its own strategy and mode | clusters, with settings for each cluster (3.1) | yes, from the leaves up | treemap and pack only | yes (compound nodes) | clusters |
 | Your own algorithm | a small `arrange` function | no | Java or a fork | no | an extension | no |
-| Edge routes | straight, orthogonal, yours | polyline | orthogonal, polyline, splines | no | by the renderer | splines, orthogonal |
+| Edge routes | straight, orthogonal, around boxes, yours | polyline | orthogonal, polyline, splines | no | by the renderer | splines, orthogonal |
 | Audit of the output | yes, in each layout | no | no | no | no | no |
 | Text language | yes | no | no (JSON) | no | no | DOT |
 | Renderers | SVG, DOM, Canvas, React, React Flow | no | no | no | its own | SVG |
 | API | synchronous | synchronous | asynchronous (worker) | synchronous | synchronous | asynchronous (WASM) |
-| Size, min + gzip | 9 KB | 17 KB | 467 KB | 6 KB | not measured | not measured (WASM) |
+| Size, min + gzip | 11 KB | 17 KB | 467 KB | 6 KB | not measured | not measured (WASM) |
 | License | MIT | MIT | EPL-2.0 | ISC | MIT | EPL-1.0 (Graphviz) |
 
 The sizes are measurements of the minified bundle after gzip, in October 2026: ireko 0.1, `@dagrejs/dagre` 3.1.1, `elkjs` 0.12.0 (`elk.bundled.js`) and `d3-hierarchy` 3.1.2.
@@ -50,7 +50,7 @@ Good layout engines for nested graphs do the same thing at the core. They lay ou
 - **No layered layout.** ireko has no crossing reduction and no layers. For a flow chart with long chains, use dagre or ELK.
 - **No ports.** An edge starts at the border of a box, on the line to the other box.
 - **No edge label space.** A label goes at the middle of its route, on top of the line. The layout does not keep space for it.
-- **No obstacle routing.** An edge can cross a box. The orthogonal router does not go around other boxes.
+- **No edge bundling.** The `avoid` router goes around boxes, but it does not keep edges apart from each other, and it does not reduce crossings between edges.
 
 The [plan of the project](https://github.com/mark1russell7/ireko/blob/main/docs/REVIEW.md) has a tree strategy, a stack strategy and an obstacle router as next steps.
 
