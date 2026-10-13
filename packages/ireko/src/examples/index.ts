@@ -90,8 +90,8 @@ export const examples: readonly Example[] = [
       edges: [
         { source: "gateway", target: "auth" },
         { source: "gateway", target: "orders" },
-        { source: "orders", target: "postgres" },
-        { source: "billing", target: "kafka" },
+        { source: "orders", target: "postgres", label: "writes" },
+        { source: "billing", target: "kafka", label: "events" },
         { source: "search", target: "redis" },
       ],
     },

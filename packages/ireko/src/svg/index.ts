@@ -6,6 +6,7 @@
 import { round3 } from "../core/geometry.ts";
 import type { Layout, PlacedEdge, PlacedNode } from "../core/model.ts";
 import { clipRoots, isContainer, mount, paintOrder, type Renderer, type RendererOptions, type Surface } from "../render/renderer.ts";
+import { haloOf, labelAt, LABEL_SCALE } from "../render/label.ts";
 import { lightTheme, themeOf, type Theme } from "../render/theme.ts";
 import type { Frame, FrameNode } from "../render/tween.ts";
 import type { View } from "../render/viewport.ts";
@@ -88,13 +89,29 @@ export function toSVG(layout: Layout, options: SvgOptions = {}): string {
     out.push("</g>");
   }
   out.push("</g>");
+
+  const labelled = labels ? layout.edges.filter((e) => e.label !== undefined && e.label !== "") : [];
+  if (labelled.length > 0) {
+    out.push(`<g class="ireko-edge-labels" text-anchor="middle" dominant-baseline="central" fill="${esc(theme.mutedText)}" stroke="${esc(haloOf(theme))}" stroke-width="4" stroke-linejoin="round" paint-order="stroke">`);
+    for (const e of labelled) {
+      const p = labelAt(e.points);
+      const size = theme.fontSize * LABEL_SCALE * edgeScale(e, byId);
+      out.push(`<text class="ireko-edge-label" data-id="${esc(e.id)}" x="${num(p.x)}" y="${num(p.y)}" font-size="${num(size)}">${esc(e.label ?? "")}</text>`);
+    }
+    out.push("</g>");
+  }
   out.push("</svg>");
   return out.join("\n");
 }
 
+/** This function gives the scale of an edge: the smaller scale of its two ends. */
+function edgeScale(e: PlacedEdge, byId: ReadonlyMap<string, PlacedNode>): number {
+  return Math.min(byId.get(e.source)?.scale ?? 1, byId.get(e.target)?.scale ?? 1);
+}
+
 function edgeOf(e: PlacedEdge, theme: Theme, byId: ReadonlyMap<string, PlacedNode>): string {
   const points = e.points.map((p) => `${num(p.x)},${num(p.y)}`).join(" ");
-  const scale = Math.min(byId.get(e.source)?.scale ?? 1, byId.get(e.target)?.scale ?? 1);
+  const scale = edgeScale(e, byId);
   const extra = e.kind === "extra";
   const stroke = extra ? theme.extraEdge : theme.edge;
   const dash = extra ? ` stroke-dasharray="${num(4 * scale)} ${num(3 * scale)}"` : "";
@@ -129,13 +146,16 @@ export function svgSurface(host: HTMLElement, theme: Theme): Surface {
   svg.setAttribute("font-family", theme.fontFamily);
   const defs = document.createElementNS(SVG, "defs");
   const stage = document.createElementNS(SVG, "g");
-  const layers = [document.createElementNS(SVG, "g"), document.createElementNS(SVG, "g"), document.createElementNS(SVG, "g")] as const;
+  const layers = [document.createElementNS(SVG, "g"), document.createElementNS(SVG, "g"), document.createElementNS(SVG, "g"), document.createElementNS(SVG, "g")] as const;
   layers[1].setAttribute("fill", "none");
+  layers[3].setAttribute("class", "ireko-edge-labels");
+  setAll(layers[3], { "text-anchor": "middle", "dominant-baseline": "central", fill: theme.mutedText, stroke: haloOf(theme), "stroke-width": 4, "stroke-linejoin": "round", "paint-order": "stroke" });
   stage.append(...layers);
   svg.append(defs, stage);
   host.appendChild(svg);
   const groups = new Map<string, { readonly g: SVGGElement; readonly rect: SVGRectElement; readonly text: SVGTextElement }>();
   const lines = new Map<string, SVGPolylineElement>();
+  const texts = new Map<string, SVGTextElement>();
 
   const node = (n: FrameNode, layer: SVGGElement, selected: boolean, clip: FrameNode | undefined): void => {
     let entry = groups.get(n.id);
@@ -203,11 +223,33 @@ export function svgSurface(host: HTMLElement, theme: Theme): Surface {
         line.remove();
         lines.delete(id);
       }
+
+      const labelled = new Set<string>();
+      for (const e of frame.edges) {
+        if (e.label === undefined || e.label === "") continue;
+        let text = texts.get(e.id);
+        if (text === undefined) {
+          text = document.createElementNS(SVG, "text");
+          text.dataset["id"] = e.id;
+          texts.set(e.id, text);
+          layers[3].appendChild(text);
+        }
+        const p = labelAt(e.points);
+        text.textContent = e.label;
+        setAll(text, { x: round3(p.x), y: round3(p.y), "font-size": theme.fontSize * LABEL_SCALE, opacity: e.opacity });
+        labelled.add(e.id);
+      }
+      for (const [id, text] of texts) {
+        if (labelled.has(id)) continue;
+        text.remove();
+        texts.delete(id);
+      }
     },
     destroy() {
       svg.remove();
       groups.clear();
       lines.clear();
+      texts.clear();
     },
   };
 }

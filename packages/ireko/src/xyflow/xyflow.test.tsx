@@ -24,6 +24,13 @@ describe("toXYFlow", () => {
     expect(flow.edges.find((e) => e.id === "x")?.type).toBe("ireko");
     expect(toXYFlow(out, { nodeType: () => "card", edgeType: "smooth" }).nodes[0]?.type).toBe("card");
   });
+
+  it("keeps the label of an edge", () => {
+    const out = layout({ root: { id: "r", children: [{ id: "a" }, { id: "b" }] }, edges: [{ id: "x", source: "a", target: "b", label: "calls" }] });
+    const flow = toXYFlow(out);
+    expect(flow.edges.find((e) => e.id === "x")?.label).toBe("calls");
+    expect(flow.edges.find((e) => e.id !== "x")).not.toHaveProperty("label");
+  });
 });
 
 /** This function gives the properties that React Flow gives to an edge component. */

@@ -4,6 +4,7 @@
  */
 import { round3 } from "../core/geometry.ts";
 import { clipRoots, isContainer, mount, paintOrder, type Renderer, type RendererOptions, type Surface } from "../render/renderer.ts";
+import { haloOf, labelAt, LABEL_SCALE } from "../render/label.ts";
 import type { Theme } from "../render/theme.ts";
 import type { Frame, FrameNode } from "../render/tween.ts";
 import type { View } from "../render/viewport.ts";
@@ -28,11 +29,15 @@ export function domSurface(host: HTMLElement, theme: Theme): Surface {
   edgeLayer.setAttribute("height", "1");
   Object.assign(edgeLayer.style, { position: "absolute", left: "0", top: "0", overflow: "visible", pointerEvents: "none" });
   const leafLayer = document.createElement("div");
-  stage.append(containerLayer, edgeLayer, leafLayer);
+  const labelLayer = document.createElement("div");
+  labelLayer.className = "ireko-edge-labels";
+  stage.append(containerLayer, edgeLayer, leafLayer, labelLayer);
   host.appendChild(stage);
 
   const boxes = new Map<string, { readonly el: HTMLDivElement; readonly label: HTMLSpanElement }>();
   const lines = new Map<string, SVGPolylineElement>();
+  const texts = new Map<string, HTMLSpanElement>();
+  const halo = haloOf(theme);
 
   const box = (n: FrameNode, layer: HTMLElement, selected: boolean, clip: FrameNode | undefined): void => {
     let entry = boxes.get(n.id);
@@ -113,11 +118,47 @@ export function domSurface(host: HTMLElement, theme: Theme): Surface {
         line.remove();
         lines.delete(id);
       }
+
+      const labelled = new Set<string>();
+      for (const e of frame.edges) {
+        if (e.label === undefined || e.label === "") continue;
+        let text = texts.get(e.id);
+        if (text === undefined) {
+          text = document.createElement("span");
+          text.className = "ireko-edge-label";
+          text.dataset["id"] = e.id;
+          texts.set(e.id, text);
+          labelLayer.appendChild(text);
+        }
+        const p = labelAt(e.points);
+        text.textContent = e.label;
+        Object.assign(text.style, {
+          position: "absolute",
+          left: px(p.x),
+          top: px(p.y),
+          transform: "translate(-50%, -50%)",
+          padding: "0 3px",
+          borderRadius: "3px",
+          background: halo,
+          color: theme.mutedText,
+          fontSize: `${String(theme.fontSize * LABEL_SCALE)}px`,
+          whiteSpace: "nowrap",
+          opacity: String(e.opacity),
+          pointerEvents: "none",
+        });
+        labelled.add(e.id);
+      }
+      for (const [id, text] of texts) {
+        if (labelled.has(id)) continue;
+        text.remove();
+        texts.delete(id);
+      }
     },
     destroy() {
       stage.remove();
       boxes.clear();
       lines.clear();
+      texts.clear();
     },
   };
 }

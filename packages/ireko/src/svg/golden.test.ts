@@ -33,6 +33,16 @@ describe("toSVG", () => {
     expect(esc("plain")).toBe("plain");
   });
 
+  it("draws the labels of the edges, and leaves them out with labels: false", () => {
+    const out = layout({ root: { id: "r", children: [{ id: "a" }, { id: "b" }] }, edges: [{ source: "a", target: "b", label: "a & b" }, { source: "b", target: "a", label: "" }] });
+    const svg = toSVG(out, { theme: { background: "transparent", nodeFill: "#fafafa" } });
+    expect(svg.match(/class="ireko-edge-label"/g)).toHaveLength(1);
+    expect(svg).toContain(">a &amp; b</text>");
+    expect(svg).toContain('stroke="#fafafa"');
+    expect(toSVG(out, { labels: false })).not.toContain("ireko-edge-label");
+    expect(toSVG(layout({ root: { id: "r" } }))).not.toContain("ireko-edge-labels");
+  });
+
   it("has options for the theme, the labels and the background", () => {
     const out = layout({ root: { id: "r", mode: "nested", children: [{ id: "a" }] } });
     const svg = toSVG(out, { labels: false, background: false, padding: 0, theme: { nodeFill: "#123456" } });

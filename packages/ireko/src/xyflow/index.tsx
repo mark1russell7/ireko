@@ -52,7 +52,7 @@ export function toXYFlow(layout: Layout, options: ToXYFlowOptions = {}): { nodes
       ...(holder === undefined ? {} : { parentId: holder.id, extent: "parent" as const }),
     };
   });
-  const edges = layout.edges.map((e: PlacedEdge): IrekoEdge => ({ id: e.id, source: e.source, target: e.target, type: options.edgeType ?? "ireko", data: { points: e.points } }));
+  const edges = layout.edges.map((e: PlacedEdge): IrekoEdge => ({ id: e.id, source: e.source, target: e.target, type: options.edgeType ?? "ireko", data: { points: e.points }, ...(e.label === undefined ? {} : { label: e.label }) }));
   return { nodes, edges };
 }
 

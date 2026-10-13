@@ -7,6 +7,7 @@ import { mountDom } from "../dom/index.ts";
 import { examples } from "../examples/index.ts";
 import { mountSvg } from "../svg/index.ts";
 import { clipRoots, isContainer, paintOrder, pickIn } from "./renderer.ts";
+import { haloOf, labelAt } from "./label.ts";
 import { darkTheme, lightTheme, themeOf } from "./theme.ts";
 import { easeInOut, frameOf, interpolate, morph, resample } from "./tween.ts";
 import { createViewport } from "./viewport.ts";
@@ -80,6 +81,8 @@ function recorder() {
     fillText(text: string) {
       texts.push(text);
     },
+    strokeText() {},
+    lineJoin: "miter",
     setLineDash() {},
     fillStyle: "",
     strokeStyle: "",
@@ -234,7 +237,8 @@ describe("P9: the renderers draw the same boxes", () => {
         expect(b.height).toBeCloseTo(n.height, 6);
       });
       expect(rec.boxes).toHaveLength(out.nodes.length);
-      expect(rec.texts.toSorted()).toEqual(out.nodes.map((n) => n.label).toSorted());
+      const edgeLabels = out.edges.flatMap((e) => (e.label === undefined ? [] : [e.label]));
+      expect(rec.texts.toSorted()).toEqual([...out.nodes.map((n) => n.label), ...edgeLabels].toSorted());
     });
   }
 });
@@ -342,6 +346,37 @@ describe("live renderers", () => {
     r.update(first);
     expect(r.viewport.get()).toEqual({ x: 0, y: 0, k: 1 });
     r.destroy();
+  });
+
+  it("draws the edge labels in each renderer, and removes them with their edges", () => {
+    const input = { root: { id: "r", children: [{ id: "a" }, { id: "b" }] }, edges: [{ source: "a", target: "b", label: "a <to> b" }] };
+    const withLabel = layout(input);
+    const without = layout({ root: input.root });
+    for (const mountOf of [mountSvg, mountDom]) {
+      const r = mountOf(host(), { duration: 0 });
+      r.update(withLabel);
+      const label = r.element.querySelector(".ireko-edge-labels [data-id]");
+      expect(label?.textContent).toBe("a <to> b");
+      r.update(without);
+      expect(r.element.querySelector(".ireko-edge-labels [data-id]")).toBeNull();
+      r.destroy();
+    }
+    const rec = recorder();
+    drawFrame(rec.ctx, frameOf(withLabel), { x: 0, y: 0, k: 1 }, { ...lightTheme, background: "transparent" }, { width: 800, height: 600, dpr: 1 });
+    expect(rec.texts).toContain("a <to> b");
+  });
+
+  it("puts a label at the middle of the length of its route", () => {
+    expect(labelAt([])).toEqual({ x: 0, y: 0 });
+    expect(labelAt([{ x: 5, y: 5 }])).toEqual({ x: 5, y: 5 });
+    expect(labelAt([{ x: 0, y: 0 }, { x: 10, y: 0 }])).toEqual({ x: 5, y: 0 });
+    // An L route of length 10 + 30: the middle is 10 units along the second segment.
+    expect(labelAt([{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 10, y: 30 }])).toEqual({ x: 10, y: 10 });
+    // A segment of length 0 does not count.
+    expect(labelAt([{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 8 }])).toEqual({ x: 0, y: 4 });
+    expect(labelAt([{ x: 3, y: 3 }, { x: 3, y: 3 }])).toEqual({ x: 3, y: 3 });
+    expect(haloOf(lightTheme)).toBe(lightTheme.background);
+    expect(haloOf({ ...lightTheme, background: "transparent" })).toBe(lightTheme.nodeFill);
   });
 
   it("keeps the paint order and the clip roots", () => {

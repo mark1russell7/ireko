@@ -40,6 +40,15 @@ describe("LayoutSvg", () => {
     expect(html).toContain('stroke-dasharray="4 3"');
   });
 
+  it("draws the labels of the edges, with a halo", () => {
+    const out = layout({ root: { id: "r", children: [{ id: "a" }, { id: "b" }] }, edges: [{ source: "a", target: "b", label: "<calls>" }] });
+    const html = renderToStaticMarkup(<LayoutSvg layout={out} />);
+    expect(html).toContain('class="ireko-edge-label"');
+    expect(html).toContain("&lt;calls&gt;");
+    expect(html).toContain('paint-order="stroke"');
+    expect(renderToStaticMarkup(<LayoutSvg layout={layout(input)} />)).not.toContain("ireko-edge-labels");
+  });
+
   it("draws the tree edges of a linked node", () => {
     const html = renderToStaticMarkup(<LayoutSvg layout={layout({ root: { id: "p", children: [{ id: "c" }] } })} />);
     expect(html.match(/<polyline/g)).toHaveLength(1);

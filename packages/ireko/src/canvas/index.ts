@@ -3,6 +3,7 @@
  * `drawFrame` is a pure function of a 2D context, so a test can give it a context that records the calls.
  */
 import { clipRoots, isContainer, mount, paintOrder, type Renderer, type RendererOptions, type Surface } from "../render/renderer.ts";
+import { haloOf, labelAt, LABEL_SCALE } from "../render/label.ts";
 import type { Theme } from "../render/theme.ts";
 import type { Frame, FrameNode } from "../render/tween.ts";
 import type { View } from "../render/viewport.ts";
@@ -27,6 +28,8 @@ export type Context2D = Pick<
   | "rect"
   | "clip"
   | "fillText"
+  | "strokeText"
+  | "lineJoin"
   | "setLineDash"
   | "fillStyle"
   | "strokeStyle"
@@ -100,6 +103,22 @@ export function drawFrame(ctx: Context2D, frame: Frame, view: View, theme: Theme
     ctx.restore();
   }
   for (const n of leaves) box(ctx, n, theme, selected.has(n.id), clips.get(n.id));
+  for (const e of frame.edges) {
+    if (e.label === undefined || e.label === "") continue;
+    const p = labelAt(e.points);
+    ctx.save();
+    ctx.globalAlpha = e.opacity;
+    ctx.font = `${String(theme.fontSize * LABEL_SCALE)}px ${theme.fontFamily}`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = haloOf(theme);
+    ctx.strokeText(e.label, p.x, p.y);
+    ctx.fillStyle = theme.mutedText;
+    ctx.fillText(e.label, p.x, p.y);
+    ctx.restore();
+  }
 }
 
 function box(ctx: Context2D, n: FrameNode, theme: Theme, selected: boolean, clip: FrameNode | undefined): void {

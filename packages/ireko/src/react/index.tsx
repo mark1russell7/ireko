@@ -9,6 +9,7 @@ import { mountCanvas } from "../canvas/index.ts";
 import { layout as defaultLayout, type Engine, type Layout, type LayoutInput, type LayoutOptions, type PlacedNode } from "../core/index.ts";
 import { mountDom } from "../dom/index.ts";
 import { isContainer, type Renderer } from "../render/renderer.ts";
+import { haloOf, labelAt, LABEL_SCALE } from "../render/label.ts";
 import { lightTheme, themeOf, type Theme } from "../render/theme.ts";
 import type { Viewport } from "../render/viewport.ts";
 import { mountSvg } from "../svg/index.ts";
@@ -41,6 +42,7 @@ export function LayoutSvg({ layout, theme: partial, padding = 16, title, classNa
   };
   const containers = layout.nodes.filter(isContainer);
   const leaves = layout.nodes.filter((n) => !isContainer(n));
+  const labelled = layout.edges.filter((e) => e.label !== undefined && e.label !== "");
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -92,6 +94,18 @@ export function LayoutSvg({ layout, theme: partial, padding = 16, title, classNa
           </g>
         ))}
       </g>
+      {labelled.length === 0 ? null : (
+        <g className="ireko-edge-labels" textAnchor="middle" dominantBaseline="central" fill={theme.mutedText} stroke={haloOf(theme)} strokeWidth={4} strokeLinejoin="round" paintOrder="stroke">
+          {labelled.map((e) => {
+            const p = labelAt(e.points);
+            return (
+              <text key={e.id} className="ireko-edge-label" data-id={e.id} x={p.x} y={p.y} fontSize={theme.fontSize * LABEL_SCALE}>
+                {e.label}
+              </text>
+            );
+          })}
+        </g>
+      )}
     </svg>
   );
 }
