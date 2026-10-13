@@ -4,11 +4,12 @@
  * `parse(print(input))` gives the input again. It loses only the data of the user and the identifiers of the edges.
  */
 import type { LayoutInput, NodeSpec } from "../core/index.ts";
+import { BUILTIN_STRATEGY_NAMES } from "../core/strategies/names.ts";
 import { KEYWORDS } from "./parse.ts";
 
 /** The options of `print`. */
 export interface PrintOptions {
-  /** The names of the strategies. An identifier with one of these names gets quotes. The default is `grid` and `radial`. */
+  /** The names of the strategies. An identifier with one of these names gets quotes. The default is the built-in strategies. */
   readonly strategies?: readonly string[];
   /** The largest length of a line of leaves. The default is 80. */
   readonly width?: number;
@@ -19,7 +20,7 @@ const SIZE_LIKE = /^(\d+(?:\.\d+)?|_)x(\d+(?:\.\d+)?|_)$/;
 
 /** This function writes an input as text of the language. */
 export function print(input: LayoutInput, options: PrintOptions = {}): string {
-  const strategies = new Set(options.strategies ?? ["grid", "radial"]);
+  const strategies = new Set(options.strategies ?? BUILTIN_STRATEGY_NAMES);
   const width = options.width ?? 80;
   const lines: string[] = [];
   const id = (value: string): string => (BARE.test(value) && !value.includes("->") && !KEYWORDS.has(value) && !strategies.has(value) && !SIZE_LIKE.test(value) ? value : `'${escape(value, "'")}'`);

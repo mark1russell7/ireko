@@ -8,7 +8,8 @@ import { rectAt, union, unionAll, type Point, type Rect, type Size } from "../ge
 import type { Issue, NodeSpec } from "../model.ts";
 import { resolveOptions } from "../options.ts";
 import { grid } from "../strategies/grid.ts";
-import type { AnyStrategy, Arrangement, MeasuredChild } from "../strategy.ts";
+import type { AnyStrategy, Arrangement, Direction, MeasuredChild, Shape } from "../strategy.ts";
+import { boxShape, joinShapes, moveShape } from "./shape.ts";
 import type { Context, Normalized, Placement } from "./types.ts";
 
 /** The keys of a layout object that belong to the engine, not to the strategy. */
@@ -25,6 +26,8 @@ export interface Measurement {
   readonly layout: readonly string[];
   /** The resolved strategy options of each node with children. */
   readonly options: readonly unknown[];
+  /** The direction of the tree edges of each node, from its strategy. */
+  readonly direction: readonly (Direction | undefined)[];
   readonly gap: readonly number[];
 }
 
@@ -39,8 +42,19 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
   const placement: Placement[] = Array.from({ length: n }, () => IDENTITY);
   const layout: string[] = [];
   const options: unknown[] = [];
+  const direction: (Direction | undefined)[] = Array.from({ length: n }, () => undefined);
   const gaps: number[] = [];
   const { spacing, nodeSize } = ctx.options;
+
+  // The shapes: a strategy with `shapes: true` needs the shape of each child. A linked node composes its shape from
+  // the shapes of its children, so the need goes down the tree. The pre-order visits each parent before its children.
+  const wantsShapes = (i: number): boolean => ctx.strategies.get(at(norm.nodes, i).layout)?.shapes === true;
+  const needsShape: boolean[] = Array.from({ length: n }, () => false);
+  for (let i = 0; i < n; i++) {
+    const p = at(norm.nodes, i).parent;
+    if (p >= 0) needsShape[i] = wantsShapes(p) || (at(needsShape, p) && at(norm.nodes, p).mode === "linked");
+  }
+  const shapes: (Shape | undefined)[] = Array.from({ length: n }, () => undefined);
 
   for (let i = n - 1; i >= 0; i--) {
     const node = at(norm.nodes, i);
@@ -51,6 +65,7 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
     if (node.children.length === 0) {
       box[i] = own.size;
       extent[i] = rectAt({ x: 0, y: 0 }, own.size);
+      if (at(needsShape, i)) shapes[i] = boxShape(own.size);
       continue;
     }
 
@@ -61,12 +76,18 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
     gaps[i] = gap;
 
     // The reverse pre-order visits each child before its parent, so each child already has its measurement.
-    const children: MeasuredChild[] = node.children.map((c) => ({ id: at(norm.nodes, c).id, box: at(box, c), extent: at(extent, c), mode: at(norm.nodes, c).mode }));
+    const withShapes = wantsShapes(i);
+    const children: MeasuredChild[] = node.children.map((c) => {
+      const child = { id: at(norm.nodes, c).id, box: at(box, c), extent: at(extent, c), mode: at(norm.nodes, c).mode };
+      const shape = shapes[c];
+      return withShapes && shape !== undefined ? { ...child, shape } : child;
+    });
     // In the nested mode, a container without a size in its spec has no smallest size: its content sets the size.
     const self = node.mode === "linked" ? own.size : own.explicit;
     const arranged = arrangeSafely(atKey(ctx.strategies, node.layout), node, { self, children, gap }, issues);
     layout[i] = arranged.layout;
     options[i] = arranged.options;
+    direction[i] = arranged.arrangement.direction;
     const offsets = arranged.arrangement.offsets;
 
     if (node.mode === "linked") {
@@ -79,6 +100,15 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
         ext = union(ext, { x: o.x + e.x, y: o.y + e.y, width: e.width, height: e.height });
       });
       extent[i] = ext;
+      if (at(needsShape, i)) {
+        const parts = node.children.map((c, k) => {
+          const o = at(offsets, k);
+          // A child without a shape counts with its extent: a shape that covers more is still correct.
+          const shape = shapes[c] ?? moveShape(boxShape(at(extent, c)), at(extent, c).x, at(extent, c).y);
+          return moveShape(shape, o.x, o.y);
+        });
+        shapes[i] = joinShapes([boxShape(own.size), ...parts]);
+      }
       continue;
     }
 
@@ -114,9 +144,11 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
     });
     box[i] = size;
     extent[i] = rectAt({ x: 0, y: 0 }, size);
+    // The children of a nested node are inside its box, so the box is its shape.
+    if (at(needsShape, i)) shapes[i] = boxShape(size);
   }
 
-  return { box, extent, placement, layout, options, gap: gaps };
+  return { box, extent, placement, layout, options, direction, gap: gaps };
 }
 
 /** The size of the box of a node: from its spec, then from `measure`, then from the default node size. */

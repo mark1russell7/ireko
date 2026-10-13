@@ -6,6 +6,7 @@
 import { at } from "../at.ts";
 import type { Point } from "../geometry.ts";
 import { defineStrategy, type Strategy } from "../strategy.ts";
+import { DIRECTION } from "./side.ts";
 
 /** The options of the strategy `grid`. */
 export interface GridOptions {
@@ -79,7 +80,7 @@ export const grid: Strategy<GridOptions> = defineStrategy<GridOptions>({
 
     const distance = options.distance > 0 ? options.distance : gap * 1.5;
     const origin = clusterOrigin(options.side, self.width, self.height, width, height, distance);
-    return { offsets: cells.map((p) => ({ x: origin.x + p.x, y: origin.y + p.y })) };
+    return { offsets: cells.map((p) => ({ x: origin.x + p.x, y: origin.y + p.y })), direction: DIRECTION[options.side] };
   },
 });
 

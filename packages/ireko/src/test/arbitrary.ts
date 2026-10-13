@@ -50,12 +50,24 @@ const radialLayout = fc.record(
   { requiredKeys: ["type"] },
 );
 
+const treeLayout = fc.record(
+  {
+    type: fc.constant("tree"),
+    side: fc.constantFrom("bottom", "top", "left", "right"),
+    distance: fc.integer({ min: 0, max: 40 }),
+    align: fc.constantFrom("center", "start", "end"),
+    gap: fc.integer({ min: 0, max: 40 }),
+    padding: fc.integer({ min: 0, max: 40 }),
+  },
+  { requiredKeys: ["type"] },
+);
+
 const size = fc.record({ width: fc.integer({ min: 4, max: 300 }), height: fc.integer({ min: 4, max: 200 }) });
 
 function shape(depth: number, settings: Required<TreeSettings>): fc.Arbitrary<Shape> {
   const children = depth <= 0 ? fc.constant([]) : fc.array(shape(depth - 1, settings), { maxLength: settings.maxChildren });
   return fc.record({
-    layout: fc.oneof(gridLayout, radialLayout),
+    layout: fc.oneof(gridLayout, radialLayout, treeLayout),
     mode: fc.constantFrom<Mode>("nested", "linked"),
     fit: fc.option(fc.constantFrom(...settings.fits), { nil: undefined }),
     size: fc.option(size, { nil: undefined }),

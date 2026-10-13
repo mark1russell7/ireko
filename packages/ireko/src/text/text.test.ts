@@ -64,6 +64,8 @@ auth -> home`);
 
   it("knows the strategies that a user registers", () => {
     expect(ok("r fan { a b }", ["grid", "radial", "fan"]).root.layout).toBe("fan");
+    expect(ok("r tree(side: left) { a b }").root.layout).toEqual({ type: "tree", side: "left" });
+    expect(print({ root: { id: "tree", children: [{ id: "a" }] } })).toContain("'tree'");
     expect(ok("r { fan }").root.children?.map((c) => c.id)).toEqual(["fan"]);
   });
 

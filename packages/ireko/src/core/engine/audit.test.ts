@@ -61,6 +61,14 @@ describe("audit (on boxes made by hand)", () => {
     expect(issues.map((i) => i.code)).toEqual(["OVERLAP"]);
   });
 
+  it("finds an overlap in a column of boxes, where the sweep goes along y", () => {
+    const column = Array.from({ length: 30 }, (_, i) => box(`n${String(i)}`, 0, i * 60, 100, 50, { depth: 1 }));
+    // The box n10 moves up, into the box n9.
+    const moved = column.map((b) => (b.id === "n10" ? { ...b, y: b.y - 30 } : b));
+    const issues = run({ id: "r", children: moved.map((b) => ({ id: b.id })) }, [box("r", 0, -100, 100, 50), ...moved], [-1, ...moved.map(() => -1)]);
+    expect(issues.map((i) => [i.code, i.node, i.detail?.["with"]])).toEqual([["OVERLAP", "n10", "n9"]]);
+  });
+
   it("accepts a container over its own children and grandchildren", () => {
     const issues = run(
       { id: "p", mode: "nested", children: [{ id: "a" }] },

@@ -1,0 +1,736 @@
+{
+  "nodes": [
+    {
+      "id": "ceo",
+      "label": "CEO",
+      "x": 0,
+      "y": 0,
+      "width": 88,
+      "height": 32,
+      "depth": 0,
+      "mode": "linked",
+      "layout": "tree",
+      "scale": 1,
+      "clip": false,
+      "childCount": 3
+    },
+    {
+      "id": "cto",
+      "label": "CTO",
+      "x": -169,
+      "y": 56,
+      "width": 88,
+      "height": 32,
+      "parent": "ceo",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "tree",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "platform",
+      "label": "Platform",
+      "x": -247,
+      "y": 112,
+      "width": 88,
+      "height": 32,
+      "parent": "cto",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "tree",
+      "scale": 1,
+      "clip": false,
+      "childCount": 1
+    },
+    {
+      "id": "infra",
+      "label": "Infra",
+      "x": -247,
+      "y": 168,
+      "width": 88,
+      "height": 32,
+      "parent": "platform",
+      "depth": 3,
+      "mode": "linked",
+      "layout": "tree",
+      "scale": 1,
+      "clip": false,
+      "childCount": 3
+    },
+    {
+      "id": "network",
+      "label": "Network",
+      "x": -351,
+      "y": 224,
+      "width": 88,
+      "height": 32,
+      "parent": "infra",
+      "depth": 4,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "storage",
+      "label": "Storage",
+      "x": -247,
+      "y": 224,
+      "width": 88,
+      "height": 32,
+      "parent": "infra",
+      "depth": 4,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "compute",
+      "label": "Compute",
+      "x": -143,
+      "y": 224,
+      "width": 88,
+      "height": 32,
+      "parent": "infra",
+      "depth": 4,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "web",
+      "label": "Web",
+      "x": -91,
+      "y": 112,
+      "width": 88,
+      "height": 32,
+      "parent": "cto",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "tree",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "web-ui",
+      "label": "UI",
+      "x": -143,
+      "y": 168,
+      "width": 88,
+      "height": 32,
+      "parent": "web",
+      "depth": 3,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "web-api",
+      "label": "API",
+      "x": -39,
+      "y": 168,
+      "width": 88,
+      "height": 32,
+      "parent": "web",
+      "depth": 3,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "cfo",
+      "label": "CFO",
+      "x": 13,
+      "y": 56,
+      "width": 88,
+      "height": 32,
+      "parent": "ceo",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "tree",
+      "scale": 1,
+      "clip": false,
+      "childCount": 1
+    },
+    {
+      "id": "finance",
+      "label": "Finance",
+      "x": 13,
+      "y": 112,
+      "width": 88,
+      "height": 32,
+      "parent": "cfo",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "coo",
+      "label": "COO",
+      "x": 169,
+      "y": 56,
+      "width": 88,
+      "height": 32,
+      "parent": "ceo",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "tree",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "ops",
+      "label": "Operations",
+      "x": 117,
+      "y": 112,
+      "width": 88,
+      "height": 32,
+      "parent": "coo",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "tree",
+      "scale": 1,
+      "clip": false,
+      "childCount": 1
+    },
+    {
+      "id": "warehouse",
+      "label": "Warehouse",
+      "x": 117,
+      "y": 168,
+      "width": 88,
+      "height": 32,
+      "parent": "ops",
+      "depth": 3,
+      "mode": "linked",
+      "layout": "tree",
+      "scale": 1,
+      "clip": false,
+      "childCount": 4
+    },
+    {
+      "id": "north",
+      "label": "North",
+      "x": -39,
+      "y": 224,
+      "width": 88,
+      "height": 32,
+      "parent": "warehouse",
+      "depth": 4,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "south",
+      "label": "South",
+      "x": 65,
+      "y": 224,
+      "width": 88,
+      "height": 32,
+      "parent": "warehouse",
+      "depth": 4,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "east",
+      "label": "East",
+      "x": 169,
+      "y": 224,
+      "width": 88,
+      "height": 32,
+      "parent": "warehouse",
+      "depth": 4,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "west",
+      "label": "West",
+      "x": 273,
+      "y": 224,
+      "width": 88,
+      "height": 32,
+      "parent": "warehouse",
+      "depth": 4,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "support",
+      "label": "Support",
+      "x": 221,
+      "y": 112,
+      "width": 88,
+      "height": 32,
+      "parent": "coo",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    }
+  ],
+  "edges": [
+    {
+      "id": "ceo->cto",
+      "source": "ceo",
+      "target": "cto",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 44,
+          "y": 32
+        },
+        {
+          "x": 44,
+          "y": 44
+        },
+        {
+          "x": -125,
+          "y": 44
+        },
+        {
+          "x": -125,
+          "y": 56
+        }
+      ]
+    },
+    {
+      "id": "cto->platform",
+      "source": "cto",
+      "target": "platform",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -125,
+          "y": 88
+        },
+        {
+          "x": -125,
+          "y": 100
+        },
+        {
+          "x": -203,
+          "y": 100
+        },
+        {
+          "x": -203,
+          "y": 112
+        }
+      ]
+    },
+    {
+      "id": "platform->infra",
+      "source": "platform",
+      "target": "infra",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -203,
+          "y": 144
+        },
+        {
+          "x": -203,
+          "y": 168
+        }
+      ]
+    },
+    {
+      "id": "infra->network",
+      "source": "infra",
+      "target": "network",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -203,
+          "y": 200
+        },
+        {
+          "x": -203,
+          "y": 212
+        },
+        {
+          "x": -307,
+          "y": 212
+        },
+        {
+          "x": -307,
+          "y": 224
+        }
+      ]
+    },
+    {
+      "id": "infra->storage",
+      "source": "infra",
+      "target": "storage",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -203,
+          "y": 200
+        },
+        {
+          "x": -203,
+          "y": 224
+        }
+      ]
+    },
+    {
+      "id": "infra->compute",
+      "source": "infra",
+      "target": "compute",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -203,
+          "y": 200
+        },
+        {
+          "x": -203,
+          "y": 212
+        },
+        {
+          "x": -99,
+          "y": 212
+        },
+        {
+          "x": -99,
+          "y": 224
+        }
+      ]
+    },
+    {
+      "id": "cto->web",
+      "source": "cto",
+      "target": "web",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -125,
+          "y": 88
+        },
+        {
+          "x": -125,
+          "y": 100
+        },
+        {
+          "x": -47,
+          "y": 100
+        },
+        {
+          "x": -47,
+          "y": 112
+        }
+      ]
+    },
+    {
+      "id": "web->web-ui",
+      "source": "web",
+      "target": "web-ui",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -47,
+          "y": 144
+        },
+        {
+          "x": -47,
+          "y": 156
+        },
+        {
+          "x": -99,
+          "y": 156
+        },
+        {
+          "x": -99,
+          "y": 168
+        }
+      ]
+    },
+    {
+      "id": "web->web-api",
+      "source": "web",
+      "target": "web-api",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -47,
+          "y": 144
+        },
+        {
+          "x": -47,
+          "y": 156
+        },
+        {
+          "x": 5,
+          "y": 156
+        },
+        {
+          "x": 5,
+          "y": 168
+        }
+      ]
+    },
+    {
+      "id": "ceo->cfo",
+      "source": "ceo",
+      "target": "cfo",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 44,
+          "y": 32
+        },
+        {
+          "x": 44,
+          "y": 44
+        },
+        {
+          "x": 57,
+          "y": 44
+        },
+        {
+          "x": 57,
+          "y": 56
+        }
+      ]
+    },
+    {
+      "id": "cfo->finance",
+      "source": "cfo",
+      "target": "finance",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 57,
+          "y": 88
+        },
+        {
+          "x": 57,
+          "y": 112
+        }
+      ]
+    },
+    {
+      "id": "ceo->coo",
+      "source": "ceo",
+      "target": "coo",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 44,
+          "y": 32
+        },
+        {
+          "x": 44,
+          "y": 44
+        },
+        {
+          "x": 213,
+          "y": 44
+        },
+        {
+          "x": 213,
+          "y": 56
+        }
+      ]
+    },
+    {
+      "id": "coo->ops",
+      "source": "coo",
+      "target": "ops",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 213,
+          "y": 88
+        },
+        {
+          "x": 213,
+          "y": 100
+        },
+        {
+          "x": 161,
+          "y": 100
+        },
+        {
+          "x": 161,
+          "y": 112
+        }
+      ]
+    },
+    {
+      "id": "ops->warehouse",
+      "source": "ops",
+      "target": "warehouse",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 161,
+          "y": 144
+        },
+        {
+          "x": 161,
+          "y": 168
+        }
+      ]
+    },
+    {
+      "id": "warehouse->north",
+      "source": "warehouse",
+      "target": "north",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 161,
+          "y": 200
+        },
+        {
+          "x": 161,
+          "y": 212
+        },
+        {
+          "x": 5,
+          "y": 212
+        },
+        {
+          "x": 5,
+          "y": 224
+        }
+      ]
+    },
+    {
+      "id": "warehouse->south",
+      "source": "warehouse",
+      "target": "south",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 161,
+          "y": 200
+        },
+        {
+          "x": 161,
+          "y": 212
+        },
+        {
+          "x": 109,
+          "y": 212
+        },
+        {
+          "x": 109,
+          "y": 224
+        }
+      ]
+    },
+    {
+      "id": "warehouse->east",
+      "source": "warehouse",
+      "target": "east",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 161,
+          "y": 200
+        },
+        {
+          "x": 161,
+          "y": 212
+        },
+        {
+          "x": 213,
+          "y": 212
+        },
+        {
+          "x": 213,
+          "y": 224
+        }
+      ]
+    },
+    {
+      "id": "warehouse->west",
+      "source": "warehouse",
+      "target": "west",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 161,
+          "y": 200
+        },
+        {
+          "x": 161,
+          "y": 212
+        },
+        {
+          "x": 317,
+          "y": 212
+        },
+        {
+          "x": 317,
+          "y": 224
+        }
+      ]
+    },
+    {
+      "id": "coo->support",
+      "source": "coo",
+      "target": "support",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 213,
+          "y": 88
+        },
+        {
+          "x": 213,
+          "y": 100
+        },
+        {
+          "x": 265,
+          "y": 100
+        },
+        {
+          "x": 265,
+          "y": 112
+        }
+      ]
+    }
+  ],
+  "bounds": {
+    "x": -351,
+    "y": 0,
+    "width": 712,
+    "height": 256
+  },
+  "issues": []
+}

@@ -6,6 +6,28 @@ import type { Point, Rect, Size } from "./geometry.ts";
 import type { Issue, Mode, PlacedNode } from "./model.ts";
 import type { OptionSchema, OptionSpec } from "./options.ts";
 
+/**
+ * One band of a shape. Between `from` and `to` on one axis, the subtree is between `min` and `max` on the other axis.
+ * In the rows of a shape, `from` and `to` are y values. In the columns, they are x values.
+ */
+export interface Band {
+  readonly from: number;
+  readonly to: number;
+  readonly min: number;
+  readonly max: number;
+}
+
+/**
+ * The shape of a subtree, relative to the top-left corner of its root box. The bands cover each box of the subtree.
+ * A tidy strategy uses the shape to put a subtree closer to its neighbors than the extent permits.
+ */
+export interface Shape {
+  /** Horizontal bands, from the top down. */
+  readonly rows: readonly Band[];
+  /** Vertical bands, from the left to the right. */
+  readonly columns: readonly Band[];
+}
+
 /** A child after the measure pass. The strategy sees only its sizes. */
 export interface MeasuredChild {
   readonly id: string;
@@ -15,6 +37,8 @@ export interface MeasuredChild {
   readonly extent: Rect;
   /** The mode of the children of this child. */
   readonly mode: Mode;
+  /** The shape of the subtree of the child. The engine gives it only to a strategy with `shapes: true`. */
+  readonly shape?: Shape;
 }
 
 /** The input of `Strategy.arrange`. */
@@ -33,8 +57,16 @@ export interface ArrangeInput<O> {
   readonly depth: number;
 }
 
+/** The direction from a node to its children: below, above, on the left or on the right. */
+export type Direction = "down" | "up" | "left" | "right";
+
 /** The output of `Strategy.arrange`. */
 export interface Arrangement {
+  /**
+   * In the linked mode, the direction from the node to its children, if the children are on one side of it.
+   * A router uses it for the tree edges of the node: the orthogonal router then draws the edges of an organization chart.
+   */
+  readonly direction?: Direction;
   /**
    * The top-left corner of each child box, in the order of the children.
    * In the linked mode, the coordinates are relative to the top-left corner of the node box.
@@ -60,6 +92,8 @@ export interface Strategy<O = Record<string, never>> {
   /** One sentence for the reference of the site. */
   readonly description: string;
   readonly options: OptionSchema<O>;
+  /** If true, each measured child has its `shape`. The engine then does more work for the subtree of this node. */
+  readonly shapes?: boolean;
   /** This function arranges the measured children of one node. The engine uses it once for each node with children. */
   arrange(input: ArrangeInput<O>): Arrangement;
   /** This function gives the findings of the strategy for one placed node. */
@@ -74,6 +108,7 @@ export interface AnyStrategy {
   readonly type: string;
   readonly description: string;
   readonly options: Readonly<Record<string, OptionSpec>>;
+  readonly shapes?: boolean;
   arrange(input: ArrangeInput<unknown>): Arrangement;
   audit?(input: AuditInput<unknown>): readonly Issue[];
 }

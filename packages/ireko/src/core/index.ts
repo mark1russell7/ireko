@@ -10,5 +10,7 @@ export { borderPoint, defineRouter, type RouteInput, type Router } from "./route
 export { straight, orthogonal } from "./routers.ts";
 export { grid as gridStrategy, type GridOptions } from "./strategies/grid.ts";
 export { radial as radialStrategy, type RadialOptions } from "./strategies/radial.ts";
-export { builder, grid, node, radial, type Builder, type BuildOptions, type Child, type ContainerOptions } from "./build.ts";
+export { tree as treeStrategy, type TreeOptions } from "./strategies/tree.ts";
+export { BUILTIN_STRATEGY_NAMES } from "./strategies/names.ts";
+export { builder, grid, node, radial, tree, type Builder, type BuildOptions, type Child, type ContainerOptions } from "./build.ts";
 export { createEngine, layout, builtinStrategies, builtinRouters, defaultLimits, type Engine, type EngineConfig, type Limits } from "./engine.ts";

@@ -3,6 +3,7 @@
  * A router gives the points of one edge. The engine uses it after it places the boxes.
  */
 import { centerOf, contains, type Point, type Rect } from "./geometry.ts";
+import type { Direction } from "./strategy.ts";
 
 /** The input of `Router.route`. The rectangles are absolute. */
 export interface RouteInput {
@@ -10,6 +11,8 @@ export interface RouteInput {
   readonly kind: "tree" | "extra";
   readonly source: Rect;
   readonly target: Rect;
+  /** For a tree edge, the direction from the parent to its children, if the strategy of the parent gives one. */
+  readonly direction?: Direction;
 }
 
 /** A router: one way to draw an edge between two boxes. */

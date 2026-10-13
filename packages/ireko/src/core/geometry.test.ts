@@ -82,4 +82,31 @@ describe("routers", () => {
     expect(overlapH).toHaveLength(2);
     expect(orthogonal.route({ id: "e", kind: "tree", source: a, target: r(10, 10, 5, 5) })).toEqual([{ x: 50, y: 25 }, { x: 12.5, y: 12.5 }]);
   });
+
+  it("orthogonal: a tree edge with a direction leaves the side of the parent that faces its children", () => {
+    // The child is farther away on x than on y. Without a direction, the edge leaves the side of the parent.
+    const child = r(300, 80, 100, 50);
+    expect(orthogonal.route({ id: "e", kind: "tree", source: a, target: child, direction: "down" })).toEqual([
+      { x: 50, y: 50 }, { x: 50, y: 65 }, { x: 350, y: 65 }, { x: 350, y: 80 },
+    ]);
+    expect(orthogonal.route({ id: "e", kind: "tree", source: child, target: a, direction: "up" })).toEqual([
+      { x: 350, y: 80 }, { x: 350, y: 65 }, { x: 50, y: 65 }, { x: 50, y: 50 },
+    ]);
+    const below = r(200, 300, 100, 50);
+    expect(orthogonal.route({ id: "e", kind: "tree", source: a, target: below, direction: "right" })).toEqual([
+      { x: 100, y: 25 }, { x: 150, y: 25 }, { x: 150, y: 325 }, { x: 200, y: 325 },
+    ]);
+    expect(orthogonal.route({ id: "e", kind: "tree", source: below, target: a, direction: "left" })).toEqual([
+      { x: 200, y: 325 }, { x: 150, y: 325 }, { x: 150, y: 25 }, { x: 100, y: 25 },
+    ]);
+    expect(orthogonal.route({ id: "e", kind: "tree", source: a, target: r(0, 100, 100, 50), direction: "down" })).toEqual([{ x: 50, y: 50 }, { x: 50, y: 100 }]);
+    expect(orthogonal.route({ id: "e", kind: "tree", source: a, target: r(200, 0, 100, 50), direction: "right" })).toEqual([{ x: 100, y: 25 }, { x: 200, y: 25 }]);
+  });
+
+  it("orthogonal: a direction without a gap gives the route without a direction, and straight ignores it", () => {
+    const beside = r(300, 0, 100, 50);
+    expect(orthogonal.route({ id: "e", kind: "tree", source: a, target: beside, direction: "down" })).toEqual(orthogonal.route({ id: "e", kind: "tree", source: a, target: beside }));
+    expect(orthogonal.route({ id: "e", kind: "tree", source: a, target: r(0, 300, 100, 50), direction: "left" })).toEqual(orthogonal.route({ id: "e", kind: "tree", source: a, target: r(0, 300, 100, 50) }));
+    expect(straight.route({ id: "e", kind: "tree", source: a, target: beside, direction: "down" })).toEqual(straight.route({ id: "e", kind: "tree", source: a, target: beside }));
+  });
 });

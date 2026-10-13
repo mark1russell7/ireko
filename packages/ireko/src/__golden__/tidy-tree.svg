@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-367 -16 744 288" width="744" height="288" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>Tidy tree</title>
+<rect class="ireko-background" x="-367" y="-16" width="744" height="288" fill="#f5f6f9"/>
+<g class="ireko-containers">
+</g>
+<g class="ireko-edges" fill="none">
+<polyline class="ireko-edge" data-id="ceo-&gt;cto" points="44,32 44,44 -125,44 -125,56" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="cto-&gt;platform" points="-125,88 -125,100 -203,100 -203,112" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="platform-&gt;infra" points="-203,144 -203,168" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="infra-&gt;network" points="-203,200 -203,212 -307,212 -307,224" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="infra-&gt;storage" points="-203,200 -203,224" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="infra-&gt;compute" points="-203,200 -203,212 -99,212 -99,224" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="cto-&gt;web" points="-125,88 -125,100 -47,100 -47,112" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="web-&gt;web-ui" points="-47,144 -47,156 -99,156 -99,168" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="web-&gt;web-api" points="-47,144 -47,156 5,156 5,168" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="ceo-&gt;cfo" points="44,32 44,44 57,44 57,56" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="cfo-&gt;finance" points="57,88 57,112" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="ceo-&gt;coo" points="44,32 44,44 213,44 213,56" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="coo-&gt;ops" points="213,88 213,100 161,100 161,112" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="ops-&gt;warehouse" points="161,144 161,168" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="warehouse-&gt;north" points="161,200 161,212 5,212 5,224" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="warehouse-&gt;south" points="161,200 161,212 109,212 109,224" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="warehouse-&gt;east" points="161,200 161,212 213,212 213,224" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="warehouse-&gt;west" points="161,200 161,212 317,212 317,224" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="coo-&gt;support" points="213,88 213,100 265,100 265,112" stroke="#7a8399" stroke-width="1.25"/>
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="ceo">
+<rect x="0" y="0" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="44" y="16" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">CEO</text>
+</g>
+<g class="ireko-node" data-id="cto">
+<rect x="-169" y="56" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-125" y="72" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">CTO</text>
+</g>
+<g class="ireko-node" data-id="platform">
+<rect x="-247" y="112" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-203" y="128" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Platform</text>
+</g>
+<g class="ireko-node" data-id="infra">
+<rect x="-247" y="168" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-203" y="184" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Infra</text>
+</g>
+<g class="ireko-node" data-id="network">
+<rect x="-351" y="224" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-307" y="240" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Network</text>
+</g>
+<g class="ireko-node" data-id="storage">
+<rect x="-247" y="224" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-203" y="240" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Storage</text>
+</g>
+<g class="ireko-node" data-id="compute">
+<rect x="-143" y="224" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-99" y="240" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Compute</text>
+</g>
+<g class="ireko-node" data-id="web">
+<rect x="-91" y="112" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-47" y="128" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Web</text>
+</g>
+<g class="ireko-node" data-id="web-ui">
+<rect x="-143" y="168" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-99" y="184" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">UI</text>
+</g>
+<g class="ireko-node" data-id="web-api">
+<rect x="-39" y="168" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="5" y="184" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">API</text>
+</g>
+<g class="ireko-node" data-id="cfo">
+<rect x="13" y="56" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="57" y="72" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">CFO</text>
+</g>
+<g class="ireko-node" data-id="finance">
+<rect x="13" y="112" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="57" y="128" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Finance</text>
+</g>
+<g class="ireko-node" data-id="coo">
+<rect x="169" y="56" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="213" y="72" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">COO</text>
+</g>
+<g class="ireko-node" data-id="ops">
+<rect x="117" y="112" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="161" y="128" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Operations</text>
+</g>
+<g class="ireko-node" data-id="warehouse">
+<rect x="117" y="168" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="161" y="184" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Warehouse</text>
+</g>
+<g class="ireko-node" data-id="north">
+<rect x="-39" y="224" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="5" y="240" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">North</text>
+</g>
+<g class="ireko-node" data-id="south">
+<rect x="65" y="224" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="109" y="240" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">South</text>
+</g>
+<g class="ireko-node" data-id="east">
+<rect x="169" y="224" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="213" y="240" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">East</text>
+</g>
+<g class="ireko-node" data-id="west">
+<rect x="273" y="224" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="317" y="240" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">West</text>
+</g>
+<g class="ireko-node" data-id="support">
+<rect x="221" y="112" width="88" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="265" y="128" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Support</text>
+</g>
+</g>
+</svg>

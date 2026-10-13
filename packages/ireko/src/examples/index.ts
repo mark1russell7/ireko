@@ -53,6 +53,40 @@ export const examples: readonly Example[] = [
     options: { router: "orthogonal" },
   },
   {
+    name: "tidy-tree",
+    title: "Tidy tree",
+    description: "The strategy tree packs each subtree by its shape. A small team fits under the edge of a large one, so the chart is narrower than with linked grids.",
+    input: {
+      root: {
+        id: "ceo",
+        label: "CEO",
+        layout: "tree",
+        children: [
+          {
+            id: "cto",
+            label: "CTO",
+            layout: "tree",
+            children: [
+              { id: "platform", label: "Platform", layout: "tree", children: [{ id: "infra", label: "Infra", layout: "tree", children: [{ id: "network", label: "Network" }, { id: "storage", label: "Storage" }, { id: "compute", label: "Compute" }] }] },
+              { id: "web", label: "Web", layout: "tree", children: [{ id: "web-ui", label: "UI" }, { id: "web-api", label: "API" }] },
+            ],
+          },
+          { id: "cfo", label: "CFO", layout: "tree", children: [{ id: "finance", label: "Finance" }] },
+          {
+            id: "coo",
+            label: "COO",
+            layout: "tree",
+            children: [
+              { id: "ops", label: "Operations", layout: "tree", children: [{ id: "warehouse", label: "Warehouse", layout: "tree", children: [{ id: "north", label: "North" }, { id: "south", label: "South" }, { id: "east", label: "East" }, { id: "west", label: "West" }] }] },
+              { id: "support", label: "Support" },
+            ],
+          },
+        ],
+      },
+    },
+    options: { router: "orthogonal", nodeSize: { width: 88, height: 32 }, spacing: 16 },
+  },
+  {
     name: "mind-map",
     title: "Mind map",
     description: "A radial root with four fans. Each fan opens away from the root, and each ring is large enough for the subtrees on it.",

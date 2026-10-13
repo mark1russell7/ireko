@@ -1,6 +1,7 @@
+import { BUILTIN_STRATEGY_NAMES } from "./strategies/names.ts";
 import { describe, expect, it } from "vitest";
 import { defectsOf } from "../test/invariants.ts";
-import { createEngine, layout } from "./engine.ts";
+import { createEngine, layout, builtinStrategies } from "./engine.ts";
 import { IrekoError, type Layout, type NodeSpec, type TraceEvent } from "./model.ts";
 import { defineRouter } from "./router.ts";
 import { defineStrategy } from "./strategy.ts";
@@ -414,7 +415,8 @@ describe("edge cases", () => {
 
   it("extends an engine with an empty configuration", () => {
     const more = createEngine().extend({});
-    expect([...more.strategies.keys()]).toEqual(["grid", "radial"]);
+    expect([...more.strategies.keys()]).toEqual(["grid", "radial", "tree"]);
+    expect(BUILTIN_STRATEGY_NAMES).toEqual(builtinStrategies.map((s) => s.type));
   });
 
   it("reports a strategy without offsets, and things that throw values that are not errors", () => {

@@ -4,13 +4,13 @@
 <g class="ireko-containers">
 </g>
 <g class="ireko-edges" fill="none">
-<polyline class="ireko-edge" data-id="ceo-&gt;cto" points="0,24 -48,24 -48,108 -96,108" stroke="#7a8399" stroke-width="1.25"/>
-<polyline class="ireko-edge" data-id="cto-&gt;platform" points="-216,108 -228,108 -228,192 -240,192" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="ceo-&gt;cto" points="60,48 60,66 -156,66 -156,84" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="cto-&gt;platform" points="-156,132 -156,150 -300,150 -300,168" stroke="#7a8399" stroke-width="1.25"/>
 <polyline class="ireko-edge" data-id="cto-&gt;product" points="-156,132 -156,168" stroke="#7a8399" stroke-width="1.25"/>
-<polyline class="ireko-edge" data-id="cto-&gt;data" points="-96,108 -84,108 -84,192 -72,192" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="cto-&gt;data" points="-156,132 -156,150 -12,150 -12,168" stroke="#7a8399" stroke-width="1.25"/>
 <polyline class="ireko-edge" data-id="ceo-&gt;cfo" points="60,48 60,66 132,66 132,84" stroke="#7a8399" stroke-width="1.25"/>
 <polyline class="ireko-edge" data-id="cfo-&gt;finance" points="132,132 132,168" stroke="#7a8399" stroke-width="1.25"/>
-<polyline class="ireko-edge" data-id="ceo-&gt;coo" points="120,24 204,24 204,108 288,108" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="ceo-&gt;coo" points="60,48 60,66 348,66 348,84" stroke="#7a8399" stroke-width="1.25"/>
 <polyline class="ireko-edge" data-id="coo-&gt;ops" points="348,132 348,150 276,150 276,168" stroke="#7a8399" stroke-width="1.25"/>
 <polyline class="ireko-edge" data-id="coo-&gt;support" points="348,132 348,150 420,150 420,168" stroke="#7a8399" stroke-width="1.25"/>
 </g>

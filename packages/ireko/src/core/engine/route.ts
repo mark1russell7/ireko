@@ -6,15 +6,18 @@ import { clean, type Point } from "../geometry.ts";
 import type { Issue, PlacedEdge, PlacedNode } from "../model.ts";
 import { straight } from "../routers.ts";
 import type { Router } from "../router.ts";
+import type { Direction } from "../strategy.ts";
 import type { Context, Normalized } from "./types.ts";
 
 /** This function gives the routed edges. It adds its findings to `issues`. */
-export function route(norm: Normalized, nodes: readonly PlacedNode[], ctx: Context, issues: Issue[]): PlacedEdge[] {
+export function route(norm: Normalized, nodes: readonly PlacedNode[], ctx: Context, issues: Issue[], direction: readonly (Direction | undefined)[] = []): PlacedEdge[] {
   const out: PlacedEdge[] = [];
   const ids = new Set<string>();
   const { router, treeEdges } = ctx.options;
 
   const add = (id: string, kind: PlacedEdge["kind"], s: number, t: number, extra?: { label?: string; data?: unknown }): void => {
+    // A tree edge goes in the direction of the strategy of its parent.
+    const dir = kind === "tree" ? direction[s] : undefined;
     const source = at(nodes, s);
     const target = at(nodes, t);
     let unique = id;
@@ -26,7 +29,7 @@ export function route(norm: Normalized, nodes: readonly PlacedNode[], ctx: Conte
       source: source.id,
       target: target.id,
       kind,
-      points: routeSafely(router, { id: unique, kind, source, target }, issues),
+      points: routeSafely(router, { id: unique, kind, source, target, ...(dir === undefined ? {} : { direction: dir }) }, issues),
       ...(extra?.label === undefined ? {} : { label: extra.label }),
       ...(extra?.data === undefined ? {} : { data: extra.data }),
     });

@@ -14,6 +14,7 @@
  * keyword or the name of a strategy. Thus `{ auth users billing }` has three leaves, and needs no commas.
  */
 import { at, atKey } from "../core/at.ts";
+import { BUILTIN_STRATEGY_NAMES } from "../core/strategies/names.ts";
 import type { EdgeSpec, Fit, LayoutInput, Mode, NodeSpec, Size } from "../core/index.ts";
 
 /** A syntax error, with its place in the text. The editor of the site underlines it. */
@@ -33,7 +34,7 @@ export type ParseResult = { readonly ok: true; readonly input: LayoutInput } | {
 
 /** The options of `parse`. */
 export interface ParseOptions {
-  /** The names of the strategies. The default is `grid` and `radial`. Give the names of the strategies that you register. */
+  /** The names of the strategies. The default is the built-in strategies: `grid`, `radial` and `tree`. Give the names of the strategies that you register. */
   readonly strategies?: readonly string[];
 }
 
@@ -141,7 +142,7 @@ function tokens(text: string): Token[] {
 /** This function reads a document of the text language. It gives the input, or the first syntax error. */
 export function parse(text: string, options: ParseOptions = {}): ParseResult {
   try {
-    return { ok: true, input: new Parser(tokens(text), new Set(options.strategies ?? ["grid", "radial"])).document() };
+    return { ok: true, input: new Parser(tokens(text), new Set(options.strategies ?? BUILTIN_STRATEGY_NAMES)).document() };
   } catch (error) {
     if (error instanceof Failure) return { ok: false, error: error.issue };
     throw error;

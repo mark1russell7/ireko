@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { defectsOf } from "../../test/invariants.ts";
-import { layout } from "../engine.ts";
+import { createEngine, layout } from "../engine.ts";
 import type { Layout, NodeSpec } from "../model.ts";
 import { defaultsOf } from "../options.ts";
-import type { MeasuredChild } from "../strategy.ts";
+import { defineStrategy, type MeasuredChild } from "../strategy.ts";
 import { grid, type GridOptions } from "./grid.ts";
 import { radial, type RadialOptions } from "./radial.ts";
+import { tree, type TreeOptions } from "./tree.ts";
 
 const leaf = (id: string, width = 100, height = 50): MeasuredChild => ({ id, box: { width, height }, extent: { x: 0, y: 0, width, height }, mode: "linked" });
 const gridOf = (options: Partial<GridOptions>, mode: "nested" | "linked", children: MeasuredChild[]) =>
@@ -158,5 +159,103 @@ describe("radial, the search of the radius", () => {
     if (a0 === undefined || a1 === undefined || a2 === undefined) throw new Error("angles");
     expect(a1 - a0).toBeCloseTo(a2 - a1, 9);
     expect(defectsOf(layout({ root: { id: "p", layout: "radial", mode: "nested", children: children.map((c) => ({ id: c.id, size: c.box })) } }))).toEqual([]);
+  });
+});
+
+const treeOf = (options: Partial<TreeOptions>, mode: "nested" | "linked", children: MeasuredChild[]) =>
+  tree.arrange({ id: "p", mode, self: { width: 100, height: 50 }, children, options: { ...defaultsOf(tree.options), ...options }, gap: 10, depth: 0 });
+
+/** A lopsided tree: the wide parts of the subtrees are at different depths, so a tidy tree interleaves them. */
+const lopsided = (strategy: string): NodeSpec => ({
+  id: "r",
+  layout: strategy,
+  children: [
+    { id: "a", layout: strategy, children: [{ id: "a1", layout: strategy, children: ["a11", "a12", "a13", "a14", "a15"].map((id) => ({ id })) }] },
+    { id: "b" },
+    { id: "c" },
+    { id: "d", layout: strategy, children: [{ id: "d1", layout: strategy, children: ["d11", "d12", "d13", "d14", "d15", "d16"].map((id) => ({ id })) }] },
+  ],
+});
+
+describe("tree", () => {
+  it("is narrower than the linked grid for a lopsided tree, with no defect", () => {
+    const options = { spacing: 12, nodeSize: { width: 64, height: 28 } };
+    const tidy = layout({ root: lopsided("tree") }, options);
+    const wide = layout({ root: lopsided("grid") }, options);
+    expect(tidy.issues).toEqual([]);
+    expect(defectsOf(tidy)).toEqual([]);
+    expect(tidy.bounds.width).toBeLessThan(wide.bounds.width * 0.85);
+    expect(tidy.bounds.height).toBe(wide.bounds.height);
+  });
+
+  it("puts a row of leaves under the node like the grid: centered, at 1.5 times the gap", () => {
+    const out = treeOf({}, "linked", [leaf("a"), leaf("b")]);
+    expect(out.offsets).toEqual([{ x: -55, y: 65 }, { x: 55, y: 65 }]);
+  });
+
+  it("puts the node over its first or last child with the option align", () => {
+    expect(treeOf({ align: "start" }, "linked", [leaf("a"), leaf("b")]).offsets[0]).toEqual({ x: 0, y: 65 });
+    const end = treeOf({ align: "end" }, "linked", [leaf("a"), leaf("b")]).offsets;
+    expect((end[1]?.x ?? 0) + 100).toBe(100);
+  });
+
+  it("puts the children on each side, and keeps a subtree that grows toward the node away from it", () => {
+    const up: MeasuredChild = { id: "u", box: { width: 100, height: 50 }, extent: { x: 0, y: -80, width: 100, height: 130 }, mode: "linked" };
+    expect(treeOf({ side: "bottom" }, "linked", [up]).offsets[0]?.y).toBe(50 + 15 + 80);
+    expect(treeOf({ side: "top", distance: 20 }, "linked", [leaf("a")]).offsets[0]?.y).toBe(-70);
+    expect(treeOf({ side: "right" }, "linked", [leaf("a")]).offsets[0]?.x).toBe(115);
+    expect(treeOf({ side: "left" }, "linked", [leaf("a")]).offsets[0]?.x).toBe(-115);
+    const column = treeOf({ side: "right" }, "linked", [leaf("a"), leaf("b")]).offsets;
+    expect((column[1]?.y ?? 0) - (column[0]?.y ?? 0)).toBe(60);
+  });
+
+  it("uses the extent of a child without a shape, and starts at the origin in the nested mode", () => {
+    const out = treeOf({}, "nested", [leaf("a"), leaf("b", 40, 20)]);
+    expect(out.offsets).toEqual([{ x: 0, y: 0 }, { x: 110, y: 0 }]);
+  });
+
+  it("gives no defect on each side, with each alignment, nested or linked", () => {
+    for (const side of ["bottom", "top", "left", "right"] as const) {
+      for (const align of ["center", "start", "end"] as const) {
+        for (const mode of ["linked", "nested"] as const) {
+          const root = lopsided("tree");
+          const set = (n: NodeSpec): NodeSpec => ({ ...n, ...(n.children === undefined ? {} : { layout: { type: "tree", side, align }, mode, children: n.children.map(set) }) });
+          const out = layout({ root: set(root) });
+          expect(out.issues).toEqual([]);
+          expect(defectsOf(out)).toEqual([]);
+        }
+      }
+    }
+  });
+
+  it("packs a long row of subtrees, where it merges the bands of the row", () => {
+    const children = Array.from({ length: 40 }, (_, i): NodeSpec => ({ id: `c${String(i)}`, layout: "tree", children: Array.from({ length: 1 + (i % 5) }, (_unused, k) => ({ id: `c${String(i)}-${String(k)}`, children: [{ id: `c${String(i)}-${String(k)}-x` }] })) }));
+    const out = layout({ root: { id: "r", layout: "tree", children } });
+    expect(out.issues).toEqual([]);
+    expect(defectsOf(out)).toEqual([]);
+  });
+
+  it("gives the shapes only to a strategy that asks for them", () => {
+    const seen: boolean[] = [];
+    let depthOfA = 0;
+    const spy = (shapes: boolean) =>
+      defineStrategy<Record<string, never>>({
+        type: shapes ? "with" : "without",
+        description: "A test strategy.",
+        options: {},
+        shapes,
+        arrange: ({ children }) => {
+          seen.push(children.every((c) => c.shape !== undefined));
+          // The shape of a covers its own box and the box of its child a1, below it.
+          const a = children.find((c) => c.id === "a");
+          depthOfA = Math.max(depthOfA, ...(a?.shape?.rows.map((b) => b.to) ?? [0]));
+          return { offsets: children.map((_, i) => ({ x: i * 200, y: 100 })) };
+        },
+      });
+    const engine = createEngine({ strategies: [spy(true), spy(false)] });
+    engine.layout({ root: { id: "r", layout: "with", children: [{ id: "a", children: [{ id: "a1" }] }, { id: "b" }] } });
+    engine.layout({ root: { id: "r", layout: "without", children: [{ id: "a" }] } });
+    expect(seen).toEqual([true, false]);
+    expect(depthOfA).toBeGreaterThan(48);
   });
 });
