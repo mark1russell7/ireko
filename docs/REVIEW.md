@@ -723,7 +723,7 @@ The research ranks these actions by effect:
 
 ## 16. Execution record
 
-*This section records what the work did, and where the work is different from the plan. Updated: 2026-10-13.*
+*This section records what the work did, and where the work is different from the plan. Updated: 2026-10-13, after P4.*
 
 ### 16.1 Status of the phases
 
@@ -733,7 +733,7 @@ The research ranks these actions by effect:
 | P1 Core | Done | `packages/ireko/src/core` and `packages/ireko/src/svg`. 110 tests. The coverage gates pass. |
 | P2 Surface | Done, with one change (§16.2) | The builder, the text language, the renderers for SVG, DOM and Canvas, the React bindings and the React Flow adapter. 169 tests. |
 | P3 Depth | not started | |
-| P4 Site | not started | |
+| P4 Site | Done, with changes (§16.2) | `packages/site`: Astro 7 and Starlight. 18 pages of the guide, a gallery page for each example, the playground, 10 live figures, a share card for each page, `llms.txt`, 22 Playwright tests (smoke, head and SEO, axe in both themes, budgets), the site job of CI and `pages.yml`. The legacy package is gone. |
 | P5 Release | not started | |
 
 ### 16.2 Changes to the plan
@@ -750,6 +750,12 @@ The research ranks these actions by effect:
 | §13 P2: the playground moves to the new core, and the legacy package goes | The legacy package stays until the playground of the site exists (P4). | The new playground is a page of the site. A second playground in P2 is work that the plan then removes. |
 | §6.7: one live renderer for each target | One loop for all live renderers. A surface only draws a frame. The loop owns the animation, the viewport, the size and the hit test. | The three renderers share their behavior. The parity test (P9) compares them box by box. |
 | §6.8: a text language with separators | Commas are optional. A word after an identifier is a part of the node only if it is a keyword or the name of a strategy. | `{ auth users billing }` reads as three leaves. This is the form that people write. |
+| §11: the site | Each figure of the guide is a text of the text language. The build lays it out, and a syntax error stops the build. A link opens each figure in the playground. | The guide cannot show a stale example, and the reader can change each example. |
+| §11: a "before and after" figure | The page "Why two passes" shows the output of the old engine from `src/data/legacy-demo.json`. A script of the session recorded it from the legacy package (55 overlapping pairs, as in §3.2). | The legacy package is gone, so the site keeps the data, not the old code. |
+| §11: Playwright in Chromium, Firefox and WebKit | Chromium only, at this time. | The tests examine the site, not the browsers. Add the other browsers when a defect needs them. |
+| §11: IndexNow | Not done. | IndexNow needs a key file and a request after each deployment. Do it after the first deployment. |
+| (new) Edge labels | Each renderer draws the label of an edge at the middle of its route, with a halo. `toXYFlow` gives the label to React Flow. | The model and the text language had labels, but no renderer drew them. The guide found the gap. |
+| (new) Erasable syntax | `erasableSyntaxOnly` in `packages/ireko/tsconfig.json`. | Node.js strips types, but it does not transform parameter properties. The share-card script imports the source of the library in plain Node.js. |
 
 ### 16.3 Measurements
 
@@ -769,3 +775,8 @@ The research ranks these actions by effect:
 - P2 found two more defects with its tests. Trigonometry gave positions, for example `2e-14`, and some CSS parsers reject an exponent. The engine writes 0 for these values, but only for positions. A size can be very small, and it stays positive.
 - The parity test (P9) shows that SVG, DOM and Canvas draw the same boxes, to 0.001 pixels, for each example.
 - Coverage of the library: 99.2 % of the statements, 98.5 % of the branches, 99.6 % of the functions and 99.7 % of the lines.
+- P4 (2026-10-13): 176 tests of the library. Coverage 99.3 % of the statements, 97.9 % of the branches, 99.6 % of the functions and 99.7 % of the lines.
+- The core is 24 kB minified and 8.9 kB after gzip (esbuild, all exports). `toSVG` adds 1.5 kB, and the text language 2.8 kB.
+- In the browser, the fuzz meter of the site lays out 2000 random trees (26315 boxes) in 175 ms, with no overlap.
+- The home page of the site loads 117 kB of script after gzip. The playground lays out its first text in approximately 5 ms.
+- The work on the site found three defects of the library. The first frame of an animation gave a negative size, because the time of a frame can come before its start. No renderer drew edge labels. The parser had parameter properties.
