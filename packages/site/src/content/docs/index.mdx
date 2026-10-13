@@ -15,7 +15,9 @@ hero:
       variant: minimal
 ---
 
+import { CardGrid, LinkCard } from "@astrojs/starlight/components";
 import Showcase from "../../components/Showcase.astro";
+import { href } from "../../lib/site.ts";
 
 <div class="ik-stats">
   <div class="ik-stat"><strong>0</strong><span>overlaps in 20000 random trees</span></div>
@@ -34,6 +36,15 @@ ireko (入れ子) is the Japanese word for a set of boxes that fit inside each o
 One layout gives plain data: boxes, routed edges and findings. Any renderer can draw it.
 
 <Showcase />
+
+## Watch it work
+
+<CardGrid>
+  <LinkCard title="Why two passes" description="The first version beside ireko, and 2000 random trees laid out in your browser." href={href("design/two-passes/")} />
+  <LinkCard title="The pipeline, step by step" description="Watch the engine measure from the leaves up, then place from the root down." href={href("design/pipeline/")} />
+  <LinkCard title="Try each strategy" description="Sliders for each option of grid and radial, with the text and the TypeScript code." href={href("learn/strategies/")} />
+  <LinkCard title="The gallery" description="Org charts, mind maps, architectures, rings of rings and fractals. Each one is live." href={href("gallery/")} />
+</CardGrid>
 
 ## Use it in your code
 
