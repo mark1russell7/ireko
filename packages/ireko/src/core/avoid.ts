@@ -54,9 +54,16 @@ function stubOf(r: Rect, side: Side): Point {
   return { x: p.x + OUT[side].x * MARGIN, y: p.y + OUT[side].y * MARGIN };
 }
 
-/** This function tells if a point is strictly inside a box. A point on the edge of a box is free. */
-function inside(p: Point, b: Rect): boolean {
-  return p.x > b.x + EPSILON && p.x < b.x + b.width - EPSILON && p.y > b.y + EPSILON && p.y < b.y + b.height - EPSILON;
+/** This function gives the index of a value in a sorted axis: the index of the nearest value. */
+function find(sorted: readonly number[], v: number): number {
+  let lo = 0;
+  let hi = sorted.length - 1;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (at(sorted, mid) < v - EPSILON) lo = mid + 1;
+    else hi = mid;
+  }
+  return lo;
 }
 
 /** This function gives the sorted values without duplicates. */
@@ -83,20 +90,35 @@ function search(source: Rect, target: Rect, boxes: readonly Rect[], direction: D
   const xs = axis([left, right, ...boxes.flatMap((b) => [b.x, b.x + b.width]), ...all.map((p) => p.x)]);
   const ys = axis([top, bottom, ...boxes.flatMap((b) => [b.y, b.y + b.height]), ...all.map((p) => p.y)]);
   const w = xs.length;
-  const free = new Uint8Array(w * ys.length);
-  for (let j = 0; j < ys.length; j++) {
-    for (let i = 0; i < w; i++) {
-      const p = { x: at(xs, i), y: at(ys, j) };
-      free[j * w + i] = boxes.some((b) => inside(p, b)) ? 0 : 1;
+  const h = ys.length;
+  // Each edge of a box is a grid line, so a box covers a range of indexes on each axis. The search then tests one
+  // array item for each point and each step, not each box.
+  const free = new Uint8Array(w * h).fill(1);
+  const openX = new Uint8Array(w * h).fill(1);
+  const openY = new Uint8Array(w * h).fill(1);
+  for (const b of boxes) {
+    const x0 = find(xs, b.x);
+    const x1 = find(xs, b.x + b.width);
+    const y0 = find(ys, b.y);
+    const y1 = find(ys, b.y + b.height);
+    for (let j = y0; j <= y1; j++) {
+      for (let i = x0; i <= x1; i++) {
+        const k = j * w + i;
+        // A point strictly inside the box is not free.
+        if (i > x0 && i < x1 && j > y0 && j < y1) free[k] = 0;
+        // A step from (i, j) to (i + 1, j) is closed when its middle is inside the box. The same for (i, j + 1).
+        if (i < x1 && j > y0 && j < y1) openX[k] = 0;
+        if (j < y1 && i > x0 && i < x1) openY[k] = 0;
+      }
     }
   }
   // A step between two neighbor grid points is open when its middle is outside each box.
   const open = (i: number, j: number, di: number, dj: number): boolean => {
     const k = j + dj;
     const l = i + di;
-    if (l < 0 || l >= w || k < 0 || k >= ys.length || at(free, k * w + l) === 0) return false;
-    const middle = { x: (at(xs, i) + at(xs, l)) / 2, y: (at(ys, j) + at(ys, k)) / 2 };
-    return !boxes.some((b) => inside(middle, b));
+    if (l < 0 || l >= w || k < 0 || k >= h || at(free, k * w + l) === 0) return false;
+    if (di !== 0) return at(openX, j * w + Math.min(i, l)) === 1;
+    return at(openY, Math.min(j, k) * w + i) === 1;
   };
   const indexOf = (p: Point): number => {
     const i = xs.findIndex((x) => Math.abs(x - p.x) <= EPSILON);
