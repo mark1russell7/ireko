@@ -747,7 +747,7 @@ The research ranks these actions by effect:
 | §6.6: rounded output | The engine does not round. Exporters and golden files round. | Rounding made very small boxes inside scaled containers into empty boxes. |
 | §6.1: a grid of linked children is approximately square | In the linked mode, the default grid is one row. | With two or more rows, the edges to the second row crossed the boxes of the first row. |
 | §6.3: `arrange` gives a content area | The radial strategy gives no content area. The engine uses the extents of the children. | A nested ring is as small as its children permit. |
-| §13 P2: the playground moves to the new core, and the legacy package goes | The legacy package stays until the playground of the site exists (P4). | The new playground is a page of the site. A second playground in P2 would be work to throw away. |
+| §13 P2: the playground moves to the new core, and the legacy package goes | The legacy package stays until the playground of the site exists (P4). | The new playground is a page of the site. A second playground in P2 is work that the plan then removes. |
 | §6.7: one live renderer for each target | One loop for all live renderers. A surface only draws a frame. The loop owns the animation, the viewport, the size and the hit test. | The three renderers share their behavior. The parity test (P9) compares them box by box. |
 | §6.8: a text language with separators | Commas are optional. A word after an identifier is a part of the node only if it is a keyword or the name of a strategy. | `{ auth users billing }` reads as three leaves. This is the form that people write. |
 
@@ -766,6 +766,6 @@ The research ranks these actions by effect:
 
 - Coverage of `src/core` and `src/svg`: 99.7 % of the statements, 99.1 % of the branches, 100 % of the functions and lines.
 - The property tests found three defects of the new core before the first commit. The test of the audit found one defect of the test itself.
-- P2 found two more defects with its tests. Trigonometry gave positions such as `2e-14`, and some CSS parsers reject an exponent. The engine now writes 0 for these values, but only for positions. A size can be very small, and it stays positive.
+- P2 found two more defects with its tests. Trigonometry gave positions, for example `2e-14`, and some CSS parsers reject an exponent. The engine writes 0 for these values, but only for positions. A size can be very small, and it stays positive.
 - The parity test (P9) shows that SVG, DOM and Canvas draw the same boxes, to 0.001 pixels, for each example.
 - Coverage of the library: 99.2 % of the statements, 98.5 % of the branches, 99.6 % of the functions and 99.7 % of the lines.
