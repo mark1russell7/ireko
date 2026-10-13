@@ -4,7 +4,7 @@
  * - `PolylineEdge` draws the route of an ireko edge. Register it with `edgeTypes`.
  * - `layoutFlow` gives positions to the nodes of an existing flow: the automatic layout of nested sub-flows.
  */
-import { BaseEdge, type Edge, type EdgeProps, type Node } from "@xyflow/react";
+import { BaseEdge, Handle, Position, type Edge, type EdgeProps, type Node, type NodeProps } from "@xyflow/react";
 import type { ReactElement } from "react";
 import { createEngine, type Engine, type LayoutOptions, type LayoutRef, type Mode, type Fit, type Layout, type NodeSpec, type PlacedEdge, type PlacedNode, type Point } from "../core/index.ts";
 import { at } from "../core/at.ts";
@@ -79,6 +79,25 @@ export function PolylineEdge({ data, sourceX, sourceY, targetX, targetY, markerE
 
 /** The edge types of ireko. Give them to the `edgeTypes` property of `ReactFlow`. Keep the object outside a component. */
 export const edgeTypes: { readonly ireko: typeof PolylineEdge } = { ireko: PolylineEdge };
+
+/**
+ * This component draws a container: its label at the top left, and two handles that a reader does not see.
+ * React Flow draws an edge only between two handles, so a container needs handles for its edges.
+ */
+export function GroupNode({ data }: NodeProps<Node<{ label?: unknown }>>): ReactElement {
+  return (
+    <>
+      <Handle type="target" position={Position.Top} isConnectable={false} style={{ opacity: 0 }} />
+      <div className="ireko-xyflow-label" style={{ position: "absolute", left: 8, top: 5, fontSize: 12, opacity: 0.75 }}>
+        {typeof data.label === "string" ? data.label : null}
+      </div>
+      <Handle type="source" position={Position.Bottom} isConnectable={false} style={{ opacity: 0 }} />
+    </>
+  );
+}
+
+/** The node types of ireko. Give them to the `nodeTypes` property of `ReactFlow`. The type `group` replaces the group of React Flow. */
+export const nodeTypes: { readonly group: typeof GroupNode } = { group: GroupNode };
 
 /** The layout settings of one node of a flow. */
 export interface FlowNodeSpec {

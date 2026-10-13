@@ -3,7 +3,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { createEngine, defineStrategy, layout } from "../core/index.ts";
 import { defectsOf } from "../test/invariants.ts";
-import { edgeTypes, layoutFlow, pathOf, PolylineEdge, toXYFlow, type IrekoEdgeData } from "./index.tsx";
+import { ReactFlowProvider } from "@xyflow/react";
+import { edgeTypes, GroupNode, layoutFlow, nodeTypes, pathOf, PolylineEdge, toXYFlow, type IrekoEdgeData } from "./index.tsx";
 
 describe("toXYFlow", () => {
   it("gives parents before children, positions relative to the container, and the ireko edge type", () => {
@@ -39,6 +40,18 @@ describe("PolylineEdge", () => {
     expect(renderToStaticMarkup(<svg>{PolylineEdge(marked)}</svg>)).toContain('marker-end="url(#m)"');
     expect(edgeTypes.ireko).toBe(PolylineEdge);
     expect(renderToStaticMarkup(<svg>{PolylineEdge({ ...props({ points: [{ x: 0, y: 0 }, { x: 8, y: 0 }] }), label: "calls" })}</svg>)).toContain("d=\"M 0 0 L 8 0\"");
+  });
+});
+
+describe("GroupNode", () => {
+  it("draws the label and two handles", () => {
+    const props = { id: "g", data: { label: "Group" }, type: "group", selected: false, dragging: false, zIndex: 0, selectable: true, deletable: true, draggable: true, isConnectable: false, positionAbsoluteX: 0, positionAbsoluteY: 0 } as unknown as Parameters<typeof GroupNode>[0];
+    const html = renderToStaticMarkup(<ReactFlowProvider>{GroupNode(props)}</ReactFlowProvider>);
+    expect(html).toContain("Group");
+    expect(html.match(/react-flow__handle/g)?.length).toBeGreaterThanOrEqual(2);
+    const empty = renderToStaticMarkup(<ReactFlowProvider>{GroupNode({ ...props, data: {} })}</ReactFlowProvider>);
+    expect(empty).not.toContain("Group");
+    expect(nodeTypes.group).toBe(GroupNode);
   });
 });
 

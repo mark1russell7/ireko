@@ -21,7 +21,7 @@ export function useLayout(input: LayoutInput, options?: LayoutOptions, engine?: 
 /** The properties of `LayoutSvg`. */
 export interface LayoutSvgProps {
   readonly layout: Layout;
-  readonly theme?: Partial<Theme>;
+  readonly theme?: Partial<Theme> | undefined;
   /** The space around the layout, in pixels. The default is 16. */
   readonly padding?: number;
   /** The title of the image, for assistive technology. */
@@ -104,17 +104,17 @@ export interface LayoutViewProps {
   readonly layout: Layout;
   /** The renderer. The default is `svg`. */
   readonly renderer?: RendererKind;
-  readonly theme?: Partial<Theme>;
+  readonly theme?: Partial<Theme> | undefined;
   /** The viewport. Give the same viewport to two views to move them together. */
-  readonly viewport?: Viewport;
+  readonly viewport?: Viewport | undefined;
   /** The time of the animation from one layout to the next, in milliseconds. The default is 320. */
-  readonly duration?: number;
+  readonly duration?: number | undefined;
   /** If true, the user can pan and zoom. The default is true. */
-  readonly interactive?: boolean;
+  readonly interactive?: boolean | undefined;
   /** The identifiers of the selected boxes. */
-  readonly selected?: readonly string[];
+  readonly selected?: readonly string[] | undefined;
   /** This function receives the identifier of the box that the user clicks, or undefined for the background. */
-  readonly onPick?: (id: string | undefined) => void;
+  readonly onPick?: ((id: string | undefined) => void) | undefined;
   readonly className?: string;
   readonly style?: CSSProperties;
 }

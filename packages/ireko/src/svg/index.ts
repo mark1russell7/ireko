@@ -148,7 +148,7 @@ export function svgSurface(host: HTMLElement, theme: Theme): Surface {
     const { g, rect, text } = entry;
     if (g.parentNode !== layer) layer.appendChild(g);
     const container = isContainer(n);
-    g.setAttribute("class", container ? "ireko-container" : "ireko-node");
+    g.setAttribute("class", `${container ? "ireko-container" : "ireko-node"}${selected ? " ireko-selected" : ""}`);
     g.setAttribute("opacity", String(n.opacity));
     if (clip === undefined) g.removeAttribute("clip-path");
     else g.setAttribute("clip-path", `url(#${clipId(clip.id)})`);

@@ -45,7 +45,7 @@ export function domSurface(host: HTMLElement, theme: Theme): Surface {
     }
     const { el, label } = entry;
     if (el.parentElement !== layer) layer.appendChild(el);
-    el.className = container ? "ireko-container" : "ireko-node";
+    el.className = `${container ? "ireko-container" : "ireko-node"}${selected ? " ireko-selected" : ""}`;
     label.textContent = n.label;
     Object.assign(el.style, {
       position: "absolute",
