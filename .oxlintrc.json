@@ -48,6 +48,12 @@
   ],
   "overrides": [
     {
+      "files": ["**/*.bench.ts"],
+      "rules": {
+        "vitest/expect-expect": "off"
+      }
+    },
+    {
       "files": ["packages/site/e2e/**", "packages/site/scripts/**"],
       "rules": {
         "eslint/no-await-in-loop": "off"
