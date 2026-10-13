@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "pnpm --filter @ireko/site dev",
-    "build": "pnpm -r run build",
+    "build": "pnpm --filter ireko build",
     "package": "tsx packages/cli/src/index.ts package",
     "template": "tsx packages/cli/src/index.ts repo",
     "test": "pnpm -r run test",
@@ -18,13 +18,20 @@
     "lint:ste": "ste-lint",
     "check": "pnpm typecheck && pnpm lint && pnpm test:coverage && pnpm test && pnpm lint:ste",
     "dump:src": "cd packages/ireko/src && node ../../../external/concat-src/concat-src.js ../../../src-catalog.md",
-    "test:coverage": "pnpm --filter ireko test:coverage"
+    "test:coverage": "pnpm --filter ireko test:coverage",
+    "size": "pnpm --filter ireko size",
+    "check:package": "pnpm --filter ireko build && pnpm --filter ireko size && pnpm --filter ireko smoke"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@mark1russell7/cue": "github:mark1russell7/cue",
     "@mark1russell7/ste-lint": "github:mark1russell7/ste-lint",
+    "@size-limit/preset-small-lib": "^14.1.0",
     "oxlint": "^1.87.0",
     "oxlint-tsgolint": "^7.0.2004",
+    "publint": "^0.3.25",
+    "size-limit": "^14.1.0",
+    "tsdown": "^0.23.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }

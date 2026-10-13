@@ -54,7 +54,7 @@
       }
     },
     {
-      "files": ["packages/site/*.mjs", "packages/site/scripts/**", "packages/site/src/content.config.ts"],
+      "files": ["packages/site/*.mjs", "packages/site/scripts/**", "packages/site/src/content.config.ts", "packages/ireko/scripts/**"],
       "rules": {
         "typescript/no-unsafe-call": "off",
         "typescript/no-unsafe-member-access": "off",

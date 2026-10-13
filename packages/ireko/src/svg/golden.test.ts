@@ -3,7 +3,8 @@ import { layout } from "../core/engine.ts";
 import type { Layout } from "../core/model.ts";
 import { examples } from "../examples/index.ts";
 import { defectsOf } from "../test/invariants.ts";
-import { esc, toSVG } from "./index.ts";
+import { esc } from "./escape.ts";
+import { toSVG } from "./index.ts";
 
 /** This function writes a layout as JSON, with numbers rounded to three decimals, so a golden file is short and stable. */
 function goldenJson(out: Layout): string {

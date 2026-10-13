@@ -2,9 +2,43 @@
   "$schema": "https://json.schemastore.org/package",
   "name": "ireko",
   "version": "0.1.0",
-  "private": true,
+  "description": "Composable graph and tree layout for TypeScript. Select a layout for each container, and get boxes and routed edges for any renderer.",
+  "keywords": [
+    "graph-layout",
+    "tree-layout",
+    "compound-graph",
+    "hierarchical-layout",
+    "nested-graph",
+    "group-layout",
+    "diagram-layout",
+    "auto-layout",
+    "layout-engine",
+    "graph-drawing",
+    "react-flow",
+    "xyflow",
+    "subflows",
+    "radial-tree",
+    "edge-routing",
+    "svg",
+    "canvas",
+    "typescript",
+    "dagre-alternative",
+    "elkjs-alternative"
+  ],
+  "homepage": "https://mark1russell7.github.io/ireko/",
+  "bugs": {
+    "url": "https://github.com/mark1russell7/ireko/issues"
+  },
+  "author": "Mark Russell (https://github.com/mark1russell7)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mark1russell7/ireko.git",
+    "directory": "packages/ireko"
+  },
   "type": "module",
   "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
     "./text": "./src/text/index.ts",
@@ -17,12 +51,78 @@
     "./examples": "./src/examples/index.ts",
     "./package.json": "./package.json"
   },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
   "sideEffects": false,
+  "engines": {
+    "node": ">=22.12"
+  },
+  "publishConfig": {
+    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./text": {
+        "types": "./dist/text.d.ts",
+        "default": "./dist/text.js"
+      },
+      "./svg": {
+        "types": "./dist/svg.d.ts",
+        "default": "./dist/svg.js"
+      },
+      "./dom": {
+        "types": "./dist/dom.d.ts",
+        "default": "./dist/dom.js"
+      },
+      "./canvas": {
+        "types": "./dist/canvas.d.ts",
+        "default": "./dist/canvas.js"
+      },
+      "./render": {
+        "types": "./dist/render.d.ts",
+        "default": "./dist/render.js"
+      },
+      "./react": {
+        "types": "./dist/react.d.ts",
+        "default": "./dist/react.js"
+      },
+      "./xyflow": {
+        "types": "./dist/xyflow.d.ts",
+        "default": "./dist/xyflow.js"
+      },
+      "./examples": {
+        "types": "./dist/examples.d.ts",
+        "default": "./dist/examples.js"
+      },
+      "./package.json": "./package.json"
+    }
+  },
   "scripts": {
+    "build": "tsdown",
+    "size": "size-limit",
+    "smoke": "node scripts/smoke.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.core.json && tsc -p tsconfig.test.json",
     "test:coverage": "vitest run --coverage"
+  },
+  "peerDependencies": {
+    "@xyflow/react": "^12.0.0",
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "@xyflow/react": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@mark1russell7/cue": "github:mark1russell7/cue",
@@ -38,18 +138,5 @@
     "typescript": "^7.0.2",
     "vite": "^8.3.4",
     "vitest": "^5.0.3"
-  },
-  "description": "Composable graph and tree layout for TypeScript. Select a layout for each container, and get boxes and routed edges for any renderer.",
-  "peerDependencies": {
-    "@xyflow/react": "^12.0.0",
-    "react": ">=18"
-  },
-  "peerDependenciesMeta": {
-    "@xyflow/react": {
-      "optional": true
-    },
-    "react": {
-      "optional": true
-    }
   }
 }

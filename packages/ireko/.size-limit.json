@@ -1,0 +1,10 @@
+[
+  { "name": "ireko: layout", "path": "dist/index.js", "import": "{ layout }", "gzip": true, "limit": "12 kB" },
+  { "name": "ireko: all of the core", "path": "dist/index.js", "import": "*", "gzip": true, "limit": "12 kB" },
+  { "name": "ireko/text: parse and print", "path": "dist/text.js", "import": "{ parse, print }", "gzip": true, "limit": "3.3 kB" },
+  { "name": "ireko/svg: toSVG", "path": "dist/svg.js", "import": "{ toSVG }", "gzip": true, "limit": "2.1 kB" },
+  { "name": "ireko/svg: mountSvg", "path": "dist/svg.js", "import": "{ mountSvg }", "gzip": true, "limit": "4.9 kB" },
+  { "name": "ireko/canvas: mountCanvas", "path": "dist/canvas.js", "import": "{ mountCanvas }", "gzip": true, "limit": "4.4 kB" },
+  { "name": "ireko/react: all", "path": "dist/react.js", "import": "*", "gzip": true, "limit": "18 kB", "ignore": ["react", "react-dom", "@xyflow/react"] },
+  { "name": "ireko/xyflow: all", "path": "dist/xyflow.js", "import": "*", "gzip": true, "limit": "12 kB", "ignore": ["react", "react-dom", "@xyflow/react"] }
+]

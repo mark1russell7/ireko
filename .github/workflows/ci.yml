@@ -1,5 +1,6 @@
 # The gates of each change.
 #   check   the type check, Oxlint, the tests and the prose lint, on each supported Node.js version
+#   package the package as npm gives it: the build, the size budgets, publint, attw and the smoke test
 #   site    the type check and the build of the site, the share cards and the browser tests
 #   ci-ok   the one check that a pull request must pass
 # release.yml calls this workflow before it builds a release.
@@ -52,6 +53,29 @@ jobs:
       # The writing rules (ASD-STE100) of the README files, the docs and the doc comments
       - run: pnpm lint:ste
 
+  package:
+    name: Package
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # tsdown writes an ES module and its declarations for each entry point to packages/ireko/dist
+      - run: pnpm build
+      # The budgets of .size-limit.json, minified and gzipped. The core must stay under 12 kB.
+      - run: pnpm size
+      # pnpm pack, publint, attw, an install in an empty project, plain Node.js and two TypeScript consumers
+      - run: pnpm --filter ireko smoke
+
   site:
     name: Site
     runs-on: ubuntu-latest
@@ -102,7 +126,7 @@ jobs:
   ci-ok:
     name: CI OK
     if: always()
-    needs: [check, site]
+    needs: [check, package, site]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     permissions: {}

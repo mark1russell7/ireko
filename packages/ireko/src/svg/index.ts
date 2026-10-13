@@ -7,6 +7,7 @@ import { round3 } from "../core/geometry.ts";
 import type { Layout, PlacedEdge, PlacedNode } from "../core/model.ts";
 import { clipRoots, isContainer, mount, paintOrder, type Renderer, type RendererOptions, type Surface } from "../render/renderer.ts";
 import { haloOf, labelAt, LABEL_SCALE } from "../render/label.ts";
+import { esc } from "./escape.ts";
 import { lightTheme, themeOf, type Theme } from "../render/theme.ts";
 import type { Frame, FrameNode } from "../render/tween.ts";
 import type { View } from "../render/viewport.ts";
@@ -125,11 +126,6 @@ function clipId(id: string): string {
 /** This function writes a number with three decimals or fewer. */
 function num(v: number): string {
   return String(round3(v));
-}
-
-/** This function escapes the characters that have a meaning in XML. */
-export function esc(text: string): string {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
 const SVG = "http://www.w3.org/2000/svg";
