@@ -17,7 +17,7 @@ The project is in a rebuild. The plan is in [`docs/REVIEW.md`](./docs/REVIEW.md)
 | P0 | The template monorepo, pnpm, TypeScript 7, Oxlint, `ste-lint`, CI | done |
 | P1 | The new core: two passes, an open strategy registry, plain JSON output, SVG export | done |
 | P2 | The builder, the text language, and the SVG, DOM, Canvas, React and React Flow renderers | done |
-| P3 | More strategies, sizing policies and routers | in progress: the tidy tree is done |
+| P3 | More strategies, sizing policies and routers | in progress: `tree`, `layers` and the router `avoid` are done |
 | P4 | The site: the guide, the gallery, the playground and live figures | done |
 | P5 | The first release on npm | ready: the owner publishes 0.1.0 |
 
@@ -27,7 +27,7 @@ The code of Jqy is in the git history. The site compares its output with the out
 
 A diagram is a tree of nodes. Each node selects two things for its children:
 
-- **The strategy:** how to arrange the children. The built-in strategies are `grid`, `radial` and `tree` (a tidy tree).
+- **The strategy:** how to arrange the children. The built-in strategies are `grid`, `radial`, `tree` (a tidy tree) and `layers` (a flowchart).
 - **The mode:** where the children go. In the `nested` mode, the children are inside the box of the node. In the `linked` mode, the children are around the box, and edges connect them.
 
 One layout gives plain data: boxes, edges and findings. Any renderer can draw it.

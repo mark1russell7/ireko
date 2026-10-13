@@ -37,6 +37,7 @@ class IrekoError extends Error {
 const grid: Builder<GridOptions>;
 const radial: Builder<RadialOptions>;
 const tree: Builder<TreeOptions>;
+const layers: Builder<LayersOptions>;
 function builder<O>(type: string): Builder<O>; // a builder for a strategy that you register
 function node(id: string, options?: { label?; size?; fit?; data? }): NodeSpec;
 
@@ -57,7 +58,8 @@ function defineRouter(router: Router): Router;
 const gridStrategy: Strategy<GridOptions>;
 const radialStrategy: Strategy<RadialOptions>;
 const treeStrategy: Strategy<TreeOptions>;
-const BUILTIN_STRATEGY_NAMES: readonly string[]; // grid, radial, tree
+const layersStrategy: Strategy<LayersOptions>;
+const BUILTIN_STRATEGY_NAMES: readonly string[]; // grid, radial, tree, layers
 const straight: Router;
 const orthogonal: Router;
 const avoid: Router;      // around the other boxes

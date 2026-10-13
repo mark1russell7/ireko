@@ -1,7 +1,7 @@
 ---
 title: Strategies
-seoTitle: "Layout strategies: grid, radial and tidy tree, live"
-description: The grid strategy puts children in rows and columns, the radial strategy puts them on a ring, and the tree strategy makes a tidy tree. Try each option live.
+seoTitle: "Layout strategies: grid, radial, tidy tree and layers"
+description: Grid puts children in rows and columns, radial on a ring, tree makes a tidy tree, and layers makes a flowchart. Try each option live.
 ---
 
 import Configurator from "../../../components/Configurator.tsx";
@@ -33,6 +33,24 @@ export const tidyStates = [
   { label: "tree", source: tidy.replaceAll("{", "tree {"), options: { router: "orthogonal" }, note: "The tree strategy packs each subtree by its shape. The small teams fit under the edges of the large ones." },
 ];
 
+export const flow = `ci "CI" nested layers {
+  push "git push"
+  lint test build
+  pack "package"
+  review nested layers(side: right) { approve stage }
+  deploy
+}
+push -> lint
+push -> test
+push -> build
+lint -> pack
+test -> pack
+build -> pack
+pack -> approve
+approve -> stage
+stage -> deploy
+deploy -> push "next"`;
+
 export const rings = `hub radial nested {
   tiny
   big radial nested { a b c d e f }
@@ -47,7 +65,7 @@ export const sweeps = [
   { label: "90°", source: "root radial(sweep: 90, startAngle: 0) { a b c d e }", note: "sweep: 90: a fan." },
 ];
 
-ireko has three strategies: `grid`, `radial` and `tree`. A strategy arranges the children of one node. It gets the size of each child and the extent of its subtree, and it gives an offset for each child. The engine does all other work: the recursion, the padding, the fit and the absolute positions. Thus a strategy is a small function, and you can [write your own](/learn/custom-strategy/).
+ireko has four strategies: `grid`, `radial`, `tree` and `layers`. A strategy arranges the children of one node. It gets the size of each child and the extent of its subtree, and it gives an offset for each child. The engine does all other work: the recursion, the padding, the fit and the absolute positions. Thus a strategy is a small function, and you can [write your own](/learn/custom-strategy/).
 
 ## Try each option
 
@@ -96,6 +114,24 @@ The strategy packs the row two times: from the first child to the last, and from
 The tree strategy gives the direction of its edges to the router. With the `orthogonal` router, the edges make the buses of an organization chart. The [gallery](/gallery/tidy-tree/) has this chart with labels.
 
 <OptionsTable strategy="tree" />
+
+## layers
+
+The layers strategy puts the children in layers, in the direction of the edges between them: a flowchart. The edges come from the input. An edge between two subtrees counts for the two children that hold them.
+
+<Figure source={flow} options={{ router: "avoid", nodeSize: { width: 80, height: 30 }, spacing: 16 }} caption="A CI pipeline. The edge back to git push makes a cycle, so the strategy turns it around. The review stage has its own layers." height="24rem" />
+
+The strategy has three steps:
+
+1. It turns around the edges that close a cycle.
+2. It gives each child the layer of its longest path from a child with no edge into it.
+3. It orders each layer by the mean place of the neighbors of each child, so fewer edges cross.
+
+Each layer is as deep as its deepest subtree, and the subtrees in a layer keep the gap. The strategy gives the direction of the flow to the router. Thus the forward edges leave the bottom of a box and enter the top of the next box.
+
+For a large directed graph with many crossings, use dagre or ELK: they have better crossing reduction. The layers strategy is for the flow inside one container.
+
+<OptionsTable strategy="layers" />
 
 ## Options of each container
 

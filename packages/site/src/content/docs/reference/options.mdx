@@ -1,7 +1,7 @@
 ---
 title: Options
 seoTitle: "All options of ireko: layout, node, strategy, engine and renderer"
-description: Each option of ireko with its type and default - the layout options, the fields of a node and an edge, the options of grid, radial and tree, the engine and the renderers.
+description: Each option of ireko with its type and default - the layout options, the fields of a node and an edge, the options of each strategy, the engine and the renderers.
 ---
 
 import OptionsTable from "../../../components/OptionsTable.astro";
@@ -69,6 +69,10 @@ Each strategy has these options too. The engine reads them.
 
 <OptionsTable strategy="tree" />
 
+## layers
+
+<OptionsTable strategy="layers" />
+
 ## The engine
 
 `createEngine(config)` and `engine.extend(config)`:
@@ -123,7 +127,7 @@ Each strategy has these options too. The engine reads them.
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `strategies` | `BUILTIN_STRATEGY_NAMES`: `grid`, `radial` and `tree` | The names of the strategies. Give the names of the strategies that you register. |
+| `strategies` | `BUILTIN_STRATEGY_NAMES`: `grid`, `radial`, `tree` and `layers` | The names of the strategies. Give the names of the strategies that you register. |
 | `width` (print) | `80` | The largest length of a line of leaves. |
 
 ## layoutFlow
