@@ -1,0 +1,26 @@
+---
+/**
+ * The hero of the home page: the hero of Starlight with the install command, and the live panel beside them.
+ * The site config sets this component as the override of the Starlight hero. Another page with a hero (the 404 page)
+ * gets the hero of Starlight only.
+ */
+import Default from "@astrojs/starlight/components/Hero.astro";
+import CopyInstall from "./CopyInstall.tsx";
+import LiveHero from "./LiveHero.tsx";
+
+const home = Astro.locals.starlightRoute.id === "" || Astro.locals.starlightRoute.id === "index";
+---
+
+{
+  home ? (
+    <div class="ik-hero">
+      <div class="ik-hero-copy">
+        <Default />
+        <CopyInstall client:idle />
+      </div>
+      <LiveHero client:load />
+    </div>
+  ) : (
+    <Default />
+  )
+}

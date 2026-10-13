@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="ireko">
+  <style>
+    .ink { stroke: #151c2e; }
+    .blue { stroke: #2346c4; }
+    .red { fill: #c2301f; }
+    @media (prefers-color-scheme: dark) {
+      .ink { stroke: #e6e9f3; }
+      .blue { stroke: #93abff; }
+      .red { fill: #ff7b6b; }
+    }
+  </style>
+  <rect class="ink" x="2" y="2" width="28" height="28" rx="5" fill="none" stroke-width="2.5" />
+  <rect class="blue" x="8" y="8" width="16" height="16" rx="3" fill="none" stroke-width="2.5" />
+  <rect class="red" x="13" y="13" width="6" height="6" rx="1.5" />
+</svg>

@@ -1,0 +1,80 @@
+---
+/**
+ * The playground: a full window app, outside the layout of Starlight. The page has its own head, with the same
+ * fonts, tokens and theme switch as the rest of the site.
+ */
+import "@fontsource-variable/atkinson-hyperlegible-next";
+import "@fontsource-variable/atkinson-hyperlegible-mono";
+import "../styles/tokens.css";
+import "../styles/theme.css";
+import "../styles/widgets.css";
+import "../styles/playground.css";
+import Playground from "../playground/Playground.tsx";
+import { AUTHOR, NAME, SITE } from "../lib/site.ts";
+
+const title = "Playground: type a layout, see it at once | ireko";
+const description =
+  "Type a nested diagram in the text language of ireko and see its layout at once. Change the strategy of each container, compare SVG, Canvas, DOM and React Flow, and share a link.";
+const url = `${SITE}playground/`;
+const card = `${SITE}og/playground.png`;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const data = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "ireko playground",
+  description,
+  url,
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Any",
+  browserRequirements: "Requires JavaScript",
+  isAccessibleForFree: true,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  author: { "@type": "Person", name: AUTHOR.name, url: AUTHOR.url },
+  isPartOf: { "@type": "WebSite", name: NAME, url: SITE },
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={url} />
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+    <link rel="manifest" href={`${base}/site.webmanifest`} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={NAME} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={card} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The playground of ireko: the text language on the left, the layout on the right." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={card} />
+    <meta name="theme-color" content="#f5f6f9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e1220" media="(prefers-color-scheme: dark)" />
+    <script type="application/ld+json" set:html={JSON.stringify(data).replace(/</g, "\\u003c")} />
+    <script is:inline>
+      // The theme of the reader: the choice in the header of the site, else the theme of the system.
+      try {
+        const theme = localStorage.getItem("starlight-theme");
+        if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <h1 class="ik-sr">The playground of ireko</h1>
+    <Playground client:only="react" />
+    <noscript>
+      <p class="pg-noscript">
+        The playground needs JavaScript. The <a href={`${base}/gallery/`}>gallery</a> shows each example as a static picture.
+      </p>
+    </noscript>
+  </body>
+</html>

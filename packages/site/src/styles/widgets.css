@@ -1,0 +1,245 @@
+/*
+ * The parts of the interactive widgets: the frame, the toolbar, the buttons, the chips and the editor.
+ * Each class has the prefix "ik-".
+ */
+
+/* The frame of a widget: the family card, with an ink line at the top. */
+.ik-frame {
+  margin-block: var(--space-5);
+  border: 1px solid var(--color-rule);
+  border-top: 3px solid var(--color-ink);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+.ik-frame-body {
+  position: relative;
+}
+.ik-paper {
+  background-color: var(--color-surface);
+  background-image:
+    linear-gradient(var(--color-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: -1px -1px;
+}
+.ik-caption {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--color-rule);
+  color: var(--color-ink-muted);
+  font-size: var(--text-xs);
+}
+
+.ik-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-rule);
+  background: var(--color-surface);
+  font-size: var(--text-sm);
+}
+.ik-toolbar label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-ink-secondary);
+}
+.ik-toolbar .ik-spacer {
+  flex: 1;
+}
+
+.ik-button,
+.ik-segmented button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 2rem;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-small);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.ik-button:hover,
+.ik-segmented button:hover {
+  border-color: var(--color-accent);
+}
+.ik-button[data-variant="primary"],
+.ik-button[aria-pressed="true"],
+.ik-segmented button[aria-pressed="true"] {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-on-accent, #ffffff);
+}
+:root[data-theme="dark"] .ik-button[data-variant="primary"],
+:root[data-theme="dark"] .ik-button[aria-pressed="true"],
+:root[data-theme="dark"] .ik-segmented button[aria-pressed="true"] {
+  color: #0e1220;
+}
+.ik-segmented {
+  display: inline-flex;
+}
+.ik-segmented button {
+  border-radius: 0;
+}
+.ik-segmented button + button {
+  margin-left: -1px;
+}
+.ik-segmented button:first-child {
+  border-radius: var(--radius-small) 0 0 var(--radius-small);
+}
+.ik-segmented button:last-child {
+  border-radius: 0 var(--radius-small) var(--radius-small) 0;
+}
+.ik-button:focus-visible,
+.ik-segmented button:focus-visible,
+.ik-select:focus-visible,
+.ik-editor textarea:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.ik-select,
+.ik-input {
+  min-height: 2rem;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-small);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: var(--text-sm);
+}
+.ik-input[type="range"] {
+  padding: 0;
+  accent-color: var(--color-accent);
+}
+
+/* A chip: a short state, in the mono font. */
+.ik-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.1rem 0.55rem;
+  border: 1px solid var(--color-rule-strong);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-ink-secondary);
+  white-space: nowrap;
+}
+.ik-chip[data-state="pass"] {
+  border-color: var(--status-good);
+  color: var(--status-good-ink);
+}
+.ik-chip[data-state="fail"] {
+  border-color: var(--color-mark);
+  color: var(--color-mark);
+  background: var(--color-mark-wash);
+}
+
+/* The code editor: a text area over a highlighted copy of its text. */
+.ik-editor {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  tab-size: 2;
+}
+.ik-editor pre,
+.ik-editor textarea {
+  margin: 0;
+  padding: var(--space-3);
+  border: 0;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: normal;
+  white-space: pre;
+  overflow-wrap: normal;
+  box-sizing: border-box;
+}
+.ik-editor pre {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--color-ink);
+  background: transparent;
+}
+.ik-editor textarea {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  color: transparent;
+  caret-color: var(--color-ink);
+  background: transparent;
+  overflow: auto;
+}
+.ik-editor textarea::selection {
+  background: var(--color-accent-wash);
+  color: transparent;
+}
+.ik-tok-id {
+  color: var(--color-ink);
+}
+.ik-tok-strategy {
+  color: light-dark(#7a2aa8, #d6a8ff);
+}
+.ik-tok-keyword {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.ik-tok-string {
+  color: light-dark(#17692f, #8fdc9f);
+}
+.ik-tok-number {
+  color: light-dark(#9a4500, #ffbb7a);
+}
+.ik-tok-comment {
+  color: var(--color-ink-muted);
+  font-style: italic;
+}
+.ik-tok-punct {
+  color: var(--color-ink-muted);
+}
+.ik-tok-error {
+  text-decoration: underline wavy var(--color-mark);
+  text-decoration-skip-ink: none;
+  text-underline-offset: 3px;
+}
+
+/* A text for screen readers only. */
+.ik-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A live layout. Its height comes from the page that uses it. */
+.ik-stage {
+  position: relative;
+  width: 100%;
+  height: 22rem;
+}
+.ik-stage > div {
+  position: absolute;
+  inset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ik-frame *,
+  .ik-hero * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

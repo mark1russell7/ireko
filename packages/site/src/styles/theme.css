@@ -1,0 +1,77 @@
+/*
+ * The family tokens (tokens.css) mapped to the variables of Starlight. Starlight and the tokens both use the
+ * attribute data-theme on the html element, so both themes follow the same switch.
+ * In Starlight, "white" is the text with the most contrast and "black" is the page, in both themes.
+ */
+:root,
+:root[data-theme="light"],
+:root[data-theme="dark"] {
+  --sl-font: var(--font-sans);
+  --sl-font-mono: var(--font-mono);
+  --sl-color-accent-low: var(--color-accent-wash);
+  --sl-color-accent: var(--color-accent);
+  --sl-color-accent-high: var(--color-accent-strong);
+  --sl-color-white: var(--color-ink);
+  --sl-color-gray-1: var(--color-ink);
+  --sl-color-gray-2: var(--color-ink-secondary);
+  --sl-color-gray-3: var(--color-ink-muted);
+  --sl-color-gray-4: var(--color-rule-strong);
+  --sl-color-gray-5: var(--color-rule);
+  --sl-color-gray-6: var(--color-surface-sunken);
+  --sl-color-gray-7: var(--color-surface);
+  --sl-color-black: var(--color-page);
+  --sl-color-bg-nav: color-mix(in srgb, var(--color-page) 92%, transparent);
+  --sl-color-bg-sidebar: var(--color-page);
+  --sl-color-hairline: var(--color-rule);
+  --sl-color-hairline-light: var(--color-rule);
+  --sl-color-hairline-shade: var(--color-rule-strong);
+  --sl-color-red: var(--color-mark);
+  --sl-color-red-low: var(--color-mark-wash);
+  --sl-color-red-high: var(--color-mark);
+}
+
+header.header {
+  backdrop-filter: blur(6px);
+}
+
+/*
+ * The colors of an ireko layout in SVG (LayoutSvg, toSVG and the live SVG renderer). A CSS rule is stronger
+ * than an SVG attribute, so these rules give the layouts of the site both themes without JavaScript.
+ */
+.ik-svg .ireko-background {
+  fill: transparent;
+}
+.ik-svg .ireko-node rect {
+  fill: var(--color-surface);
+  stroke: var(--color-ink-secondary);
+}
+.ik-svg .ireko-node text {
+  fill: var(--color-ink);
+}
+.ik-svg .ireko-container rect {
+  fill: color-mix(in srgb, var(--color-surface-sunken) 80%, transparent);
+  stroke: var(--color-rule-strong);
+}
+.ik-svg .ireko-container text {
+  fill: var(--color-ink-muted);
+}
+.ik-svg .ireko-edges polyline,
+.ik-svg polyline.ireko-edge {
+  stroke: var(--color-control-border);
+}
+.ik-svg .ireko-edges polyline[stroke-dasharray="4 3"],
+.ik-svg polyline.ireko-edge[stroke-dasharray] {
+  stroke: var(--color-accent);
+}
+.ik-svg svg {
+  background: transparent !important;
+  font-family: var(--font-sans);
+}
+.ik-svg .ireko-selected > rect {
+  stroke: var(--color-accent);
+  stroke-width: 2.5;
+}
+.ik-svg .ireko-node.ik-hit rect {
+  stroke: var(--color-mark);
+  stroke-width: 2;
+}

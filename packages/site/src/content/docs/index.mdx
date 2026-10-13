@@ -1,0 +1,52 @@
+---
+title: ireko
+seoTitle: "ireko: composable graph and tree layout for TypeScript and React Flow"
+description: Composable graph and tree layout for TypeScript. Select a layout for each container, and get boxes and routed edges for SVG, Canvas, the DOM or React Flow.
+template: splash
+hero:
+  tagline: Mix layout algorithms per group. A small, deterministic layout engine for nested diagrams, with renderers for SVG, Canvas, the DOM and React Flow.
+  actions:
+    - text: Open the playground
+      link: /playground/
+      icon: right-arrow
+      variant: primary
+    - text: Take the tour
+      link: /learn/tour/
+      variant: minimal
+---
+
+import Showcase from "../../components/Showcase.astro";
+
+<div class="ik-stats">
+  <div class="ik-stat"><strong>0</strong><span>overlaps in 20000 random trees</span></div>
+  <div class="ik-stat"><strong>70 to 170×</strong><span>faster than the first version</span></div>
+  <div class="ik-stat"><strong>0</strong><span>runtime dependencies</span></div>
+  <div class="ik-stat"><strong>4</strong><span>renderers from one layout</span></div>
+</div>
+
+## What it does
+
+ireko (入れ子) is the Japanese word for a set of boxes that fit inside each other. A diagram is a tree of nodes. Each node selects two things for its children:
+
+- **The strategy:** how to arrange the children. The built-in strategies are `grid` and `radial`, and you can add your own.
+- **The mode:** where the children go. In the `nested` mode, the children are inside the box of the node. In the `linked` mode, they are around it, and edges connect them.
+
+One layout gives plain data: boxes, routed edges and findings. Any renderer can draw it.
+
+<Showcase />
+
+## Use it in your code
+
+```ts
+import { grid, layout, radial } from "ireko";
+import { toSVG } from "ireko/svg";
+
+const root = grid.nested("system", radial.nested("web", "home", "cart", "search"), grid("api", "auth", "orders"));
+
+const result = layout({ root });
+result.nodes; // { id, x, y, width, height, container, ... } for each box
+result.issues; // the findings of the audit: an empty list
+document.body.innerHTML = toSVG(result);
+```
+
+The [quick start](/learn/quick-start/) has the steps for React, React Flow and the server.

@@ -1,0 +1,10 @@
+{
+  "name": "ireko",
+  "short_name": "ireko",
+  "description": "Composable graph and tree layout for TypeScript.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f6f9",
+  "theme_color": "#2346c4",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

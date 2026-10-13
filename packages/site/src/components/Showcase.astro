@@ -1,0 +1,69 @@
+---
+/**
+ * The cards of the home page. The build lays out a small example for each card, so each card shows real output of
+ * ireko as static SVG, with no script.
+ */
+import { layout, type LayoutInput, type LayoutOptions } from "ireko";
+import { LayoutSvg } from "ireko/react";
+import { parse } from "ireko/text";
+import { href } from "../lib/site.ts";
+
+interface Card {
+  readonly title: string;
+  readonly text: string;
+  readonly link: string;
+  readonly source: string;
+  readonly options?: LayoutOptions;
+}
+
+const cards: readonly Card[] = [
+  {
+    title: "Two passes, no overlaps",
+    text: "The engine measures each subtree before it places it. A large subtree gets a large cell.",
+    link: "design/two-passes/",
+    source: "r { a { a1 a2 a3 } b nested { b1 b2 b3 b4 } c { c1 } }",
+  },
+  {
+    title: "A strategy for each container",
+    text: "A grid of rings of grids: each container selects its own layout and its own mode.",
+    link: "learn/strategies/",
+    source: "hub radial nested { g1 nested { a b c d } g2 nested { e f g h } g3 nested { i j k l } }",
+  },
+  {
+    title: "A small text language",
+    text: "Type a layout, and the playground draws it at once. The builder gives the same data in TypeScript.",
+    link: "learn/text-language/",
+    source: "app nested { web radial nested { home cart search } api { auth orders } }\nweb -> api",
+  },
+  {
+    title: "React Flow sub-flows",
+    text: "Give layoutFlow your nodes and edges. Groups get a size, and children get positions inside them.",
+    link: "guides/react-flow/",
+    source: "flow nested { group nested { a b c } other nested { d e } }\na -> d",
+  },
+];
+
+const options: LayoutOptions = { spacing: 10, nodeSize: { width: 40, height: 22 }, header: 20 };
+const shown = cards.map((card) => {
+  const r = parse(card.source);
+  if (!r.ok) throw new Error(`Showcase: ${r.error.message}`);
+  const input: LayoutInput = r.input;
+  return { card, out: layout(input, { ...options, ...card.options }) };
+});
+---
+
+<div class="ik-cards">
+  {
+    shown.map(({ card, out }) => (
+      <a class="ik-card" href={href(card.link)}>
+        <div class="ik-card-art ik-svg ik-paper" aria-hidden="true">
+          <LayoutSvg layout={out} padding={10} />
+        </div>
+        <div class="ik-card-body">
+          <h3>{card.title}</h3>
+          <p>{card.text}</p>
+        </div>
+      </a>
+    ))
+  }
+</div>
