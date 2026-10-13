@@ -52,18 +52,28 @@ export function Architecture({ input }) {
 
 ## Measure the labels
 
-Without a size, each leaf gets the `nodeSize` of the layout (120 by 48). For labels of different lengths, give a `measure` function. It gets each leaf, and gives its size or `undefined`.
+Without a size, each leaf gets the `nodeSize` of the layout (120 by 48). For labels of different lengths, give a `measure` function. It gets each node, and gives its size or `undefined`. `fitText` makes one: each box is as wide as its label, plus the padding.
 
 ```ts
-import { layout } from "ireko";
+import { fitText, layout } from "ireko";
 
-// An estimate with no font engine: 7 pixels for each character, and 24 pixels of padding.
 const result = layout(input, {
-  measure: (node) => ({ width: Math.max(60, 7 * (node.label ?? node.id).length + 24), height: 32 }),
+  measure: fitText({ fontSize: 13, padding: { x: 12, y: 8 }, minWidth: 60 }),
 });
 ```
 
-In a browser, measure the real text with a canvas: `ctx.measureText(label).width`. On a server, use the metrics of your font, or a library that reads them. A leaf with a `size` in its spec keeps that size.
+The default width of a text is an estimate from the widths of the characters of a common sans-serif font. It needs no font engine, so the same input gives the same layout on a server and in a browser.
+
+In a browser, `widthOfCanvas` from `ireko/render` gives the exact width in the font of the page. The playground of this site uses it.
+
+```ts
+import { fitText } from "ireko";
+import { widthOfCanvas } from "ireko/render";
+
+const measure = fitText({ widthOf: widthOfCanvas("Inter, sans-serif") });
+```
+
+Measure after the web fonts load (`document.fonts.ready`), because a fallback font has other widths. A node with a `size` in its spec keeps that size. For a container, the measured size is the smallest size, so its label fits.
 
 ## Theme and styles
 

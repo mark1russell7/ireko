@@ -2,10 +2,10 @@
  * The playground. The editor of the text language is on the left, and the live layout is on the right.
  * The side panel has the settings of the selected node and the findings of the audit. A link holds the whole state.
  */
-import { createEngine, type Engine, type Issue, type Layout, type LayoutInput, type LayoutOptions, type NodeSpec } from "ireko";
+import { createEngine, fitText, type Engine, type Issue, type Layout, type LayoutInput, type LayoutOptions, type NodeSpec } from "ireko";
 import { examples } from "ireko/examples";
 import { LayoutView } from "ireko/react";
-import { createViewport } from "ireko/render";
+import { createViewport, widthOfCanvas } from "ireko/render";
 import { toSVG } from "ireko/svg";
 import { parse, print } from "ireko/text";
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState, type ReactElement } from "react";
@@ -79,6 +79,17 @@ export default function Playground(): ReactElement {
   const [notice, setNotice] = useState("");
   const viewport = useMemo(() => createViewport(), []);
   const theme = useSiteTheme();
+  // Each box fits its label in the font of the site. The widths change when the web fonts load, so the measure changes too.
+  const [fontsReady, setFontsReady] = useState(false);
+  useEffect(() => {
+    void document.fonts.ready.then(() => setFontsReady(true));
+  }, []);
+  const measure = useMemo(() => {
+    const family = typeof document === "undefined" ? "sans-serif" : getComputedStyle(document.documentElement).getPropertyValue("--font-sans").trim() || "sans-serif";
+    return fitText({ fontSize: 13, padding: { x: 12, y: 10 }, minWidth: 64, widthOf: widthOfCanvas(family) });
+    // The fonts change the widths. The memo is new after the fonts load.
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
+  }, [fontsReady]);
   const update = (patch: Partial<Omit<PlaygroundState, "text">>): void => setState((s) => ({ ...s, ...patch }));
 
   /** This function sets the text. A text without a syntax error also becomes the good text. */
@@ -103,7 +114,7 @@ export default function Playground(): ReactElement {
     const parsed = parse(state.text, { strategies: names });
     return parsed.ok ? undefined : parsed.error;
   }, [state.text, names]);
-  const options = useMemo<LayoutOptions>(() => ({ spacing: state.spacing, router: state.router, nodeSize: { width: 92, height: 38 } }), [state.spacing, state.router]);
+  const options = useMemo<LayoutOptions>(() => ({ spacing: state.spacing, router: state.router, measure }), [state.spacing, state.router, measure]);
   const result = useMemo(() => layoutOf(engine, names, goodText, options), [engine, names, goodText, options]);
   const shown = result?.layout;
   const issues: readonly Issue[] = error === undefined ? (shown?.issues ?? []) : [];

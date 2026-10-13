@@ -18,7 +18,7 @@ The second argument of `layout(input, options)` and `engine.layout(input, option
 | `router` | string | `"straight"` | The router of the edges: `straight`, `orthogonal`, `avoid` or a router that you register. |
 | `treeEdges` | `"linked"`, `"all"`, `"none"` | `"linked"` | The tree edges of the output. See [edges](/learn/edges/#tree-edges). |
 | `origin` | `{ x, y }` | `{ x: 0, y: 0 }` | The top-left corner of the root box. |
-| `measure` | `(node) => size or undefined` | none | The size of a leaf. Use it to measure the labels. |
+| `measure` | `(node) => size or undefined` | none | The size of a node: a leaf gets it, and a container gets it as its smallest size. `fitText()` makes boxes that fit their labels. |
 | `audit` | boolean | `true` | With `false`, the engine does not examine the layout. It is a little faster. |
 | `strict` | boolean | `false` | With `true`, the engine throws an `IrekoError` for each finding with the severity `error`. |
 | `trace` | `(event) => void` | none | A function that gets the output of each phase. See [the pipeline](/design/pipeline/#the-trace-option). |

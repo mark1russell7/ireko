@@ -94,6 +94,15 @@ interface PlacedEdge { id; source; target; kind: "tree" | "extra"; points: Point
 
 All types are plain data. JSON holds each value with no loss.
 
+### Label sizes
+
+```ts
+function fitText(options?: { fontSize?; padding?: { x; y }; minWidth?; minHeight?; widthOf? }): (node: NodeSpec) => Size;
+function estimateWidth(text: string, fontSize: number): number; // a sans-serif font, with no font engine
+```
+
+Give `fitText()` to the `measure` option. `widthOfCanvas(fontFamily)` from `ireko/render` gives exact widths in a browser.
+
 ### Geometry
 
 `Point`, `Size` and `Rect`, and small functions on them: `centerOf`, `union`, `unionAll`, `translate`, `inflate`, `overlaps`, `contains`, `rectAt`.
@@ -173,6 +182,7 @@ function frameOf(layout: Layout): Frame;
 function interpolate(from: Frame, to: Layout, t: number): Frame;
 function easeInOut(t: number): number;
 function labelAt(points: Point[]): Point; // the middle of a route, for its label
+function widthOfCanvas(fontFamily: string): (text: string, fontSize: number) => number;
 ```
 
 ## ireko/react
