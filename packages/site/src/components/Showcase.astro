@@ -3,7 +3,7 @@
  * The cards of the home page. The build lays out a small example for each card, so each card shows real output of
  * ireko as static SVG, with no script.
  */
-import { layout, type LayoutInput, type LayoutOptions } from "ireko";
+import { fitText, layout, type LayoutInput, type LayoutOptions } from "ireko";
 import { LayoutSvg } from "ireko/react";
 import { parse } from "ireko/text";
 import { href } from "../lib/site.ts";
@@ -58,7 +58,8 @@ const cards: readonly Card[] = [
   },
 ];
 
-const options: LayoutOptions = { spacing: 10, nodeSize: { width: 40, height: 22 }, header: 20 };
+// Each box fits its label (fitText), with a small padding for the small cards.
+const options: LayoutOptions = { spacing: 10, header: 20, measure: fitText({ padding: { x: 7, y: 3 }, minWidth: 30 }) };
 const shown = cards.map((card) => {
   const r = parse(card.source);
   if (!r.ok) throw new Error(`Showcase: ${r.error.message}`);
