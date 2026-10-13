@@ -1,0 +1,347 @@
+{
+  "nodes": [
+    {
+      "id": "center",
+      "label": "center",
+      "x": 0,
+      "y": 0,
+      "width": 352,
+      "height": 224,
+      "depth": 0,
+      "mode": "nested",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 4
+    },
+    {
+      "id": "down",
+      "label": "down",
+      "x": 60,
+      "y": 24,
+      "width": 64,
+      "height": 32,
+      "parent": "center",
+      "container": "center",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "d1",
+      "label": "d1",
+      "x": 20,
+      "y": 80,
+      "width": 64,
+      "height": 32,
+      "parent": "down",
+      "container": "center",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "d2",
+      "label": "d2",
+      "x": 100,
+      "y": 80,
+      "width": 64,
+      "height": 32,
+      "parent": "down",
+      "container": "center",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "up",
+      "label": "up",
+      "x": 228,
+      "y": 80,
+      "width": 64,
+      "height": 32,
+      "parent": "center",
+      "container": "center",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "u1",
+      "label": "u1",
+      "x": 188,
+      "y": 24,
+      "width": 64,
+      "height": 32,
+      "parent": "up",
+      "container": "center",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "u2",
+      "label": "u2",
+      "x": 268,
+      "y": 24,
+      "width": 64,
+      "height": 32,
+      "parent": "up",
+      "container": "center",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "right",
+      "label": "right",
+      "x": 16,
+      "y": 152,
+      "width": 64,
+      "height": 32,
+      "parent": "center",
+      "container": "center",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "r1",
+      "label": "r1",
+      "x": 104,
+      "y": 128,
+      "width": 64,
+      "height": 32,
+      "parent": "right",
+      "container": "center",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "r2",
+      "label": "r2",
+      "x": 104,
+      "y": 176,
+      "width": 64,
+      "height": 32,
+      "parent": "right",
+      "container": "center",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "left",
+      "label": "left",
+      "x": 272,
+      "y": 152,
+      "width": 64,
+      "height": 32,
+      "parent": "center",
+      "container": "center",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "l1",
+      "label": "l1",
+      "x": 184,
+      "y": 128,
+      "width": 64,
+      "height": 32,
+      "parent": "left",
+      "container": "center",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "l2",
+      "label": "l2",
+      "x": 184,
+      "y": 176,
+      "width": 64,
+      "height": 32,
+      "parent": "left",
+      "container": "center",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    }
+  ],
+  "edges": [
+    {
+      "id": "down->d1",
+      "source": "down",
+      "target": "d1",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 80.571,
+          "y": 56
+        },
+        {
+          "x": 63.429,
+          "y": 80
+        }
+      ]
+    },
+    {
+      "id": "down->d2",
+      "source": "down",
+      "target": "d2",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 103.429,
+          "y": 56
+        },
+        {
+          "x": 120.571,
+          "y": 80
+        }
+      ]
+    },
+    {
+      "id": "up->u1",
+      "source": "up",
+      "target": "u1",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 248.571,
+          "y": 80
+        },
+        {
+          "x": 231.429,
+          "y": 56
+        }
+      ]
+    },
+    {
+      "id": "up->u2",
+      "source": "up",
+      "target": "u2",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 271.429,
+          "y": 80
+        },
+        {
+          "x": 288.571,
+          "y": 56
+        }
+      ]
+    },
+    {
+      "id": "right->r1",
+      "source": "right",
+      "target": "r1",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 80,
+          "y": 159.273
+        },
+        {
+          "x": 104,
+          "y": 152.727
+        }
+      ]
+    },
+    {
+      "id": "right->r2",
+      "source": "right",
+      "target": "r2",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 80,
+          "y": 176.727
+        },
+        {
+          "x": 104,
+          "y": 183.273
+        }
+      ]
+    },
+    {
+      "id": "left->l1",
+      "source": "left",
+      "target": "l1",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 272,
+          "y": 159.273
+        },
+        {
+          "x": 248,
+          "y": 152.727
+        }
+      ]
+    },
+    {
+      "id": "left->l2",
+      "source": "left",
+      "target": "l2",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 272,
+          "y": 176.727
+        },
+        {
+          "x": 248,
+          "y": 183.273
+        }
+      ]
+    }
+  ],
+  "bounds": {
+    "x": 0,
+    "y": 0,
+    "width": 352,
+    "height": 224
+  },
+  "issues": []
+}

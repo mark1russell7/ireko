@@ -723,13 +723,43 @@ The research ranks these actions by effect:
 
 ## 16. Execution record
 
-*This section records what the work did, and where the work is different from the plan.*
+*This section records what the work did, and where the work is different from the plan. Updated: 2026-10-13.*
+
+### 16.1 Status of the phases
 
 | Phase | Status | Evidence |
 |---|---|---|
-| P0 Migrate | not started | |
-| P1 Core | not started | |
+| P0 Migrate | Done | The template monorepo, the legacy package and the CI workflow. `pnpm check` passes. |
+| P1 Core | Done | `packages/ireko/src/core` and `packages/ireko/src/svg`. 110 tests. The coverage gates pass. |
 | P2 Surface | not started | |
 | P3 Depth | not started | |
 | P4 Site | not started | |
 | P5 Release | not started | |
+
+### 16.2 Changes to the plan
+
+| Plan | What the work did | Reason |
+|---|---|---|
+| D1: the name | The name is ireko, unscoped. The owner also considered `@mark1russell7/layout`. | ireko is free on npm, short and easy to remember. The words in the description carry the search terms. |
+| §6.2: equal angles on a ring | On a full ring, each pair of neighbors gets the angle that it needs. A bisection finds the smallest radius. A second search makes the ring larger when two large children touch across a small child. | Equal angles left large empty areas when the children had different sizes. A test found the case of two large children. |
+| §6.2: a part of a ring puts the first child at the start angle | Each child is at the middle of an equal part of the arc. | The property test P1 found an overlap: with a sweep of 289 degrees, the last child was near the first child. |
+| §6.1: the header is extra space | The header is the smallest space above the content, and the padding counts as a part of it. The default is 24. | The labels of containers touched their children when the spacing was small. |
+| §6.6: rounded output | The engine does not round. Exporters and golden files round. | Rounding made very small boxes inside scaled containers into empty boxes. |
+| §6.1: a grid of linked children is approximately square | In the linked mode, the default grid is one row. | With two or more rows, the edges to the second row crossed the boxes of the first row. |
+| §6.3: `arrange` gives a content area | The radial strategy gives no content area. The engine uses the extents of the children. | A nested ring is as small as its children permit. |
+
+### 16.3 Measurements
+
+- The two-pass engine gives 0 overlaps and 0 escapes on 20000 random inputs (depth 5, up to 5 children, all fit policies, random options and routers).
+- The old engine gives overlaps in 1084 of 2000 random trees (§3.2).
+- Speed, on one machine, with the audit on:
+
+| Tree | Jqy 0.x | ireko |
+|---|---|---|
+| 1111 nodes, grid | 469 ms | 6.6 ms |
+| 1111 nodes, mixed | 896 ms | 8.6 ms |
+| 11111 nodes, grid | 8.1 s | 58 ms |
+| 11111 nodes, mixed | 9.1 s | 48 ms |
+
+- Coverage of `src/core` and `src/svg`: 99.7 % of the statements, 99.1 % of the branches, 100 % of the functions and lines.
+- The property tests found three defects of the new core before the first commit. The test of the audit found one defect of the test itself.

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16 -16 384 256" width="384" height="256" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>Children on each side</title>
+<rect class="ireko-background" x="-16" y="-16" width="384" height="256" fill="#f5f6f9"/>
+<g class="ireko-containers">
+<g class="ireko-container" data-id="center">
+<rect x="0" y="0" width="352" height="224" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="8" y="19" font-size="13" fill="#5f6880">center</text>
+</g>
+</g>
+<g class="ireko-edges" fill="none">
+<polyline class="ireko-edge" data-id="down-&gt;d1" points="80.571,56 63.429,80" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="down-&gt;d2" points="103.429,56 120.571,80" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="up-&gt;u1" points="248.571,80 231.429,56" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="up-&gt;u2" points="271.429,80 288.571,56" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="right-&gt;r1" points="80,159.273 104,152.727" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="right-&gt;r2" points="80,176.727 104,183.273" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="left-&gt;l1" points="272,159.273 248,152.727" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="left-&gt;l2" points="272,176.727 248,183.273" stroke="#7a8399" stroke-width="1.25"/>
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="down">
+<rect x="60" y="24" width="64" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="92" y="40" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">down</text>
+</g>
+<g class="ireko-node" data-id="d1">
+<rect x="20" y="80" width="64" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="52" y="96" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">d1</text>
+</g>
+<g class="ireko-node" data-id="d2">
+<rect x="100" y="80" width="64" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="132" y="96" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">d2</text>
+</g>
+<g class="ireko-node" data-id="up">
+<rect x="228" y="80" width="64" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="260" y="96" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">up</text>
+</g>
+<g class="ireko-node" data-id="u1">
+<rect x="188" y="24" width="64" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="220" y="40" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">u1</text>
+</g>
+<g class="ireko-node" data-id="u2">
+<rect x="268" y="24" width="64" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="300" y="40" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">u2</text>
+</g>
+<g class="ireko-node" data-id="right">
+<rect x="16" y="152" width="64" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="48" y="168" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">right</text>
+</g>
+<g class="ireko-node" data-id="r1">
+<rect x="104" y="128" width="64" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="136" y="144" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">r1</text>
+</g>
+<g class="ireko-node" data-id="r2">
+<rect x="104" y="176" width="64" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="136" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">r2</text>
+</g>
+<g class="ireko-node" data-id="left">
+<rect x="272" y="152" width="64" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="304" y="168" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">left</text>
+</g>
+<g class="ireko-node" data-id="l1">
+<rect x="184" y="128" width="64" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="216" y="144" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">l1</text>
+</g>
+<g class="ireko-node" data-id="l2">
+<rect x="184" y="176" width="64" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="216" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">l2</text>
+</g>
+</g>
+</svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-199.704 -16 471.408 311.198" width="471.408" height="311.198" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>A fan</title>
+<rect class="ireko-background" x="-199.704" y="-16" width="471.408" height="311.198" fill="#f5f6f9"/>
+<g class="ireko-containers">
+</g>
+<g class="ireko-edges" fill="none">
+<polyline class="ireko-edge" data-id="source-&gt;ray-1" points="53.77,32 201.934,165.408" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="source-&gt;ray-2" points="43.124,32 129.421,225.827" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="source-&gt;ray-3" points="36,32 36,247.198" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="source-&gt;ray-4" points="28.876,32 -57.421,225.827" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="source-&gt;ray-5" points="18.23,32 -129.934,165.408" stroke="#7a8399" stroke-width="1.25"/>
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="source">
+<rect x="0" y="0" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="36" y="16" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">source</text>
+</g>
+<g class="ireko-node" data-id="ray-1">
+<rect x="183.704" y="165.408" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="219.704" y="181.408" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">ray-1</text>
+</g>
+<g class="ireko-node" data-id="ray-2">
+<rect x="100.545" y="225.827" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="136.545" y="241.827" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">ray-2</text>
+</g>
+<g class="ireko-node" data-id="ray-3">
+<rect x="0" y="247.198" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="36" y="263.198" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">ray-3</text>
+</g>
+<g class="ireko-node" data-id="ray-4">
+<rect x="-100.545" y="225.827" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-64.545" y="241.827" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">ray-4</text>
+</g>
+<g class="ireko-node" data-id="ray-5">
+<rect x="-183.704" y="165.408" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-147.704" y="181.408" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">ray-5</text>
+</g>
+</g>
+</svg>

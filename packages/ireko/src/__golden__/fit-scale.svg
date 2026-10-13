@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16 -16 656 248" width="656" height="248" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>Fit: scale</title>
+<rect class="ireko-background" x="-16" y="-16" width="656" height="248" fill="#f5f6f9"/>
+<g class="ireko-containers">
+<g class="ireko-container" data-id="frame">
+<rect x="0" y="0" width="624" height="216" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="8" y="19" font-size="13" fill="#5f6880">frame</text>
+</g>
+<g class="ireko-container" data-id="small-window">
+<rect x="24" y="28" width="240" height="160" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="32" y="47" font-size="13" fill="#5f6880">small-window</text>
+</g>
+<g class="ireko-container" data-id="big-window">
+<rect x="288" y="24" width="312" height="168" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="296" y="43" font-size="13" fill="#5f6880">big-window</text>
+</g>
+</g>
+<g class="ireko-edges" fill="none">
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="w1">
+<rect x="48" y="74.609" width="41.739" height="16.696" rx="2.087" fill="#ffffff" stroke="#454f67"/>
+<text x="68.87" y="82.957" font-size="4.522" text-anchor="middle" dominant-baseline="central" fill="#151c2e">w1</text>
+</g>
+<g class="ireko-node" data-id="w2">
+<rect x="98.087" y="74.609" width="41.739" height="16.696" rx="2.087" fill="#ffffff" stroke="#454f67"/>
+<text x="118.957" y="82.957" font-size="4.522" text-anchor="middle" dominant-baseline="central" fill="#151c2e">w2</text>
+</g>
+<g class="ireko-node" data-id="w3">
+<rect x="148.174" y="74.609" width="41.739" height="16.696" rx="2.087" fill="#ffffff" stroke="#454f67"/>
+<text x="169.043" y="82.957" font-size="4.522" text-anchor="middle" dominant-baseline="central" fill="#151c2e">w3</text>
+</g>
+<g class="ireko-node" data-id="w4">
+<rect x="198.261" y="74.609" width="41.739" height="16.696" rx="2.087" fill="#ffffff" stroke="#454f67"/>
+<text x="219.13" y="82.957" font-size="4.522" text-anchor="middle" dominant-baseline="central" fill="#151c2e">w4</text>
+</g>
+<g class="ireko-node" data-id="w5">
+<rect x="48" y="99.652" width="41.739" height="16.696" rx="2.087" fill="#ffffff" stroke="#454f67"/>
+<text x="68.87" y="108" font-size="4.522" text-anchor="middle" dominant-baseline="central" fill="#151c2e">w5</text>
+</g>
+<g class="ireko-node" data-id="w6">
+<rect x="98.087" y="99.652" width="41.739" height="16.696" rx="2.087" fill="#ffffff" stroke="#454f67"/>
+<text x="118.957" y="108" font-size="4.522" text-anchor="middle" dominant-baseline="central" fill="#151c2e">w6</text>
+</g>
+<g class="ireko-node" data-id="w7">
+<rect x="148.174" y="99.652" width="41.739" height="16.696" rx="2.087" fill="#ffffff" stroke="#454f67"/>
+<text x="169.043" y="108" font-size="4.522" text-anchor="middle" dominant-baseline="central" fill="#151c2e">w7</text>
+</g>
+<g class="ireko-node" data-id="w8">
+<rect x="198.261" y="99.652" width="41.739" height="16.696" rx="2.087" fill="#ffffff" stroke="#454f67"/>
+<text x="219.13" y="108" font-size="4.522" text-anchor="middle" dominant-baseline="central" fill="#151c2e">w8</text>
+</g>
+<g class="ireko-node" data-id="w9">
+<rect x="48" y="124.696" width="41.739" height="16.696" rx="2.087" fill="#ffffff" stroke="#454f67"/>
+<text x="68.87" y="133.043" font-size="4.522" text-anchor="middle" dominant-baseline="central" fill="#151c2e">w9</text>
+</g>
+<g class="ireko-node" data-id="w10">
+<rect x="98.087" y="124.696" width="41.739" height="16.696" rx="2.087" fill="#ffffff" stroke="#454f67"/>
+<text x="118.957" y="133.043" font-size="4.522" text-anchor="middle" dominant-baseline="central" fill="#151c2e">w10</text>
+</g>
+<g class="ireko-node" data-id="w11">
+<rect x="148.174" y="124.696" width="41.739" height="16.696" rx="2.087" fill="#ffffff" stroke="#454f67"/>
+<text x="169.043" y="133.043" font-size="4.522" text-anchor="middle" dominant-baseline="central" fill="#151c2e">w11</text>
+</g>
+<g class="ireko-node" data-id="w12">
+<rect x="198.261" y="124.696" width="41.739" height="16.696" rx="2.087" fill="#ffffff" stroke="#454f67"/>
+<text x="219.13" y="133.043" font-size="4.522" text-anchor="middle" dominant-baseline="central" fill="#151c2e">w12</text>
+</g>
+<g class="ireko-node" data-id="g1">
+<rect x="312" y="48" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="372" y="72" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">g1</text>
+</g>
+<g class="ireko-node" data-id="g2">
+<rect x="456" y="48" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="516" y="72" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">g2</text>
+</g>
+<g class="ireko-node" data-id="g3">
+<rect x="312" y="120" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="372" y="144" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">g3</text>
+</g>
+<g class="ireko-node" data-id="g4">
+<rect x="456" y="120" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="516" y="144" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">g4</text>
+</g>
+</g>
+</svg>

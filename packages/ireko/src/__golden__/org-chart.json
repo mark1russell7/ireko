@@ -1,0 +1,362 @@
+{
+  "nodes": [
+    {
+      "id": "ceo",
+      "label": "CEO",
+      "x": 0,
+      "y": 0,
+      "width": 120,
+      "height": 48,
+      "depth": 0,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 3
+    },
+    {
+      "id": "cto",
+      "label": "CTO",
+      "x": -216,
+      "y": 84,
+      "width": 120,
+      "height": 48,
+      "parent": "ceo",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 3
+    },
+    {
+      "id": "platform",
+      "label": "Platform",
+      "x": -360,
+      "y": 168,
+      "width": 120,
+      "height": 48,
+      "parent": "cto",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "product",
+      "label": "Product",
+      "x": -216,
+      "y": 168,
+      "width": 120,
+      "height": 48,
+      "parent": "cto",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "data",
+      "label": "Data",
+      "x": -72,
+      "y": 168,
+      "width": 120,
+      "height": 48,
+      "parent": "cto",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "cfo",
+      "label": "CFO",
+      "x": 72,
+      "y": 84,
+      "width": 120,
+      "height": 48,
+      "parent": "ceo",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 1
+    },
+    {
+      "id": "finance",
+      "label": "Finance",
+      "x": 72,
+      "y": 168,
+      "width": 120,
+      "height": 48,
+      "parent": "cfo",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "coo",
+      "label": "COO",
+      "x": 288,
+      "y": 84,
+      "width": 120,
+      "height": 48,
+      "parent": "ceo",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "ops",
+      "label": "Operations",
+      "x": 216,
+      "y": 168,
+      "width": 120,
+      "height": 48,
+      "parent": "coo",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "support",
+      "label": "Support",
+      "x": 360,
+      "y": 168,
+      "width": 120,
+      "height": 48,
+      "parent": "coo",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    }
+  ],
+  "edges": [
+    {
+      "id": "ceo->cto",
+      "source": "ceo",
+      "target": "cto",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 0,
+          "y": 24
+        },
+        {
+          "x": -48,
+          "y": 24
+        },
+        {
+          "x": -48,
+          "y": 108
+        },
+        {
+          "x": -96,
+          "y": 108
+        }
+      ]
+    },
+    {
+      "id": "cto->platform",
+      "source": "cto",
+      "target": "platform",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -216,
+          "y": 108
+        },
+        {
+          "x": -228,
+          "y": 108
+        },
+        {
+          "x": -228,
+          "y": 192
+        },
+        {
+          "x": -240,
+          "y": 192
+        }
+      ]
+    },
+    {
+      "id": "cto->product",
+      "source": "cto",
+      "target": "product",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -156,
+          "y": 132
+        },
+        {
+          "x": -156,
+          "y": 168
+        }
+      ]
+    },
+    {
+      "id": "cto->data",
+      "source": "cto",
+      "target": "data",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -96,
+          "y": 108
+        },
+        {
+          "x": -84,
+          "y": 108
+        },
+        {
+          "x": -84,
+          "y": 192
+        },
+        {
+          "x": -72,
+          "y": 192
+        }
+      ]
+    },
+    {
+      "id": "ceo->cfo",
+      "source": "ceo",
+      "target": "cfo",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 60,
+          "y": 48
+        },
+        {
+          "x": 60,
+          "y": 66
+        },
+        {
+          "x": 132,
+          "y": 66
+        },
+        {
+          "x": 132,
+          "y": 84
+        }
+      ]
+    },
+    {
+      "id": "cfo->finance",
+      "source": "cfo",
+      "target": "finance",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 132,
+          "y": 132
+        },
+        {
+          "x": 132,
+          "y": 168
+        }
+      ]
+    },
+    {
+      "id": "ceo->coo",
+      "source": "ceo",
+      "target": "coo",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 120,
+          "y": 24
+        },
+        {
+          "x": 204,
+          "y": 24
+        },
+        {
+          "x": 204,
+          "y": 108
+        },
+        {
+          "x": 288,
+          "y": 108
+        }
+      ]
+    },
+    {
+      "id": "coo->ops",
+      "source": "coo",
+      "target": "ops",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 348,
+          "y": 132
+        },
+        {
+          "x": 348,
+          "y": 150
+        },
+        {
+          "x": 276,
+          "y": 150
+        },
+        {
+          "x": 276,
+          "y": 168
+        }
+      ]
+    },
+    {
+      "id": "coo->support",
+      "source": "coo",
+      "target": "support",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 348,
+          "y": 132
+        },
+        {
+          "x": 348,
+          "y": 150
+        },
+        {
+          "x": 420,
+          "y": 150
+        },
+        {
+          "x": 420,
+          "y": 168
+        }
+      ]
+    }
+  ],
+  "bounds": {
+    "x": -360,
+    "y": 0,
+    "width": 840,
+    "height": 216
+  },
+  "issues": []
+}

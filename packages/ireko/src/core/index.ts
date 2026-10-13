@@ -2,4 +2,12 @@
  * The core of ireko: the model, the engine, the strategies and the routers.
  * The core imports nothing from the DOM, React or a renderer.
  */
-export const VERSION = "0.1.0";
+export * from "./geometry.ts";
+export * from "./model.ts";
+export * from "./options.ts";
+export * from "./strategy.ts";
+export * from "./router.ts";
+export { straight, orthogonal } from "./routers.ts";
+export { grid, type GridOptions } from "./strategies/grid.ts";
+export { radial, type RadialOptions } from "./strategies/radial.ts";
+export { createEngine, layout, builtinStrategies, builtinRouters, defaultLimits, type Engine, type EngineConfig, type Limits } from "./engine.ts";

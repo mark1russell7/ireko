@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-276 -16 632 212" width="632" height="212" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>Orthogonal edges</title>
+<rect class="ireko-background" x="-276" y="-16" width="632" height="212" fill="#f5f6f9"/>
+<g class="ireko-containers">
+</g>
+<g class="ireko-edges" fill="none">
+<polyline class="ireko-edge" data-id="main-&gt;parse" points="0,18 -90,18 -90,90 -180,90" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="main-&gt;check" points="0,18 -38,18 -38,90 -76,90" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="main-&gt;plan" points="40,36 40,54 -12,54 -12,72" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="main-&gt;run" points="80,18 118,18 118,90 156,90" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="run-&gt;step-1" points="156,90 144,90 144,162 132,162" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="run-&gt;step-2" points="196,108 196,144" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="run-&gt;step-3" points="236,90 248,90 248,162 260,162" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="edge-0" points="-180,90 -156,90" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-1" points="-76,90 -52,90" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-2" points="28,90 156,90" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="main">
+<rect x="0" y="0" width="80" height="36" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="40" y="18" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">main</text>
+</g>
+<g class="ireko-node" data-id="parse">
+<rect x="-260" y="72" width="80" height="36" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-220" y="90" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">parse</text>
+</g>
+<g class="ireko-node" data-id="check">
+<rect x="-156" y="72" width="80" height="36" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-116" y="90" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">check</text>
+</g>
+<g class="ireko-node" data-id="plan">
+<rect x="-52" y="72" width="80" height="36" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-12" y="90" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">plan</text>
+</g>
+<g class="ireko-node" data-id="run">
+<rect x="156" y="72" width="80" height="36" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="196" y="90" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">run</text>
+</g>
+<g class="ireko-node" data-id="step-1">
+<rect x="52" y="144" width="80" height="36" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="92" y="162" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">step-1</text>
+</g>
+<g class="ireko-node" data-id="step-2">
+<rect x="156" y="144" width="80" height="36" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="196" y="162" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">step-2</text>
+</g>
+<g class="ireko-node" data-id="step-3">
+<rect x="260" y="144" width="80" height="36" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="300" y="162" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">step-3</text>
+</g>
+</g>
+</svg>

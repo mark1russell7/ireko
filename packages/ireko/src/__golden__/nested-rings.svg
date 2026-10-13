@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16 -16 341.548 513.521" width="341.548" height="513.521" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>Rings in rings</title>
+<rect class="ireko-background" x="-16" y="-16" width="341.548" height="513.521" fill="#f5f6f9"/>
+<g class="ireko-containers">
+<g class="ireko-container" data-id="galaxy">
+<rect x="0" y="0" width="309.548" height="481.521" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="8" y="19" font-size="13" fill="#5f6880">galaxy</text>
+</g>
+<g class="ireko-container" data-id="sun">
+<rect x="54.645" y="24" width="242.903" height="207.713" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="62.645" y="43" font-size="13" fill="#5f6880">sun</text>
+</g>
+<g class="ireko-container" data-id="binary">
+<rect x="162.983" y="310.73" width="96" height="158.791" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="170.983" y="329.73" font-size="13" fill="#5f6880">binary</text>
+</g>
+<g class="ireko-container" data-id="lonely">
+<rect x="12" y="293.127" width="96" height="68" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="20" y="312.127" font-size="13" fill="#5f6880">lonely</text>
+</g>
+</g>
+<g class="ireko-edges" fill="none">
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="planet-1">
+<rect x="140.097" y="48" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="176.097" y="64" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">planet-1</text>
+</g>
+<g class="ireko-node" data-id="planet-2">
+<rect x="213.548" y="101.366" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="249.548" y="117.366" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">planet-2</text>
+</g>
+<g class="ireko-node" data-id="planet-3">
+<rect x="185.492" y="187.713" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="221.492" y="203.713" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">planet-3</text>
+</g>
+<g class="ireko-node" data-id="planet-4">
+<rect x="94.701" y="187.713" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="130.701" y="203.713" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">planet-4</text>
+</g>
+<g class="ireko-node" data-id="planet-5">
+<rect x="66.645" y="101.366" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="102.645" y="117.366" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">planet-5</text>
+</g>
+<g class="ireko-node" data-id="star-1">
+<rect x="174.983" y="334.73" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="210.983" y="350.73" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">star-1</text>
+</g>
+<g class="ireko-node" data-id="star-2">
+<rect x="174.983" y="425.521" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="210.983" y="441.521" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">star-2</text>
+</g>
+<g class="ireko-node" data-id="moon">
+<rect x="24" y="317.127" width="72" height="32" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="60" y="333.127" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">moon</text>
+</g>
+</g>
+</svg>

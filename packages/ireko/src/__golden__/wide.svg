@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-434 -16 932 106" width="932" height="106" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>A wide tree</title>
+<rect class="ireko-background" x="-434" y="-16" width="932" height="106" fill="#f5f6f9"/>
+<g class="ireko-containers">
+</g>
+<g class="ireko-edges" fill="none">
+<polyline class="ireko-edge" data-id="hub-&gt;leaf-1" points="0,14 -177,14 -177,60 -354,60" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="hub-&gt;leaf-2" points="0,14 -139,14 -139,60 -278,60" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="hub-&gt;leaf-3" points="0,14 -101,14 -101,60 -202,60" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="hub-&gt;leaf-4" points="0,14 -63,14 -63,60 -126,60" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="hub-&gt;leaf-5" points="0,14 -25,14 -25,60 -50,60" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="hub-&gt;leaf-6" points="32,28 32,37 -6,37 -6,46" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="hub-&gt;leaf-7" points="32,28 32,37 70,37 70,46" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="hub-&gt;leaf-8" points="64,14 89,14 89,60 114,60" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="hub-&gt;leaf-9" points="64,14 127,14 127,60 190,60" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="hub-&gt;leaf-10" points="64,14 165,14 165,60 266,60" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="hub-&gt;leaf-11" points="64,14 203,14 203,60 342,60" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="hub-&gt;leaf-12" points="64,14 241,14 241,60 418,60" stroke="#7a8399" stroke-width="1.25"/>
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="hub">
+<rect x="0" y="0" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="32" y="14" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">hub</text>
+</g>
+<g class="ireko-node" data-id="leaf-1">
+<rect x="-418" y="46" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-386" y="60" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">leaf-1</text>
+</g>
+<g class="ireko-node" data-id="leaf-2">
+<rect x="-342" y="46" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-310" y="60" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">leaf-2</text>
+</g>
+<g class="ireko-node" data-id="leaf-3">
+<rect x="-266" y="46" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-234" y="60" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">leaf-3</text>
+</g>
+<g class="ireko-node" data-id="leaf-4">
+<rect x="-190" y="46" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-158" y="60" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">leaf-4</text>
+</g>
+<g class="ireko-node" data-id="leaf-5">
+<rect x="-114" y="46" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-82" y="60" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">leaf-5</text>
+</g>
+<g class="ireko-node" data-id="leaf-6">
+<rect x="-38" y="46" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-6" y="60" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">leaf-6</text>
+</g>
+<g class="ireko-node" data-id="leaf-7">
+<rect x="38" y="46" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="70" y="60" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">leaf-7</text>
+</g>
+<g class="ireko-node" data-id="leaf-8">
+<rect x="114" y="46" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="146" y="60" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">leaf-8</text>
+</g>
+<g class="ireko-node" data-id="leaf-9">
+<rect x="190" y="46" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="222" y="60" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">leaf-9</text>
+</g>
+<g class="ireko-node" data-id="leaf-10">
+<rect x="266" y="46" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="298" y="60" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">leaf-10</text>
+</g>
+<g class="ireko-node" data-id="leaf-11">
+<rect x="342" y="46" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="374" y="60" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">leaf-11</text>
+</g>
+<g class="ireko-node" data-id="leaf-12">
+<rect x="418" y="46" width="64" height="28" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="450" y="60" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">leaf-12</text>
+</g>
+</g>
+</svg>

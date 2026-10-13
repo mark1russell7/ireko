@@ -1,0 +1,356 @@
+{
+  "nodes": [
+    {
+      "id": "root",
+      "label": "root",
+      "x": 0,
+      "y": 0,
+      "width": 120,
+      "height": 48,
+      "depth": 0,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 3
+    },
+    {
+      "id": "A",
+      "label": "A",
+      "x": -592.982,
+      "y": 84,
+      "width": 321.244,
+      "height": 228.713,
+      "parent": "root",
+      "depth": 1,
+      "mode": "nested",
+      "layout": "radial",
+      "scale": 1,
+      "clip": false,
+      "childCount": 3
+    },
+    {
+      "id": "A1",
+      "label": "A1",
+      "x": -492.36,
+      "y": 108,
+      "width": 120,
+      "height": 48,
+      "parent": "A",
+      "container": "A",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "A2",
+      "label": "A2",
+      "x": -415.738,
+      "y": 240.713,
+      "width": 120,
+      "height": 48,
+      "parent": "A",
+      "container": "A",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "A3",
+      "label": "A3",
+      "x": -568.982,
+      "y": 240.713,
+      "width": 120,
+      "height": 48,
+      "parent": "A",
+      "container": "A",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "B",
+      "label": "B",
+      "x": -31.738,
+      "y": 84,
+      "width": 120,
+      "height": 48,
+      "parent": "root",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 4
+    },
+    {
+      "id": "B1",
+      "label": "B1",
+      "x": -247.738,
+      "y": 168,
+      "width": 120,
+      "height": 48,
+      "parent": "B",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "B2",
+      "label": "B2",
+      "x": -103.738,
+      "y": 168,
+      "width": 120,
+      "height": 48,
+      "parent": "B",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "B3",
+      "label": "B3",
+      "x": 40.262,
+      "y": 168,
+      "width": 120,
+      "height": 48,
+      "parent": "B",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "B4",
+      "label": "B4",
+      "x": 184.262,
+      "y": 168,
+      "width": 120,
+      "height": 48,
+      "parent": "B",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "C",
+      "label": "C",
+      "x": 328.262,
+      "y": 84,
+      "width": 384.72,
+      "height": 312.72,
+      "parent": "root",
+      "depth": 1,
+      "mode": "nested",
+      "layout": "radial",
+      "scale": 1,
+      "clip": false,
+      "childCount": 4
+    },
+    {
+      "id": "C1",
+      "label": "C1",
+      "x": 460.622,
+      "y": 108,
+      "width": 120,
+      "height": 48,
+      "parent": "C",
+      "container": "C",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "C2",
+      "label": "C2",
+      "x": 568.982,
+      "y": 216.36,
+      "width": 120,
+      "height": 48,
+      "parent": "C",
+      "container": "C",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "C3",
+      "label": "C3",
+      "x": 460.622,
+      "y": 324.72,
+      "width": 120,
+      "height": 48,
+      "parent": "C",
+      "container": "C",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "C4",
+      "label": "C4",
+      "x": 352.262,
+      "y": 216.36,
+      "width": 120,
+      "height": 48,
+      "parent": "C",
+      "container": "C",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    }
+  ],
+  "edges": [
+    {
+      "id": "root->A",
+      "source": "root",
+      "target": "A",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 0,
+          "y": 45.247
+        },
+        {
+          "x": -271.738,
+          "y": 141.476
+        }
+      ]
+    },
+    {
+      "id": "root->B",
+      "source": "root",
+      "target": "B",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 50.932,
+          "y": 48
+        },
+        {
+          "x": 37.33,
+          "y": 84
+        }
+      ]
+    },
+    {
+      "id": "B->B1",
+      "source": "B",
+      "target": "B1",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -31.738,
+          "y": 131.333
+        },
+        {
+          "x": -127.738,
+          "y": 168.667
+        }
+      ]
+    },
+    {
+      "id": "B->B2",
+      "source": "B",
+      "target": "B2",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 7.691,
+          "y": 132
+        },
+        {
+          "x": -23.166,
+          "y": 168
+        }
+      ]
+    },
+    {
+      "id": "B->B3",
+      "source": "B",
+      "target": "B3",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 48.834,
+          "y": 132
+        },
+        {
+          "x": 79.691,
+          "y": 168
+        }
+      ]
+    },
+    {
+      "id": "B->B4",
+      "source": "B",
+      "target": "B4",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 88.262,
+          "y": 131.333
+        },
+        {
+          "x": 184.262,
+          "y": 168.667
+        }
+      ]
+    },
+    {
+      "id": "root->C",
+      "source": "root",
+      "target": "C",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 111.095,
+          "y": 48
+        },
+        {
+          "x": 328.262,
+          "y": 150.006
+        }
+      ]
+    }
+  ],
+  "bounds": {
+    "x": -592.982,
+    "y": 0,
+    "width": 1305.964,
+    "height": 396.72
+  },
+  "issues": []
+}

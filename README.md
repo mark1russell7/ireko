@@ -10,8 +10,8 @@ The project is in a rebuild. The plan is in [`docs/REVIEW.md`](./docs/REVIEW.md)
 
 | Phase | Content | Status |
 |---|---|---|
-| P0 | The template monorepo, pnpm, TypeScript 7, Oxlint, `ste-lint`, CI | in progress |
-| P1 | The new core: two passes, an open strategy registry, plain JSON output | planned |
+| P0 | The template monorepo, pnpm, TypeScript 7, Oxlint, `ste-lint`, CI | done |
+| P1 | The new core: two passes, an open strategy registry, plain JSON output, SVG export | done |
 | P2 | The builder, the text language, and the SVG, DOM, Canvas, React and React Flow renderers | planned |
 | P3 | More strategies, sizing policies and routers | planned |
 | P4 | The site, with a live playground | planned |
@@ -28,10 +28,36 @@ A diagram is a tree of nodes. Each node selects two things for its children:
 
 One layout gives plain data: boxes, edges and findings. Any renderer can draw it.
 
+## Use it
+
+The library is not on npm yet. In this repository, the package `ireko` is ready:
+
+```ts
+import { layout } from "ireko";
+import { toSVG } from "ireko/svg";
+
+const result = layout({
+  root: {
+    id: "system",
+    mode: "nested",
+    children: [
+      { id: "web", layout: "radial", mode: "nested", children: [{ id: "home" }, { id: "cart" }, { id: "search" }] },
+      { id: "api", children: [{ id: "auth" }, { id: "orders" }] },
+    ],
+  },
+});
+
+result.nodes; // the boxes: { id, x, y, width, height, container, ... }
+result.edges; // the edges, with their points
+result.issues; // the findings: overlaps, bad options, limits
+const svg = toSVG(result);
+```
+
 ## Packages
 
 | Package | Contents |
 |---|---|
+| [`ireko`](./packages/ireko) | The engine, the strategies `grid` and `radial`, the routers, the audit and the SVG export |
 | [`@ireko/legacy`](./packages/legacy) | The engine and the playground of Jqy, until the new core reaches parity |
 | [`@ireko/cli`](./packages/cli) | The workspace commands of the template |
 
@@ -43,6 +69,7 @@ pnpm dev             # the playground of Jqy
 pnpm typecheck       # the source and the tests of each package
 pnpm lint            # Oxlint, with the type-aware rules
 pnpm test            # the tests of each package
+pnpm test:coverage   # the tests of ireko, with the coverage gates
 pnpm lint:ste        # the writing rules
 pnpm check           # all of the above, in the order of CI
 pnpm package add <name> --preset=<node|node-cjs|ts|vite|react>

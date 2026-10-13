@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-376 -16 872 248" width="872" height="248" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>Organization chart</title>
+<rect class="ireko-background" x="-376" y="-16" width="872" height="248" fill="#f5f6f9"/>
+<g class="ireko-containers">
+</g>
+<g class="ireko-edges" fill="none">
+<polyline class="ireko-edge" data-id="ceo-&gt;cto" points="0,24 -48,24 -48,108 -96,108" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="cto-&gt;platform" points="-216,108 -228,108 -228,192 -240,192" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="cto-&gt;product" points="-156,132 -156,168" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="cto-&gt;data" points="-96,108 -84,108 -84,192 -72,192" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="ceo-&gt;cfo" points="60,48 60,66 132,66 132,84" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="cfo-&gt;finance" points="132,132 132,168" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="ceo-&gt;coo" points="120,24 204,24 204,108 288,108" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="coo-&gt;ops" points="348,132 348,150 276,150 276,168" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="coo-&gt;support" points="348,132 348,150 420,150 420,168" stroke="#7a8399" stroke-width="1.25"/>
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="ceo">
+<rect x="0" y="0" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="60" y="24" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">CEO</text>
+</g>
+<g class="ireko-node" data-id="cto">
+<rect x="-216" y="84" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-156" y="108" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">CTO</text>
+</g>
+<g class="ireko-node" data-id="platform">
+<rect x="-360" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-300" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Platform</text>
+</g>
+<g class="ireko-node" data-id="product">
+<rect x="-216" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-156" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Product</text>
+</g>
+<g class="ireko-node" data-id="data">
+<rect x="-72" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-12" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Data</text>
+</g>
+<g class="ireko-node" data-id="cfo">
+<rect x="72" y="84" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="132" y="108" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">CFO</text>
+</g>
+<g class="ireko-node" data-id="finance">
+<rect x="72" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="132" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Finance</text>
+</g>
+<g class="ireko-node" data-id="coo">
+<rect x="288" y="84" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="348" y="108" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">COO</text>
+</g>
+<g class="ireko-node" data-id="ops">
+<rect x="216" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="276" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Operations</text>
+</g>
+<g class="ireko-node" data-id="support">
+<rect x="360" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="420" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Support</text>
+</g>
+</g>
+</svg>

@@ -1,0 +1,182 @@
+{
+  "nodes": [
+    {
+      "id": "source",
+      "label": "source",
+      "x": 0,
+      "y": 0,
+      "width": 72,
+      "height": 32,
+      "depth": 0,
+      "mode": "linked",
+      "layout": "radial",
+      "scale": 1,
+      "clip": false,
+      "childCount": 5
+    },
+    {
+      "id": "ray-1",
+      "label": "ray-1",
+      "x": 183.704,
+      "y": 165.408,
+      "width": 72,
+      "height": 32,
+      "parent": "source",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "ray-2",
+      "label": "ray-2",
+      "x": 100.545,
+      "y": 225.827,
+      "width": 72,
+      "height": 32,
+      "parent": "source",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "ray-3",
+      "label": "ray-3",
+      "x": 0,
+      "y": 247.198,
+      "width": 72,
+      "height": 32,
+      "parent": "source",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "ray-4",
+      "label": "ray-4",
+      "x": -100.545,
+      "y": 225.827,
+      "width": 72,
+      "height": 32,
+      "parent": "source",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "ray-5",
+      "label": "ray-5",
+      "x": -183.704,
+      "y": 165.408,
+      "width": 72,
+      "height": 32,
+      "parent": "source",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    }
+  ],
+  "edges": [
+    {
+      "id": "source->ray-1",
+      "source": "source",
+      "target": "ray-1",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 53.77,
+          "y": 32
+        },
+        {
+          "x": 201.934,
+          "y": 165.408
+        }
+      ]
+    },
+    {
+      "id": "source->ray-2",
+      "source": "source",
+      "target": "ray-2",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 43.124,
+          "y": 32
+        },
+        {
+          "x": 129.421,
+          "y": 225.827
+        }
+      ]
+    },
+    {
+      "id": "source->ray-3",
+      "source": "source",
+      "target": "ray-3",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 36,
+          "y": 32
+        },
+        {
+          "x": 36,
+          "y": 247.198
+        }
+      ]
+    },
+    {
+      "id": "source->ray-4",
+      "source": "source",
+      "target": "ray-4",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 28.876,
+          "y": 32
+        },
+        {
+          "x": -57.421,
+          "y": 225.827
+        }
+      ]
+    },
+    {
+      "id": "source->ray-5",
+      "source": "source",
+      "target": "ray-5",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 18.23,
+          "y": 32
+        },
+        {
+          "x": -129.934,
+          "y": 165.408
+        }
+      ]
+    }
+  ],
+  "bounds": {
+    "x": -183.704,
+    "y": 0,
+    "width": 439.408,
+    "height": 279.198
+  },
+  "issues": []
+}

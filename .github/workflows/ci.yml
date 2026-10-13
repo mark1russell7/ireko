@@ -47,6 +47,8 @@ jobs:
       # Oxlint, with the type-aware rules
       - run: pnpm lint
       - run: pnpm test
+      # The coverage of the core and the SVG export, with the gates of vitest.config.ts
+      - run: pnpm test:coverage
       # The writing rules (ASD-STE100) of the README files, the docs and the doc comments
       - run: pnpm lint:ste
 

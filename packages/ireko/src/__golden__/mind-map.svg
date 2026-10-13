@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-479.734 -524.638 1117.227 1045.191" width="1117.227" height="1045.191" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>Mind map</title>
+<rect class="ireko-background" x="-479.734" y="-524.638" width="1117.227" height="1045.191" fill="#f5f6f9"/>
+<g class="ireko-containers">
+</g>
+<g class="ireko-edges" fill="none">
+<polyline class="ireko-edge" data-id="idea-&gt;why" points="60,0 60,-307.394" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="why-&gt;why-1" points="18.431,-355.394 -31.144,-384.016" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="why-&gt;why-2" points="60,-355.394 60,-460.638" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="why-&gt;why-3" points="101.569,-355.394 151.144,-384.016" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="idea-&gt;how" points="120,36.217 348.248,82.691" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="how-&gt;how-1" points="422.105,70.908 471.014,-13.805" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="how-&gt;how-2" points="468.248,94.908 501.492,94.908" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="how-&gt;how-3" points="422.105,118.908 471.014,203.621" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="idea-&gt;who" points="55.094,48 -6.268,348.194" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="who-&gt;who-1" points="12.826,396.194 73.186,456.554" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="who-&gt;who-2" points="-35.174,396.194 -95.534,456.554" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="idea-&gt;when" points="0,23.377 -235.375,20.933" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="when-&gt;when-1" points="-319.375,44.31 -379.734,104.67" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="when-&gt;when-2" points="-319.375,-3.69 -379.734,-64.049" stroke="#7a8399" stroke-width="1.25"/>
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="idea">
+<rect x="0" y="0" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="60" y="24" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Big idea</text>
+</g>
+<g class="ireko-node" data-id="why">
+<rect x="0" y="-355.394" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="60" y="-331.394" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Why</text>
+</g>
+<g class="ireko-node" data-id="why-1">
+<rect x="-132.713" y="-432.016" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-72.713" y="-408.016" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">why-1</text>
+</g>
+<g class="ireko-node" data-id="why-2">
+<rect x="0" y="-508.638" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="60" y="-484.638" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">why-2</text>
+</g>
+<g class="ireko-node" data-id="why-3">
+<rect x="132.713" y="-432.016" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="192.713" y="-408.016" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">why-3</text>
+</g>
+<g class="ireko-node" data-id="how">
+<rect x="348.248" y="70.908" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="408.248" y="94.908" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">How</text>
+</g>
+<g class="ireko-node" data-id="how-1">
+<rect x="424.87" y="-61.805" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="484.87" y="-37.805" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">how-1</text>
+</g>
+<g class="ireko-node" data-id="how-2">
+<rect x="501.492" y="70.908" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="561.492" y="94.908" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">how-2</text>
+</g>
+<g class="ireko-node" data-id="how-3">
+<rect x="424.87" y="203.621" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="484.87" y="227.621" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">how-3</text>
+</g>
+<g class="ireko-node" data-id="who">
+<rect x="-71.174" y="348.194" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-11.174" y="372.194" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Who</text>
+</g>
+<g class="ireko-node" data-id="who-1">
+<rect x="37.186" y="456.554" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="97.186" y="480.554" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">who-1</text>
+</g>
+<g class="ireko-node" data-id="who-2">
+<rect x="-179.534" y="456.554" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-119.534" y="480.554" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">who-2</text>
+</g>
+<g class="ireko-node" data-id="when">
+<rect x="-355.375" y="-3.69" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-295.375" y="20.31" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">When</text>
+</g>
+<g class="ireko-node" data-id="when-1">
+<rect x="-463.734" y="104.67" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-403.734" y="128.67" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">when-1</text>
+</g>
+<g class="ireko-node" data-id="when-2">
+<rect x="-463.734" y="-112.049" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-403.734" y="-88.049" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">when-2</text>
+</g>
+</g>
+</svg>

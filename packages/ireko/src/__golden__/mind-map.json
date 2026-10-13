@@ -1,0 +1,461 @@
+{
+  "nodes": [
+    {
+      "id": "idea",
+      "label": "Big idea",
+      "x": 0,
+      "y": 0,
+      "width": 120,
+      "height": 48,
+      "depth": 0,
+      "mode": "linked",
+      "layout": "radial",
+      "scale": 1,
+      "clip": false,
+      "childCount": 4
+    },
+    {
+      "id": "why",
+      "label": "Why",
+      "x": 0,
+      "y": -355.394,
+      "width": 120,
+      "height": 48,
+      "parent": "idea",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "radial",
+      "scale": 1,
+      "clip": false,
+      "childCount": 3
+    },
+    {
+      "id": "why-1",
+      "label": "why-1",
+      "x": -132.713,
+      "y": -432.016,
+      "width": 120,
+      "height": 48,
+      "parent": "why",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "why-2",
+      "label": "why-2",
+      "x": 0,
+      "y": -508.638,
+      "width": 120,
+      "height": 48,
+      "parent": "why",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "why-3",
+      "label": "why-3",
+      "x": 132.713,
+      "y": -432.016,
+      "width": 120,
+      "height": 48,
+      "parent": "why",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "how",
+      "label": "How",
+      "x": 348.248,
+      "y": 70.908,
+      "width": 120,
+      "height": 48,
+      "parent": "idea",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "radial",
+      "scale": 1,
+      "clip": false,
+      "childCount": 3
+    },
+    {
+      "id": "how-1",
+      "label": "how-1",
+      "x": 424.87,
+      "y": -61.805,
+      "width": 120,
+      "height": 48,
+      "parent": "how",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "how-2",
+      "label": "how-2",
+      "x": 501.492,
+      "y": 70.908,
+      "width": 120,
+      "height": 48,
+      "parent": "how",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "how-3",
+      "label": "how-3",
+      "x": 424.87,
+      "y": 203.621,
+      "width": 120,
+      "height": 48,
+      "parent": "how",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "who",
+      "label": "Who",
+      "x": -71.174,
+      "y": 348.194,
+      "width": 120,
+      "height": 48,
+      "parent": "idea",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "radial",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "who-1",
+      "label": "who-1",
+      "x": 37.186,
+      "y": 456.554,
+      "width": 120,
+      "height": 48,
+      "parent": "who",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "who-2",
+      "label": "who-2",
+      "x": -179.534,
+      "y": 456.554,
+      "width": 120,
+      "height": 48,
+      "parent": "who",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "when",
+      "label": "When",
+      "x": -355.375,
+      "y": -3.69,
+      "width": 120,
+      "height": 48,
+      "parent": "idea",
+      "depth": 1,
+      "mode": "linked",
+      "layout": "radial",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "when-1",
+      "label": "when-1",
+      "x": -463.734,
+      "y": 104.67,
+      "width": 120,
+      "height": 48,
+      "parent": "when",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "when-2",
+      "label": "when-2",
+      "x": -463.734,
+      "y": -112.049,
+      "width": 120,
+      "height": 48,
+      "parent": "when",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    }
+  ],
+  "edges": [
+    {
+      "id": "idea->why",
+      "source": "idea",
+      "target": "why",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 60,
+          "y": 0
+        },
+        {
+          "x": 60,
+          "y": -307.394
+        }
+      ]
+    },
+    {
+      "id": "why->why-1",
+      "source": "why",
+      "target": "why-1",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 18.431,
+          "y": -355.394
+        },
+        {
+          "x": -31.144,
+          "y": -384.016
+        }
+      ]
+    },
+    {
+      "id": "why->why-2",
+      "source": "why",
+      "target": "why-2",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 60,
+          "y": -355.394
+        },
+        {
+          "x": 60,
+          "y": -460.638
+        }
+      ]
+    },
+    {
+      "id": "why->why-3",
+      "source": "why",
+      "target": "why-3",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 101.569,
+          "y": -355.394
+        },
+        {
+          "x": 151.144,
+          "y": -384.016
+        }
+      ]
+    },
+    {
+      "id": "idea->how",
+      "source": "idea",
+      "target": "how",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 120,
+          "y": 36.217
+        },
+        {
+          "x": 348.248,
+          "y": 82.691
+        }
+      ]
+    },
+    {
+      "id": "how->how-1",
+      "source": "how",
+      "target": "how-1",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 422.105,
+          "y": 70.908
+        },
+        {
+          "x": 471.014,
+          "y": -13.805
+        }
+      ]
+    },
+    {
+      "id": "how->how-2",
+      "source": "how",
+      "target": "how-2",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 468.248,
+          "y": 94.908
+        },
+        {
+          "x": 501.492,
+          "y": 94.908
+        }
+      ]
+    },
+    {
+      "id": "how->how-3",
+      "source": "how",
+      "target": "how-3",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 422.105,
+          "y": 118.908
+        },
+        {
+          "x": 471.014,
+          "y": 203.621
+        }
+      ]
+    },
+    {
+      "id": "idea->who",
+      "source": "idea",
+      "target": "who",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 55.094,
+          "y": 48
+        },
+        {
+          "x": -6.268,
+          "y": 348.194
+        }
+      ]
+    },
+    {
+      "id": "who->who-1",
+      "source": "who",
+      "target": "who-1",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 12.826,
+          "y": 396.194
+        },
+        {
+          "x": 73.186,
+          "y": 456.554
+        }
+      ]
+    },
+    {
+      "id": "who->who-2",
+      "source": "who",
+      "target": "who-2",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -35.174,
+          "y": 396.194
+        },
+        {
+          "x": -95.534,
+          "y": 456.554
+        }
+      ]
+    },
+    {
+      "id": "idea->when",
+      "source": "idea",
+      "target": "when",
+      "kind": "tree",
+      "points": [
+        {
+          "x": 0,
+          "y": 23.377
+        },
+        {
+          "x": -235.375,
+          "y": 20.933
+        }
+      ]
+    },
+    {
+      "id": "when->when-1",
+      "source": "when",
+      "target": "when-1",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -319.375,
+          "y": 44.31
+        },
+        {
+          "x": -379.734,
+          "y": 104.67
+        }
+      ]
+    },
+    {
+      "id": "when->when-2",
+      "source": "when",
+      "target": "when-2",
+      "kind": "tree",
+      "points": [
+        {
+          "x": -319.375,
+          "y": -3.69
+        },
+        {
+          "x": -379.734,
+          "y": -64.049
+        }
+      ]
+    }
+  ],
+  "bounds": {
+    "x": -463.734,
+    "y": -508.638,
+    "width": 1085.227,
+    "height": 1013.191
+  },
+  "issues": []
+}

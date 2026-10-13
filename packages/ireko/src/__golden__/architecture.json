@@ -1,0 +1,347 @@
+{
+  "nodes": [
+    {
+      "id": "system",
+      "label": "System",
+      "x": 0,
+      "y": 0,
+      "width": 840,
+      "height": 348,
+      "depth": 0,
+      "mode": "nested",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 4
+    },
+    {
+      "id": "edge",
+      "label": "Edge",
+      "x": 96,
+      "y": 64,
+      "width": 312,
+      "height": 100,
+      "parent": "system",
+      "container": "system",
+      "depth": 1,
+      "mode": "nested",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "cdn",
+      "label": "CDN",
+      "x": 120,
+      "y": 92,
+      "width": 120,
+      "height": 48,
+      "parent": "edge",
+      "container": "edge",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "gateway",
+      "label": "Gateway",
+      "x": 264,
+      "y": 92,
+      "width": 120,
+      "height": 48,
+      "parent": "edge",
+      "container": "edge",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "services",
+      "label": "Services",
+      "x": 504,
+      "y": 28,
+      "width": 312,
+      "height": 172,
+      "parent": "system",
+      "container": "system",
+      "depth": 1,
+      "mode": "nested",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 4
+    },
+    {
+      "id": "auth",
+      "label": "Auth",
+      "x": 528,
+      "y": 56,
+      "width": 120,
+      "height": 48,
+      "parent": "services",
+      "container": "services",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "orders",
+      "label": "Orders",
+      "x": 672,
+      "y": 56,
+      "width": 120,
+      "height": 48,
+      "parent": "services",
+      "container": "services",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "billing",
+      "label": "Billing",
+      "x": 528,
+      "y": 128,
+      "width": 120,
+      "height": 48,
+      "parent": "services",
+      "container": "services",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "search",
+      "label": "Search",
+      "x": 672,
+      "y": 128,
+      "width": 120,
+      "height": 48,
+      "parent": "services",
+      "container": "services",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "data",
+      "label": "Data",
+      "x": 24,
+      "y": 224,
+      "width": 456,
+      "height": 100,
+      "parent": "system",
+      "container": "system",
+      "depth": 1,
+      "mode": "nested",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 3
+    },
+    {
+      "id": "postgres",
+      "label": "Postgres",
+      "x": 48,
+      "y": 252,
+      "width": 120,
+      "height": 48,
+      "parent": "data",
+      "container": "data",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "redis",
+      "label": "Redis",
+      "x": 192,
+      "y": 252,
+      "width": 120,
+      "height": 48,
+      "parent": "data",
+      "container": "data",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "kafka",
+      "label": "Kafka",
+      "x": 336,
+      "y": 252,
+      "width": 120,
+      "height": 48,
+      "parent": "data",
+      "container": "data",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "observability",
+      "label": "Observability",
+      "x": 504,
+      "y": 224,
+      "width": 312,
+      "height": 100,
+      "parent": "system",
+      "container": "system",
+      "depth": 1,
+      "mode": "nested",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 2
+    },
+    {
+      "id": "logs",
+      "label": "Logs",
+      "x": 528,
+      "y": 252,
+      "width": 120,
+      "height": 48,
+      "parent": "observability",
+      "container": "observability",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    },
+    {
+      "id": "metrics",
+      "label": "Metrics",
+      "x": 672,
+      "y": 252,
+      "width": 120,
+      "height": 48,
+      "parent": "observability",
+      "container": "observability",
+      "depth": 2,
+      "mode": "linked",
+      "layout": "grid",
+      "scale": 1,
+      "clip": false,
+      "childCount": 0
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-0",
+      "source": "gateway",
+      "target": "auth",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 384,
+          "y": 107.818
+        },
+        {
+          "x": 528,
+          "y": 88.182
+        }
+      ]
+    },
+    {
+      "id": "edge-1",
+      "source": "gateway",
+      "target": "orders",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 384,
+          "y": 110.706
+        },
+        {
+          "x": 672,
+          "y": 85.294
+        }
+      ]
+    },
+    {
+      "id": "edge-2",
+      "source": "orders",
+      "target": "postgres",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 672,
+          "y": 98.846
+        },
+        {
+          "x": 168,
+          "y": 257.154
+        }
+      ]
+    },
+    {
+      "id": "edge-3",
+      "source": "billing",
+      "target": "kafka",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 550.839,
+          "y": 176
+        },
+        {
+          "x": 433.161,
+          "y": 252
+        }
+      ]
+    },
+    {
+      "id": "edge-4",
+      "source": "search",
+      "target": "redis",
+      "kind": "extra",
+      "points": [
+        {
+          "x": 672,
+          "y": 167.5
+        },
+        {
+          "x": 312,
+          "y": 260.5
+        }
+      ]
+    }
+  ],
+  "bounds": {
+    "x": 0,
+    "y": 0,
+    "width": 840,
+    "height": 348
+  },
+  "issues": []
+}

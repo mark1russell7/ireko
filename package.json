@@ -16,8 +16,9 @@
     "typecheck": "pnpm -r run typecheck",
     "lint": "oxlint",
     "lint:ste": "ste-lint",
-    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm lint:ste",
-    "dump:src": "cd packages/legacy/src && node ../../../external/concat-src/concat-src.js ../../../src-catalog.md"
+    "check": "pnpm typecheck && pnpm lint && pnpm test:coverage && pnpm test && pnpm lint:ste",
+    "dump:src": "cd packages/ireko/src && node ../../../external/concat-src/concat-src.js ../../../src-catalog.md",
+    "test:coverage": "pnpm --filter ireko test:coverage"
   },
   "devDependencies": {
     "@mark1russell7/cue": "github:mark1russell7/cue",

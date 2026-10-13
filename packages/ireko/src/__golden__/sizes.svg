@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16 -16 728 334" width="728" height="334" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>Boxes of different sizes</title>
+<rect class="ireko-background" x="-16" y="-16" width="728" height="334" fill="#f5f6f9"/>
+<g class="ireko-containers">
+<g class="ireko-container" data-id="board">
+<rect x="0" y="0" width="696" height="302" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="8" y="19" font-size="13" fill="#5f6880">board</text>
+</g>
+</g>
+<g class="ireko-edges" fill="none">
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="wide">
+<rect x="24" y="84" width="260" height="40" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="154" y="104" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">wide</text>
+</g>
+<g class="ireko-node" data-id="tall">
+<rect x="348" y="24" width="60" height="160" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="378" y="104" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">tall</text>
+</g>
+<g class="ireko-node" data-id="square">
+<rect x="527" y="59" width="90" height="90" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="572" y="104" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">square</text>
+</g>
+<g class="ireko-node" data-id="small">
+<rect x="134" y="228" width="40" height="30" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="154" y="243" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">small</text>
+</g>
+<g class="ireko-node" data-id="medium">
+<rect x="308" y="208" width="140" height="70" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="378" y="243" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">medium</text>
+</g>
+<g class="ireko-node" data-id="long">
+<rect x="472" y="218" width="200" height="50" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="572" y="243" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">long</text>
+</g>
+</g>
+</svg>

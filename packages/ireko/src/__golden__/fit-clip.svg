@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16 -16 464 248" width="464" height="248" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>Fit: clip</title>
+<defs>
+<clipPath id="ireko-clip-viewport"><rect x="0" y="0" width="300" height="140" rx="6"/></clipPath>
+</defs>
+<rect class="ireko-background" x="-16" y="-16" width="464" height="248" fill="#f5f6f9"/>
+<g class="ireko-containers">
+<g class="ireko-container" data-id="viewport">
+<rect x="0" y="0" width="300" height="140" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="8" y="19" font-size="13" fill="#5f6880">viewport</text>
+</g>
+</g>
+<g class="ireko-edges" fill="none">
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="item-1" clip-path="url(#ireko-clip-viewport)">
+<rect x="24" y="24" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="84" y="48" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">item-1</text>
+</g>
+<g class="ireko-node" data-id="item-2" clip-path="url(#ireko-clip-viewport)">
+<rect x="168" y="24" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="228" y="48" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">item-2</text>
+</g>
+<g class="ireko-node" data-id="item-3" clip-path="url(#ireko-clip-viewport)">
+<rect x="312" y="24" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="372" y="48" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">item-3</text>
+</g>
+<g class="ireko-node" data-id="item-4" clip-path="url(#ireko-clip-viewport)">
+<rect x="24" y="96" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="84" y="120" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">item-4</text>
+</g>
+<g class="ireko-node" data-id="item-5" clip-path="url(#ireko-clip-viewport)">
+<rect x="168" y="96" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="228" y="120" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">item-5</text>
+</g>
+<g class="ireko-node" data-id="item-6" clip-path="url(#ireko-clip-viewport)">
+<rect x="312" y="96" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="372" y="120" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">item-6</text>
+</g>
+<g class="ireko-node" data-id="item-7" clip-path="url(#ireko-clip-viewport)">
+<rect x="24" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="84" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">item-7</text>
+</g>
+<g class="ireko-node" data-id="item-8" clip-path="url(#ireko-clip-viewport)">
+<rect x="168" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="228" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">item-8</text>
+</g>
+<g class="ireko-node" data-id="item-9" clip-path="url(#ireko-clip-viewport)">
+<rect x="312" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="372" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">item-9</text>
+</g>
+</g>
+</svg>

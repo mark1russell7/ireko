@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-608.982 -16 1337.964 428.72" width="1337.964" height="428.72" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>The demo of Jqy</title>
+<rect class="ireko-background" x="-608.982" y="-16" width="1337.964" height="428.72" fill="#f5f6f9"/>
+<g class="ireko-containers">
+<g class="ireko-container" data-id="A">
+<rect x="-592.982" y="84" width="321.244" height="228.713" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="-584.982" y="103" font-size="13" fill="#5f6880">A</text>
+</g>
+<g class="ireko-container" data-id="C">
+<rect x="328.262" y="84" width="384.72" height="312.72" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="336.262" y="103" font-size="13" fill="#5f6880">C</text>
+</g>
+</g>
+<g class="ireko-edges" fill="none">
+<polyline class="ireko-edge" data-id="root-&gt;A" points="0,45.247 -271.738,141.476" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="root-&gt;B" points="50.932,48 37.33,84" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="B-&gt;B1" points="-31.738,131.333 -127.738,168.667" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="B-&gt;B2" points="7.691,132 -23.166,168" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="B-&gt;B3" points="48.834,132 79.691,168" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="B-&gt;B4" points="88.262,131.333 184.262,168.667" stroke="#7a8399" stroke-width="1.25"/>
+<polyline class="ireko-edge" data-id="root-&gt;C" points="111.095,48 328.262,150.006" stroke="#7a8399" stroke-width="1.25"/>
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="root">
+<rect x="0" y="0" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="60" y="24" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">root</text>
+</g>
+<g class="ireko-node" data-id="A1">
+<rect x="-492.36" y="108" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-432.36" y="132" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">A1</text>
+</g>
+<g class="ireko-node" data-id="A2">
+<rect x="-415.738" y="240.713" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-355.738" y="264.713" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">A2</text>
+</g>
+<g class="ireko-node" data-id="A3">
+<rect x="-568.982" y="240.713" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-508.982" y="264.713" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">A3</text>
+</g>
+<g class="ireko-node" data-id="B">
+<rect x="-31.738" y="84" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="28.262" y="108" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">B</text>
+</g>
+<g class="ireko-node" data-id="B1">
+<rect x="-247.738" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-187.738" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">B1</text>
+</g>
+<g class="ireko-node" data-id="B2">
+<rect x="-103.738" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="-43.738" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">B2</text>
+</g>
+<g class="ireko-node" data-id="B3">
+<rect x="40.262" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="100.262" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">B3</text>
+</g>
+<g class="ireko-node" data-id="B4">
+<rect x="184.262" y="168" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="244.262" y="192" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">B4</text>
+</g>
+<g class="ireko-node" data-id="C1">
+<rect x="460.622" y="108" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="520.622" y="132" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">C1</text>
+</g>
+<g class="ireko-node" data-id="C2">
+<rect x="568.982" y="216.36" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="628.982" y="240.36" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">C2</text>
+</g>
+<g class="ireko-node" data-id="C3">
+<rect x="460.622" y="324.72" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="520.622" y="348.72" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">C3</text>
+</g>
+<g class="ireko-node" data-id="C4">
+<rect x="352.262" y="216.36" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="412.262" y="240.36" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">C4</text>
+</g>
+</g>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16 -16 872 380" width="872" height="380" role="img" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif" font-size="13">
+<title>System architecture</title>
+<rect class="ireko-background" x="-16" y="-16" width="872" height="380" fill="#f5f6f9"/>
+<g class="ireko-containers">
+<g class="ireko-container" data-id="system">
+<rect x="0" y="0" width="840" height="348" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="8" y="19" font-size="13" fill="#5f6880">System</text>
+</g>
+<g class="ireko-container" data-id="edge">
+<rect x="96" y="64" width="312" height="100" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="104" y="83" font-size="13" fill="#5f6880">Edge</text>
+</g>
+<g class="ireko-container" data-id="services">
+<rect x="504" y="28" width="312" height="172" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="512" y="47" font-size="13" fill="#5f6880">Services</text>
+</g>
+<g class="ireko-container" data-id="data">
+<rect x="24" y="224" width="456" height="100" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="32" y="243" font-size="13" fill="#5f6880">Data</text>
+</g>
+<g class="ireko-container" data-id="observability">
+<rect x="504" y="224" width="312" height="100" rx="6" fill="#eef1f6" stroke="#aeb6c7"/>
+<text x="512" y="243" font-size="13" fill="#5f6880">Observability</text>
+</g>
+</g>
+<g class="ireko-edges" fill="none">
+<polyline class="ireko-edge" data-id="edge-0" points="384,107.818 528,88.182" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-1" points="384,110.706 672,85.294" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-2" points="672,98.846 168,257.154" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-3" points="550.839,176 433.161,252" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+<polyline class="ireko-edge" data-id="edge-4" points="672,167.5 312,260.5" stroke="#2346c4" stroke-width="1.25" stroke-dasharray="4 3"/>
+</g>
+<g class="ireko-nodes">
+<g class="ireko-node" data-id="cdn">
+<rect x="120" y="92" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="180" y="116" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">CDN</text>
+</g>
+<g class="ireko-node" data-id="gateway">
+<rect x="264" y="92" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="324" y="116" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Gateway</text>
+</g>
+<g class="ireko-node" data-id="auth">
+<rect x="528" y="56" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="588" y="80" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Auth</text>
+</g>
+<g class="ireko-node" data-id="orders">
+<rect x="672" y="56" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="732" y="80" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Orders</text>
+</g>
+<g class="ireko-node" data-id="billing">
+<rect x="528" y="128" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="588" y="152" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Billing</text>
+</g>
+<g class="ireko-node" data-id="search">
+<rect x="672" y="128" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="732" y="152" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Search</text>
+</g>
+<g class="ireko-node" data-id="postgres">
+<rect x="48" y="252" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="108" y="276" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Postgres</text>
+</g>
+<g class="ireko-node" data-id="redis">
+<rect x="192" y="252" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="252" y="276" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Redis</text>
+</g>
+<g class="ireko-node" data-id="kafka">
+<rect x="336" y="252" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="396" y="276" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Kafka</text>
+</g>
+<g class="ireko-node" data-id="logs">
+<rect x="528" y="252" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="588" y="276" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Logs</text>
+</g>
+<g class="ireko-node" data-id="metrics">
+<rect x="672" y="252" width="120" height="48" rx="6" fill="#ffffff" stroke="#454f67"/>
+<text x="732" y="276" font-size="13" text-anchor="middle" dominant-baseline="central" fill="#151c2e">Metrics</text>
+</g>
+</g>
+</svg>
