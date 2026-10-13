@@ -5,7 +5,9 @@ import { defectsOf, distanceToBorder } from "../test/invariants.ts";
 import { layout } from "./engine.ts";
 import type { Layout, NodeSpec } from "./model.ts";
 
-const RUNS = { numRuns: 400 };
+/** The number of random cases. A mutation run (IREKO_FAST=1) repeats the tests for each mutant, so it uses a tenth. */
+const runs = (n: number): { numRuns: number } => ({ numRuns: process.env["IREKO_FAST"] === "1" ? Math.ceil(n / 10) : n });
+const RUNS = runs(400);
 
 describe("properties of each layout (docs/REVIEW.md §9.3)", () => {
   it("P1, P2, P4: no overlap, each nested child inside its container, finite and positive boxes", () => {
@@ -41,7 +43,7 @@ describe("properties of each layout (docs/REVIEW.md §9.3)", () => {
         expect(b).toEqual(a);
         expect(JSON.parse(JSON.stringify(a))).toEqual(a);
       }),
-      { numRuns: 150 },
+      runs(150),
     );
   });
 
@@ -57,7 +59,7 @@ describe("properties of each layout (docs/REVIEW.md §9.3)", () => {
           expect(m?.width).toBe(n.width);
         });
       }),
-      { numRuns: 150 },
+      runs(150),
     );
   });
 
@@ -96,7 +98,7 @@ describe("properties of each layout (docs/REVIEW.md §9.3)", () => {
           expect(Math.abs((b[id]?.[1] ?? NaN) - y)).toBeLessThan(0.002);
         }
       }),
-      { numRuns: 200 },
+      runs(200),
     );
   });
 });

@@ -102,3 +102,7 @@ test-results/
 playwright-report/
 .astro/
 .playwright-mcp/
+
+# Mutation tests (Stryker): the reports and the sandboxes
+reports/
+.stryker-tmp/

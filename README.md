@@ -109,6 +109,8 @@ pnpm lint            # Oxlint, with the type-aware rules
 pnpm test            # the tests of each package
 pnpm test:coverage   # the tests of ireko, with the coverage gates
 pnpm lint:ste        # the writing rules
+pnpm --filter ireko bench      # the benchmarks of the engine
+pnpm --filter ireko mutation   # the mutation tests of the core (slow: about an hour)
 pnpm check           # all of the above, in the order of CI
 pnpm package add <name> --preset=<node|node-cjs|ts|vite|react>
 ```

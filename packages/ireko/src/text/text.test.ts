@@ -5,6 +5,10 @@ import { grid, layout, node, radial } from "../core/index.ts";
 import { treeArbitrary } from "../test/arbitrary.ts";
 import { parse, print } from "./index.ts";
 
+/** The number of random cases. A mutation run (IREKO_FAST=1) repeats the tests for each mutant, so it uses a tenth. */
+const runs = (n: number): { numRuns: number } => ({ numRuns: process.env["IREKO_FAST"] === "1" ? Math.ceil(n / 10) : n });
+
+
 const ok = (text: string, strategies?: readonly string[]): LayoutInput => {
   const r = parse(text, strategies === undefined ? {} : { strategies });
   if (!r.ok) throw new Error(`${String(r.error.line)}:${String(r.error.column)} ${r.error.message}`);
@@ -132,7 +136,7 @@ api -> web "a \\"b\\""
         expect(canonical(back.input.root)).toEqual(canonical(root));
         expect(back.input.edges).toEqual([{ source: root.id, target: root.id, label: "loop" }]);
       }),
-      { numRuns: 300 },
+      runs(300),
     );
   });
 
