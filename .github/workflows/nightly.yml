@@ -29,6 +29,10 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: The benchmarks
+        # No colors: the tables go into the summary of the run as plain text.
+        env:
+          FORCE_COLOR: "0"
+          NO_COLOR: "1"
         run: |
           pnpm --filter ireko bench | tee bench.txt
           {

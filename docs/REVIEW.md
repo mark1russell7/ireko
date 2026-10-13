@@ -736,7 +736,7 @@ The research ranks these actions by effect:
 | P0 Migrate | Done | The template monorepo, the legacy package and the CI workflow. `pnpm check` passes. |
 | P1 Core | Done | `packages/ireko/src/core` and `packages/ireko/src/svg`. 110 tests. The coverage gates pass. |
 | P2 Surface | Done, with one change (§16.2) | The builder, the text language, the renderers for SVG, DOM and Canvas, the React bindings and the React Flow adapter. 169 tests. |
-| P3 Depth | In progress | The strategy `tree` (a tidy tree), the shapes of subtrees for strategies, the direction of tree edges and the organization-chart elbow of the orthogonal router, a faster audit. The router `avoid`. The strategy `layers`. Not done: `stack`, `bundle`, label sizes, benchmarks, mutation tests. |
+| P3 Depth | In progress | The strategy `tree` (a tidy tree), the shapes of subtrees for strategies, the direction of tree edges and the organization-chart elbow of the orthogonal router, a faster audit. The router `avoid`. The strategy `layers`. The benchmarks and `nightly.yml`. Not done: `stack`, `bundle`, label sizes, mutation tests. |
 | P4 Site | Done, with changes (§16.2) | `packages/site`: Astro 7 and Starlight. 18 pages of the guide, a gallery page for each example, the playground, 10 live figures, a share card for each page, `llms.txt`, 22 Playwright tests (smoke, head and SEO, axe in both themes, budgets), the site job of CI and `pages.yml`. The legacy package is gone. |
 | P5 Release | Ready. The owner publishes 0.1.0 (§10.2, §10.3). | The `tsdown` build, `publint`, `attw`, `size-limit`, a smoke test of the tarball, the `package` job of CI, `release.yml`, the npm README and `CHANGELOG.md`. The public API of the core is an explicit list. |
 
@@ -790,5 +790,6 @@ The research ranks these actions by effect:
 - The home page of the site loads 117 kB of script after gzip. The playground lays out its first text in approximately 5 ms.
 - P3 (2026-10-13): the example tidy-tree is 712 px wide with the strategy `tree`, and 1128 px with linked grids. 20000 random inputs with grid, radial and tree give no defect.
 - P3: the audit of a linked chain of 10000 nodes takes 11 ms (658 ms before). A nested chain is still quadratic: each box overlaps all its containers. The core with `tree` is 9.8 kB after gzip. The router `avoid`: 1164 random extra edges on 300 random trees cross boxes 36 times, against 662 times with `orthogonal`. It takes approximately 2.6 ms for each edge.
+- P3 benchmarks (GitHub Actions, ubuntu-latest): 11111 nodes take 70 to 80 ms with each strategy, linked or nested. The router `avoid` takes 194 ms for 100 extra edges on 1111 nodes, and `straight` takes 5 ms.
 - P5: the core is 8.1 kB after gzip for `layout`, and 8.7 kB for all of the core. The budget is 12 kB. The tarball has 43 files and no runtime dependencies.
 - The work on the site found three defects of the library. The first frame of an animation gave a negative size, because the time of a frame can come before its start. No renderer drew edge labels. The parser had parameter properties.
