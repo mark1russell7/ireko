@@ -5,76 +5,106 @@ export class VexContractError extends Error {}
 export const VEX_ERROR = Object.freeze({ vexError: true });
 const E = {};
 const Z = {};
-function C(m) { throw new VexContractError(m); }
+const N = {}, W = {};
 function F() { throw E; }
+function B(x) { return typeof x === "boolean" ? x : F(); }
+function C(m) { throw new VexContractError(m); }
 function G(x) { return x === E ? F() : x; }
-function L(op, lo, hi, skip, body, test, strict, num) {
-  const vs = [];
-  for (let j = lo; j < hi; j++) {
-    if (j === skip) continue;
-    let v;
-    try {
-      if (test !== undefined && !test(j)) continue;
-      v = body(j);
-    } catch (e) {
-      if (e instanceof VexContractError) throw e;
-      if (strict) F();
-      continue;
-    }
-    vs.push(v);
-  }
-  if (op === "count") return vs.length;
-  if (!vs.every((x) => typeof x === "number")) F();
-  if (op === "sum" || op === "mean") {
-    if (op === "mean" && vs.length === 0) F();
-    const s = vs.reduce((a, x) => a + x, 0);
-    return num(op === "sum" ? s : s / vs.length);
-  }
-  if (vs.length === 0) F();
-  return vs.reduce((a, x) => (op === "min" ? Math.min(a, x) : Math.max(a, x)));
-}
-function T(f) { try { return f(); } catch (e) { if (e instanceof VexContractError) throw e; return E; } }
-function M(f) {
-  const root = new Map();
-  return (...k) => {
-    let m = root;
-    for (const x of k) {
-      const s = Object.is(x, -0) ? Z : x;
-      let next = m.get(s);
-      if (next === undefined) m.set(s, (next = new Map()));
-      m = next;
-    }
-    if (!m.has(Z)) m.set(Z, T(() => f(...k)));
-    return G(m.get(Z));
-  };
-}
 function M1(f) {
   const m = new Map();
   return (k) => {
     const s = Object.is(k, -0) ? Z : k;
-    let v = m.get(s);
-    if (v === undefined) m.set(s, (v = T(() => f(k))));
-    return G(v);
+    let r = m.get(s);
+    if (r === undefined) {
+      try { r = f(k); } catch { r = E; }
+      m.set(s, r);
+    }
+    return G(r);
   };
 }
-const op_1_0 = (a,b)=>a===b;
-const k_boolean = (x) => (typeof x !== "boolean" ? C("an op gave a value that is not a boolean") : x);
-const op_0_1 = (a,b)=>a>b;
-const op_0_2 = (a,b)=>Math.min(a,b);
-const v_0 = n=>Number.isFinite(n);
-const k_number = (x) => (typeof x !== "number" ? C("an op gave a value that is not a number") : Number.isFinite(x) && v_0(x) ? x : F());
-const op_0_3 = a=>Math.sqrt(a);
-const op_0_4 = a=>Math.ceil(a);
-const op_0_5 = (a,b)=>a/b;
-const op_0_6 = (a,b)=>a%b;
-const op_0_7 = a=>Math.floor(a);
-const op_0_8 = (a,b)=>a*b;
-const op_0_9 = (a,b)=>Math.max(a,b);
-const op_0_0 = (a,b)=>a===b;
-const op_0_10 = (a,b)=>a-b;
-const op_0_11 = (a,b)=>a<b;
-const op_0_12 = (a,b)=>a+b;
-const op_0_13 = a=>-a;
+function S(n, mode, strict, a0, step, result, key, val, test, pre, ok) {
+  let ts, js, xs, bad, reach, gs, mono, pa, pc, pe;
+  const value = (i) => {
+    let x = xs[i];
+    if (x === undefined) {
+      x = val(js[i]);
+      xs[i] = x;
+    }
+    return x;
+  };
+  return M1((q) => {
+    if (ts === undefined) {
+      ts = [];
+      js = [];
+      xs = [];
+      for (let j = 0; j < n; j++) {
+        try {
+          if (pre && !pre(j)) continue;
+          const t = key(j);
+          if (mode && t !== t) continue;
+          ts.push(t);
+          js.push(j);
+        } catch {
+        }
+      }
+      if (mode === 1) {
+        gs = new Map();
+        for (let i = 0; i < ts.length; i++) {
+          let g = gs.get(ts[i]);
+          if (g === undefined) gs.set(ts[i], (g = []));
+          g.push(i);
+        }
+      }
+      if (mode === 2) {
+        mono = true;
+        for (let i = 1; i < ts.length; i++) if (!(ts[i - 1] <= ts[i])) mono = false;
+        pa = [a0];
+        pc = [0];
+        pe = [false];
+      }
+    }
+    if (q === E) return result(a0, 0);
+    let a = a0, c = 0;
+    const add = (i) => {
+      const x = value(i);
+      if (x === N || x === E) return;
+      a = step(a, c, x);
+      c++;
+    };
+    if (mode === 1) {
+      const g = gs.get(q);
+      if (g !== undefined) for (const i of g) add(i);
+      return result(a, c);
+    }
+    if (mode === 2 && mono) {
+      let lo = 0, hi = ts.length;
+      while (lo < hi) {
+        const h = (lo + hi) >> 1;
+        if (test(ts[h], q)) lo = h + 1;
+        else hi = h;
+      }
+      for (let i = pa.length - 1; i < lo; i++) {
+        let x = value(i), b = pa[i], d = pc[i], err = pe[i];
+        if (x !== N && x !== E) {
+          b = step(b, d, x);
+          d++;
+        }
+        pa.push(b);
+        pc.push(d);
+        pe.push(err);
+      }
+      if (pe[lo]) F();
+      return result(pa[lo], pc[lo]);
+    }
+    for (let i = 0; i < ts.length; i++) if (test(ts[i], q)) add(i);
+    return result(a, c);
+  });
+}
+function T(f) { try { return f(); } catch { return E; } }
+const k_number = (x) => (Number.isFinite(x) ? x : F());
+const s_max = (a, c, x) => (c === 0 ? x : Math.max(a, x));
+const r_one = (a, c) => (c === 0 ? F() : a);
+const s_add = (a, c, x) => a + x;
 export function gridOf(records, vars) {
   if (!Array.isArray(records)) C("the records are not an array");
   const R = records;
@@ -94,44 +124,176 @@ export function gridOf(records, vars) {
   const v7 = vars["justify"];
   const v8 = vars["selfW"];
   const v9 = vars["selfH"];
-  const c1 = T(() => L("count", 0, n, -1, (j0) => R[j0]["i"]));
-  const c2 = T(() => k_boolean(op_1_0(v0, "linked")));
-  const c3 = T(() => (k_boolean(op_0_1(v1, 0)) ? k_number(op_0_2(v1, G(c1))) : (G(c2) ? ((k_boolean(op_1_0(v2, "left")) || k_boolean(op_1_0(v2, "right"))) ? 1 : G(c1)) : k_number(op_0_4(k_number(op_0_3(G(c1))))))));
-  const c4 = T(() => k_number(op_0_4(k_number(op_0_5(G(c1), G(c3))))));
-  const c7 = T(() => (k_boolean(op_1_0(v3, "auto")) ? (G(c2) ? "start" : "center") : v3));
-  const c8 = T(() => (k_boolean(op_0_1(v4, 0)) ? v4 : k_number(op_0_8(v5, 1.5))));
-  const c9 = T(() => k_boolean(op_1_0(v2, "bottom")));
-  const c10 = T(() => k_boolean(op_1_0(v2, "top")));
-  const c11 = T(() => k_boolean(op_1_0(v2, "right")));
-  const c15 = T(() => L("max", 0, n, -1, (j14) => R[j14]["w"]));
-  const c16 = T(() => k_number(op_0_9(0, G(c15))));
-  const m20 = M1((q19) => L("max", 0, n, -1, (j21) => R[j21]["w"], (j21) => k_boolean(op_0_0(k_number(op_0_6(R[j21]["i"], G(c3))), G(q19)))));
-  const m18 = M1((q17) => k_number(op_0_9(0, m20(q17))));
-  const m13 = M1((q12) => (v6 ? G(c16) : m18(q12)));
-  const c23 = T(() => k_boolean(op_1_0(v7, "center")));
-  const c24 = T(() => k_boolean(op_1_0(v7, "start")));
-  const m33 = M1((q32) => k_number(op_0_12(m13(q32), v5)));
-  const m29 = M1((q28) => L("sum", 0, n, -1, (j30) => ((b31) => m33(b31))(R[j30]["i"]), (j30) => k_boolean(op_0_11(R[j30]["i"], G(q28))), false, k_number));
-  const m27 = M((q25, q26) => k_number(op_0_12(m29(q25), G(q26))));
-  const c39 = T(() => L("max", 0, n, -1, (j38) => R[j38]["h"]));
-  const c40 = T(() => k_number(op_0_9(0, G(c39))));
-  const m44 = M1((q43) => L("max", 0, n, -1, (j45) => R[j45]["h"], (j45) => k_boolean(op_0_0(k_number(op_0_7(k_number(op_0_5(R[j45]["i"], G(c3))))), G(q43)))));
-  const m42 = M1((q41) => k_number(op_0_9(0, m44(q41))));
-  const m37 = M1((q36) => (v6 ? G(c40) : m42(q36)));
-  const c47 = T(() => k_boolean(op_1_0(G(c7), "center")));
-  const c48 = T(() => k_boolean(op_1_0(G(c7), "start")));
-  const m57 = M1((q56) => k_number(op_0_12(m37(q56), v5)));
-  const m53 = M1((q52) => L("sum", 0, n, -1, (j54) => ((b55) => m57(b55))(T(() => k_number(op_0_7(k_number(op_0_5(R[j54]["i"], G(c3))))))), (j54) => (k_boolean(op_0_0(k_number(op_0_6(R[j54]["i"], G(c3))), 0)) && k_boolean(op_0_11(R[j54]["i"], G(q52)))), false, k_number));
-  const m51 = M((q49, q50) => k_number(op_0_12(m53(q49), G(q50))));
-  const c60 = T(() => k_number(op_0_8(v5, k_number(op_0_10(G(c3), 1)))));
-  const c64 = T(() => L("sum", 0, n, -1, (j61) => ((b62) => m13(b62))(R[j61]["i"]), (j61) => k_boolean(op_0_11(R[j61]["i"], G(c3))), false, k_number));
-  const c65 = T(() => k_number(op_0_12(G(c64), G(c60))));
-  const c66 = T(() => k_number(op_0_8(v5, k_number(op_0_10(G(c4), 1)))));
-  const c70 = T(() => L("sum", 0, n, -1, (j67) => ((b68) => m37(b68))(T(() => k_number(op_0_7(k_number(op_0_5(R[j67]["i"], G(c3))))))), (j67) => k_boolean(op_0_0(k_number(op_0_6(R[j67]["i"], G(c3))), 0)), false, k_number));
-  const c71 = T(() => k_number(op_0_12(G(c70), G(c66))));
-  const c72 = T(() => (G(c9) ? k_number(op_0_10(k_number(op_0_5(v8, 2)), k_number(op_0_5(G(c65), 2)))) : (G(c10) ? k_number(op_0_10(k_number(op_0_5(v8, 2)), k_number(op_0_5(G(c65), 2)))) : (G(c11) ? k_number(op_0_12(v8, G(c8))) : k_number(op_0_10(k_number(op_0_13(G(c8))), G(c65)))))));
-  const c73 = T(() => (G(c9) ? k_number(op_0_12(v9, G(c8))) : (G(c10) ? k_number(op_0_10(k_number(op_0_13(G(c8))), G(c71))) : (G(c11) ? k_number(op_0_10(k_number(op_0_5(v9, 2)), k_number(op_0_5(G(c71), 2)))) : k_number(op_0_10(k_number(op_0_5(v9, 2)), k_number(op_0_5(G(c71), 2))))))));
+  const c1 = ((v0)===("linked"));
+  const c2 = T(() => (((v1)>(0)) ? k_number(Math.min((v1),(n))) : (c1 ? ((((v2)===("left")) || ((v2)===("right"))) ? 1 : n) : k_number(Math.ceil((k_number(Math.sqrt((n)))))))));
+  const c3 = T(() => k_number(Math.ceil((k_number((n)/(G(c2)))))));
+  const c6 = (((v3)===("auto")) ? (c1 ? "start" : "center") : v3);
+  const c7 = T(() => (((v4)>(0)) ? v4 : k_number((v5)*(1.5))));
+  const c8 = ((v2)===("bottom"));
+  const c9 = ((v2)===("top"));
+  const c10 = ((v2)===("right"));
+  let c15;
+  try {
+    let a12, n13 = 0;
+    for (let j11 = 0; j11 < n; j11++) {
+      const x14 = R[j11]["w"];
+      a12 = n13++ === 0 ? x14 : Math.max(a12, x14);
+    }
+    c15 = (n13 === 0 ? F() : a12);
+  } catch {
+    c15 = E;
+  }
+  const m17 = S(n, 1, false, undefined, s_max, r_one,
+    (j18) => k_number((R[j18]["i"])%(G(c2))),
+    (j18) => R[j18]["w"],
+    (t, q) => (t)===(q)
+  );
+  const c19 = T(() => k_number(Math.max((0),(G(c15)))));
+  const m22 = S(n, 2, false, 0, s_add, k_number,
+    (j23) => R[j23]["i"],
+    (j23) => {
+      try {
+        const b24 = R[j23]["i"];
+        return k_number(((v6 ? G(c19) : k_number(Math.max((0),(m17(b24))))))+(v5));
+      } catch {
+        return E;
+      }
+    },
+    (t, q) => (t)<(q)
+  );
+  const c30 = ((v7)===("center"));
+  const c31 = ((v7)===("start"));
+  let c37;
+  try {
+    let a34, n35 = 0;
+    for (let j33 = 0; j33 < n; j33++) {
+      const x36 = R[j33]["h"];
+      a34 = n35++ === 0 ? x36 : Math.max(a34, x36);
+    }
+    c37 = (n35 === 0 ? F() : a34);
+  } catch {
+    c37 = E;
+  }
+  const m39 = S(n, 1, false, undefined, s_max, r_one,
+    (j40) => k_number(Math.floor((k_number((R[j40]["i"])/(G(c2)))))),
+    (j40) => R[j40]["h"],
+    (t, q) => (t)===(q)
+  );
+  const c41 = T(() => k_number(Math.max((0),(G(c37)))));
+  const m44 = S(n, 2, false, 0, s_add, k_number,
+    (j45) => R[j45]["i"],
+    (j45) => {
+      try {
+        let b46;
+        try {
+          b46 = k_number(Math.floor((k_number((R[j45]["i"])/(G(c2))))));
+        } catch {
+          b46 = E;
+        }
+        return k_number(((v6 ? G(c41) : k_number(Math.max((0),(m39(b46))))))+(v5));
+      } catch {
+        return E;
+      }
+    },
+    (t, q) => (t)<(q),
+    (j45) => ((k_number((R[j45]["i"])%(G(c2))))===(0))
+  );
+  const c53 = ((c6)===("center"));
+  const c54 = ((c6)===("start"));
+  let c66;
+  try {
+    let a63 = 0;
+    for (let j56 = 0; j56 < n; j56++) {
+      let x65;
+      try {
+        if (!((R[j56]["i"])<(G(c2)))) continue;
+        const b57 = R[j56]["i"];
+        x65 = (v6 ? G(c19) : k_number(Math.max((0),(m17(b57)))));
+      } catch {
+        continue;
+      }
+      a63 += x65;
+    }
+    c66 = k_number(a63);
+  } catch {
+    c66 = E;
+  }
+  const c67 = T(() => k_number((G(c66))+(k_number((v5)*(k_number((G(c2))-(1)))))));
+  let c78;
+  try {
+    let a75 = 0;
+    for (let j68 = 0; j68 < n; j68++) {
+      let x77;
+      try {
+        if (!((k_number((R[j68]["i"])%(G(c2))))===(0))) continue;
+        let b69;
+        try {
+          b69 = k_number(Math.floor((k_number((R[j68]["i"])/(G(c2))))));
+        } catch {
+          b69 = E;
+        }
+        x77 = (v6 ? G(c41) : k_number(Math.max((0),(m39(b69)))));
+      } catch {
+        continue;
+      }
+      a75 += x77;
+    }
+    c78 = k_number(a75);
+  } catch {
+    c78 = E;
+  }
+  const c79 = T(() => k_number((G(c78))+(k_number((v5)*(k_number((G(c3))-(1)))))));
+  const c80 = T(() => (c8 ? k_number((k_number((v8)/(2)))-(k_number((G(c67))/(2)))) : (c9 ? k_number((k_number((v8)/(2)))-(k_number((G(c67))/(2)))) : (c10 ? k_number((v8)+(G(c7))) : k_number((k_number(-(G(c7))))-(G(c67)))))));
+  const c81 = T(() => (c8 ? k_number((v9)+(G(c7))) : (c9 ? k_number((k_number(-(G(c7))))-(G(c79))) : (c10 ? k_number((k_number((v9)/(2)))-(k_number((G(c79))/(2)))) : k_number((k_number((v9)/(2)))-(k_number((G(c79))/(2))))))));
   const out = [];
-  for (let o = 0; o < n; o++) out.push(T(() => ((b5, b6) => ((b35, b59) => (G(c2) ? Object.freeze({ "x": k_number(op_0_12(G(c72), G(b35))), "y": k_number(op_0_12(G(c73), G(b59))), "width": G(c65), "height": G(c71) }) : Object.freeze({ "x": G(b35), "y": G(b59), "width": G(c65), "height": G(c71) })))(T(() => ((b22) => k_number(op_0_10(m27(b5, T(() => (G(c24) ? 0 : (G(c23) ? k_number(op_0_5(G(b22), 2)) : G(b22))))), R[o]["x"])))(T(() => k_number(op_0_10(m13(b5), R[o]["w"]))))), T(() => ((b46) => k_number(op_0_10(m51(T(() => k_number(op_0_8(G(b6), G(c3)))), T(() => (G(c48) ? 0 : (G(c47) ? k_number(op_0_5(G(b46), 2)) : G(b46))))), R[o]["y"])))(T(() => k_number(op_0_10(m37(b6), R[o]["h"])))))))(T(() => k_number(op_0_6(R[o]["i"], G(c3)))), T(() => k_number(op_0_7(k_number(op_0_5(R[o]["i"], G(c3)))))))));
-  return out.map((x) => (x === E ? VEX_ERROR : x));
+  for (let o = 0; o < n; o++) {
+    try {
+      let b4;
+      try {
+        b4 = k_number((R[o]["i"])%(G(c2)));
+      } catch {
+        b4 = E;
+      }
+      let b5;
+      try {
+        b5 = k_number(Math.floor((k_number((R[o]["i"])/(G(c2))))));
+      } catch {
+        b5 = E;
+      }
+      let b32;
+      try {
+        let b20;
+        try {
+          b20 = k_number(((v6 ? G(c19) : k_number(Math.max((0),(m17(b4))))))-(R[o]["w"]));
+        } catch {
+          b20 = E;
+        }
+        b32 = k_number((k_number((m22(b4))+((c31 ? 0 : (c30 ? k_number((G(b20))/(2)) : G(b20))))))-(R[o]["x"]));
+      } catch {
+        b32 = E;
+      }
+      let b55;
+      try {
+        let b42;
+        try {
+          b42 = k_number(((v6 ? G(c41) : k_number(Math.max((0),(m39(b5))))))-(R[o]["h"]));
+        } catch {
+          b42 = E;
+        }
+        let k52;
+        try {
+          k52 = k_number((G(b5))*(G(c2)));
+        } catch {
+          k52 = E;
+        }
+        b55 = k_number((k_number((m44(k52))+((c54 ? 0 : (c53 ? k_number((G(b42))/(2)) : G(b42))))))-(R[o]["y"]));
+      } catch {
+        b55 = E;
+      }
+      out.push((c1 ? ({ "x": k_number((G(c80))+(G(b32))), "y": k_number((G(c81))+(G(b55))), "width": G(c67), "height": G(c79) }) : ({ "x": G(b32), "y": G(b55), "width": G(c67), "height": G(c79) })));
+    } catch {
+      out.push(VEX_ERROR);
+    }
+  }
+  return out;
 }
