@@ -39,6 +39,7 @@
   "ignorePatterns": [
     "**/*.generated.js",
     "packages/cli/**",
+    "scripts/release/**",
     "external/**",
     "docs/**",
     "**/dist/**",

@@ -591,7 +591,7 @@ The properties run at the end of the pipeline and also between its phases, the s
 |---|---|---|
 | `ci.yml` | push, pull request, `workflow_call` | `check` on Node 22, 24 and 26: type check, Oxlint, tests with coverage, `lint:ste`. `packages`: build, `publint`, `attw`, size, smoke test. `site`: build, then Playwright in Chromium, Firefox and WebKit. `ci-ok`: the one necessary check. |
 | `pages.yml` | CI passes on `main` | Build the commit that CI tested, deploy to GitHub Pages, then notify IndexNow. |
-| `release.yml` | a tag `v*` | The crawler pattern: preflight, CI again, build and pack, smoke test of the tarball, publish with provenance from a job with no checkout, then a GitHub release. |
+| `release.yml` | a change of the version on `main`, or by hand | The standard release of the template: CI again, build and pack, smoke test of the tarball, publish with provenance from a job with no checkout, then the tag and the GitHub release. |
 | `nightly.yml` | each night | Mutation tests and benchmarks |
 
 Each workflow starts with `permissions: {}` and gives each job only what it needs. Each action is pinned to a commit SHA, with the version in a comment. Renovate keeps the pins current.
