@@ -3,6 +3,7 @@
   "include": [
     "README.md",
     "CLAUDE.md",
+    "RELEASING.md",
     "docs/**/*.{md,mdx}",
     "packages/*/README.md",
     "packages/site/src/content/**/*.{md,mdx}",
@@ -70,6 +71,9 @@
     "Vex",
     "Vite",
     "Vitest",
-    "yFiles"
+    "yFiles",
+    "OIDC",
+    "SemVer",
+    "Mark"
   ]
 }

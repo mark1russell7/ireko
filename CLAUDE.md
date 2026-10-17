@@ -31,6 +31,12 @@ The project was named Jqy. The new name is ireko. The code of Jqy is in the git 
 - A golden file changes only with a change of the layout. To accept it, start `vitest run -u` and examine the SVG diff.
 - The output of the engine is deterministic. Do not use `Date.now()`, `Math.random()` or the order of a `Set` of objects in the core.
 
+## npm
+
+- `packages/ireko` goes to npm when a change of its version merges to `main`. `RELEASING.md` tells the procedure.
+- Do not publish to npm, and do not change npm settings. The owner and one named Claude session do all npm work.
+- Do not edit `.github/workflows/release.yml` or `scripts/release/`.
+
 ## The site
 
 - `packages/site` is Astro with Starlight. `pnpm dev` starts it. Build it with `SITE_BASE=ireko` (no slash: Git Bash changes `/ireko` into a Windows path).
