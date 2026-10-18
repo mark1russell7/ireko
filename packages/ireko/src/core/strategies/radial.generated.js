@@ -103,227 +103,236 @@ export function radialOf(records, vars) {
     }
     return t38;
   };
-  const fn40 = (k21) => k_number((k_number((fn7(k21))+(fn39(k21))))+(v7));
-  let c44;
-  try {
-    let a41, n42 = 0;
-    for (let j20 = 0; j20 < n; j20++) {
-      let x43;
-      try {
-        x43 = fn40(j20);
-      } catch {
-        continue;
-      }
-      a41 = n42++ === 0 ? x43 : Math.max(a41, x43);
-    }
-    c44 = k_number(((n42 === 0 ? F() : a41))/(2));
-  } catch {
-    c44 = E;
-  }
-  const fn52 = (p49, k50) => k_number((2)*(k_number(op_0_12(k_number(Math.min((1),(k_number((fn40(k50))/(k_number((2)*(G(p49))))))))))));
-  const fn56 = (p45) => {
-    let a53 = 0;
-    for (let j48 = 0; j48 < n; j48++) {
-      let x55;
-      try {
-        x55 = fn52(p45, j48);
-      } catch {
-        continue;
-      }
-      a53 += x55;
-    }
-    return k_number(a53);
-  };
-  const c60 = L(() => {
-    let l57 = k_number((G(c44))*(2));
-    for (let k59 = 0; ; k59++) {
-      if ((!(((fn56(l57))>(6.283185307179586))))) break;
-      if (k59 === 2048) F();
-      const t58 = k_number((l57)*(2));
-      l57 = t58;
-    }
-    return l57;
+  const col40 = Q((k21) => {
+    return k_number((fn7(k21))+(fn39(k21)));
   });
-  const c69 = L(() => {
-    let t68;
-    if (((fn56(c44))<=(6.283185307179586))) {
-      t68 = G(c44);
+  const col41 = Q((k21) => {
+    return k_number((G(col40(k21)))+(v7));
+  });
+  const fn42 = (k21) => G(col41(k21));
+  let c46;
+  try {
+    let a43, n44 = 0;
+    for (let j20 = 0; j20 < n; j20++) {
+      let x45;
+      try {
+        x45 = fn42(j20);
+      } catch {
+        continue;
+      }
+      a43 = n44++ === 0 ? x45 : Math.max(a43, x45);
+    }
+    c46 = k_number(((n44 === 0 ? F() : a43))/(2));
+  } catch {
+    c46 = E;
+  }
+  const fn54 = (p51, k52) => k_number((2)*(k_number(op_0_12(k_number(Math.min((1),(k_number((fn42(k52))/(k_number((2)*(G(p51))))))))))));
+  const fn58 = (p47) => {
+    let a55 = 0;
+    for (let j50 = 0; j50 < n; j50++) {
+      let x57;
+      try {
+        x57 = fn54(p47, j50);
+      } catch {
+        continue;
+      }
+      a55 += x57;
+    }
+    return k_number(a55);
+  };
+  const c62 = L(() => {
+    let l59 = k_number((G(c46))*(2));
+    for (let k61 = 0; ; k61++) {
+      if ((!(((fn58(l59))>(6.283185307179586))))) break;
+      if (k61 === 2048) F();
+      const t60 = k_number((l59)*(2));
+      l59 = t60;
+    }
+    return l59;
+  });
+  const c71 = L(() => {
+    let t70;
+    if (((fn58(c46))<=(6.283185307179586))) {
+      t70 = G(c46);
     } else {
-      let l61 = G(c44);
-      let l62 = G(c60());
-      for (let k67 = 0; ; k67++) {
-        if (k67 === 64) break;
-        let b63;
-        try {
-          b63 = k_number((k_number((l61)+(l62)))/(2));
-        } catch {
-          b63 = E;
-        }
-        const t64 = (((fn56(b63))>(6.283185307179586)) ? G(b63) : l61);
+      let l63 = G(c46);
+      let l64 = G(c62());
+      for (let k69 = 0; ; k69++) {
+        if (k69 === 64) break;
         let b65;
         try {
-          b65 = k_number((k_number((l61)+(l62)))/(2));
+          b65 = k_number((k_number((l63)+(l64)))/(2));
         } catch {
           b65 = E;
         }
-        const t66 = (((fn56(b65))>(6.283185307179586)) ? l62 : G(b65));
-        l61 = t64;
-        l62 = t66;
+        const t66 = (((fn58(b65))>(6.283185307179586)) ? G(b65) : l63);
+        let b67;
+        try {
+          b67 = k_number((k_number((l63)+(l64)))/(2));
+        } catch {
+          b67 = E;
+        }
+        const t68 = (((fn58(b67))>(6.283185307179586)) ? l64 : G(b67));
+        l63 = t66;
+        l64 = t68;
       }
-      t68 = l62;
+      t70 = l64;
     }
-    return k_number(Math.max((G(c16)),(t68)));
+    return k_number(Math.max((G(c16)),(t70)));
   });
-  const fn76 = (p73) => k_number((k_number((6.283185307179586)-(fn56(p73))))/(n));
-  const fn85 = (p81, p82, k83) => k_number((c12)*(k_number((fn52(p81, k83))+(k_number(Math.max((0),(G(p82))))))));
-  const fn104 = (p96, p97, p98, p99, p100) => {
-    let b103;
+  const fn78 = (p75) => k_number((k_number((6.283185307179586)-(fn58(p75))))/(n));
+  const fn87 = (p83, p84, k85) => k_number((c12)*(k_number((fn54(p83, k85))+(k_number(Math.max((0),(G(p84))))))));
+  const fn106 = (p98, p99, p100, p101, p102) => {
+    let b105;
     try {
-      b103 = k_number((k_number(Math.abs((k_number((G(p96))-(G(p97)))))))%(6.283185307179586));
+      b105 = k_number((k_number(Math.abs((k_number((G(p98))-(G(p99)))))))%(6.283185307179586));
     } catch {
-      b103 = E;
+      b105 = E;
     }
-    return ((k_number((k_number((2)*(G(p100))))*(k_number(Math.sin((k_number((k_number(Math.min((G(b103)),(k_number((6.283185307179586)-(G(b103)))))))/(2))))))))<(k_number((k_number((k_number((G(p98))+(G(p99))))+(v7)))-(1e-7))));
+    return ((k_number((k_number((2)*(G(p102))))*(k_number(Math.sin((k_number((k_number(Math.min((G(b105)),(k_number((6.283185307179586)-(G(b105)))))))/(2))))))))<(k_number((k_number((k_number((G(p100))+(G(p101))))+(v7)))-(1e-7))));
   };
-  const fn110 = (p70) => {
-    let b77;
+  const fn112 = (p72) => {
+    let b79;
     try {
-      b77 = fn76(p70);
+      b79 = fn78(p72);
     } catch {
-      b77 = E;
+      b79 = E;
     }
-    let t109 = (!(((G(b77))<(-1e-9))));
-    if (t109) {
-      let l78 = G(c13);
-      let l79 = true;
-      for (let j80 = 0; j80 < n; j80++) {
-        const t86 = k_number((l78)+(fn85(p70, b77, j80)));
-        let t107 = l79;
-        if (t107) {
-          let b87;
+    let t111 = (!(((G(b79))<(-1e-9))));
+    if (t111) {
+      let l80 = G(c13);
+      let l81 = true;
+      for (let j82 = 0; j82 < n; j82++) {
+        const t88 = k_number((l80)+(fn87(p72, b79, j82)));
+        let t109 = l81;
+        if (t109) {
+          let b89;
           try {
-            b87 = fn85(p70, b77, j80);
+            b89 = fn87(p72, b79, j82);
           } catch {
-            b87 = E;
+            b89 = E;
           }
-          let b88;
+          let b90;
           try {
-            b88 = fn7(j80);
+            b90 = fn7(j82);
           } catch {
-            b88 = E;
+            b90 = E;
           }
-          let l89 = k_number((l78)+(G(b87)));
-          let l90 = true;
-          const f92 = j80;
-          const h93 = Math.min(n, f92 + Math.min(256, n) + 1);
-          for (let j91 = Math.max(0, f92 + Math.max(1, -n)); j91 < h93; j91++) {
-            const t94 = k_number((l89)+(fn85(p70, b77, j91)));
-            let t105 = l90;
-            if (t105) {
-              let b95;
+          let l91 = k_number((l80)+(G(b89)));
+          let l92 = true;
+          const f94 = j82;
+          const h95 = Math.min(n, f94 + Math.min(256, n) + 1);
+          for (let j93 = Math.max(0, f94 + Math.max(1, -n)); j93 < h95; j93++) {
+            const t96 = k_number((l91)+(fn87(p72, b79, j93)));
+            let t107 = l92;
+            if (t107) {
+              let b97;
               try {
-                b95 = fn7(j91);
+                b97 = fn7(j93);
               } catch {
-                b95 = E;
+                b97 = E;
               }
-              t105 = (!(fn104(l78, l89, b88, b95, p70)));
+              t107 = (!(fn106(l80, l91, b90, b97, p72)));
             }
-            const t106 = t105;
-            l89 = t94;
-            l90 = t106;
+            const t108 = t107;
+            l91 = t96;
+            l92 = t108;
           }
-          t107 = l90;
+          t109 = l92;
         }
-        const t108 = t107;
-        l78 = t86;
-        l79 = t108;
+        const t110 = t109;
+        l80 = t88;
+        l81 = t110;
       }
-      t109 = l79;
+      t111 = l81;
     }
-    return t109;
+    return t111;
   };
-  const c114 = L(() => {
-    let l111 = k_number((G(c69()))*(2));
-    for (let k113 = 0; ; k113++) {
-      if (fn110(l111)) break;
-      if (k113 === 2048) F();
-      const t112 = k_number((l111)*(2));
-      l111 = t112;
+  const c116 = L(() => {
+    let l113 = k_number((G(c71()))*(2));
+    for (let k115 = 0; ; k115++) {
+      if (fn112(l113)) break;
+      if (k115 === 2048) F();
+      const t114 = k_number((l113)*(2));
+      l113 = t114;
     }
-    return l111;
+    return l113;
   });
-  const c117 = T(() => k_number((k_number((G(c69()))+(G(c114()))))/(2)));
-  const c127 = L(() => {
-    let t126;
+  const c119 = T(() => k_number((k_number((G(c71()))+(G(c116()))))/(2)));
+  const c129 = L(() => {
+    let t128;
     if (c17) {
-      t126 = G(c16);
+      t128 = G(c16);
     } else {
-      let t125;
+      let t127;
       if (c18) {
-        let t124;
-        if (fn110(c69())) {
-          t124 = G(c69());
+        let t126;
+        if (fn112(c71())) {
+          t126 = G(c71());
         } else {
-          let l115 = G(c69());
-          let l116 = G(c114());
-          let l118 = fn110(c117);
-          for (let k123 = 0; ; k123++) {
-            if (k123 === 50) break;
-            const t119 = (l118 ? l115 : k_number((k_number((l115)+(l116)))/(2)));
-            const t120 = (l118 ? k_number((k_number((l115)+(l116)))/(2)) : l116);
-            let b121;
+          let l117 = G(c71());
+          let l118 = G(c116());
+          let l120 = fn112(c119);
+          for (let k125 = 0; ; k125++) {
+            if (k125 === 50) break;
+            const t121 = (l120 ? l117 : k_number((k_number((l117)+(l118)))/(2)));
+            const t122 = (l120 ? k_number((k_number((l117)+(l118)))/(2)) : l118);
+            let b123;
             try {
-              b121 = k_number((k_number(((l118 ? l115 : k_number((k_number((l115)+(l116)))/(2))))+((l118 ? k_number((k_number((l115)+(l116)))/(2)) : l116))))/(2));
+              b123 = k_number((k_number(((l120 ? l117 : k_number((k_number((l117)+(l118)))/(2))))+((l120 ? k_number((k_number((l117)+(l118)))/(2)) : l118))))/(2));
             } catch {
-              b121 = E;
+              b123 = E;
             }
-            const t122 = fn110(b121);
-            l115 = t119;
-            l116 = t120;
+            const t124 = fn112(b123);
+            l117 = t121;
             l118 = t122;
+            l120 = t124;
           }
-          t124 = l116;
+          t126 = l118;
         }
-        t125 = t124;
+        t127 = t126;
       } else {
-        t125 = k_number(Math.max((G(c16)),(k_number((k_number((k_number((2)*(G(c11))))+(v7)))/(k_number((2)*(k_number(Math.sin((k_number((G(c19))/(2))))))))))));
+        t127 = k_number(Math.max((G(c16)),(k_number((k_number((k_number((2)*(G(c11))))+(v7)))/(k_number((2)*(k_number(Math.sin((k_number((G(c19))/(2))))))))))));
       }
-      t126 = t125;
+      t128 = t127;
     }
-    return t126;
+    return t128;
   });
-  const c128 = T(() => (c15 ? k_number((v4)/(2)) : 0));
-  const c129 = T(() => (c15 ? k_number((v5)/(2)) : 0));
-  const c130 = T(() => fn76(c127()));
-  const c135 = T(() => (c14 ? G(c13) : k_number((G(c13))+(k_number((k_number((k_number((c12)*(k_number((v2)*(3.141592653589793)))))/(180)))/(2))))));
+  const c130 = T(() => (c15 ? k_number((v4)/(2)) : 0));
+  const c131 = T(() => (c15 ? k_number((v5)/(2)) : 0));
+  const c132 = T(() => fn78(c129()));
+  const col135 = Q((j134) => {
+    return fn87(c129(), c132, j134);
+  });
+  const c138 = T(() => (c14 ? G(c13) : k_number((G(c13))+(k_number((k_number((k_number((c12)*(k_number((v2)*(3.141592653589793)))))/(180)))/(2))))));
   const out = [];
   for (let o = 0; o < n; o++) {
     try {
-      let b137;
+      let b140;
       try {
-        let t136;
+        let t139;
         if (c17) {
-          t136 = G(c135);
+          t139 = G(c138);
         } else {
-          let t134;
+          let t137;
           if (c18) {
-            let l131 = G(c13);
-            for (let j132 = 0; j132 < n; j132++) {
-              if (!((R[j132]["i"])<(R[o]["i"]))) continue;
-              const t133 = k_number((l131)+(fn85(c127(), c130, j132)));
-              l131 = t133;
+            let l133 = G(c13);
+            for (let j134 = 0; j134 < n; j134++) {
+              if (!((R[j134]["i"])<(R[o]["i"]))) continue;
+              const t136 = k_number((l133)+(G(col135(j134))));
+              l133 = t136;
             }
-            t134 = l131;
+            t137 = l133;
           } else {
-            t134 = k_number((G(c13))+(k_number((k_number((c12)*((c14 ? R[o]["i"] : k_number((R[o]["i"])+(0.5))))))*(G(c19)))));
+            t137 = k_number((G(c13))+(k_number((k_number((c12)*((c14 ? R[o]["i"] : k_number((R[o]["i"])+(0.5))))))*(G(c19)))));
           }
-          t136 = t134;
+          t139 = t137;
         }
-        b137 = t136;
+        b140 = t139;
       } catch {
-        b137 = E;
+        b140 = E;
       }
-      out.push(({ "x": k_number((k_number((G(c128))+(k_number((G(c127()))*(k_number(Math.cos((G(b137)))))))))-(k_number((R[o]["bw"])/(2)))), "y": k_number((k_number((G(c129))+(k_number((G(c127()))*(k_number(Math.sin((G(b137)))))))))-(k_number((R[o]["bh"])/(2)))) }));
+      out.push(({ "x": k_number((k_number((G(c130))+(k_number((G(c129()))*(k_number(Math.cos((G(b140)))))))))-(k_number((R[o]["bw"])/(2)))), "y": k_number((k_number((G(c131))+(k_number((G(c129()))*(k_number(Math.sin((G(b140)))))))))-(k_number((R[o]["bh"])/(2)))) }));
     } catch {
       out.push(VEX_ERROR);
     }
