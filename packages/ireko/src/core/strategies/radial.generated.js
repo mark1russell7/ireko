@@ -258,7 +258,9 @@ export function radialOf(records, vars) {
     }
     return l113;
   });
-  const c119 = T(() => k_number((k_number((G(c71()))+(G(c116()))))/(2)));
+  const c119 = L(() => {
+    return k_number((k_number((G(c71()))+(G(c116()))))/(2));
+  });
   const c129 = L(() => {
     let t128;
     if (c17) {
@@ -272,7 +274,7 @@ export function radialOf(records, vars) {
         } else {
           let l117 = G(c71());
           let l118 = G(c116());
-          let l120 = fn112(c119);
+          let l120 = fn112(c119());
           for (let k125 = 0; ; k125++) {
             if (k125 === 50) break;
             const t121 = (l120 ? l117 : k_number((k_number((l117)+(l118)))/(2)));
@@ -300,9 +302,11 @@ export function radialOf(records, vars) {
   });
   const c130 = T(() => (c15 ? k_number((v4)/(2)) : 0));
   const c131 = T(() => (c15 ? k_number((v5)/(2)) : 0));
-  const c132 = T(() => fn78(c129()));
+  const c132 = L(() => {
+    return fn78(c129());
+  });
   const col135 = Q((j134) => {
-    return fn87(c129(), c132, j134);
+    return fn87(c129(), c132(), j134);
   });
   const c138 = T(() => (c14 ? G(c13) : k_number((G(c13))+(k_number((k_number((k_number((c12)*(k_number((v2)*(3.141592653589793)))))/(180)))/(2))))));
   const out = [];
