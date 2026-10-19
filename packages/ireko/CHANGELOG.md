@@ -14,6 +14,12 @@ A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other ver
 
 ## Unreleased
 
+## 0.1.1
+
+- The strategy `radial` uses a module that the Vex compiler makes from a Vex program. The module gives the offset of each child. It also finds the radius of a full ring.
+- The layouts do not change. The 213 tests and the golden SVG files pass.
+- The source of the module is in `ireko`, so `ireko` still has no runtime dependencies.
+
 ## 0.1.0
 
 The first version. It needs Node.js 22.12 or later, or a current browser. It is ESM only, and it has no runtime dependencies.
