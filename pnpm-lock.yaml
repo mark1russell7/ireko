@@ -210,7 +210,7 @@ importers:
         specifier: github:mark1russell7/cue
         version: https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e
       '@types/node':
-        specifier: ^26.6.4
+        specifier: ^26.6.5
         version: 26.6.5
       typescript:
         specifier: ^7.0.2
@@ -228,7 +228,7 @@ importers:
         specifier: 10.0.0
         version: 10.0.0(@types/node@26.6.5)
       '@types/node':
-        specifier: ^26.6.4
+        specifier: ^26.6.5
         version: 26.6.5
       '@types/react':
         specifier: ^19.3.0
@@ -310,7 +310,7 @@ importers:
         specifier: ^1.64.0
         version: 1.64.0
       '@types/node':
-        specifier: ^26.6.4
+        specifier: ^26.6.5
         version: 26.6.5
       '@types/react':
         specifier: ^19.3.0
