@@ -25,13 +25,14 @@ if (start === -1) {
   process.exit(1);
 }
 const length = lines.slice(start + 1).findIndex((line) => line.startsWith("## "));
-const body = lines
-  .slice(start + 1, length === -1 ? undefined : start + 1 + length)
-  .join("\n")
-  // An HTML comment is a note for the authors, not for the readers of the release.
-  .replace(/<!--[\s\S]*?-->/g, "")
-  .replace(/\n{3,}/g, "\n\n")
-  .trim();
+let body = lines.slice(start + 1, length === -1 ? undefined : start + 1 + length).join("\n");
+// An HTML comment is a note for the authors, not for the readers of the release. One pass can make a new comment
+// from the text around a comment ("<!<!-- a -->-- b -->"), so the loop continues until no comment stays.
+for (let previous; previous !== body; ) {
+  previous = body;
+  body = body.replace(/<!--[\s\S]*?-->/g, "");
+}
+body = body.replace(/\n{3,}/g, "\n\n").trim();
 if (body === "") {
   process.stderr.write(`The section "## ${version}" of CHANGELOG.md is empty.\n`);
   process.exit(1);
