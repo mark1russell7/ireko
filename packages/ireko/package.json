@@ -57,7 +57,7 @@
   ],
   "sideEffects": false,
   "engines": {
-    "node": ">=22.12"
+    "node": ">=22.23.3"
   },
   "publishConfig": {
     "access": "public",
