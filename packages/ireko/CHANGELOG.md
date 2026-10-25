@@ -14,6 +14,13 @@ A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other ver
 
 ## Unreleased
 
+## 0.1.2
+
+- The live renderers `mountSvg` and `mountDom` keep the paint order of `mountCanvas`. Before, a node that became a container around other containers painted above them. The loop of the home page showed this.
+- `LayoutView` keeps the selection when its renderer or its theme changes. Before, the new renderer had no selection until `selected` changed.
+- A `size` of `null` gives the finding `INVALID_SIZE`, and a `null` or `undefined` item of `edges` gives `UNKNOWN_EDGE_END`. Before, the engine threw a `TypeError`.
+- The layouts do not change.
+
 ## 0.1.1
 
 - The strategy `radial` uses a module that the Vex compiler makes from a Vex program. The module gives the offset of each child. It also finds the radius of a full ring.

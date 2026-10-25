@@ -39,7 +39,8 @@ export function domSurface(host: HTMLElement, theme: Theme): Surface {
   const texts = new Map<string, HTMLSpanElement>();
   const halo = haloOf(theme);
 
-  const box = (n: FrameNode, layer: HTMLElement, selected: boolean, clip: FrameNode | undefined): void => {
+  // The element of a node goes to the position `index` of its layer. Thus the layer keeps the paint order of the canvas.
+  const box = (n: FrameNode, layer: HTMLElement, index: number, selected: boolean, clip: FrameNode | undefined): void => {
     let entry = boxes.get(n.id);
     const container = isContainer(n);
     if (entry === undefined) {
@@ -49,7 +50,8 @@ export function domSurface(host: HTMLElement, theme: Theme): Surface {
       boxes.set(n.id, entry);
     }
     const { el, label } = entry;
-    if (el.parentElement !== layer) layer.appendChild(el);
+    const at = layer.children[index];
+    if (at !== el) layer.insertBefore(el, at ?? null);
     el.className = `${container ? "ireko-container" : "ireko-node"}${selected ? " ireko-selected" : ""}`;
     label.textContent = n.label;
     Object.assign(el.style, {
@@ -81,14 +83,14 @@ export function domSurface(host: HTMLElement, theme: Theme): Surface {
       const { containers, leaves } = paintOrder(frame.nodes);
       const clips = clipRoots(frame.nodes);
       const seen = new Set<string>();
-      for (const n of containers) {
-        box(n, containerLayer, selected.has(n.id), clips.get(n.id));
+      containers.forEach((n, i) => {
+        box(n, containerLayer, i, selected.has(n.id), clips.get(n.id));
         seen.add(n.id);
-      }
-      for (const n of leaves) {
-        box(n, leafLayer, selected.has(n.id), clips.get(n.id));
+      });
+      leaves.forEach((n, i) => {
+        box(n, leafLayer, i, selected.has(n.id), clips.get(n.id));
         seen.add(n.id);
-      }
+      });
       for (const [id, entry] of boxes) {
         if (seen.has(id)) continue;
         entry.el.remove();

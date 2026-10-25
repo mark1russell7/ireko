@@ -153,7 +153,8 @@ export function svgSurface(host: HTMLElement, theme: Theme): Surface {
   const lines = new Map<string, SVGPolylineElement>();
   const texts = new Map<string, SVGTextElement>();
 
-  const node = (n: FrameNode, layer: SVGGElement, selected: boolean, clip: FrameNode | undefined): void => {
+  // The element of a node goes to the position `index` of its layer. Thus the layer keeps the paint order of the canvas.
+  const node = (n: FrameNode, layer: SVGGElement, index: number, selected: boolean, clip: FrameNode | undefined): void => {
     let entry = groups.get(n.id);
     if (entry === undefined) {
       entry = { g: document.createElementNS(SVG, "g"), rect: document.createElementNS(SVG, "rect"), text: document.createElementNS(SVG, "text") };
@@ -162,7 +163,8 @@ export function svgSurface(host: HTMLElement, theme: Theme): Surface {
       groups.set(n.id, entry);
     }
     const { g, rect, text } = entry;
-    if (g.parentNode !== layer) layer.appendChild(g);
+    const at = layer.children[index];
+    if (at !== g) layer.insertBefore(g, at ?? null);
     const container = isContainer(n);
     g.setAttribute("class", `${container ? "ireko-container" : "ireko-node"}${selected ? " ireko-selected" : ""}`);
     g.setAttribute("opacity", String(n.opacity));
@@ -189,14 +191,14 @@ export function svgSurface(host: HTMLElement, theme: Theme): Surface {
         return path;
       }));
       const seen = new Set<string>();
-      for (const n of containers) {
-        node(n, layers[0], selected.has(n.id), clips.get(n.id));
+      containers.forEach((n, i) => {
+        node(n, layers[0], i, selected.has(n.id), clips.get(n.id));
         seen.add(n.id);
-      }
-      for (const n of leaves) {
-        node(n, layers[2], selected.has(n.id), clips.get(n.id));
+      });
+      leaves.forEach((n, i) => {
+        node(n, layers[2], i, selected.has(n.id), clips.get(n.id));
         seen.add(n.id);
-      }
+      });
       for (const [id, entry] of groups) {
         if (seen.has(id)) continue;
         entry.g.remove();

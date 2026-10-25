@@ -5,7 +5,7 @@
  */
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer } from "node:http";
-import { extname, join, normalize, resolve } from "node:path";
+import { extname, isAbsolute, join, normalize, relative, resolve, sep } from "node:path";
 
 const root = resolve(process.env["SITE_DIST"] ?? "dist");
 const port = Number(process.env["PORT"] ?? "4322");
@@ -33,8 +33,17 @@ const TYPES: Readonly<Record<string, string>> = {
 
 /** This function gives the file of a path below the base, or undefined. A path outside the folder gives undefined. */
 function fileOf(path: string): string | undefined {
-  const full = normalize(join(root, decodeURIComponent(path)));
-  if (!full.startsWith(root)) return undefined;
+  let decoded: string;
+  try {
+    decoded = decodeURIComponent(path);
+  } catch {
+    // A malformed escape, for example "%E0", gives 404. It does not stop the server.
+    return undefined;
+  }
+  const full = normalize(join(root, decoded));
+  // A sibling folder whose name starts with the name of the root, for example "dist-other", is outside the root.
+  const inside = relative(root, full);
+  if (inside === ".." || inside.startsWith(`..${sep}`) || isAbsolute(inside)) return undefined;
   if (existsSync(full) && statSync(full).isFile()) return full;
   const index = join(full, "index.html");
   return existsSync(index) ? index : undefined;

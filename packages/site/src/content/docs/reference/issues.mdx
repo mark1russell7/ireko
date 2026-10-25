@@ -60,12 +60,15 @@ An option has the wrong type or is out of its range, or the strategy has no opti
 ## `INVALID_SIZE`
 
 - A `size` of a node is not a finite number more than 0 (an error). The engine uses the default for that dimension.
+- The `size` of a node is `null` (an error). The engine uses the default size.
 - The `nodeSize` option is not a valid size (an error). The engine uses 120 by 48.
 - A fixed size of a container is smaller than its padding and header (a warning). The engine makes the box large enough to hold one pixel of content.
 
 ## `UNKNOWN_EDGE_END`
 
 An edge connects a node that is not in the tree. The engine skips the edge. Check the identifiers. A node that the engine skipped for another finding (for example `DUPLICATE_ID`) is not in the tree either.
+
+An item of `edges` that is `null` or `undefined` gets this finding too. The engine skips it.
 
 ## `SELF_LOOP`
 

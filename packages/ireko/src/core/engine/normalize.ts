@@ -110,6 +110,11 @@ function enumOf<V extends string>(value: unknown, values: readonly V[], fallback
 function sizeOf(spec: NodeSpec, id: string, issues: Issue[]): NodeRecord["size"] {
   const size = spec.size;
   if (size === undefined) return {};
+  // A JSON input can have null in place of an object.
+  if ((size as unknown) === null) {
+    issues.push({ code: "INVALID_SIZE", severity: "error", message: `The size of the node "${id}" is null. The engine uses the default size.`, node: id, detail: { size: null } });
+    return {};
+  }
   const out: { width?: number; height?: number } = {};
   for (const key of ["width", "height"] as const) {
     const v = size[key];
@@ -125,6 +130,12 @@ function edgesOf(input: LayoutInput, index: ReadonlyMap<string, number>, issues:
   const edges: unknown = input.edges;
   const list: readonly EdgeSpec[] = Array.isArray(edges) ? (input.edges ?? []) : [];
   list.forEach((spec, i) => {
+    // A JSON input can have null in place of an edge. A JavaScript input can have undefined.
+    if ((spec as unknown) === null || (spec as unknown) === undefined) {
+      const id = `edge-${String(i)}`;
+      issues.push({ code: "UNKNOWN_EDGE_END", severity: "error", message: `The edge "${id}" is not an object. The engine skips the edge.`, edge: id, detail: { edge: spec } });
+      return;
+    }
     const id = typeof spec.id === "string" && spec.id !== "" ? spec.id : `edge-${String(i)}`;
     const source = index.get(spec.source);
     const target = index.get(spec.target);

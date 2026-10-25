@@ -179,6 +179,12 @@ describe("findings of the input", () => {
     expect(node(out, "r").width).toBe(120);
   });
 
+  it("uses the default for a null size, and does not throw", () => {
+    const out = layout({ root: { id: "r", children: [{ id: "a", size: null as never }, { id: "b" }] } });
+    expect(codes(out)).toEqual(["INVALID_SIZE"]);
+    expect(node(out, "a").width).toBe(120);
+  });
+
   it("uses the defaults for bad layout options", () => {
     const out = layout({ root: { id: "r" } }, { spacing: -3, nodeSize: { width: 0, height: 5 }, header: Number.NaN, origin: { x: Number.NaN, y: 0 } });
     expect(codes(out)).toEqual(["INVALID_OPTION", "INVALID_SIZE", "INVALID_OPTION"]);
@@ -189,6 +195,13 @@ describe("findings of the input", () => {
     const out = layout({ root: { id: "r", children: [{ id: "a" }] }, edges: [{ source: "a", target: "zzz" }, { source: "a", target: "a" }] });
     expect(codes(out)).toEqual(["UNKNOWN_EDGE_END", "SELF_LOOP"]);
     expect(out.edges.map((e) => e.kind)).toEqual(["tree"]);
+  });
+
+  it("skips a null or undefined edge, and does not throw", () => {
+    const out = layout({ root: { id: "r", children: [{ id: "a" }, { id: "b" }] }, edges: [null as never, undefined as never, { source: "a", target: "b" }] });
+    expect(codes(out)).toEqual(["UNKNOWN_EDGE_END", "UNKNOWN_EDGE_END"]);
+    expect(out.issues.map((i) => i.edge)).toEqual(["edge-0", "edge-1"]);
+    expect(out.edges.filter((e) => e.kind === "extra")).toHaveLength(1);
   });
 
   it("renames a duplicate edge identifier", () => {
