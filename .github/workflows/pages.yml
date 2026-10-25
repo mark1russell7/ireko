@@ -2,6 +2,9 @@
 #   build   the site, with the base path from the name of the repository, and the share cards
 #   deploy  the upload to Pages
 # The deployment starts after a green CI run of a push to the main branch. It can also start by hand.
+# After a CI run, the build checks out the default ref of the event: the last commit of the default branch.
+# The build runs only when that commit is the commit that CI examined. When a newer commit is on the branch,
+# the CI run of that commit deploys it. Thus the build never checks out a commit from the event payload.
 # The Pages source of the repository must be "GitHub Actions" (Settings > Pages).
 name: Pages
 
@@ -22,8 +25,13 @@ concurrency:
 jobs:
   # The build installs and runs the code of the repository, so it gets only "contents: read".
   build:
-    # A CI run for a pull request does not deploy. Only a green CI run of a push deploys.
-    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    # A CI run for a pull request does not deploy. Only a green CI run of a push deploys, and only for the
+    # commit that is now the last commit of the default branch (github.sha).
+    if: >-
+      github.event_name == 'workflow_dispatch' || (
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_sha == github.sha)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -32,8 +40,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          # The commit that CI examined
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          # No ref: github.sha. After a CI run, the condition of the job makes it the commit that CI examined.
           # The whole history: the sitemap gets the date of each page from its last commit.
           fetch-depth: 0
       # The pnpm version comes from "packageManager" in package.json
