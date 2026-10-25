@@ -1,15 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "helpers:pinGitHubActionDigestsToSemver"],
+  "description": "The shared settings of mark1russell7 (template renovate/default), with the rules of ireko: a wait of 14 days after a release, and ranges that follow the new versions (bump).",
+  "extends": ["github>mark1russell7/template//renovate/default"],
   "minimumReleaseAge": "14 days",
   "rangeStrategy": "bump",
-  "labels": ["dependencies"],
   "packageRules": [
     {
-      "description": "One pull request for the GitHub Actions each week.",
-      "matchManagers": ["github-actions"],
-      "groupName": "GitHub Actions",
-      "schedule": ["before 6am on monday"]
+      "description": "The engines range is the minimum Node.js of the published package. A higher minimum is a MAJOR change (SemVer), so it changes only by hand: bump does not apply to it.",
+      "matchDepTypes": ["engines"],
+      "rangeStrategy": "update-lockfile"
     }
   ]
 }
