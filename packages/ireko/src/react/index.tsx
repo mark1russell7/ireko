@@ -141,13 +141,15 @@ export function LayoutView({ layout, renderer = "svg", theme, viewport, duration
   const live = useRef<Renderer | undefined>(undefined);
   const latest = useRef(layout);
   const latestTheme = useRef(theme);
+  const latestSelected = useRef(selected);
   // The key stands for the theme object, so an equal theme in a new object does not mount the renderer again.
   const themeKey = JSON.stringify(theme ?? {});
 
-  // This effect comes first, so a renderer that the next effect mounts draws the newest layout and theme.
+  // This effect comes first, so a renderer that the next effect mounts draws the newest layout, theme and selection.
   useEffect(() => {
     latest.current = layout;
     latestTheme.current = theme;
+    latestSelected.current = selected;
   });
 
   useEffect(() => {
@@ -163,6 +165,8 @@ export function LayoutView({ layout, renderer = "svg", theme, viewport, duration
     });
     live.current = r;
     r.update(latest.current);
+    // A new renderer has no selection. The selection effect runs only when `selected` changes.
+    r.select(latestSelected.current ?? []);
     return () => {
       r.destroy();
       live.current = undefined;

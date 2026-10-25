@@ -101,6 +101,19 @@ describe("LayoutView", () => {
     expect(view.container.innerHTML).toBe("");
   });
 
+  it("keeps the selection when the renderer or the theme changes", () => {
+    const out = layout(input);
+    const selected = ["a"];
+    const view = mountReact(<LayoutView layout={out} renderer="svg" duration={0} selected={selected} />);
+    const isSelected = (): boolean => view.container.querySelector('[data-id="a"]')?.classList.contains("ireko-selected") === true;
+    expect(isSelected()).toBe(true);
+    view.rerender(<LayoutView layout={out} renderer="dom" duration={0} selected={selected} />);
+    expect(isSelected()).toBe(true);
+    view.rerender(<LayoutView layout={out} renderer="dom" duration={0} selected={selected} theme={{ accent: "red" }} />);
+    expect(isSelected()).toBe(true);
+    view.unmount();
+  });
+
   it("changes the renderer, shares a viewport, and reports a click on a box", () => {
     const viewport = createViewport();
     const picked: (string | undefined)[] = [];

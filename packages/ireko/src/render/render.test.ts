@@ -2,7 +2,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { drawFrame, mountCanvas, type Context2D } from "../canvas/index.ts";
 import { layout } from "../core/engine.ts";
-import type { Rect } from "../core/index.ts";
+import type { NodeSpec, Rect } from "../core/index.ts";
 import { mountDom } from "../dom/index.ts";
 import { examples } from "../examples/index.ts";
 import { mountSvg } from "../svg/index.ts";
@@ -25,6 +25,11 @@ afterEach(() => {
   document.body.replaceChildren();
   vi.unstubAllGlobals();
 });
+
+/** This function gives the identifiers of the elements of `selector` in a renderer, in the order of the document. */
+function ids(r: ReturnType<typeof mountSvg>, selector: string): (string | null)[] {
+  return [...r.element.querySelectorAll(selector)].map((el) => el.getAttribute("data-id"));
+}
 
 /** A wheel event at the point (0, 0). happy-dom does not set the client coordinates of a wheel event. */
 function wheel(deltaY: number): WheelEvent {
@@ -346,6 +351,26 @@ describe("live renderers", () => {
     r.update(first);
     expect(r.viewport.get()).toEqual({ x: 0, y: 0, k: 1 });
     r.destroy();
+  });
+
+  it("keeps the paint order of the canvas when a node becomes a container around containers", () => {
+    // The loop of the home page goes from "app" linked to "app" nested around the containers "web" and "data".
+    const children: NodeSpec[] = [
+      { id: "web", mode: "nested", children: [{ id: "w1" }] },
+      { id: "data", mode: "nested", children: [{ id: "d1" }] },
+    ];
+    const linked = layout({ root: { id: "app", children } });
+    const nested = layout({ root: { id: "app", mode: "nested", children } });
+    for (const mountOf of [mountSvg, mountDom]) {
+      const r = mountOf(host(), { duration: 0 });
+      for (const out of [linked, nested, linked, nested]) {
+        r.update(out);
+        const { containers, leaves } = paintOrder(frameOf(out).nodes);
+        expect(ids(r, ".ireko-container")).toEqual(containers.map((n) => n.id));
+        expect(ids(r, ".ireko-node")).toEqual(leaves.map((n) => n.id));
+      }
+      r.destroy();
+    }
   });
 
   it("draws the edge labels in each renderer, and removes them with their edges", () => {

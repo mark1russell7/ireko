@@ -4,7 +4,7 @@
  */
 import type { Rect } from "ireko";
 import { createViewport, easeInOut, type View, type Viewport } from "ireko/render";
-import { useEffect, type RefObject } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 
 /** The options of `useFollowFit`. */
 export interface FollowOptions {
@@ -25,6 +25,8 @@ export function useFollowFit(viewport: Viewport, stage: RefObject<HTMLElement | 
   const y = bounds?.y;
   const width = bounds?.width;
   const height = bounds?.height;
+  // The renderer fits the layout when it mounts, before this hook runs. Thus the first fit snaps, also when the view is not the identity.
+  const fitted = useRef(false);
 
   useEffect(() => {
     const element = stage.current;
@@ -37,7 +39,8 @@ export function useFollowFit(viewport: Viewport, stage: RefObject<HTMLElement | 
     const observer = new ResizeObserver(() => viewport.set(goal()));
     const from = viewport.get();
     const to = goal();
-    const first = from.k === 1 && from.x === 0 && from.y === 0;
+    const first = !fitted.current || (from.k === 1 && from.x === 0 && from.y === 0);
+    fitted.current = true;
     if (first || duration <= 0) {
       viewport.set(to);
       observer.observe(element);
