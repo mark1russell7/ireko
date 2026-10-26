@@ -4,11 +4,12 @@
  * placement of each child in the box of the node.
  */
 import { at, atKey } from "../at.ts";
-import { rectAt, union, unionAll, type Point, type Rect, type Size } from "../geometry.ts";
+import { rectAt, type Rect, type Size } from "../geometry.ts";
 import type { Issue, NodeSpec } from "../model.ts";
 import { resolveOptions } from "../options.ts";
 import { grid } from "../strategies/grid.ts";
 import type { AnyStrategy, Arrangement, ChildEdge, Direction, MeasuredChild, Shape } from "../strategy.ts";
+import { measureOf, type MeasureColumn, type MeasureRecord } from "./measure.generated.js";
 import { boxShape, joinShapes, moveShape } from "./shape.ts";
 import type { Context, Normalized, Placement } from "./types.ts";
 
@@ -36,6 +37,8 @@ export interface Measurement {
 }
 
 const IDENTITY: Placement = { x: 0, y: 0, scale: 1 };
+/** The record of the node in the sheet of the fit: the root of the sheet, before the records of its children. */
+const NODE_RECORD: MeasureRecord = { p: -1, ox: 0, oy: 0, ex: 0, ey: 0, ew: 0, eh: 0 };
 
 /** This function measures each node of `norm`. It adds its findings to `issues`. */
 export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measurement {
@@ -97,16 +100,46 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
     flow[i] = arranged.arrangement.flow;
     const offsets = arranged.arrangement.offsets;
 
+    // The Vex sheet of the fit gives the bounds, the box and the placements: measure.generated.js, from the pilot of Vex.
+    const records: MeasureRecord[] = [NODE_RECORD];
+    children.forEach((child, k) => {
+      const o = at(offsets, k);
+      const e = child.extent;
+      records.push({ p: 0, ox: o.x, oy: o.y, ex: e.x, ey: e.y, ew: e.width, eh: e.height });
+    });
+    const area = arranged.arrangement.content;
+    const fit = measureOf(
+      records,
+      {
+        linked: node.mode === "linked",
+        content: area !== undefined,
+        cx: area?.x ?? 0,
+        cy: area?.y ?? 0,
+        cw: area?.width ?? 0,
+        ch: area?.height ?? 0,
+        ownW: own.size.width,
+        ownH: own.size.height,
+        expW: own.explicit.width,
+        expH: own.explicit.height,
+        hasW: node.size.width !== undefined,
+        hasH: node.size.height !== undefined,
+        nodeW: node.size.width ?? 0,
+        nodeH: node.size.height ?? 0,
+        padding,
+        header,
+        grow: node.fit === "grow",
+        scale: node.fit === "scale",
+        clip: node.fit === "clip",
+      },
+      records.map((r) => r.p),
+    );
+    node.children.forEach((child, k) => {
+      placement[child] = { x: numberAt(fit.lx, k + 1), y: numberAt(fit.ly, k + 1), scale: numberAt(fit.ls, k + 1) };
+    });
+
     if (node.mode === "linked") {
       box[i] = own.size;
-      let ext = rectAt({ x: 0, y: 0 }, own.size);
-      node.children.forEach((c, k) => {
-        const o = at(offsets, k);
-        placement[c] = { x: o.x, y: o.y, scale: 1 };
-        const e = at(extent, c);
-        ext = union(ext, { x: o.x + e.x, y: o.y + e.y, width: e.width, height: e.height });
-      });
-      extent[i] = ext;
+      extent[i] = { x: numberAt(fit.bx, 0), y: numberAt(fit.by, 0), width: numberAt(fit.bw, 0), height: numberAt(fit.bh, 0) };
       if (at(needsShape, i)) {
         const parts = node.children.map((c, k) => {
           const o = at(offsets, k);
@@ -119,36 +152,13 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
       continue;
     }
 
-    // The nested mode: the engine moves the content into the box, inside the padding and below the header.
-    // The header is the smallest space above the content. The padding counts as a part of it.
-    const top = Math.max(padding, header);
-    const placed = children.map((child, k) => {
-      const o = at(offsets, k);
-      return { x: o.x + child.extent.x, y: o.y + child.extent.y, width: child.extent.width, height: child.extent.height };
-    });
-    const content = arranged.arrangement.content === undefined ? unionAll(placed) : unionAll([arranged.arrangement.content, ...placed]);
-    const need: Size = { width: content.width + 2 * padding, height: content.height + top + padding };
-    const fixed = node.fit !== "grow";
-    let size: Size = fixed
-      ? { width: node.size.width ?? need.width, height: node.size.height ?? need.height }
-      : { width: Math.max(need.width, own.explicit.width), height: Math.max(need.height, own.explicit.height) };
-    if (fixed && (size.width - 2 * padding < 1 || size.height - top - padding < 1)) {
+    // The nested mode: the sheet moves the content into the box, inside the padding and below the header.
+    if (at(fit.small, 0) === true) {
       // A fixed size that cannot hold its own padding: the box grows to hold one pixel of content.
+      const size: Size = { width: numberAt(fit.firstW, 0), height: numberAt(fit.firstH, 0) };
       issues.push({ code: "INVALID_SIZE", severity: "warning", message: `The size of the node "${node.id}" is smaller than its padding and header. The engine makes the box larger.`, node: node.id, detail: { size, padding, header } });
-      size = { width: Math.max(size.width, 2 * padding + 1), height: Math.max(size.height, top + padding + 1) };
     }
-    const free: Size = { width: size.width - 2 * padding, height: size.height - top - padding };
-    const scale = node.fit === "scale" ? scaleToFit(content, free) : 1;
-    const shownW = content.width * scale;
-    const shownH = content.height * scale;
-    // The content is centered in the free area. A clipped content that is too large starts at the padding.
-    const ox = padding + (node.fit === "clip" ? Math.max(0, (free.width - shownW) / 2) : (free.width - shownW) / 2);
-    const oy = top + (node.fit === "clip" ? Math.max(0, (free.height - shownH) / 2) : (free.height - shownH) / 2);
-
-    node.children.forEach((c, k) => {
-      const o: Point = at(offsets, k);
-      placement[c] = { x: ox + scale * (o.x - content.x), y: oy + scale * (o.y - content.y), scale };
-    });
+    const size: Size = { width: numberAt(fit.sw, 0), height: numberAt(fit.sh, 0) };
     box[i] = size;
     extent[i] = rectAt({ x: 0, y: 0 }, size);
     // The children of a nested node are inside its box, so the box is its shape.
@@ -176,9 +186,11 @@ function positive(v: number): boolean {
   return Number.isFinite(v) && v > 0;
 }
 
-function scaleToFit(content: Rect, free: Size): number {
-  // Each child box has a positive size, so the content is never empty.
-  return Math.min(1, free.width / content.width, free.height / content.height);
+/** This function gives the number of a column at the index `i`. An error of Vex is a value that is not finite, for example an overflow of a sum. */
+function numberAt(column: MeasureColumn, i: number): number {
+  const v = at(column, i);
+  if (typeof v !== "number") throw new RangeError("ireko: the measure of a node is not finite.");
+  return v;
 }
 
 function commonNumber(raw: Readonly<Record<string, unknown>> | undefined, key: string, fallback: number, node: string, issues: Issue[]): number {

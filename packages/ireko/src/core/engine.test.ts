@@ -323,6 +323,15 @@ describe("extension points", () => {
     }
   });
 
+  it("throws a RangeError when the fit of a node is not finite", () => {
+    // Each offset is finite, but the union of the two children is wider than the largest number.
+    const far = defineStrategy({ type: "far", description: "It puts two children very far apart.", options: {}, arrange: ({ children }) => ({ offsets: children.map((_, k) => ({ x: k === 0 ? -1.7e308 : 1.7e308, y: 0 })) }) });
+    const engine = createEngine({ strategies: [far] });
+    for (const mode of ["nested", "linked"] as const) {
+      expect(() => engine.layout({ root: { id: "r", layout: "far", mode, children: [{ id: "a" }, { id: "b" }] } })).toThrow(RangeError);
+    }
+  });
+
   it("starts the audit of a strategy, and reports an audit that throws", () => {
     const audited = defineStrategy({ ...column, type: "audited", audit: ({ node: n, children }) => [{ code: "CUSTOM", severity: "warning", message: `${n.id} has ${String(children.length)}` }] });
     const broken = defineStrategy({ ...column, type: "broken", audit: () => { throw new Error("audit"); } });
