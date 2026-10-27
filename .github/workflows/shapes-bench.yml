@@ -1,0 +1,85 @@
+# SHAPEWIRE: the shapes module of Vex against the shapes code of ireko (an experiment, not for main).
+#   suite   the whole test suite of packages/ireko with the switch of the shapes on
+#   bench   packages/ireko/scripts/bench-shapes.mjs: the shapes pass alone and a full layout, switch off and on,
+#           as a table in the summary of the run and a JSON artifact, and the size of the module
+name: Shapes bench
+
+on:
+  push:
+    branches: [vex-shapes]
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: The number of runs of each measure (the median is the result)
+        default: "31"
+
+permissions: {}
+
+jobs:
+  suite:
+    name: Tests with the switch on
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter ireko test:vex-shapes
+      # The generated module is the output of the generator: a new run of the script must not change it.
+      - run: pnpm --filter ireko vex:shapes && git diff --exit-code packages/ireko/src/core/engine/shape.generated.js
+
+  bench:
+    name: Benchmark
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: The benchmark
+        working-directory: packages/ireko
+        env:
+          RUNS: ${{ inputs.runs || '31' }}
+        run: node scripts/bench-shapes.mjs --runs "$RUNS" --large --out shapes-bench.json
+      - name: The size of the module
+        working-directory: packages/ireko
+        run: |
+          esbuild="$(ls -d ../../node_modules/.pnpm/esbuild@*/node_modules/esbuild | head -n 1)/bin/esbuild"
+          module_size=$(node "$esbuild" src/core/engine/shape.generated.js --minify --format=esm | gzip -9c | wc -c)
+          printf 'export { layout } from "./src/core/engine.ts";\n' > size-off.ts
+          printf 'export { layout } from "./src/core/engine.ts";\nimport { setLinkedShape } from "./src/core/engine/shape.ts";\nimport { vexLinkedShape } from "./src/core/engine/shape-vex.ts";\nsetLinkedShape(vexLinkedShape);\n' > size-on.ts
+          off=$(node "$esbuild" size-off.ts --bundle --minify --format=esm --log-level=error | gzip -9c | wc -c)
+          on=$(node "$esbuild" size-on.ts --bundle --minify --format=esm --log-level=error | gzip -9c | wc -c)
+          {
+            echo "### Size (esbuild --minify, gzip -9)"
+            echo
+            echo "| Item | Bytes |"
+            echo "|---|---:|"
+            echo "| \`shape.generated.js\` alone | $module_size |"
+            echo "| \`layout\` bundle, switch code only (this branch as published) | $off |"
+            echo "| \`layout\` bundle with the module wired in | $on |"
+            echo "| Difference | $((on - off)) |"
+            echo
+            echo "The size check of ireko (\`.size-limit.json\`) gives \`layout\` a limit of 17.4 kB. It uses a different bundler, so compare the difference, not the totals."
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: shapes-bench
+          path: packages/ireko/shapes-bench.json
+          retention-days: 90
