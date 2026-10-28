@@ -14,7 +14,7 @@ function listOf(bands: readonly Band[]): VexList<VexBand> {
   return { kind: "vex.list", items: bands.map((value, k) => ({ key: String(k), result: { ok: true, value } })) };
 }
 
-/** This function gives the values of a list of Vex. An error in the list is a value that is not finite. */
+/** This function gives the values of a list of Vex. An error in the list is a band with NaN. An infinite end is a value. */
 function valuesOf<T>(list: VexList<T>): T[] {
   return list.items.map((item) => {
     if (!item.result.ok) throw new RangeError("ireko: the shape of a node is not finite.");

@@ -63,14 +63,19 @@ describe("the shapes module of Vex against the shapes code of ireko", () => {
     expect(vexLinkedShape({ width: 10, height: 4 }, [])).toStrictEqual(boxShape({ width: 10, height: 4 }));
   });
 
-  it("differs only where a moved band is not finite: the module drops the child, and the code of ireko keeps Infinity", () => {
+  it("gives the same bits where a moved band is not finite: the module and the code of ireko keep Infinity", () => {
     // A sum of two numbers near the largest number overflows. The layout of ireko throws before this point.
     const huge: ShapePart = { shape: boxShape({ width: 1e308, height: 1e308 }), x: 1e308, y: 1e308 };
     const own = { width: 10, height: 4 };
-    expect(vexLinkedShape(own, [huge])).toStrictEqual(boxShape(own));
-    expect(handLinkedShape(own, [huge]).rows.some((b) => b.max === Infinity)).toBe(true);
-    // A box that is not finite is an error of the module.
-    expect(() => vexLinkedShape({ width: Infinity, height: 4 }, [{ shape: boxShape(own), x: 0, y: 0 }])).toThrow(RangeError);
+    const hand = handLinkedShape(own, [huge]);
+    expect(hand.rows.some((b) => b.max === Infinity)).toBe(true);
+    expect(shapeDifference(hand, vexLinkedShape(own, [huge]))).toBeUndefined();
+    // A box that is not finite keeps its infinite end in both.
+    const wide = { width: Infinity, height: 4 };
+    const parts: ShapePart[] = [{ shape: boxShape(own), x: 0, y: 0 }];
+    expect(shapeDifference(handLinkedShape(wide, parts), vexLinkedShape(wide, parts))).toBeUndefined();
+    // A box with NaN is an error of the module.
+    expect(() => vexLinkedShape({ width: Number.NaN, height: 4 }, parts)).toThrow(RangeError);
   });
 
   it("gives the code before, and the measure pass uses the code of the switch", () => {

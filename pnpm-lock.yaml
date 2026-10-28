@@ -209,14 +209,14 @@ importers:
         specifier: github:mark1russell7/cue
         version: https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e
       '@mark1russell7/vex':
-        specifier: ^0.13.4
-        version: 0.13.4
+        specifier: ^0.17.0
+        version: 0.17.0
       '@mark1russell7/vex-compiler':
-        specifier: ^0.13.4
-        version: 0.13.4
+        specifier: ^0.17.0
+        version: 0.17.0
       '@mark1russell7/vex-domains':
-        specifier: ^0.13.4
-        version: 0.13.4
+        specifier: ^0.17.0
+        version: 0.17.0
       '@stryker-mutator/core':
         specifier: 10.0.0
         version: 10.0.0(@types/node@26.6.5)
@@ -1249,8 +1249,8 @@ packages:
   '@loaderkit/resolve@1.0.6':
     resolution: {integrity: sha512-G8FdIoF5CypfwmD9rl8BXod5HDn8JqB0CCNBXDTaRZ+yRYhARrrSToX1zg1zy9jX3zLqigsELwhT4gNtkdQAUg==}
 
-  '@mark1russell7/coeval@0.8.0':
-    resolution: {integrity: sha512-luTZVua8cwNkVpC6ERtL90ukaXLtmye/RvSf3WXmFSNvDaiLRDYE6YQwuJDkUjYWhRBJ+u7lVkr0JhDpiFErhw==}
+  '@mark1russell7/coeval@0.15.0':
+    resolution: {integrity: sha512-+dYqBFAW6i/wETKGqujgiB7jb2vXHxsbxDJCHPpH5K/4D72sknuu4JO3Dr5/ULUuYdNccPJRN1+yKtYhGdcySw==}
 
   '@mark1russell7/cue@https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e':
     resolution: {gitHosted: true, integrity: sha512-qEi0JRgyXKmNAiLlIKy1mKKeaEc/4AIUh8pNKR+JfMooaq/Ovpztp4tVNY1e23yi6PeuacrrR2e8/j0AA0f0nA==, tarball: https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e}
@@ -1269,14 +1269,14 @@ packages:
     engines: {node: '>=22.12'}
     hasBin: true
 
-  '@mark1russell7/vex-compiler@0.13.4':
-    resolution: {integrity: sha512-GUjaVIcj9T9FX/n2xOaB7g0BDJCE3g8auJ1vZtX9cOWqRKMFpsW8VNCTqg38h5wcORb44yI885vBOXuQaUaygw==}
+  '@mark1russell7/vex-compiler@0.17.0':
+    resolution: {integrity: sha512-vQuJrxd2rsDYR85qWy9ufuHw/ez0XzpsSe9UxhUejgZmn3YS4wawGzqriY5FZTi7yDbWp9XbM56SdqqnCBXHYQ==}
 
-  '@mark1russell7/vex-domains@0.13.4':
-    resolution: {integrity: sha512-KpK/poqRNnjwrofhon9ZVL/AWO+4kgIBS1GaqG/BiOksNYQ9SGuelVJ+ImAFkMxVNthIyjbniWg4oDcTAi5pSw==}
+  '@mark1russell7/vex-domains@0.17.0':
+    resolution: {integrity: sha512-D/RKGDXXrWN0TeAwPhySw/muRKmKtirTTCeZuW9gUr9KrBgpXuwzL1rYTn4a05kfrl/ZOhAzJ8XpnMNos3DIuA==}
 
-  '@mark1russell7/vex@0.13.4':
-    resolution: {integrity: sha512-xESyHHEpQfnNpAAO2TvVOCWX3+BuFYw/Ily6Nv+Fc9/ZrVDKaRFewx9HfL0tnTEJsNKi4D54x6iO2QV/EvX6ew==}
+  '@mark1russell7/vex@0.17.0':
+    resolution: {integrity: sha512-/cc36k7VseqIRkHYu39+kotsX+qdCRO3Y5FntOMgmKv4QhGVuIkiSqTuw4kyhFIPsYoh4EtosHql7mKqN5801g==}
 
   '@mdx-js/mdx@3.1.1':
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
@@ -4966,7 +4966,7 @@ snapshots:
     dependencies:
       '@braidai/lang': 1.1.2
 
-  '@mark1russell7/coeval@0.8.0': {}
+  '@mark1russell7/coeval@0.15.0': {}
 
   '@mark1russell7/cue@https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e': {}
 
@@ -4978,17 +4978,17 @@ snapshots:
     dependencies:
       '@clack/prompts': 1.8.1
 
-  '@mark1russell7/vex-compiler@0.13.4':
+  '@mark1russell7/vex-compiler@0.17.0':
     dependencies:
-      '@mark1russell7/vex': 0.13.4
+      '@mark1russell7/vex': 0.17.0
 
-  '@mark1russell7/vex-domains@0.13.4':
+  '@mark1russell7/vex-domains@0.17.0':
     dependencies:
-      '@mark1russell7/vex': 0.13.4
+      '@mark1russell7/vex': 0.17.0
 
-  '@mark1russell7/vex@0.13.4':
+  '@mark1russell7/vex@0.17.0':
     dependencies:
-      '@mark1russell7/coeval': 0.8.0
+      '@mark1russell7/coeval': 0.15.0
 
   '@mdx-js/mdx@3.1.1(supports-color@7.2.0)':
     dependencies:
