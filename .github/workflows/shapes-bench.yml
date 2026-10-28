@@ -2,6 +2,9 @@
 #   suite   the whole test suite of packages/ireko with the switch of the shapes on
 #   bench   packages/ireko/scripts/bench-shapes.mjs: the shapes pass alone and a full layout, switch off and on,
 #           as a table in the summary of the run and a JSON artifact, and the size of the module
+#   profile packages/ireko/scripts/profile-shapes.mjs and profile-summary.mjs: a CPU profile of the shapes pass on the
+#           full tree of 1111 nodes (the wrapper and the module, the module alone, the code of ireko), with the self
+#           time in groups (wrap, envelope, alloc, dispatch, bandops, other), and the .cpuprofile files as an artifact
 name: Shapes bench
 
 on:
@@ -12,6 +15,9 @@ on:
       runs:
         description: The number of runs of each measure (the median is the result)
         default: "31"
+      profile_seconds:
+        description: The seconds of samples of each CPU profile
+        default: "4"
 
 permissions: {}
 
@@ -83,4 +89,40 @@ jobs:
         with:
           name: shapes-bench
           path: packages/ireko/shapes-bench.json
+          retention-days: 90
+
+  profile:
+    name: CPU profile
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Each mode warms up for 1 s, then the profiler of V8 samples every 100 µs for the given seconds.
+      - name: The profiles
+        working-directory: packages/ireko
+        env:
+          SECONDS_OF_SAMPLES: ${{ inputs.profile_seconds || '4' }}
+        run: |
+          set -o pipefail
+          mkdir -p shapes-profile
+          for mode in vex module hand; do
+            node scripts/profile-shapes.mjs --mode "$mode" --seconds "$SECONDS_OF_SAMPLES" --out "shapes-profile/$mode.cpuprofile"
+          done
+      - name: The summary of the profiles
+        working-directory: packages/ireko
+        run: node scripts/profile-summary.mjs --out shapes-profile/summary.json vex=shapes-profile/vex.cpuprofile module=shapes-profile/module.cpuprofile hand=shapes-profile/hand.cpuprofile
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: shapes-profile
+          path: packages/ireko/shapes-profile/
           retention-days: 90
