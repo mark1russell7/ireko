@@ -60,12 +60,13 @@ jobs:
       - name: The size of the module
         working-directory: packages/ireko
         run: |
+          set -o pipefail
           esbuild="$(ls -d ../../node_modules/.pnpm/esbuild@*/node_modules/esbuild | head -n 1)/bin/esbuild"
-          module_size=$(node "$esbuild" src/core/engine/shape.generated.js --minify --format=esm | gzip -9c | wc -c)
+          module_size=$("$esbuild" src/core/engine/shape.generated.js --minify --format=esm | gzip -9c | wc -c)
           printf 'export { layout } from "./src/core/engine.ts";\n' > size-off.ts
           printf 'export { layout } from "./src/core/engine.ts";\nimport { setLinkedShape } from "./src/core/engine/shape.ts";\nimport { vexLinkedShape } from "./src/core/engine/shape-vex.ts";\nsetLinkedShape(vexLinkedShape);\n' > size-on.ts
-          off=$(node "$esbuild" size-off.ts --bundle --minify --format=esm --log-level=error | gzip -9c | wc -c)
-          on=$(node "$esbuild" size-on.ts --bundle --minify --format=esm --log-level=error | gzip -9c | wc -c)
+          off=$("$esbuild" size-off.ts --bundle --minify --format=esm --log-level=error | gzip -9c | wc -c)
+          on=$("$esbuild" size-on.ts --bundle --minify --format=esm --log-level=error | gzip -9c | wc -c)
           {
             echo "### Size (esbuild --minify, gzip -9)"
             echo
