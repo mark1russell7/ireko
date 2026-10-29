@@ -4,10 +4,9 @@ export class VexContractError extends Error {}
 /** The value of a key where the program gives an error of Vex. */
 export const VEX_ERROR = Object.freeze({ vexError: true });
 const E = {};
-function F() { throw E; }
-// COMPILE-FUSE step B (bench only): V, AP, AO and SK are no longer used, so the module does not print them.
+function AOC(l, o, w) { if (l !== w) return l.concat(o); const n = o.length; for (let i = 0; i < n; i++) l.push(o[i]); return l; }
 function C(m) { throw new VexContractError(m); }
-// COMPILE-FUSE step A (bench only): VW, CT and FL are no longer used, so the module does not print them.
+function F() { throw E; }
 function FI(n, v) {
   if (!(Number.isSafeInteger(n) && n >= 0 && n <= 100000 && v !== undefined)) F();
   const o = [];
@@ -17,17 +16,6 @@ function FI(n, v) {
 function G(x) { return x === E ? F() : x; }
 function L(f) { let done = false, v; return () => { if (!done) { done = true; try { v = f(); } catch { v = E; } } return v; }; }
 function LI(x, h, t) {
-  // SHAPEWIRE wrapper (bench only): a plain array is a list whose items all have values, with the keys "0", "1", ...
-  if (Array.isArray(x)) {
-    const o = new Array(x.length);
-    for (let i = 0; i < x.length; i++) {
-      const r = x[i];
-      const v = h > 0 ? LI(r, h - 1, t) : r !== undefined && t(r) ? r : undefined;
-      if (v === undefined) return undefined;
-      o[i] = [`${i}`, v];
-    }
-    return o;
-  }
   if (typeof x !== "object" || x === null || x.kind !== "vex.list" || !Array.isArray(x.items)) return undefined;
   const o = [];
   for (let i = 0; i < x.items.length; i++) {
@@ -46,8 +34,17 @@ function LI(x, h, t) {
   }
   return o;
 }
-function LO(l, h) { return { kind: "vex.list", items: l.map(([k, v]) => ({ key: `${k}`, result: v === E ? { ok: false, error: VEX_ERROR } : { ok: true, value: h > 0 ? LO(v, h - 1) : v } })) }; }
+function LOC(l, h) { return { kind: "vex.list", items: l.map(([k, v]) => ({ key: `${k}`, result: { ok: true, value: h > 0 ? LOC(v, h - 1) : v } })) }; }
 function Q(f) { const m = []; return (j) => { let v = m[j]; if (v === undefined) { try { v = f(j); } catch { v = E; } m[j] = v; } return v; }; }
+function SKI(l, f) {
+  const n = l.length;
+  for (let i = 0; i < n; i++) l[i] = [l[i], f(l[i][1])];
+  const t = n > 0 ? typeof l[0][1] : "number";
+  for (const [, v] of l) if (typeof v !== t || (t !== "number" && t !== "string") || v !== v) F();
+  l.sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0));
+  for (let i = 0; i < n; i++) l[i] = l[i][0];
+  return l;
+}
 function T(f) { try { return f(); } catch { return E; } }
 const op_2_0 = (from, to, min, max) => ({ from, to, min, max });
 const v_3 = (b) => !Number.isNaN(b.from) && !Number.isNaN(b.to) && !Number.isNaN(b.min) && !Number.isNaN(b.max);
@@ -78,347 +75,319 @@ export function nodeShape(records, vars) {
   if (!Array.isArray(records)) C("the records are not an array");
   const R = records;
   const n = R.length;
-  const LF1 = [];
-  const LF106 = [];
+  const LF3 = [];
+  const LF120 = [];
   for (let i = 0; i < n; i++) {
     const r = R[i];
-    if (typeof r !== "object" || r === null || typeof r["ox"] !== "number" || typeof r["oy"] !== "number" || (LF1[i] = LI(r["rows"], 0, is_3)) === undefined || (LF106[i] = LI(r["cols"], 0, is_3)) === undefined) C(`the record ${i} does not keep the schema`);
+    if (typeof r !== "object" || r === null || typeof r["ox"] !== "number" || typeof r["oy"] !== "number" || (LF3[i] = LI(r["rows"], 0, is_3)) === undefined || (LF120[i] = LI(r["cols"], 0, is_3)) === undefined) C(`the record ${i} does not keep the schema`);
   }
   if (typeof vars !== "object" || vars === null || typeof vars["w"] !== "number" || typeof vars["h"] !== "number" || typeof vars["limit"] !== "number") C("the variables do not keep the schema");
   const v0 = vars["h"];
   const v1 = vars["w"];
   const v2 = vars["limit"];
-  const col11 = Q((j0) => {
-    const b2 = LF1[j0];
-    const b3 = R[j0]["oy"];
-    const b4 = R[j0]["ox"];
-    const A6 = b2;
-    const L9 = [];
-    for (let q7 = 0; q7 < A6.length; q7++) {
-      const j5 = A6[q7][0];
-      let x10;
+  const col13 = Q((j1) => {
+    const b4 = LF3[j1];
+    const b5 = R[j1]["oy"];
+    const b6 = R[j1]["ox"];
+    const A8 = b4;
+    const L11 = [];
+    for (let q9 = 0; q9 < A8.length; q9++) {
+      const j7 = A8[q9][0];
+      let x12;
       try {
-        if (A6[q7][1] === E) F();
-        const y8 = A6[q7][1];
-        x10 = k_domain_Band(op_3_1(y8, b3, b4));
+        if (A8[q9][1] === E) F();
+        const y10 = A8[q9][1];
+        x12 = k_domain_Band(op_3_1(y10, b5, b6));
       } catch {
-        x10 = E;
+        x12 = E;
       }
-      L9.push([j5, x10]);
+      L11.push([j7, x12]);
     }
-    return L9;
+    return L11;
   });
-  let c14;
+  let c16;
   try {
-    // COMPILE-FUSE step A (bench only): flat(each(all, cell of col11)) is one loop with one output.
-    // COMPILE-FUSE step B (bench only): append(fill(1, box), flat(...)) pushes both parts into the one output.
-    const o12 = [];
-    o12.push([0, k_domain_Band(op_2_0(0, v0, 0, v1))]);
-    for (let j0 = 0; j0 < n; j0++) {
-      const m13 = o12.length;
+    const o0 = [];
+    o0.push([0, k_domain_Band(op_2_0(0, v0, 0, v1))]);
+    const o2 = o0;
+    for (let j1 = 0; j1 < n; j1++) {
+      const m15 = o2.length;
       try {
-        const z13 = G(col11(j0));
-        for (let i = 0; i < z13.length; i++) if (z13[i][1] !== E) o12.push(z13[i]);
+        const z14 = G(col13(j1));
+        for (let i = 0; i < z14.length; i++) if (z14[i][1] !== E) o2.push(z14[i]);
       } catch {
-        o12.length = m13;
+        o2.length = m15;
       }
     }
-    c14 = o12;
+    c16 = o0;
   } catch {
-    c14 = E;
+    c16 = E;
   }
-  const c22 = T(() => FI(0, k_domain_Band(op_2_0(0, 0, 0, 0))));
-  const c78 = T(() => k_domain_Band(op_2_0(0, 0, 0, 0)));
-  const fn103 = (p15) => {
-    let b45;
+  const c25 = T(() => FI(0, k_domain_Band(op_2_0(0, 0, 0, 0))));
+  const c90 = T(() => k_domain_Band(op_2_0(0, 0, 0, 0)));
+  const fn115 = (p17) => {
+    let b53;
     try {
-      let b25;
+      let b28;
       try {
-        // COMPILE-FUSE step A (bench only): flat(each(list(bands), if(sized, append, empty))) is one loop with one output; p15 is clean.
-        const A19 = G(p15);
-        const o23 = [];
-        for (let q20 = 0; q20 < A19.length; q20++) {
-          const y21 = A19[q20][1];
-          const m24 = o23.length;
+        const A21 = G(p17);
+        const o24 = [];
+        for (let q22 = 0; q22 < A21.length; q22++) {
+          const y23 = A21[q22][1];
+          const m27 = o24.length;
           try {
-            if (op_3_2(y21)) {
-              // COMPILE-FUSE step B (bench only): append(fill(1, b), fill(1, end(b))) in the body is two pushes into the output of flat.
-              o23.push([0, y21]);
-              o23.push([0, k_domain_Band(op_3_3(y21))]);
+            if (op_3_2(y23)) {
+              o24.push([0, y23]);
+              o24.push([0, k_domain_Band(op_3_3(y23))]);
             } else {
-              const z24 = G(c22);
-              for (let i = 0; i < z24.length; i++) o23.push(z24[i]);
+              const z26 = G(c25);
+              for (let i = 0; i < z26.length; i++) o24.push(z26[i]);
             }
           } catch {
-            o23.length = m24;
+            o24.length = m27;
           }
         }
-        b25 = o23;
+        b28 = o24;
       } catch {
-        b25 = E;
+        b28 = E;
       }
-      // COMPILE-FUSE step A (bench only): the filter flat(each(list(raw), if(side = -1, fill(1, e), empty))) is one loop; b25 is clean.
-      const A27 = G(b25);
-      const o30 = [];
-      for (let q28 = 0; q28 < A27.length; q28++) {
-        const y29 = A27[q28][1];
-        const m31 = o30.length;
+      const o29 = [];
+      const A31 = G(b28);
+      const o34 = o29;
+      for (let q32 = 0; q32 < A31.length; q32++) {
+        const y33 = A31[q32][1];
+        const m36 = o34.length;
         try {
-          if (((k_number(op_3_4(y29))) === (-1))) {
-            o30.push([0, y29]);
+          if (((k_number(op_3_4(y33))) === (-1))) {
+            o34.push([0, y33]);
           } else {
-            const z31 = G(c22);
-            for (let i = 0; i < z31.length; i++) o30.push(z31[i]);
+            const z35 = G(c25);
+            for (let i = 0; i < z35.length; i++) o34.push(z35[i]);
           }
         } catch {
-          o30.length = m31;
+          o34.length = m36;
         }
       }
-      // COMPILE-FUSE step A (bench only): the filter flat(each(list(raw), if(side = 0, fill(1, e), empty))) is one loop; b25 is clean.
-      // COMPILE-FUSE step B (bench only): sortBy(filter, by from) is a sink: the loop pushes [item, key] into the sort buffer.
-      // The key comes after the try of the item, so an error of by stays the error of the chain.
-      const A33 = G(b25);
-      const s36 = [];
-      for (let q34 = 0; q34 < A33.length; q34++) {
-        const y35 = A33[q34][1];
-        const m37 = s36.length;
+      const A38 = G(b28);
+      const o41 = [];
+      for (let q39 = 0; q39 < A38.length; q39++) {
+        const y40 = A38[q39][1];
+        const m43 = o41.length;
         try {
-          if (((k_number(op_3_4(y35))) === (0))) {
-            s36.push([[0, y35], 0]);
+          if (((k_number(op_3_4(y40))) === (0))) {
+            o41.push([0, y40]);
           } else {
-            const z37 = G(c22);
-            for (let i = 0; i < z37.length; i++) s36.push([z37[i], 0]);
+            const z42 = G(c25);
+            for (let i = 0; i < z42.length; i++) o41.push(z42[i]);
           }
         } catch {
-          s36.length = m37;
+          o41.length = m43;
         }
-        for (let i = m37; i < s36.length; i++) s36[i][1] = k_number(op_3_6(s36[i][0][1]));
       }
-      const t36 = s36.length > 0 ? typeof s36[0][1] : "number";
-      for (let i = 0; i < s36.length; i++) {
-        const v = s36[i][1];
-        if (typeof v !== t36 || (t36 !== "number" && t36 !== "string") || v !== v) F();
-      }
-      s36.sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0));
-      // COMPILE-FUSE step B (bench only): append(append(filter -1, sortBy(...)), filter 1) is one output: o30 gets the sorted buffer, then filter 1.
-      for (let i = 0; i < s36.length; i++) o30.push(s36[i][0]);
-      // COMPILE-FUSE step A (bench only): the filter flat(each(list(raw), if(side = 1, fill(1, e), empty))) is one loop; b25 is clean.
-      const A40 = G(b25);
-      for (let q41 = 0; q41 < A40.length; q41++) {
-        const y42 = A40[q41][1];
-        const m44 = o30.length;
+      const z52 = SKI(o41, ((x44) => k_number(op_3_6(x44))));
+      for (let i = 0; i < z52.length; i++) o29.push(z52[i]);
+      const A46 = G(b28);
+      const o49 = o29;
+      for (let q47 = 0; q47 < A46.length; q47++) {
+        const y48 = A46[q47][1];
+        const m51 = o49.length;
         try {
-          if (((k_number(op_3_4(y42))) === (1))) {
-            o30.push([0, y42]);
+          if (((k_number(op_3_4(y48))) === (1))) {
+            o49.push([0, y48]);
           } else {
-            const z44 = G(c22);
-            for (let i = 0; i < z44.length; i++) o30.push(z44[i]);
+            const z50 = G(c25);
+            for (let i = 0; i < z50.length; i++) o49.push(z50[i]);
           }
         } catch {
-          o30.length = m44;
+          o49.length = m51;
         }
       }
-      b45 = o30;
+      b53 = o29;
     } catch {
-      b45 = E;
+      b53 = E;
     }
-    let b88;
+    let b100;
     try {
-      let l46 = false;
-      let l47 = k_domain_Band(op_2_0(0, 0, 0, 0));
-      let l48 = FI(0, k_domain_Band(op_2_0(0, 0, 0, 0)));
-      let l49 = false;
-      let l50 = k_domain_Band(op_2_0(0, 0, 0, 0));
-      let l51 = false;
-      let l52 = k_domain_Band(op_2_0(0, 0, 0, 0));
-      let l53 = FI(0, k_domain_Band(op_2_0(0, 0, 0, 0)));
-      // COMPILE-FUSE step A (bench only): b45 is clean, so the fold has no test of the sentinel.
-      const A55 = G(b45);
-      for (let q56 = 0; q56 < A55.length; q56++) {
-        const y57 = A55[q56][1];
-        const t58 = true;
-        const t59 = ((l46 && (!((l46 && (!(op_3_7(y57, l47))))))) ? l47 : y57);
-        let b67;
+      let l54 = false;
+      let l55 = k_domain_Band(op_2_0(0, 0, 0, 0));
+      let l56 = FI(0, k_domain_Band(op_2_0(0, 0, 0, 0)));
+      let l57 = false;
+      let l58 = k_domain_Band(op_2_0(0, 0, 0, 0));
+      let l59 = false;
+      let l60 = k_domain_Band(op_2_0(0, 0, 0, 0));
+      let l61 = FI(0, k_domain_Band(op_2_0(0, 0, 0, 0)));
+      let w95 = l61;
+      const A63 = G(b53);
+      for (let q64 = 0; q64 < A63.length; q64++) {
+        const j62 = A63[q64][0];
+        const y65 = A63[q64][1];
+        const t66 = true;
+        const t67 = ((l54 && (!((l54 && (!(op_3_7(y65, l55))))))) ? l55 : y65);
+        let b76;
         try {
-          let t66;
-          if ((l46 && (!(op_3_7(y57, l47))))) {
-            // COMPILE-FUSE step A (bench only): the filter flat(each(list(open), if(outlasts, fill(1, b), empty))) is one loop; l48 is clean.
-            const A61 = l48;
-            const o64 = [];
-            for (let q62 = 0; q62 < A61.length; q62++) {
-              const y63 = A61[q62][1];
-              const m65 = o64.length;
+          let t75;
+          if ((l54 && (!(op_3_7(y65, l55))))) {
+            const A69 = l56;
+            const o72 = [];
+            for (let q70 = 0; q70 < A69.length; q70++) {
+              const y71 = A69[q70][1];
+              const m74 = o72.length;
               try {
-                if (op_3_9(y63, y57)) {
-                  o64.push([0, y63]);
+                if (op_3_9(y71, y65)) {
+                  o72.push([0, y71]);
                 } else {
-                  const z65 = G(c22);
-                  for (let i = 0; i < z65.length; i++) o64.push(z65[i]);
+                  const z73 = G(c25);
+                  for (let i = 0; i < z73.length; i++) o72.push(z73[i]);
                 }
               } catch {
-                o64.length = m65;
+                o72.length = m74;
               }
             }
-            t66 = o64;
+            t75 = o72;
           } else {
-            t66 = l48;
+            t75 = l56;
           }
-          b67 = t66;
+          b76 = t75;
         } catch {
-          b67 = E;
+          b76 = E;
         }
-        // COMPILE-FUSE step B (bench only): append(base, fill(1, e)) is one output. base is read twice, so it is a source: a loop copies its items.
-        let t68;
-        if (op_3_2(y57)) {
-          const A68 = G(b67);
-          const o68 = [];
-          for (let i = 0; i < A68.length; i++) o68.push(A68[i]);
-          o68.push([0, y57]);
-          t68 = o68;
-        } else {
-          t68 = G(b67);
-        }
-        // COMPILE-FUSE step A (bench only): l48 is clean, so count(open) reads the length with no CT and no VW.
-        const t69 = ((l46 && (!(op_3_7(y57, l47)))) && ((l48.length) > (0)));
         let t79;
-        if (((l46 && (!(op_3_7(y57, l47)))) && ((l48.length) > (0)))) {
-          let l70 = false;
-          let l71 = k_domain_Band(op_2_0(0, 0, 0, 0));
-          // COMPILE-FUSE step A (bench only): l48 is clean, so the fold has no test of the sentinel.
-          const A73 = l48;
-          for (let q74 = 0; q74 < A73.length; q74++) {
-            const y75 = A73[q74][1];
-            const t76 = true;
-            const t77 = (l70 ? k_domain_Band(op_3_11(l71, y75)) : y75);
-            l70 = t76;
-            l71 = t77;
-          }
-          t79 = k_domain_Band(op_3_12(l71, l47, y57));
+        if (op_3_2(y65)) {
+          const o77 = [];
+          const z78 = G(b76);
+          for (let i = 0; i < z78.length; i++) o77.push(z78[i]);
+          o77.push([0, y65]);
+          t79 = o77;
         } else {
-          t79 = G(c78);
+          t79 = G(b76);
         }
         const t80 = t79;
-        const t81 = (l51 || l49);
-        const t82 = (l49 ? ((l51 && op_3_13(l52, l50)) ? k_domain_Band(op_3_14(l52, l50)) : l50) : l52);
-        // COMPILE-FUSE step B (bench only): l53 is fresh (fill(0) of this body) and only the loop holds it, so AO adopts it and append(out, fill(1, pend)) is one push in place.
-        const t84 = ((l49 && (l51 && (!((l51 && op_3_13(l52, l50)))))) ? (l53.push([0, l52]), l53) : l53);
-        l46 = t58;
-        l47 = t59;
-        l48 = t68;
-        l49 = t69;
-        l50 = t80;
-        l51 = t81;
-        l52 = t82;
-        l53 = t84;
+        const t81 = ((l54 && (!(op_3_7(y65, l55)))) && ((l56.length) > (0)));
+        let t91;
+        if (((l54 && (!(op_3_7(y65, l55)))) && ((l56.length) > (0)))) {
+          let l82 = false;
+          let l83 = k_domain_Band(op_2_0(0, 0, 0, 0));
+          const A85 = l56;
+          for (let q86 = 0; q86 < A85.length; q86++) {
+            const j84 = A85[q86][0];
+            const y87 = A85[q86][1];
+            const t88 = true;
+            const t89 = (l82 ? k_domain_Band(op_3_11(l83, y87)) : y87);
+            l82 = t88;
+            l83 = t89;
+          }
+          t91 = k_domain_Band(op_3_12(l83, l55, y65));
+        } else {
+          t91 = G(c90);
+        }
+        const t92 = t91;
+        const t93 = (l59 || l57);
+        const t94 = (l57 ? ((l59 && op_3_13(l60, l58)) ? k_domain_Band(op_3_14(l60, l58)) : l58) : l60);
+        const t96 = ((l57 && (l59 && (!((l59 && op_3_13(l60, l58)))))) ? (w95 = AOC(l61, FI(1, l60), w95)) : l61);
+        l54 = t66;
+        l55 = t67;
+        l56 = t80;
+        l57 = t81;
+        l58 = t92;
+        l59 = t93;
+        l60 = t94;
+        l61 = t96;
       }
-      const b85 = (l51 || l49);
-      let b86;
+      const b97 = (l59 || l57);
+      let b98;
       try {
-        b86 = (l49 ? ((l51 && op_3_13(l52, l50)) ? k_domain_Band(op_3_14(l52, l50)) : l50) : l52);
+        b98 = (l57 ? ((l59 && op_3_13(l60, l58)) ? k_domain_Band(op_3_14(l60, l58)) : l58) : l60);
       } catch {
-        b86 = E;
+        b98 = E;
       }
-      let b87;
+      let b99;
       try {
-        // COMPILE-FUSE step B (bench only): the last append to out after its loop pushes into the array of the loop (no part reads l53 after it).
-        b87 = ((l49 && (l51 && (!((l51 && op_3_13(l52, l50)))))) ? (l53.push([0, l52]), l53) : l53);
+        b99 = ((l57 && (l59 && (!((l59 && op_3_13(l60, l58)))))) ? (w95 = AOC(l61, FI(1, l60), w95)) : l61);
       } catch {
-        b87 = E;
+        b99 = E;
       }
-      // COMPILE-FUSE step B (bench only): b87 is the array of the loop, and no part reads it after this append, so the push is in place.
-      let b88a;
-      if (b85) {
-        b88a = G(b87);
-        b88a.push([0, G(b86)]);
-      } else {
-        b88a = G(b87);
-      }
-      b88 = b88a;
+      b100 = (b97 ? (w95 = AOC(G(b99), FI(1, G(b98)), w95)) : G(b99));
     } catch {
-      b88 = E;
+      b100 = E;
     }
-    let l89 = G(b88);
-    for (let k102 = 0; ; k102++) {
-      // COMPILE-FUSE step A (bench only): l89 is clean, so count(out) reads the length with no CT and no VW.
-      if (((l89.length) <= (v2))) break;
-      if (k102 === 64) F();
-      let l90 = false;
-      let l91 = k_domain_Band(op_2_0(0, 0, 0, 0));
-      let l92 = FI(0, k_domain_Band(op_2_0(0, 0, 0, 0)));
-      // COMPILE-FUSE step A (bench only): l89 is clean, so the fold has no test of the sentinel.
-      const A94 = l89;
-      for (let q95 = 0; q95 < A94.length; q95++) {
-        const y96 = A94[q95][1];
-        const t97 = (!(l90));
-        const t98 = y96;
-        // COMPILE-FUSE step B (bench only): l92 is fresh (fill(0) of this step) and only the loop holds it, so AO adopts it and append(acc, fill(1, join)) is one push in place.
-        const t100 = (l90 ? (l92.push([0, k_domain_Band(op_3_16(l91, y96))]), l92) : l92);
-        l90 = t97;
-        l91 = t98;
-        l92 = t100;
+    let l101 = G(b100);
+    for (let k114 = 0; ; k114++) {
+      if (((l101.length) <= (v2))) break;
+      if (k114 === 64) F();
+      let l102 = false;
+      let l103 = k_domain_Band(op_2_0(0, 0, 0, 0));
+      let l104 = FI(0, k_domain_Band(op_2_0(0, 0, 0, 0)));
+      let w111 = l104;
+      const A106 = l101;
+      for (let q107 = 0; q107 < A106.length; q107++) {
+        const j105 = A106[q107][0];
+        const y108 = A106[q107][1];
+        const t109 = (!(l102));
+        const t110 = y108;
+        const t112 = (l102 ? (w111 = AOC(l104, FI(1, k_domain_Band(op_3_16(l103, y108))), w111)) : l104);
+        l102 = t109;
+        l103 = t110;
+        l104 = t112;
       }
-      // COMPILE-FUSE step B (bench only): the last append to acc after its loop pushes into the array of the loop.
-      const t101 = (l90 ? (l92.push([0, l91]), l92) : l92);
-      l89 = t101;
+      const t113 = (l102 ? (w111 = AOC(l104, FI(1, l103), w111)) : l104);
+      l101 = t113;
     }
-    return l89;
+    return l101;
   };
-  const c104 = L(() => {
-    return fn103(c14);
+  const c116 = L(() => {
+    return fn115(c16);
   });
-  const col116 = Q((j105) => {
-    const b107 = LF106[j105];
-    const b108 = R[j105]["ox"];
-    const b109 = R[j105]["oy"];
-    const A111 = b107;
-    const L114 = [];
-    for (let q112 = 0; q112 < A111.length; q112++) {
-      const j110 = A111[q112][0];
-      let x115;
+  const col130 = Q((j118) => {
+    const b121 = LF120[j118];
+    const b122 = R[j118]["ox"];
+    const b123 = R[j118]["oy"];
+    const A125 = b121;
+    const L128 = [];
+    for (let q126 = 0; q126 < A125.length; q126++) {
+      const j124 = A125[q126][0];
+      let x129;
       try {
-        if (A111[q112][1] === E) F();
-        const y113 = A111[q112][1];
-        x115 = k_domain_Band(op_3_1(y113, b108, b109));
+        if (A125[q126][1] === E) F();
+        const y127 = A125[q126][1];
+        x129 = k_domain_Band(op_3_1(y127, b122, b123));
       } catch {
-        x115 = E;
+        x129 = E;
       }
-      L114.push([j110, x115]);
+      L128.push([j124, x129]);
     }
-    return L114;
+    return L128;
   });
-  let c119;
+  let c133;
   try {
-    // COMPILE-FUSE step A (bench only): flat(each(all, cell of col116)) is one loop with one output.
-    // COMPILE-FUSE step B (bench only): append(fill(1, box), flat(...)) pushes both parts into the one output.
     const o117 = [];
     o117.push([0, k_domain_Band(op_2_0(0, v1, 0, v0))]);
-    for (let j105 = 0; j105 < n; j105++) {
-      const m118 = o117.length;
+    const o119 = o117;
+    for (let j118 = 0; j118 < n; j118++) {
+      const m132 = o119.length;
       try {
-        const z118 = G(col116(j105));
-        for (let i = 0; i < z118.length; i++) if (z118[i][1] !== E) o117.push(z118[i]);
+        const z131 = G(col130(j118));
+        for (let i = 0; i < z131.length; i++) if (z131[i][1] !== E) o119.push(z131[i]);
       } catch {
-        o117.length = m118;
+        o119.length = m132;
       }
     }
-    c119 = o117;
+    c133 = o117;
   } catch {
-    c119 = E;
+    c133 = E;
   }
-  const c120 = L(() => {
-    return fn103(c119);
+  const c134 = L(() => {
+    return fn115(c133);
   });
-  const c121 = L(() => {
-    // COMPILE-FUSE step B (bench only): append(fill(1, rows), fill(1, cols)) is one output with two pushes.
-    const o121 = [];
-    o121.push([0, G(c104())]);
-    o121.push([0, G(c120())]);
-    return o121;
+  const c136 = L(() => {
+    const o135 = [];
+    o135.push([0, G(c116())]);
+    o135.push([0, G(c134())]);
+    return o135;
   });
   const out = [];
   for (let o = 0; o < n; o++) {
     try {
-      out.push(LO(G(c121()), 1));
+      out.push(LOC(G(c136()), 1));
     } catch {
       out.push(VEX_ERROR);
     }
