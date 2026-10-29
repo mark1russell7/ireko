@@ -5,7 +5,7 @@
 //
 // The modes:
 //   vex     vexLinkedShape: the wrapper shape-vex.ts and the module shape.generated.js
-//   module  nodeShape of the module alone, with the records that the wrapper makes, made before the run
+//   module  nodeShape of the module alone, with the records that the wrapper makes (plain arrays), made before the run
 //   hand    handLinkedShape: the code of ireko, as the reference
 // One pass is each call of the linked shape of one layout of the tree (110 calls), with the inputs of that layout.
 // The script warms up the pass, then profiles it for --seconds (or for --iterations passes) with a sampling interval of
@@ -38,8 +38,7 @@ setLinkedShape((own, parts) => {
 layout({ root: fullTree(3, 10, "tree", "linked") });
 setLinkedShape(handLinkedShape);
 
-const listOf = (bands) => ({ kind: "vex.list", items: bands.map((value, k) => ({ key: String(k), result: { ok: true, value } })) });
-const prepared = calls.map(([own, parts]) => [parts.map((p) => ({ ox: p.x, oy: p.y, rows: listOf(p.shape.rows), cols: listOf(p.shape.columns) })), { w: own.width, h: own.height, limit: MAX_BANDS }]);
+const prepared = calls.map(([own, parts]) => [parts.map((p) => ({ ox: p.x, oy: p.y, rows: p.shape.rows, cols: p.shape.columns })), { w: own.width, h: own.height, limit: MAX_BANDS }]);
 
 // Each pass adds to a sink, so the JIT cannot drop the calls.
 let sink = 0;
