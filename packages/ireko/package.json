@@ -131,8 +131,8 @@
   },
   "devDependencies": {
     "@mark1russell7/cue": "github:mark1russell7/cue",
-    "@mark1russell7/vex": "^0.17.0",
-    "@mark1russell7/vex-compiler": "^0.17.0",
+    "@mark1russell7/vex": "^0.17.1",
+    "@mark1russell7/vex-compiler": "^0.17.1",
     "@mark1russell7/vex-domains": "^0.17.0",
     "@stryker-mutator/core": "10.0.0",
     "@types/node": "^26.6.4",
