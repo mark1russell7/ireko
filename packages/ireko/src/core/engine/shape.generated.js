@@ -5,9 +5,7 @@ export class VexContractError extends Error {}
 export const VEX_ERROR = Object.freeze({ vexError: true });
 const E = {};
 function F() { throw E; }
-function V(l, s) { if (!l.some((x) => x[1] === E)) return l; if (s) F(); return l.filter((x) => x[1] !== E); }
-function AP(l, o, s) { return V(l, s).concat(V(o, s)); }
-function AO(l, o, s, w) { if (l !== w) return AP(l, o, s); const a = V(o, s), n = a.length; for (let i = 0; i < n; i++) l.push(a[i]); return l; }
+// COMPILE-FUSE step B (bench only): V, AP, AO and SK are no longer used, so the module does not print them.
 function C(m) { throw new VexContractError(m); }
 // COMPILE-FUSE step A (bench only): VW, CT and FL are no longer used, so the module does not print them.
 function FI(n, v) {
@@ -39,12 +37,6 @@ function LI(x, h, t) {
 }
 function LO(l, h) { return { kind: "vex.list", items: l.map(([k, v]) => ({ key: `${k}`, result: v === E ? { ok: false, error: VEX_ERROR } : { ok: true, value: h > 0 ? LO(v, h - 1) : v } })) }; }
 function Q(f) { const m = []; return (j) => { let v = m[j]; if (v === undefined) { try { v = f(j); } catch { v = E; } m[j] = v; } return v; }; }
-function SK(l, s, f) {
-  const o = V(l, s).map((x) => [x, f(x[1])]);
-  const t = o.length > 0 ? typeof o[0][1] : "number";
-  for (const [, v] of o) if (typeof v !== t || (t !== "number" && t !== "string") || v !== v) F();
-  return o.sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0)).map((x) => x[0]);
-}
 function T(f) { try { return f(); } catch { return E; } }
 const op_2_0 = (from, to, min, max) => ({ from, to, min, max });
 const v_3 = (b) => !Number.isNaN(b.from) && !Number.isNaN(b.to) && !Number.isNaN(b.min) && !Number.isNaN(b.max);
@@ -108,7 +100,9 @@ export function nodeShape(records, vars) {
   let c14;
   try {
     // COMPILE-FUSE step A (bench only): flat(each(all, cell of col11)) is one loop with one output.
+    // COMPILE-FUSE step B (bench only): append(fill(1, box), flat(...)) pushes both parts into the one output.
     const o12 = [];
+    o12.push([0, k_domain_Band(op_2_0(0, v0, 0, v1))]);
     for (let j0 = 0; j0 < n; j0++) {
       const m13 = o12.length;
       try {
@@ -118,7 +112,7 @@ export function nodeShape(records, vars) {
         o12.length = m13;
       }
     }
-    c14 = AP(FI(1, k_domain_Band(op_2_0(0, v0, 0, v1))), o12, false);
+    c14 = o12;
   } catch {
     c14 = E;
   }
@@ -137,8 +131,9 @@ export function nodeShape(records, vars) {
           const m24 = o23.length;
           try {
             if (op_3_2(y21)) {
-              const z24 = AP(FI(1, y21), FI(1, k_domain_Band(op_3_3(y21))), false);
-              for (let i = 0; i < z24.length; i++) o23.push(z24[i]);
+              // COMPILE-FUSE step B (bench only): append(fill(1, b), fill(1, end(b))) in the body is two pushes into the output of flat.
+              o23.push([0, y21]);
+              o23.push([0, k_domain_Band(op_3_3(y21))]);
             } else {
               const z24 = G(c22);
               for (let i = 0; i < z24.length; i++) o23.push(z24[i]);
@@ -169,40 +164,50 @@ export function nodeShape(records, vars) {
         }
       }
       // COMPILE-FUSE step A (bench only): the filter flat(each(list(raw), if(side = 0, fill(1, e), empty))) is one loop; b25 is clean.
+      // COMPILE-FUSE step B (bench only): sortBy(filter, by from) is a sink: the loop pushes [item, key] into the sort buffer.
+      // The key comes after the try of the item, so an error of by stays the error of the chain.
       const A33 = G(b25);
-      const o36 = [];
+      const s36 = [];
       for (let q34 = 0; q34 < A33.length; q34++) {
         const y35 = A33[q34][1];
-        const m37 = o36.length;
+        const m37 = s36.length;
         try {
           if (((k_number(op_3_4(y35))) === (0))) {
-            o36.push([0, y35]);
+            s36.push([[0, y35], 0]);
           } else {
             const z37 = G(c22);
-            for (let i = 0; i < z37.length; i++) o36.push(z37[i]);
+            for (let i = 0; i < z37.length; i++) s36.push([z37[i], 0]);
           }
         } catch {
-          o36.length = m37;
+          s36.length = m37;
         }
+        for (let i = m37; i < s36.length; i++) s36[i][1] = k_number(op_3_6(s36[i][0][1]));
       }
+      const t36 = s36.length > 0 ? typeof s36[0][1] : "number";
+      for (let i = 0; i < s36.length; i++) {
+        const v = s36[i][1];
+        if (typeof v !== t36 || (t36 !== "number" && t36 !== "string") || v !== v) F();
+      }
+      s36.sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0));
+      // COMPILE-FUSE step B (bench only): append(append(filter -1, sortBy(...)), filter 1) is one output: o30 gets the sorted buffer, then filter 1.
+      for (let i = 0; i < s36.length; i++) o30.push(s36[i][0]);
       // COMPILE-FUSE step A (bench only): the filter flat(each(list(raw), if(side = 1, fill(1, e), empty))) is one loop; b25 is clean.
       const A40 = G(b25);
-      const o43 = [];
       for (let q41 = 0; q41 < A40.length; q41++) {
         const y42 = A40[q41][1];
-        const m44 = o43.length;
+        const m44 = o30.length;
         try {
           if (((k_number(op_3_4(y42))) === (1))) {
-            o43.push([0, y42]);
+            o30.push([0, y42]);
           } else {
             const z44 = G(c22);
-            for (let i = 0; i < z44.length; i++) o43.push(z44[i]);
+            for (let i = 0; i < z44.length; i++) o30.push(z44[i]);
           }
         } catch {
-          o43.length = m44;
+          o30.length = m44;
         }
       }
-      b45 = AP(AP(o30, SK(o36, false, ((x38) => k_number(op_3_6(x38)))), false), o43, false);
+      b45 = o30;
     } catch {
       b45 = E;
     }
@@ -216,7 +221,6 @@ export function nodeShape(records, vars) {
       let l51 = false;
       let l52 = k_domain_Band(op_2_0(0, 0, 0, 0));
       let l53 = FI(0, k_domain_Band(op_2_0(0, 0, 0, 0)));
-      let w83 = null;
       // COMPILE-FUSE step A (bench only): b45 is clean, so the fold has no test of the sentinel.
       const A55 = G(b45);
       for (let q56 = 0; q56 < A55.length; q56++) {
@@ -252,7 +256,17 @@ export function nodeShape(records, vars) {
         } catch {
           b67 = E;
         }
-        const t68 = (op_3_2(y57) ? AP(G(b67), FI(1, y57), false) : G(b67));
+        // COMPILE-FUSE step B (bench only): append(base, fill(1, e)) is one output. base is read twice, so it is a source: a loop copies its items.
+        let t68;
+        if (op_3_2(y57)) {
+          const A68 = G(b67);
+          const o68 = [];
+          for (let i = 0; i < A68.length; i++) o68.push(A68[i]);
+          o68.push([0, y57]);
+          t68 = o68;
+        } else {
+          t68 = G(b67);
+        }
         // COMPILE-FUSE step A (bench only): l48 is clean, so count(open) reads the length with no CT and no VW.
         const t69 = ((l46 && (!(op_3_7(y57, l47)))) && ((l48.length) > (0)));
         let t79;
@@ -275,7 +289,8 @@ export function nodeShape(records, vars) {
         const t80 = t79;
         const t81 = (l51 || l49);
         const t82 = (l49 ? ((l51 && op_3_13(l52, l50)) ? k_domain_Band(op_3_14(l52, l50)) : l50) : l52);
-        const t84 = ((l49 && (l51 && (!((l51 && op_3_13(l52, l50)))))) ? (w83 = AO(l53, FI(1, l52), false, w83)) : l53);
+        // COMPILE-FUSE step B (bench only): l53 is fresh (fill(0) of this body) and only the loop holds it, so AO adopts it and append(out, fill(1, pend)) is one push in place.
+        const t84 = ((l49 && (l51 && (!((l51 && op_3_13(l52, l50)))))) ? (l53.push([0, l52]), l53) : l53);
         l46 = t58;
         l47 = t59;
         l48 = t68;
@@ -294,11 +309,20 @@ export function nodeShape(records, vars) {
       }
       let b87;
       try {
-        b87 = ((l49 && (l51 && (!((l51 && op_3_13(l52, l50)))))) ? AP(l53, FI(1, l52), false) : l53);
+        // COMPILE-FUSE step B (bench only): the last append to out after its loop pushes into the array of the loop (no part reads l53 after it).
+        b87 = ((l49 && (l51 && (!((l51 && op_3_13(l52, l50)))))) ? (l53.push([0, l52]), l53) : l53);
       } catch {
         b87 = E;
       }
-      b88 = (b85 ? AP(G(b87), FI(1, G(b86)), false) : G(b87));
+      // COMPILE-FUSE step B (bench only): b87 is the array of the loop, and no part reads it after this append, so the push is in place.
+      let b88a;
+      if (b85) {
+        b88a = G(b87);
+        b88a.push([0, G(b86)]);
+      } else {
+        b88a = G(b87);
+      }
+      b88 = b88a;
     } catch {
       b88 = E;
     }
@@ -310,19 +334,20 @@ export function nodeShape(records, vars) {
       let l90 = false;
       let l91 = k_domain_Band(op_2_0(0, 0, 0, 0));
       let l92 = FI(0, k_domain_Band(op_2_0(0, 0, 0, 0)));
-      let w99 = null;
       // COMPILE-FUSE step A (bench only): l89 is clean, so the fold has no test of the sentinel.
       const A94 = l89;
       for (let q95 = 0; q95 < A94.length; q95++) {
         const y96 = A94[q95][1];
         const t97 = (!(l90));
         const t98 = y96;
-        const t100 = (l90 ? (w99 = AO(l92, FI(1, k_domain_Band(op_3_16(l91, y96))), false, w99)) : l92);
+        // COMPILE-FUSE step B (bench only): l92 is fresh (fill(0) of this step) and only the loop holds it, so AO adopts it and append(acc, fill(1, join)) is one push in place.
+        const t100 = (l90 ? (l92.push([0, k_domain_Band(op_3_16(l91, y96))]), l92) : l92);
         l90 = t97;
         l91 = t98;
         l92 = t100;
       }
-      const t101 = (l90 ? AP(l92, FI(1, l91), false) : l92);
+      // COMPILE-FUSE step B (bench only): the last append to acc after its loop pushes into the array of the loop.
+      const t101 = (l90 ? (l92.push([0, l91]), l92) : l92);
       l89 = t101;
     }
     return l89;
@@ -353,7 +378,9 @@ export function nodeShape(records, vars) {
   let c119;
   try {
     // COMPILE-FUSE step A (bench only): flat(each(all, cell of col116)) is one loop with one output.
+    // COMPILE-FUSE step B (bench only): append(fill(1, box), flat(...)) pushes both parts into the one output.
     const o117 = [];
+    o117.push([0, k_domain_Band(op_2_0(0, v1, 0, v0))]);
     for (let j105 = 0; j105 < n; j105++) {
       const m118 = o117.length;
       try {
@@ -363,7 +390,7 @@ export function nodeShape(records, vars) {
         o117.length = m118;
       }
     }
-    c119 = AP(FI(1, k_domain_Band(op_2_0(0, v1, 0, v0))), o117, false);
+    c119 = o117;
   } catch {
     c119 = E;
   }
@@ -371,7 +398,11 @@ export function nodeShape(records, vars) {
     return fn103(c119);
   });
   const c121 = L(() => {
-    return AP(FI(1, G(c104())), FI(1, G(c120())), false);
+    // COMPILE-FUSE step B (bench only): append(fill(1, rows), fill(1, cols)) is one output with two pushes.
+    const o121 = [];
+    o121.push([0, G(c104())]);
+    o121.push([0, G(c120())]);
+    return o121;
   });
   const out = [];
   for (let o = 0; o < n; o++) {
