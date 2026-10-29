@@ -23,6 +23,7 @@ import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PerformanceObserver } from "node:perf_hooks";
+import { cpus } from "node:os";
 import { parseArgs } from "node:util";
 import { gzipSync } from "node:zlib";
 import { layout } from "../src/core/engine.ts";
@@ -189,7 +190,7 @@ for (const group of groups) {
         for (const [records, vars] of prepared) nodeShape(records, vars);
       },
     );
-    Object.assign(row, { handPassMs: pass.a, vexPassMs: pass.b, passRatio: pass.b / pass.a, moduleCallMs: moduleOnly.b, moduleCallRatio: moduleOnly.b / moduleOnly.a });
+    Object.assign(row, { handPassMs: pass.a, vexPassMs: pass.b, passRatio: pass.b / pass.a, moduleCallHandMs: moduleOnly.a, moduleCallMs: moduleOnly.b, moduleCallRatio: moduleOnly.b / moduleOnly.a });
   }
   const full = compare(
     () => {
@@ -244,7 +245,7 @@ const lines = [
   "",
   `Node.js ${process.version}, ${String(RUNS)} runs, median. Times are ms for one pass over the group.`,
   "",
-  "| Trees | Nodes | Linked shapes | Shapes pass, ireko | Shapes pass, Vex | Ratio | Module call only | Ratio | Layout, switch off | Layout, switch on | Ratio | Null arm | Ratio | Fixed share | Module share | GC off | GC on | GC null | Fixed share, plain wrapper | Module share, plain wrapper |",
+  "| Trees | Nodes | Linked shapes | Shapes pass, ireko | Shapes pass, Vex | Vex/hand time (lower is better) | Module call only | Vex/hand time (lower is better) | Layout, switch off | Layout, switch on | On/off time (lower is better) | Null arm | On/off time (lower is better) | Fixed share | Module share | GC off | GC on | GC null | Fixed share, plain wrapper | Module share, plain wrapper |",
   "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
   ...rows.map((r) => `| ${r.group} | ${String(r.nodes)} | ${String(r.linkedShapes)} | ${f(r.handPassMs)} | ${f(r.vexPassMs)} | ${f(r.passRatio, 2)} | ${f(r.moduleCallMs)} | ${f(r.moduleCallRatio, 2)} | ${f(r.layoutOffMs)} | ${f(r.layoutOnMs)} | ${f(r.layoutRatio, 2)} | ${f(r.layoutNullMs)} | ${f(r.nullRatio, 2)} | ${f(r.fixedShare, 2)} | ${f(r.moduleShare, 2)} | ${f(r.gcOffMs)} | ${f(r.gcOnMs)} | ${f(r.gcNullMs)} | ${f(r.plainFixedShare, 2)} | ${f(r.plainModuleShare, 2)} |`),
   "",
@@ -254,4 +255,7 @@ const lines = [
 const text = lines.join("\n");
 process.stdout.write(`${text}\n`);
 if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, `${text}\n`);
-if (values.out !== undefined) writeFileSync(values.out, `${JSON.stringify({ node: process.version, runs: RUNS, size, rows }, null, 2)}\n`);
+// Each ratio is a cost, not a speed-up: lower is better, and 1.00 is no overhead. The CPU of the runner goes in
+// the file too, because the spread between runners is larger than the spread inside one run.
+const RATIOS = "time with Vex / time of the hand code of ireko (layoutRatio: switch on / switch off); lower is better, 1.00 is no overhead";
+if (values.out !== undefined) writeFileSync(values.out, `${JSON.stringify({ node: process.version, cpu: cpus()[0]?.model ?? "unknown", ratios: RATIOS, runs: RUNS, size, rows }, null, 2)}\n`);

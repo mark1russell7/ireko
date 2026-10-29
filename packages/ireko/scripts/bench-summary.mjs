@@ -14,10 +14,15 @@ const runs = positionals.map((p) => JSON.parse(readFileSync(p, "utf8")));
 if (runs.length === 0) throw new Error("bench-summary: give one or more JSON files of bench-shapes.mjs.");
 
 const MEASURES = [
-  ["moduleCallRatio", "Module call"],
-  ["passRatio", "Shapes pass"],
-  ["layoutRatio", "Full layout"],
-  ["nullRatio", "Null arm"],
+  // Each ratio is a cost: the time with Vex over the time of the hand code. Lower is better, and 1.00 is no overhead.
+  ["moduleCallRatio", "Module call, Vex/hand time (lower is better)"],
+  ["passRatio", "Shapes pass, Vex/hand time (lower is better)"],
+  ["layoutRatio", "Full layout, on/off time (lower is better)"],
+  ["nullRatio", "Null arm, on/off time (lower is better)"],
+  ["moduleCallMs", "Module call, Vex, ms"],
+  ["moduleCallHandMs", "Module call, hand, ms"],
+  ["layoutOnMs", "Full layout, switch on, ms"],
+  ["layoutOffMs", "Full layout, switch off, ms"],
   ["fixedShare", "Fixed share"],
   ["moduleShare", "Module share"],
   ["gcOffMs", "GC off, ms"],
@@ -67,12 +72,16 @@ const cell = (m, d) => (m === undefined ? "" : `${f(m.median, d)} (${f(m.interva
 const lines = [
   `## SHAPEWIRE over ${String(runs.length)} runs: the median of the run medians (bootstrap 90 % interval)`,
   "",
+  "Each ratio is a cost: the time with Vex over the time without it. Lower is better, and 1.00 is no overhead.",
+  "",
+  `CPUs of the runners: ${runs.map((r) => r.cpu ?? "unknown").join("; ")}`,
+  "",
   `| Trees | ${MEASURES.map(([, name]) => name).join(" | ")} |`,
   `|---|${MEASURES.map(() => "---:").join("|")}|`,
-  ...out.map((r) => `| ${r.group} | ${MEASURES.map(([key]) => cell(r[key], key.startsWith("gc") ? 3 : 2)).join(" | ")} |`),
+  ...out.map((r) => `| ${r.group} | ${MEASURES.map(([key]) => cell(r[key], key.startsWith("gc") || key.endsWith("Ms") ? 3 : 2)).join(" | ")} |`),
   "",
 ];
 const text = lines.join("\n");
 process.stdout.write(`${text}\n`);
 if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, `${text}\n`);
-if (values.out !== undefined) writeFileSync(values.out, `${JSON.stringify({ runs: runs.length, node: runs[0].node, rows: out }, null, 2)}\n`);
+if (values.out !== undefined) writeFileSync(values.out, `${JSON.stringify({ runs: runs.length, node: runs[0].node, cpus: runs.map((r) => r.cpu ?? "unknown"), ratios: runs[0].ratios, rows: out }, null, 2)}\n`);
