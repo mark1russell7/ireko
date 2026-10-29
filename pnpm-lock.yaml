@@ -209,14 +209,14 @@ importers:
         specifier: github:mark1russell7/cue
         version: https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e
       '@mark1russell7/vex':
-        specifier: ^0.17.1
-        version: 0.17.1
+        specifier: ^0.17.2
+        version: 0.17.2
       '@mark1russell7/vex-compiler':
-        specifier: ^0.17.1
-        version: 0.17.1
+        specifier: ^0.17.2
+        version: 0.17.2
       '@mark1russell7/vex-domains':
-        specifier: ^0.17.0
-        version: 0.17.0
+        specifier: ^0.17.2
+        version: 0.17.2
       '@stryker-mutator/core':
         specifier: 10.0.0
         version: 10.0.0(@types/node@26.6.5)
@@ -1269,17 +1269,14 @@ packages:
     engines: {node: '>=22.12'}
     hasBin: true
 
-  '@mark1russell7/vex-compiler@0.17.1':
-    resolution: {integrity: sha512-st2S6EzcpbX2VXcFuMZZplh+UnAd7riIOJNk/Wh/JO84wPOGOc0F43eDD/90VnWh5nEnfgdBKkeyZVAohaLdEQ==}
+  '@mark1russell7/vex-compiler@0.17.2':
+    resolution: {integrity: sha512-/LOrlcSw8b1Rh8nMNCqW9p5zDArKTcdLzSzxgUfhMlfhVq7rcRem4GK68TpXg8Z4mV1XJvj4lkrQQspYGPqpng==}
 
-  '@mark1russell7/vex-domains@0.17.0':
-    resolution: {integrity: sha512-D/RKGDXXrWN0TeAwPhySw/muRKmKtirTTCeZuW9gUr9KrBgpXuwzL1rYTn4a05kfrl/ZOhAzJ8XpnMNos3DIuA==}
+  '@mark1russell7/vex-domains@0.17.2':
+    resolution: {integrity: sha512-GHMANhyBmt4jDB5OgqX7wBI+lAid6/jPXswqDg2ja720Nag9NhmhwE9DJw6twDjGSX3fsr1cNNjC+UbKYAMT8w==}
 
-  '@mark1russell7/vex@0.17.0':
-    resolution: {integrity: sha512-/cc36k7VseqIRkHYu39+kotsX+qdCRO3Y5FntOMgmKv4QhGVuIkiSqTuw4kyhFIPsYoh4EtosHql7mKqN5801g==}
-
-  '@mark1russell7/vex@0.17.1':
-    resolution: {integrity: sha512-468lHXFk+Kfz4Q9hbJshs+rwBcRWcwmsIIfg4cs8Bz1frknurINFErdVfick6plkQIpRWd6YHNVLLSQHt3/lEQ==}
+  '@mark1russell7/vex@0.17.2':
+    resolution: {integrity: sha512-RlAOfiR0Crp+f889PiUWRIx+sFIpDLKRlfd0TSmWSsVi1da+QFp5RxZ5IH3MqY88CTociJ+HSljD9qkKHTSolg==}
 
   '@mdx-js/mdx@3.1.1':
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
@@ -4981,19 +4978,15 @@ snapshots:
     dependencies:
       '@clack/prompts': 1.8.1
 
-  '@mark1russell7/vex-compiler@0.17.1':
+  '@mark1russell7/vex-compiler@0.17.2':
     dependencies:
-      '@mark1russell7/vex': 0.17.1
+      '@mark1russell7/vex': 0.17.2
 
-  '@mark1russell7/vex-domains@0.17.0':
+  '@mark1russell7/vex-domains@0.17.2':
     dependencies:
-      '@mark1russell7/vex': 0.17.0
+      '@mark1russell7/vex': 0.17.2
 
-  '@mark1russell7/vex@0.17.0':
-    dependencies:
-      '@mark1russell7/coeval': 0.15.0
-
-  '@mark1russell7/vex@0.17.1':
+  '@mark1russell7/vex@0.17.2':
     dependencies:
       '@mark1russell7/coeval': 0.15.0
 

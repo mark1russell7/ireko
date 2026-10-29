@@ -4,6 +4,11 @@ export class VexContractError extends Error {}
 /** The value of a key where the program gives an error of Vex. */
 export const VEX_ERROR = Object.freeze({ vexError: true });
 const E = {};
+function F() { throw E; }
+function V(l, s) { if (!l.some((x) => x[1] === E)) return l; if (s) F(); return l.filter((x) => x[1] !== E); }
+function AP(l, o, s) { return V(l, s).concat(V(o, s)); }
+function AO(l, o, s, w) { if (l !== w) return AP(l, o, s); const a = V(o, s), n = a.length; for (let i = 0; i < n; i++) l.push(a[i]); return l; }
+function C(m) { throw new VexContractError(m); }
 function VW(l) {
   let o = l.vw;
   if (o === undefined) {
@@ -12,11 +17,6 @@ function VW(l) {
   }
   return o;
 }
-function F() { throw E; }
-function V(l, s) { if (!l.some((x) => x[1] === E)) return l; if (s) F(); return l.filter((x) => x[1] !== E); }
-function AP(l, o, s) { return V(l, s).concat(V(o, s)); }
-function AO(l, o, s, w) { if (l !== w) return AP(l, o, s); const a = V(o, s), n = a.length; for (let i = 0; i < n; i++) l.push(a[i]); return l; }
-function C(m) { throw new VexContractError(m); }
 function CT(l, s) { const o = VW(l); return s && o.length < l.length ? F() : o.length; }
 function FI(n, v) {
   if (!(Number.isSafeInteger(n) && n >= 0 && n <= 100000 && v !== undefined)) F();
