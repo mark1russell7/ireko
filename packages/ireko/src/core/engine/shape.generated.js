@@ -13,7 +13,7 @@ function VW(l) {
   return o;
 }
 function F() { throw E; }
-function V(l, s) { const o = VW(l); if (s && o.length < l.length) F(); return o; }
+function V(l, s) { if (!l.some((x) => x[1] === E)) return l; if (s) F(); return l.filter((x) => x[1] !== E); }
 function AP(l, o, s) { return V(l, s).concat(V(o, s)); }
 function AO(l, o, s, w) { if (l !== w) return AP(l, o, s); const a = V(o, s), n = a.length; for (let i = 0; i < n; i++) l.push(a[i]); return l; }
 function C(m) { throw new VexContractError(m); }
