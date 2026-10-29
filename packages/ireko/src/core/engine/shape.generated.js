@@ -17,6 +17,17 @@ function FI(n, v) {
 function G(x) { return x === E ? F() : x; }
 function L(f) { let done = false, v; return () => { if (!done) { done = true; try { v = f(); } catch { v = E; } } return v; }; }
 function LI(x, h, t) {
+  // SHAPEWIRE wrapper (bench only): a plain array is a list whose items all have values, with the keys "0", "1", ...
+  if (Array.isArray(x)) {
+    const o = new Array(x.length);
+    for (let i = 0; i < x.length; i++) {
+      const r = x[i];
+      const v = h > 0 ? LI(r, h - 1, t) : r !== undefined && t(r) ? r : undefined;
+      if (v === undefined) return undefined;
+      o[i] = [`${i}`, v];
+    }
+    return o;
+  }
   if (typeof x !== "object" || x === null || x.kind !== "vex.list" || !Array.isArray(x.items)) return undefined;
   const o = [];
   for (let i = 0; i < x.items.length; i++) {

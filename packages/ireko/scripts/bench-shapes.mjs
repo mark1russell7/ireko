@@ -10,6 +10,8 @@
 //      (the module time includes the change of the bands into lists of Vex and back);
 //   2. the module call alone, with the records made before the run;
 //   3. a full layout with the switch off and on;
+//   5. the null arm of the plain wrapper: the same, with the wrapper that gives the module plain arrays. The switch on
+//      uses the plain wrapper, so "Module share, plain wrapper" is the share of the module in that layout.
 //   4. the null arm: a full layout with the wrapper of shape-vex.ts around the code of ireko, not the module. Its time
 //      over the layout with the switch off is the fixed cost of the wrapper (the change of the bands into lists of Vex
 //      and back). Then full = 1 + fixed + module, and each term is measured.
@@ -72,6 +74,32 @@ function gcPerPass(spans, reps) {
   let ms = 0;
   for (const [t, d] of gcEntries) if (spans.some(([s0, s1]) => t >= s0 && t < s1)) ms += d;
   return ms / (spans.length * reps);
+}
+
+// The null arm of the plain wrapper (SHAPEWIRE): the code of vexLinkedShape after the change of the wrapper. The bands
+// go in as plain arrays, and the output is read with loops, not with map.
+const valueOfItem = (item) => {
+  if (!item.result.ok) throw new RangeError("ireko: the shape of a node is not finite.");
+  return item.result.value;
+};
+const valuesOfLoop = (list) => {
+  const items = list.items;
+  const o = new Array(items.length);
+  for (let i = 0; i < items.length; i++) o[i] = valueOfItem(items[i]);
+  return o;
+};
+function nullPlainLinkedShape(own, parts) {
+  if (parts.length === 0) return handLinkedShape(own, parts);
+  const records = new Array(parts.length);
+  for (let i = 0; i < parts.length; i++) {
+    const p = parts[i];
+    records[i] = { ox: p.x, oy: p.y, rows: p.shape.rows, cols: p.shape.columns };
+  }
+  if (records.length !== parts.length) throw new RangeError("ireko: a record is missing.");
+  const shape = handLinkedShape(own, parts);
+  const value = at([listOfBands([listOfBands(shape.rows), listOfBands(shape.columns)])], 0);
+  if (!("kind" in value)) throw new RangeError("ireko: the shape of a node is not finite.");
+  return { rows: valuesOfLoop(valueOfItem(value.items[0])), columns: valuesOfLoop(valueOfItem(value.items[1])) };
 }
 
 /** The time of one pass in ms: the median of RUNS samples. The two functions alternate, so a slow moment hits both. */
@@ -174,11 +202,21 @@ for (const group of groups) {
       for (const t of group.trees) layout(t.input, t.options);
     },
   );
+  const nulPlain = compare(
+    () => {
+      setLinkedShape(handLinkedShape);
+      for (const t of group.trees) layout(t.input, t.options);
+    },
+    () => {
+      setLinkedShape(nullPlainLinkedShape);
+      for (const t of group.trees) layout(t.input, t.options);
+    },
+  );
   setLinkedShape(handLinkedShape);
   await flushGc();
   Object.assign(row, { gcOffMs: gcPerPass(full.spansA, full.reps), gcOnMs: gcPerPass(full.spansB, full.reps), gcNullMs: gcPerPass(nul.spansB, nul.reps) });
   gcEntries.length = 0;
-  Object.assign(row, { layoutOffMs: full.a, layoutOnMs: full.b, layoutRatio: full.b / full.a, layoutNullMs: nul.b, nullRatio: nul.b / nul.a, fixedShare: nul.b / nul.a - 1, moduleShare: full.b / full.a - nul.b / nul.a });
+  Object.assign(row, { layoutOffMs: full.a, layoutOnMs: full.b, layoutRatio: full.b / full.a, layoutNullMs: nul.b, nullRatio: nul.b / nul.a, fixedShare: nul.b / nul.a - 1, plainNullRatio: nulPlain.b / nulPlain.a, plainFixedShare: nulPlain.b / nulPlain.a - 1, plainModuleShare: full.b / full.a - nulPlain.b / nulPlain.a, moduleShare: full.b / full.a - nul.b / nul.a });
   rows.push(row);
   process.stderr.write(`done: ${group.name}\n`);
 }
@@ -197,9 +235,9 @@ const lines = [
   "",
   `Node.js ${process.version}, ${String(RUNS)} runs, median. Times are ms for one pass over the group.`,
   "",
-  "| Trees | Nodes | Linked shapes | Shapes pass, ireko | Shapes pass, Vex | Ratio | Module call only | Ratio | Layout, switch off | Layout, switch on | Ratio | Null arm | Ratio | Fixed share | Module share | GC off | GC on | GC null |",
-  "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
-  ...rows.map((r) => `| ${r.group} | ${String(r.nodes)} | ${String(r.linkedShapes)} | ${f(r.handPassMs)} | ${f(r.vexPassMs)} | ${f(r.passRatio, 2)} | ${f(r.moduleCallMs)} | ${f(r.moduleCallRatio, 2)} | ${f(r.layoutOffMs)} | ${f(r.layoutOnMs)} | ${f(r.layoutRatio, 2)} | ${f(r.layoutNullMs)} | ${f(r.nullRatio, 2)} | ${f(r.fixedShare, 2)} | ${f(r.moduleShare, 2)} | ${f(r.gcOffMs)} | ${f(r.gcOnMs)} | ${f(r.gcNullMs)} |`),
+  "| Trees | Nodes | Linked shapes | Shapes pass, ireko | Shapes pass, Vex | Ratio | Module call only | Ratio | Layout, switch off | Layout, switch on | Ratio | Null arm | Ratio | Fixed share | Module share | GC off | GC on | GC null | Fixed share, plain wrapper | Module share, plain wrapper |",
+  "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+  ...rows.map((r) => `| ${r.group} | ${String(r.nodes)} | ${String(r.linkedShapes)} | ${f(r.handPassMs)} | ${f(r.vexPassMs)} | ${f(r.passRatio, 2)} | ${f(r.moduleCallMs)} | ${f(r.moduleCallRatio, 2)} | ${f(r.layoutOffMs)} | ${f(r.layoutOnMs)} | ${f(r.layoutRatio, 2)} | ${f(r.layoutNullMs)} | ${f(r.nullRatio, 2)} | ${f(r.fixedShare, 2)} | ${f(r.moduleShare, 2)} | ${f(r.gcOffMs)} | ${f(r.gcOnMs)} | ${f(r.gcNullMs)} | ${f(r.plainFixedShare, 2)} | ${f(r.plainModuleShare, 2)} |`),
   "",
   `The module \`shape.generated.js\`: ${String(size.bytes)} bytes, ${String(size.gzip)} bytes gzip (not minified).`,
   "",

@@ -23,6 +23,8 @@ const MEASURES = [
   ["gcOffMs", "GC off, ms"],
   ["gcOnMs", "GC on, ms"],
   ["gcNullMs", "GC null, ms"],
+  ["plainFixedShare", "Fixed share, plain wrapper"],
+  ["plainModuleShare", "Module share, plain wrapper"],
 ];
 
 const median = (xs) => {
