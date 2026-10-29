@@ -9,24 +9,11 @@ function V(l, s) { if (!l.some((x) => x[1] === E)) return l; if (s) F(); return 
 function AP(l, o, s) { return V(l, s).concat(V(o, s)); }
 function AO(l, o, s, w) { if (l !== w) return AP(l, o, s); const a = V(o, s), n = a.length; for (let i = 0; i < n; i++) l.push(a[i]); return l; }
 function C(m) { throw new VexContractError(m); }
-function VW(l) {
-  let o = l.vw;
-  if (o === undefined) {
-    o = l.some((x) => x[1] === E) ? l.filter((x) => x[1] !== E) : l;
-    l.vw = o;
-  }
-  return o;
-}
-function CT(l, s) { const o = VW(l); return s && o.length < l.length ? F() : o.length; }
+// COMPILE-FUSE step A (bench only): VW, CT and FL are no longer used, so the module does not print them.
 function FI(n, v) {
   if (!(Number.isSafeInteger(n) && n >= 0 && n <= 100000 && v !== undefined)) F();
   const o = [];
   for (let i = 0; i < n; i++) o.push([i, v]);
-  return o;
-}
-function FL(l, s) {
-  const o = [];
-  for (const [, v] of V(l, s)) for (const x of V(v, s)) o.push(x);
   return o;
 }
 function G(x) { return x === E ? F() : x; }
@@ -120,17 +107,18 @@ export function nodeShape(records, vars) {
   });
   let c14;
   try {
-    const L12 = [];
+    // COMPILE-FUSE step A (bench only): flat(each(all, cell of col11)) is one loop with one output.
+    const o12 = [];
     for (let j0 = 0; j0 < n; j0++) {
-      let x13;
+      const m13 = o12.length;
       try {
-        x13 = G(col11(j0));
+        const z13 = G(col11(j0));
+        for (let i = 0; i < z13.length; i++) if (z13[i][1] !== E) o12.push(z13[i]);
       } catch {
-        x13 = E;
+        o12.length = m13;
       }
-      L12.push([j0, x13]);
     }
-    c14 = AP(FI(1, k_domain_Band(op_2_0(0, v0, 0, v1))), FL(L12, false), false);
+    c14 = AP(FI(1, k_domain_Band(op_2_0(0, v0, 0, v1))), o12, false);
   } catch {
     c14 = E;
   }
@@ -141,67 +129,80 @@ export function nodeShape(records, vars) {
     try {
       let b25;
       try {
+        // COMPILE-FUSE step A (bench only): flat(each(list(bands), if(sized, append, empty))) is one loop with one output; p15 is clean.
         const A19 = G(p15);
-        const L23 = [];
+        const o23 = [];
         for (let q20 = 0; q20 < A19.length; q20++) {
-          const j18 = A19[q20][0];
-          let x24;
+          const y21 = A19[q20][1];
+          const m24 = o23.length;
           try {
-            if (A19[q20][1] === E) F();
-            const y21 = A19[q20][1];
-            x24 = (op_3_2(y21) ? AP(FI(1, y21), FI(1, k_domain_Band(op_3_3(y21))), false) : G(c22));
+            if (op_3_2(y21)) {
+              const z24 = AP(FI(1, y21), FI(1, k_domain_Band(op_3_3(y21))), false);
+              for (let i = 0; i < z24.length; i++) o23.push(z24[i]);
+            } else {
+              const z24 = G(c22);
+              for (let i = 0; i < z24.length; i++) o23.push(z24[i]);
+            }
           } catch {
-            x24 = E;
+            o23.length = m24;
           }
-          L23.push([j18, x24]);
         }
-        b25 = FL(L23, false);
+        b25 = o23;
       } catch {
         b25 = E;
       }
+      // COMPILE-FUSE step A (bench only): the filter flat(each(list(raw), if(side = -1, fill(1, e), empty))) is one loop; b25 is clean.
       const A27 = G(b25);
-      const L30 = [];
+      const o30 = [];
       for (let q28 = 0; q28 < A27.length; q28++) {
-        const j26 = A27[q28][0];
-        let x31;
+        const y29 = A27[q28][1];
+        const m31 = o30.length;
         try {
-          if (A27[q28][1] === E) F();
-          const y29 = A27[q28][1];
-          x31 = (((k_number(op_3_4(y29))) === (-1)) ? FI(1, y29) : G(c22));
+          if (((k_number(op_3_4(y29))) === (-1))) {
+            o30.push([0, y29]);
+          } else {
+            const z31 = G(c22);
+            for (let i = 0; i < z31.length; i++) o30.push(z31[i]);
+          }
         } catch {
-          x31 = E;
+          o30.length = m31;
         }
-        L30.push([j26, x31]);
       }
+      // COMPILE-FUSE step A (bench only): the filter flat(each(list(raw), if(side = 0, fill(1, e), empty))) is one loop; b25 is clean.
       const A33 = G(b25);
-      const L36 = [];
+      const o36 = [];
       for (let q34 = 0; q34 < A33.length; q34++) {
-        const j32 = A33[q34][0];
-        let x37;
+        const y35 = A33[q34][1];
+        const m37 = o36.length;
         try {
-          if (A33[q34][1] === E) F();
-          const y35 = A33[q34][1];
-          x37 = (((k_number(op_3_4(y35))) === (0)) ? FI(1, y35) : G(c22));
+          if (((k_number(op_3_4(y35))) === (0))) {
+            o36.push([0, y35]);
+          } else {
+            const z37 = G(c22);
+            for (let i = 0; i < z37.length; i++) o36.push(z37[i]);
+          }
         } catch {
-          x37 = E;
+          o36.length = m37;
         }
-        L36.push([j32, x37]);
       }
+      // COMPILE-FUSE step A (bench only): the filter flat(each(list(raw), if(side = 1, fill(1, e), empty))) is one loop; b25 is clean.
       const A40 = G(b25);
-      const L43 = [];
+      const o43 = [];
       for (let q41 = 0; q41 < A40.length; q41++) {
-        const j39 = A40[q41][0];
-        let x44;
+        const y42 = A40[q41][1];
+        const m44 = o43.length;
         try {
-          if (A40[q41][1] === E) F();
-          const y42 = A40[q41][1];
-          x44 = (((k_number(op_3_4(y42))) === (1)) ? FI(1, y42) : G(c22));
+          if (((k_number(op_3_4(y42))) === (1))) {
+            o43.push([0, y42]);
+          } else {
+            const z44 = G(c22);
+            for (let i = 0; i < z44.length; i++) o43.push(z44[i]);
+          }
         } catch {
-          x44 = E;
+          o43.length = m44;
         }
-        L43.push([j39, x44]);
       }
-      b45 = AP(AP(FL(L30, false), SK(FL(L36, false), false, ((x38) => k_number(op_3_6(x38)))), false), FL(L43, false), false);
+      b45 = AP(AP(o30, SK(o36, false, ((x38) => k_number(op_3_6(x38)))), false), o43, false);
     } catch {
       b45 = E;
     }
@@ -216,10 +217,9 @@ export function nodeShape(records, vars) {
       let l52 = k_domain_Band(op_2_0(0, 0, 0, 0));
       let l53 = FI(0, k_domain_Band(op_2_0(0, 0, 0, 0)));
       let w83 = null;
+      // COMPILE-FUSE step A (bench only): b45 is clean, so the fold has no test of the sentinel.
       const A55 = G(b45);
       for (let q56 = 0; q56 < A55.length; q56++) {
-        const j54 = A55[q56][0];
-        if (A55[q56][1] === E) F();
         const y57 = A55[q56][1];
         const t58 = true;
         const t59 = ((l46 && (!((l46 && (!(op_3_7(y57, l47))))))) ? l47 : y57);
@@ -227,21 +227,24 @@ export function nodeShape(records, vars) {
         try {
           let t66;
           if ((l46 && (!(op_3_7(y57, l47))))) {
+            // COMPILE-FUSE step A (bench only): the filter flat(each(list(open), if(outlasts, fill(1, b), empty))) is one loop; l48 is clean.
             const A61 = l48;
-            const L64 = [];
+            const o64 = [];
             for (let q62 = 0; q62 < A61.length; q62++) {
-              const j60 = A61[q62][0];
-              let x65;
+              const y63 = A61[q62][1];
+              const m65 = o64.length;
               try {
-                if (A61[q62][1] === E) F();
-                const y63 = A61[q62][1];
-                x65 = (op_3_9(y63, y57) ? FI(1, y63) : G(c22));
+                if (op_3_9(y63, y57)) {
+                  o64.push([0, y63]);
+                } else {
+                  const z65 = G(c22);
+                  for (let i = 0; i < z65.length; i++) o64.push(z65[i]);
+                }
               } catch {
-                x65 = E;
+                o64.length = m65;
               }
-              L64.push([j60, x65]);
             }
-            t66 = FL(L64, false);
+            t66 = o64;
           } else {
             t66 = l48;
           }
@@ -250,15 +253,15 @@ export function nodeShape(records, vars) {
           b67 = E;
         }
         const t68 = (op_3_2(y57) ? AP(G(b67), FI(1, y57), false) : G(b67));
-        const t69 = ((l46 && (!(op_3_7(y57, l47)))) && ((CT(l48, false)) > (0)));
+        // COMPILE-FUSE step A (bench only): l48 is clean, so count(open) reads the length with no CT and no VW.
+        const t69 = ((l46 && (!(op_3_7(y57, l47)))) && ((l48.length) > (0)));
         let t79;
-        if (((l46 && (!(op_3_7(y57, l47)))) && ((CT(l48, false)) > (0)))) {
+        if (((l46 && (!(op_3_7(y57, l47)))) && ((l48.length) > (0)))) {
           let l70 = false;
           let l71 = k_domain_Band(op_2_0(0, 0, 0, 0));
+          // COMPILE-FUSE step A (bench only): l48 is clean, so the fold has no test of the sentinel.
           const A73 = l48;
           for (let q74 = 0; q74 < A73.length; q74++) {
-            const j72 = A73[q74][0];
-            if (A73[q74][1] === E) F();
             const y75 = A73[q74][1];
             const t76 = true;
             const t77 = (l70 ? k_domain_Band(op_3_11(l71, y75)) : y75);
@@ -301,16 +304,16 @@ export function nodeShape(records, vars) {
     }
     let l89 = G(b88);
     for (let k102 = 0; ; k102++) {
-      if (((CT(l89, false)) <= (v2))) break;
+      // COMPILE-FUSE step A (bench only): l89 is clean, so count(out) reads the length with no CT and no VW.
+      if (((l89.length) <= (v2))) break;
       if (k102 === 64) F();
       let l90 = false;
       let l91 = k_domain_Band(op_2_0(0, 0, 0, 0));
       let l92 = FI(0, k_domain_Band(op_2_0(0, 0, 0, 0)));
       let w99 = null;
+      // COMPILE-FUSE step A (bench only): l89 is clean, so the fold has no test of the sentinel.
       const A94 = l89;
       for (let q95 = 0; q95 < A94.length; q95++) {
-        const j93 = A94[q95][0];
-        if (A94[q95][1] === E) F();
         const y96 = A94[q95][1];
         const t97 = (!(l90));
         const t98 = y96;
@@ -349,17 +352,18 @@ export function nodeShape(records, vars) {
   });
   let c119;
   try {
-    const L117 = [];
+    // COMPILE-FUSE step A (bench only): flat(each(all, cell of col116)) is one loop with one output.
+    const o117 = [];
     for (let j105 = 0; j105 < n; j105++) {
-      let x118;
+      const m118 = o117.length;
       try {
-        x118 = G(col116(j105));
+        const z118 = G(col116(j105));
+        for (let i = 0; i < z118.length; i++) if (z118[i][1] !== E) o117.push(z118[i]);
       } catch {
-        x118 = E;
+        o117.length = m118;
       }
-      L117.push([j105, x118]);
     }
-    c119 = AP(FI(1, k_domain_Band(op_2_0(0, v1, 0, v0))), FL(L117, false), false);
+    c119 = AP(FI(1, k_domain_Band(op_2_0(0, v1, 0, v0))), o117, false);
   } catch {
     c119 = E;
   }
