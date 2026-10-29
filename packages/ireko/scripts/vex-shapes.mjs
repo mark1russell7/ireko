@@ -193,7 +193,8 @@ const NODE_SCHEMA = {
   vars: { w: "number", h: "number", limit: "number" },
 };
 
-const m = emitModule(NODE_SHAPE, { domains: DOMAINS, schema: NODE_SCHEMA, name: "nodeShape" });
+// The bands go in and out as plain arrays (the option lists of vex-compiler, after 0.17.2).
+const m = emitModule(NODE_SHAPE, { domains: DOMAINS, schema: NODE_SCHEMA, name: "nodeShape", lists: "plain" });
 if (!m.ok) throw new Error(m.reason);
 if (m.source.includes("import")) throw new Error("The module imports a name. It must stand alone.");
 const out = resolve(dirname(fileURLToPath(import.meta.url)), "..", "src", "core", "engine", "shape.generated.js");

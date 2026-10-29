@@ -5,33 +5,41 @@
  */
 import { at } from "../at.ts";
 import type { Size } from "../geometry.ts";
-import type { Band, Shape } from "../strategy.ts";
-import { nodeShape, type VexBand, type VexList } from "./shape.generated.js";
+import type { Shape } from "../strategy.ts";
+import { nodeShape, VEX_ERROR, type ShapeRecord, type VexList } from "./shape.generated.js";
 import { boxShape, MAX_BANDS, type ShapePart } from "./shape.ts";
 
-/** This function gives a list of bands as a list of Vex. */
-function listOf(bands: readonly Band[]): VexList<VexBand> {
-  return { kind: "vex.list", items: bands.map((value, k) => ({ key: String(k), result: { ok: true, value } })) };
+/** This function tells if a value of the module is its error value. */
+function isError(v: unknown): v is typeof VEX_ERROR {
+  return v === VEX_ERROR;
 }
 
-/** This function gives the values of a list of Vex. An error in the list is a band with NaN. An infinite end is a value. */
-function valuesOf<T>(list: VexList<T>): T[] {
-  return list.items.map((item) => {
-    if (!item.result.ok) throw new RangeError("ireko: the shape of a node is not finite.");
-    return item.result.value;
-  });
+/** This function gives the values of a list of the module. An error item is a shape that is not finite. */
+function valuesOf<T>(list: VexList<T> | typeof VEX_ERROR): T[] {
+  if (isError(list)) throw new RangeError("ireko: the shape of a node is not finite.");
+  const o = new Array<T>(list.length);
+  for (let i = 0; i < list.length; i++) {
+    const v = at(list, i);
+    if (isError(v)) throw new RangeError("ireko: the shape of a node is not finite.");
+    o[i] = v;
+  }
+  return o;
 }
 
 /**
  * This function gives the shape of a linked node with the shapes module of Vex. The records of the module are the
- * children. A node without children has the shape of its box, as in the code of ireko.
+ * children. A node without children has the shape of its box, as in the code of ireko. The bands go in and out as
+ * plain arrays (the option `lists: "plain"` of the compiler).
  */
 export function vexLinkedShape(own: Size, parts: readonly ShapePart[]): Shape {
   if (parts.length === 0) return boxShape(own);
-  const records = parts.map((p) => ({ ox: p.x, oy: p.y, rows: listOf(p.shape.rows), cols: listOf(p.shape.columns) }));
+  const records = new Array<ShapeRecord>(parts.length);
+  for (let i = 0; i < parts.length; i++) {
+    const p = at(parts, i);
+    records[i] = { ox: p.x, oy: p.y, rows: p.shape.rows, cols: p.shape.columns };
+  }
   // The module gives the shape of the node at each record. The first record has it.
   const value = at(nodeShape(records, { w: own.width, h: own.height, limit: MAX_BANDS }), 0);
-  if (!("kind" in value)) throw new RangeError("ireko: the shape of a node is not finite.");
   const axes = valuesOf(value);
   return { rows: valuesOf(at(axes, 0)), columns: valuesOf(at(axes, 1)) };
 }

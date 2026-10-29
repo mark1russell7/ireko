@@ -14,24 +14,15 @@ export interface VexBand {
   readonly max: number;
 }
 
-/** One item of a list of Vex: its key, and its value or an error. */
-export interface VexItem<T> {
-  readonly key: string;
-  readonly result: { readonly ok: true; readonly value: T } | { readonly ok: false; readonly error: unknown };
-}
-
-/** A list of Vex. */
-export interface VexList<T> {
-  readonly kind: "vex.list";
-  readonly items: readonly VexItem<T>[];
-}
+/** A list of the module: the values of its items, in order (the option `lists: "plain"`). An error item is `VEX_ERROR`. */
+export type VexList<T> = readonly (T | typeof VEX_ERROR)[];
 
 /** One record of the program: a child, with its offset and its shape as two lists of bands. */
 export interface ShapeRecord {
   readonly ox: number;
   readonly oy: number;
-  readonly rows: VexList<VexBand>;
-  readonly cols: VexList<VexBand>;
+  readonly rows: readonly VexBand[];
+  readonly cols: readonly VexBand[];
 }
 
 /** The variables of a run: the box of the node and the largest number of bands on each axis. */
@@ -42,7 +33,8 @@ export interface ShapeVars {
 }
 
 /**
- * This function gives the shape of the node at each record: a list of two lists of bands, the rows and the columns.
+ * This function gives the shape of the node at each record: a list of two lists of bands, the rows and the columns,
+ * as plain arrays.
  * It gives `VEX_ERROR` where the program gives an error of Vex.
  */
 export declare function nodeShape(records: readonly ShapeRecord[], vars: ShapeVars): readonly (VexList<VexList<VexBand>> | typeof VEX_ERROR)[];

@@ -14,26 +14,22 @@ function FI(n, v) {
 }
 function G(x) { return x === E ? F() : x; }
 function L(f) { let done = false, v; return () => { if (!done) { done = true; try { v = f(); } catch { v = E; } } return v; }; }
-function LI(x, h, t) {
-  if (typeof x !== "object" || x === null || x.kind !== "vex.list" || !Array.isArray(x.items)) return undefined;
+function LA(x, h, t) {
+  if (!Array.isArray(x)) return undefined;
   const o = [];
-  for (let i = 0; i < x.items.length; i++) {
-    const it = x.items[i];
-    const r = typeof it === "object" && it !== null ? it.result : undefined;
-    if (typeof r !== "object" || r === null || typeof it.key !== "string") return undefined;
-    if (r.ok === true) {
-      const v = h > 0 ? LI(r.value, h - 1, t) : r.value !== undefined && t(r.value) ? r.value : undefined;
-      if (v === undefined) return undefined;
-      o.push([it.key, v]);
-    } else {
-      const e = r.error;
-      if (r.ok !== false || typeof e !== "object" || e === null || typeof e.code !== "string" || typeof e.kind !== "string" || typeof e.message !== "string" || !Array.isArray(e.path) || e.kind === "depth") return undefined;
-      o.push([it.key, E]);
+  for (let i = 0; i < x.length; i++) {
+    const y = x[i];
+    if (y === VEX_ERROR) {
+      o.push([i, E]);
+      continue;
     }
+    const v = h > 0 ? LA(y, h - 1, t) : y !== undefined && t(y) ? y : undefined;
+    if (v === undefined) return undefined;
+    o.push([i, v]);
   }
   return o;
 }
-function LOC(l, h) { return { kind: "vex.list", items: l.map(([k, v]) => ({ key: `${k}`, result: { ok: true, value: h > 0 ? LOC(v, h - 1) : v } })) }; }
+function LPC(l, h) { return l.map(h > 0 ? (x) => LPC(x[1], h - 1) : (x) => x[1]); }
 function Q(f) { const m = []; return (j) => { let v = m[j]; if (v === undefined) { try { v = f(j); } catch { v = E; } m[j] = v; } return v; }; }
 function SKI(l, f) {
   const n = l.length;
@@ -78,7 +74,7 @@ export function nodeShape(records, vars) {
   const LF120 = [];
   for (let i = 0; i < n; i++) {
     const r = R[i];
-    if (typeof r !== "object" || r === null || typeof r["ox"] !== "number" || typeof r["oy"] !== "number" || (LF3[i] = LI(r["rows"], 0, is_3)) === undefined || (LF120[i] = LI(r["cols"], 0, is_3)) === undefined) C(`the record ${i} does not keep the schema`);
+    if (typeof r !== "object" || r === null || typeof r["ox"] !== "number" || typeof r["oy"] !== "number" || (LF3[i] = LA(r["rows"], 0, is_3)) === undefined || (LF120[i] = LA(r["cols"], 0, is_3)) === undefined) C(`the record ${i} does not keep the schema`);
   }
   if (typeof vars !== "object" || vars === null || typeof vars["w"] !== "number" || typeof vars["h"] !== "number" || typeof vars["limit"] !== "number") C("the variables do not keep the schema");
   const v0 = vars["h"];
@@ -386,7 +382,7 @@ export function nodeShape(records, vars) {
   const out = [];
   for (let o = 0; o < n; o++) {
     try {
-      out.push(LOC(G(c136()), 1));
+      out.push(LPC(G(c136()), 1));
     } catch {
       out.push(VEX_ERROR);
     }

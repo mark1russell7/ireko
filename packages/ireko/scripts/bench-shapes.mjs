@@ -8,7 +8,7 @@
 // For each group of trees it measures, as the median of the runs:
 //   1. the shapes pass alone: each call of the linked shape of one layout, with the code of ireko and with the module
 //      (the module time includes the change of the bands into lists of Vex and back);
-//   2. the module call alone, with the records made before the run;
+//   2. the module call alone, with the records made before the run (plain arrays of bands);
 //   3. a full layout with the switch off and on;
 //   5. the null arm of the plain wrapper: the same, with the wrapper that gives the module plain arrays. The switch on
 //      uses the plain wrapper, so "Module share, plain wrapper" is the share of the module in that layout.
@@ -28,7 +28,7 @@ import { gzipSync } from "node:zlib";
 import { layout } from "../src/core/engine.ts";
 import { handLinkedShape, MAX_BANDS, setLinkedShape } from "../src/core/engine/shape.ts";
 import { vexLinkedShape } from "../src/core/engine/shape-vex.ts";
-import { nodeShape } from "../src/core/engine/shape.generated.js";
+import { nodeShape, VEX_ERROR } from "../src/core/engine/shape.generated.js";
 import { at } from "../src/core/at.ts";
 import { exampleTrees, fullTrees, randomTrees } from "../src/test/shape-trees.ts";
 
@@ -97,9 +97,20 @@ function nullPlainLinkedShape(own, parts) {
   }
   if (records.length !== parts.length) throw new RangeError("ireko: a record is missing.");
   const shape = handLinkedShape(own, parts);
-  const value = at([listOfBands([listOfBands(shape.rows), listOfBands(shape.columns)])], 0);
-  if (!("kind" in value)) throw new RangeError("ireko: the shape of a node is not finite.");
-  return { rows: valuesOfLoop(valueOfItem(value.items[0])), columns: valuesOfLoop(valueOfItem(value.items[1])) };
+  // The module gives plain arrays (the option lists: "plain"), and the wrapper copies them with a check of each item.
+  const value = at([[[...shape.rows], [...shape.columns]]], 0);
+  const plain = (list) => {
+    if (list === VEX_ERROR) throw new RangeError("ireko: the shape of a node is not finite.");
+    const o = new Array(list.length);
+    for (let i = 0; i < list.length; i++) {
+      const v = list[i];
+      if (v === VEX_ERROR) throw new RangeError("ireko: the shape of a node is not finite.");
+      o[i] = v;
+    }
+    return o;
+  };
+  const axes = plain(value);
+  return { rows: plain(axes[0]), columns: plain(axes[1]) };
 }
 
 /** The time of one pass in ms: the median of RUNS samples. The two functions alternate, so a slow moment hits both. */
@@ -141,8 +152,6 @@ function sample(f, reps) {
   return (performance.now() - t) / reps;
 }
 
-const listOf = (bands) => ({ kind: "vex.list", items: bands.map((value, k) => ({ key: String(k), result: { ok: true, value } })) });
-
 const groups = [
   { name: "examples (golden files)", trees: exampleTrees() },
   ...fullTrees(values.large).map((t) => ({ name: t.name, trees: [t] })),
@@ -171,7 +180,7 @@ for (const group of groups) {
         for (const [own, parts] of calls) vexLinkedShape(own, parts);
       },
     );
-    const prepared = calls.map(([own, parts]) => [parts.map((p) => ({ ox: p.x, oy: p.y, rows: listOf(p.shape.rows), cols: listOf(p.shape.columns) })), { w: own.width, h: own.height, limit: MAX_BANDS }]);
+    const prepared = calls.map(([own, parts]) => [parts.map((p) => ({ ox: p.x, oy: p.y, rows: p.shape.rows, cols: p.shape.columns })), { w: own.width, h: own.height, limit: MAX_BANDS }]);
     const moduleOnly = compare(
       () => {
         for (const [own, parts] of calls) handLinkedShape(own, parts);
