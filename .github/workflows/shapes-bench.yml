@@ -1,6 +1,6 @@
 # SHAPEWIRE: the shapes module of Vex against the shapes code of ireko (an experiment, not for main).
 #   suite   the whole test suite of packages/ireko with the switch of the shapes on
-#   bench   packages/ireko/scripts/bench-shapes.mjs: the shapes pass alone and a full layout, switch off and on,
+#   bench   packages/ireko/scripts/bench-shapes.mjs, five runs (bench-summary.mjs gives their median and interval): the shapes pass alone and a full layout, switch off and on,
 #           as a table in the summary of the run and a JSON artifact, and the size of the module
 #   profile packages/ireko/scripts/profile-shapes.mjs and profile-summary.mjs: a CPU profile of the shapes pass on the
 #           full tree of 1111 nodes (the wrapper and the module, the module alone, the code of ireko), with the self
@@ -43,11 +43,16 @@ jobs:
       - run: pnpm --filter ireko vex:shapes && git diff --exit-code packages/ireko/src/core/engine/shape.generated.js
 
   bench:
-    name: Benchmark
+    name: Benchmark ${{ matrix.rep }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
       contents: read
+    # Five runs on five runners: a gate is judged on the median of the run medians and its interval (bench summary).
+    strategy:
+      fail-fast: false
+      matrix:
+        rep: [1, 2, 3, 4, 5]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -87,8 +92,34 @@ jobs:
           } | tee -a "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: shapes-bench
+          name: shapes-bench-${{ matrix.rep }}
           path: packages/ireko/shapes-bench.json
+          retention-days: 90
+
+  bench-summary:
+    name: Bench summary
+    needs: bench
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: shapes-bench-*
+          path: runs
+      - name: The median of the runs
+        run: node packages/ireko/scripts/bench-summary.mjs --out bench-summary.json runs/*/shapes-bench.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: shapes-bench-summary
+          path: bench-summary.json
           retention-days: 90
 
   profile:

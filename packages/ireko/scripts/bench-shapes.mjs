@@ -13,11 +13,14 @@
 //   4. the null arm: a full layout with the wrapper of shape-vex.ts around the code of ireko, not the module. Its time
 //      over the layout with the switch off is the fixed cost of the wrapper (the change of the bands into lists of Vex
 //      and back). Then full = 1 + fixed + module, and each term is measured.
+// For the full layout and the null arm it also gives the time of the garbage collector per pass in each arm, from the
+// "gc" entries of perf_hooks.
 // It writes a Markdown table to stdout and to $GITHUB_STEP_SUMMARY, and the raw numbers to --out.
 
 import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { PerformanceObserver } from "node:perf_hooks";
 import { parseArgs } from "node:util";
 import { gzipSync } from "node:zlib";
 import { layout } from "../src/core/engine.ts";
@@ -58,6 +61,19 @@ function nullLinkedShape(own, parts) {
   return { rows: valuesOfList(at(axes, 0)), columns: valuesOfList(at(axes, 1)) };
 }
 
+// The entries of the garbage collector. compare() keeps the time span of each sample, and gcPerPass() counts the
+// entries that start in the spans of one arm.
+const gcEntries = [];
+new PerformanceObserver((list) => {
+  for (const e of list.getEntries()) gcEntries.push([e.startTime, e.duration]);
+}).observe({ entryTypes: ["gc"] });
+const flushGc = () => new Promise((done) => setTimeout(done, 20));
+function gcPerPass(spans, reps) {
+  let ms = 0;
+  for (const [t, d] of gcEntries) if (spans.some(([s0, s1]) => t >= s0 && t < s1)) ms += d;
+  return ms / (spans.length * reps);
+}
+
 /** The time of one pass in ms: the median of RUNS samples. The two functions alternate, so a slow moment hits both. */
 function compare(a, b) {
   const reps = Math.max(1, Math.ceil(MIN_SAMPLE_MS / Math.max(0.001, once(a))));
@@ -68,16 +84,23 @@ function compare(a, b) {
   }
   const ta = [];
   const tb = [];
+  const sa = [];
+  const sb = [];
+  const timed = (f, times, spans) => {
+    const t0 = performance.now();
+    times.push(sample(f, reps));
+    spans.push([t0, performance.now()]);
+  };
   for (let r = 0; r < RUNS; r++) {
     if (r % 2 === 0) {
-      ta.push(sample(a, reps));
-      tb.push(sample(b, reps));
+      timed(a, ta, sa);
+      timed(b, tb, sb);
     } else {
-      tb.push(sample(b, reps));
-      ta.push(sample(a, reps));
+      timed(b, tb, sb);
+      timed(a, ta, sa);
     }
   }
-  return { a: median(ta), b: median(tb), reps };
+  return { a: median(ta), b: median(tb), reps, spansA: sa, spansB: sb };
 }
 function once(f) {
   const t = performance.now();
@@ -152,6 +175,9 @@ for (const group of groups) {
     },
   );
   setLinkedShape(handLinkedShape);
+  await flushGc();
+  Object.assign(row, { gcOffMs: gcPerPass(full.spansA, full.reps), gcOnMs: gcPerPass(full.spansB, full.reps), gcNullMs: gcPerPass(nul.spansB, nul.reps) });
+  gcEntries.length = 0;
   Object.assign(row, { layoutOffMs: full.a, layoutOnMs: full.b, layoutRatio: full.b / full.a, layoutNullMs: nul.b, nullRatio: nul.b / nul.a, fixedShare: nul.b / nul.a - 1, moduleShare: full.b / full.a - nul.b / nul.a });
   rows.push(row);
   process.stderr.write(`done: ${group.name}\n`);
@@ -171,9 +197,9 @@ const lines = [
   "",
   `Node.js ${process.version}, ${String(RUNS)} runs, median. Times are ms for one pass over the group.`,
   "",
-  "| Trees | Nodes | Linked shapes | Shapes pass, ireko | Shapes pass, Vex | Ratio | Module call only | Ratio | Layout, switch off | Layout, switch on | Ratio | Null arm | Ratio | Fixed share | Module share |",
-  "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
-  ...rows.map((r) => `| ${r.group} | ${String(r.nodes)} | ${String(r.linkedShapes)} | ${f(r.handPassMs)} | ${f(r.vexPassMs)} | ${f(r.passRatio, 2)} | ${f(r.moduleCallMs)} | ${f(r.moduleCallRatio, 2)} | ${f(r.layoutOffMs)} | ${f(r.layoutOnMs)} | ${f(r.layoutRatio, 2)} | ${f(r.layoutNullMs)} | ${f(r.nullRatio, 2)} | ${f(r.fixedShare, 2)} | ${f(r.moduleShare, 2)} |`),
+  "| Trees | Nodes | Linked shapes | Shapes pass, ireko | Shapes pass, Vex | Ratio | Module call only | Ratio | Layout, switch off | Layout, switch on | Ratio | Null arm | Ratio | Fixed share | Module share | GC off | GC on | GC null |",
+  "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+  ...rows.map((r) => `| ${r.group} | ${String(r.nodes)} | ${String(r.linkedShapes)} | ${f(r.handPassMs)} | ${f(r.vexPassMs)} | ${f(r.passRatio, 2)} | ${f(r.moduleCallMs)} | ${f(r.moduleCallRatio, 2)} | ${f(r.layoutOffMs)} | ${f(r.layoutOnMs)} | ${f(r.layoutRatio, 2)} | ${f(r.layoutNullMs)} | ${f(r.nullRatio, 2)} | ${f(r.fixedShare, 2)} | ${f(r.moduleShare, 2)} | ${f(r.gcOffMs)} | ${f(r.gcOnMs)} | ${f(r.gcNullMs)} |`),
   "",
   `The module \`shape.generated.js\`: ${String(size.bytes)} bytes, ${String(size.gzip)} bytes gzip (not minified).`,
   "",
