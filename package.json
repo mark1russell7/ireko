@@ -3,7 +3,7 @@
   "name": "ireko-monorepo",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@12.10.1",
+  "packageManager": "pnpm@12.14.0",
   "engines": {
     "node": ">=22.12"
   },
