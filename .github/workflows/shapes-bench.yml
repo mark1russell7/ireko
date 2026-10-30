@@ -1,0 +1,169 @@
+# SHAPEWIRE: the shapes module of Vex against the shapes code of ireko (an experiment, not for main).
+#   suite   the whole test suite of packages/ireko with the switch of the shapes on
+#   bench   packages/ireko/scripts/bench-shapes.mjs, five runs (bench-summary.mjs gives their median and interval): the shapes pass alone and a full layout, switch off and on,
+#           as a table in the summary of the run and a JSON artifact, and the size of the module
+#   profile packages/ireko/scripts/profile-shapes.mjs and profile-summary.mjs: a CPU profile of the shapes pass on the
+#           full tree of 1111 nodes (the wrapper and the module, the module alone, the code of ireko), with the self
+#           time in groups (wrap, envelope, alloc, dispatch, bandops, other), and the .cpuprofile files as an artifact
+name: Shapes bench
+
+# A run starts only by hand, at a time with free runner slots (the fleet rule of 2026-10-30), not at each push.
+on:
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: The number of runs of each measure (the median is the result)
+        default: "31"
+      profile_seconds:
+        description: The seconds of samples of each CPU profile
+        default: "4"
+
+permissions: {}
+
+# One run for each branch: a newer run stops the older one.
+concurrency:
+  group: shapes-bench-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  suite:
+    name: Tests with the switch on
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter ireko test:vex-shapes
+      # The generated module is the output of the generator: a new run of the script must not change it.
+      - run: pnpm --filter ireko vex:shapes && git diff --exit-code packages/ireko/src/core/engine/shape.generated.js
+
+  bench:
+    name: Benchmark ${{ matrix.rep }}
+    # The suite first, then the benchmark, then the profile: the run holds at most 3 runner slots.
+    needs: suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    # Five runs on five runners: a gate is judged on the median of the run medians and its interval (bench summary).
+    strategy:
+      fail-fast: false
+      # The runner slots of the account are a budget: at most 3 jobs of this workflow at one time (fleet, 2026-10-30).
+      max-parallel: 3
+      matrix:
+        rep: [1, 2, 3, 4, 5]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: The benchmark
+        working-directory: packages/ireko
+        env:
+          RUNS: ${{ inputs.runs || '31' }}
+        run: node scripts/bench-shapes.mjs --runs "$RUNS" --large --out shapes-bench.json
+      - name: The size of the module
+        working-directory: packages/ireko
+        run: |
+          set -o pipefail
+          esbuild="$(ls -d ../../node_modules/.pnpm/esbuild@*/node_modules/esbuild | head -n 1)/bin/esbuild"
+          module_size=$("$esbuild" src/core/engine/shape.generated.js --minify --format=esm | gzip -9c | wc -c)
+          printf 'export { layout } from "./src/core/engine.ts";\n' > size-off.ts
+          printf 'export { layout } from "./src/core/engine.ts";\nimport { setLinkedShape } from "./src/core/engine/shape.ts";\nimport { vexLinkedShape } from "./src/core/engine/shape-vex.ts";\nsetLinkedShape(vexLinkedShape);\n' > size-on.ts
+          off=$("$esbuild" size-off.ts --bundle --minify --format=esm --log-level=error | gzip -9c | wc -c)
+          on=$("$esbuild" size-on.ts --bundle --minify --format=esm --log-level=error | gzip -9c | wc -c)
+          {
+            echo "### Size (esbuild --minify, gzip -9)"
+            echo
+            echo "| Item | Bytes |"
+            echo "|---|---:|"
+            echo "| \`shape.generated.js\` alone | $module_size |"
+            echo "| \`layout\` bundle, switch code only (this branch as published) | $off |"
+            echo "| \`layout\` bundle with the module wired in | $on |"
+            echo "| Difference | $((on - off)) |"
+            echo
+            echo "The size check of ireko (\`.size-limit.json\`) gives \`layout\` a limit of 17.4 kB. It uses a different bundler, so compare the difference, not the totals."
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: shapes-bench-${{ matrix.rep }}
+          path: packages/ireko/shapes-bench.json
+          retention-days: 90
+
+  bench-summary:
+    name: Bench summary
+    needs: bench
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: shapes-bench-*
+          path: runs
+      - name: The median of the runs
+        run: node packages/ireko/scripts/bench-summary.mjs --out bench-summary.json runs/*/shapes-bench.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: shapes-bench-summary
+          path: bench-summary.json
+          retention-days: 90
+
+  profile:
+    name: CPU profile
+    needs: bench
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Each mode warms up for 1 s, then the profiler of V8 samples every 100 µs for the given seconds.
+      - name: The profiles
+        working-directory: packages/ireko
+        env:
+          SECONDS_OF_SAMPLES: ${{ inputs.profile_seconds || '4' }}
+        run: |
+          set -o pipefail
+          mkdir -p shapes-profile
+          for mode in vex module hand; do
+            node scripts/profile-shapes.mjs --mode "$mode" --seconds "$SECONDS_OF_SAMPLES" --out "shapes-profile/$mode.cpuprofile"
+          done
+      - name: The summary of the profiles
+        working-directory: packages/ireko
+        run: node scripts/profile-summary.mjs --out shapes-profile/summary.json vex=shapes-profile/vex.cpuprofile module=shapes-profile/module.cpuprofile hand=shapes-profile/hand.cpuprofile
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: shapes-profile
+          path: packages/ireko/shapes-profile/
+          retention-days: 90

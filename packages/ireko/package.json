@@ -112,7 +112,10 @@
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.core.json && tsc -p tsconfig.test.json",
     "test:coverage": "vitest run --coverage",
     "bench": "vitest bench --run --reporter=verbose",
-    "mutation": "stryker run"
+    "mutation": "stryker run",
+    "test:vex-shapes": "vitest run --config vitest.vex-shapes.config.ts",
+    "vex:shapes": "node scripts/vex-shapes.mjs",
+    "bench:shapes": "node scripts/bench-shapes.mjs"
   },
   "peerDependencies": {
     "@xyflow/react": "^12.0.0",
@@ -128,6 +131,9 @@
   },
   "devDependencies": {
     "@mark1russell7/cue": "github:mark1russell7/cue",
+    "@mark1russell7/vex": "^0.17.2",
+    "@mark1russell7/vex-compiler": "^0.17.2",
+    "@mark1russell7/vex-domains": "^0.17.2",
     "@stryker-mutator/core": "10.0.0",
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",

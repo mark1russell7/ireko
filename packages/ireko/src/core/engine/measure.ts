@@ -10,7 +10,7 @@ import { resolveOptions } from "../options.ts";
 import { grid } from "../strategies/grid.ts";
 import type { AnyStrategy, Arrangement, ChildEdge, Direction, MeasuredChild, Shape } from "../strategy.ts";
 import { measureOf, type MeasureColumn, type MeasureRecord } from "./measure.generated.js";
-import { boxShape, joinShapes, moveShape } from "./shape.ts";
+import { boxShape, linkedShape, moveShape, type ShapePart } from "./shape.ts";
 import type { Context, Normalized, Placement } from "./types.ts";
 
 /** The keys of a layout object that belong to the engine, not to the strategy. */
@@ -141,13 +141,14 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
       box[i] = own.size;
       extent[i] = { x: numberAt(fit.bx, 0), y: numberAt(fit.by, 0), width: numberAt(fit.bw, 0), height: numberAt(fit.bh, 0) };
       if (at(needsShape, i)) {
-        const parts = node.children.map((c, k) => {
+        const parts = node.children.map((c, k): ShapePart => {
           const o = at(offsets, k);
           // A child without a shape counts with its extent: a shape that covers more is still correct.
           const shape = shapes[c] ?? moveShape(boxShape(at(extent, c)), at(extent, c).x, at(extent, c).y);
-          return moveShape(shape, o.x, o.y);
+          return { shape, x: o.x, y: o.y };
         });
-        shapes[i] = joinShapes([boxShape(own.size), ...parts]);
+        // The switch of the shapes gives the join: the code of ireko by default, or the shapes module of Vex.
+        shapes[i] = linkedShape(own.size, parts);
       }
       continue;
     }
