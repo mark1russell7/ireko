@@ -237,13 +237,16 @@ function countNodes(n) {
 
 const here = dirname(fileURLToPath(import.meta.url));
 const moduleSource = readFileSync(resolve(here, "..", "src", "core", "engine", "shape.generated.js"));
+// Each record names the CPU of the runner and the mode of the run (the fleet rule of 2026-10-30).
+const CPU = cpus()[0]?.model.trim() ?? "unknown";
+const MODE = [process.env.BENCH_MODE ?? (process.env.CI === "true" ? "ci" : "local"), ...process.execArgv].join(" ");
 const size = { bytes: moduleSource.length, gzip: gzipSync(moduleSource, { level: 9 }).length };
 
 const f = (x, d = 3) => (x === undefined ? "-" : x.toFixed(d));
 const lines = [
   "## SHAPEWIRE: the shapes module of Vex against the shapes code of ireko",
   "",
-  `Node.js ${process.version}, ${String(RUNS)} runs, median. Times are ms for one pass over the group.`,
+  `${CPU}, mode ${MODE}, Node.js ${process.version}, ${String(RUNS)} runs, median. Times are ms for one pass over the group.`,
   "",
   "| Trees | Nodes | Linked shapes | Shapes pass, ireko | Shapes pass, Vex | Vex/hand time (lower is better) | Module call only | Vex/hand time (lower is better) | Layout, switch off | Layout, switch on | On/off time (lower is better) | Null arm | On/off time (lower is better) | Fixed share | Module share | GC off | GC on | GC null | Fixed share, plain wrapper | Module share, plain wrapper |",
   "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
@@ -258,4 +261,4 @@ if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMM
 // Each ratio is a cost, not a speed-up: lower is better, and 1.00 is no overhead. The CPU of the runner goes in
 // the file too, because the spread between runners is larger than the spread inside one run.
 const RATIOS = "time with Vex / time of the hand code of ireko (layoutRatio: switch on / switch off); lower is better, 1.00 is no overhead";
-if (values.out !== undefined) writeFileSync(values.out, `${JSON.stringify({ node: process.version, cpu: cpus()[0]?.model ?? "unknown", ratios: RATIOS, runs: RUNS, size, rows }, null, 2)}\n`);
+if (values.out !== undefined) writeFileSync(values.out, `${JSON.stringify({ node: process.version, cpu: CPU, mode: MODE, ratios: RATIOS, runs: RUNS, size, rows }, null, 2)}\n`);
