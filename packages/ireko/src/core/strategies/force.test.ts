@@ -2,7 +2,10 @@ import * as fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import { defectsOf } from "../../test/invariants.ts";
 import { at } from "../at.ts";
-import { layout } from "../engine.ts";
+import { BUILTIN_STRATEGY_NAMES } from "./names.ts";
+import { createEngine, layout } from "../engine.ts";
+import { inputArbitrary, optionsArbitrary } from "../../test/arbitrary.ts";
+import * as entry from "../../strategies/force.ts";
 import type { Rect } from "../geometry.ts";
 import { defaultsOf } from "../options.ts";
 import type { ChildEdge, MeasuredChild } from "../strategy.ts";
@@ -28,6 +31,9 @@ const children = fc
   .array(fc.record({ width: fc.integer({ min: 10, max: 200 }), height: fc.integer({ min: 10, max: 120 }), x: fc.integer({ min: -40, max: 0 }), y: fc.integer({ min: -40, max: 0 }) }), { minLength: 1, maxLength: 12 })
   .map((list) => list.map((r, i): MeasuredChild => ({ id: `c${String(i).padStart(2, "0")}`, box: { width: r.width, height: r.height }, extent: { x: r.x, y: r.y, width: r.width - r.x, height: r.height - r.y }, mode: "linked" })));
 const withEdges = children.chain((list) => fc.tuple(fc.constant(list), fc.array(fc.record({ from: fc.nat(list.length - 1), to: fc.nat(list.length - 1) }), { maxLength: list.length })));
+
+/** An engine with the opt-in strategy. */
+const engine = createEngine({ strategies: [entry.forceStrategy] });
 
 describe("force", () => {
   it("gives no offsets for no children", () => {
@@ -86,15 +92,50 @@ describe("force", () => {
   });
 
   it("refuses a strength above 0.5 with a finding of the engine", () => {
-    const out = layout({ root: { id: "r", layout: { type: "force", strength: 0.9 }, mode: "nested", children: ["a", "b"].map((id) => ({ id, size: { width: 80, height: 40 } })) } });
+    const out = engine.layout({ root: { id: "r", layout: { type: "force", strength: 0.9 }, mode: "nested", children: ["a", "b"].map((id) => ({ id, size: { width: 80, height: 40 } })) } });
     expect(out.issues.map((i) => i.code)).toContain("INVALID_OPTION");
   });
 
   it("gives a layout with no defects through the engine", () => {
-    const out = layout({
+    const out = engine.layout({
       root: { id: "r", layout: { type: "force", strength: 0.24 }, mode: "nested", children: ["a", "b", "c", "d", "e", "f"].map((id) => ({ id, size: { width: 80, height: 40 } })) },
       edges: [{ source: "a", target: "b" }, { source: "b", target: "c" }, { source: "d", target: "e" }],
     });
+    expect(out.issues.filter((i) => i.severity === "error")).toEqual([]);
+    expect(defectsOf(out)).toEqual([]);
+  });
+
+  it("gives no defects through the engine on random trees that also use force", () => {
+    fc.assert(fc.property(inputArbitrary({ force: true, maxDepth: 3 }), optionsArbitrary(), (input, options) => {
+      const out = engine.layout(input, options);
+      expect(out.issues.filter((i) => i.code === "UNKNOWN_LAYOUT")).toEqual([]);
+      expect(defectsOf(out)).toEqual([]);
+    }), { numRuns: 150 });
+  });
+});
+
+describe("force is opt-in", () => {
+  it("is not a built-in strategy, so layout without a registration does not know it", () => {
+    expect(BUILTIN_STRATEGY_NAMES).not.toContain("force");
+    expect(createEngine().strategies.has("force")).toBe(false);
+    const out = layout({ root: { id: "r", layout: { type: "force" }, mode: "nested", children: [{ id: "a" }, { id: "b" }] } });
+    const finding = out.issues.find((i) => i.code === "UNKNOWN_LAYOUT");
+    expect(finding?.message).toMatch(/createEngine\(\{ strategies \}\)/);
+    expect(finding?.message).toMatch(/ireko\/strategies\/force/);
+  });
+
+  it("names createEngine, and not force, for another unknown strategy", () => {
+    const out = layout({ root: { id: "r", layout: { type: "spiral" }, children: [{ id: "a" }] } });
+    const message = out.issues.find((i) => i.code === "UNKNOWN_LAYOUT")?.message ?? "";
+    expect(message).toMatch(/createEngine/);
+    expect(message).not.toMatch(/force/);
+  });
+
+  it("exports the strategy, its builder and relaxForces from the subpath", () => {
+    expect(entry.forceStrategy).toBe(force);
+    expect(typeof entry.relaxForces).toBe("function");
+    expect(entry.MAX_SPRING_STRENGTH).toBe(0.5);
+    const out = engine.layout({ root: entry.force.nested("r", { strength: 0.24 }, "a", "b", "c") });
     expect(out.issues.filter((i) => i.severity === "error")).toEqual([]);
     expect(defectsOf(out)).toEqual([]);
   });

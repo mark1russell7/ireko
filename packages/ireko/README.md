@@ -37,10 +37,10 @@ document.body.innerHTML = toSVG(result);
 
 Each node with children selects two things:
 
-- **A strategy:** how to arrange its children. `grid` puts them in rows and columns. `radial` puts them on a ring. `tree` makes a tidy tree, for example an organization chart. `layers` makes a flowchart from the edges between the children. `force` arranges a network with no hierarchy: the children repel each other, and each edge between two children is a spring.
+- **A strategy:** how to arrange its children. `grid` puts them in rows and columns. `radial` puts them on a ring. `tree` makes a tidy tree, for example an organization chart. `layers` makes a flowchart from the edges between the children.
 - **A mode:** where its children go. In the `linked` mode, they are around the node, and edges connect them. In the `nested` mode, they are inside the box of the node.
 
-You can add your own strategy to the engine.
+You can add your own strategy to the engine. The opt-in strategy `force` from `ireko/strategies/force` arranges a network with no hierarchy. Register it with `createEngine`.
 
 The two choices apply to one node only, so each container has its own layout. The engine measures each subtree before it places it, so no two subtrees overlap. Each layout examines itself, and puts each problem in `issues`.
 

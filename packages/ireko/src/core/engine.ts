@@ -17,7 +17,6 @@ import { grid } from "./strategies/grid.ts";
 import { radial } from "./strategies/radial.ts";
 import { tree } from "./strategies/tree.ts";
 import { layers } from "./strategies/layers.ts";
-import { force } from "./strategies/force.ts";
 import type { AnyStrategy } from "./strategy.ts";
 
 export type { Limits } from "./engine/types.ts";
@@ -45,7 +44,7 @@ export interface Engine {
 }
 
 /** The built-in strategies. */
-export const builtinStrategies: readonly AnyStrategy[] = [grid, radial, tree, layers, force];
+export const builtinStrategies: readonly AnyStrategy[] = [grid, radial, tree, layers];
 /** The built-in routers. */
 export const builtinRouters: readonly Router[] = [straight, orthogonal, avoid];
 /** The default limits. */

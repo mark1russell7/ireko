@@ -14,9 +14,10 @@ A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other ver
 
 ## 0.1.3
 
-- The new strategy `force` arranges the children with a force-directed relaxation. The children repel each other, and each edge between two children is a spring. The start is a grid in the order of the identifiers, so the result does not depend on the order of the children. The builder `force` makes a node with this strategy.
-- The new function `relaxForces` relaxes boxes that have positions. It is pure and deterministic. A fixed box does not move. After the relaxation, no two boxes are nearer than the margin.
+- The new opt-in strategy `force`, from the new subpath `ireko/strategies/force`, arranges the children with a force-directed relaxation. Register it with `createEngine({ strategies: [forceStrategy] })`. `layout` and the built-in strategies do not change, so a caller that does not import the subpath does not pay for it. The children repel each other, and each edge between two children is a spring. The start is a grid in the order of the identifiers, so the result does not depend on the order of the children. The builder `force` makes a node with this strategy.
+- The subpath also exports the builder `force` and the function `relaxForces`. `relaxForces` relaxes boxes that have positions. It is pure and deterministic. A fixed box does not move. After the relaxation, no two boxes are nearer than the margin.
 - Each constant of the relaxation is an option with a default: `minDistance`, `centering`, `maxStep` and `separationPasses`. A strength above `MAX_SPRING_STRENGTH` (0.5), or a size or an option that is not a finite number of 0 or more, gives a `RangeError`. The strategy option `strength` has the same limit.
+- The finding `UNKNOWN_LAYOUT` tells you to give the strategy to `createEngine`. For `force`, it names the subpath.
 - The layouts of the other strategies do not change.
 
 ## 0.1.2

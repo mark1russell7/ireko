@@ -49,6 +49,7 @@
     "./react": "./src/react/index.tsx",
     "./xyflow": "./src/xyflow/index.tsx",
     "./examples": "./src/examples/index.ts",
+    "./strategies/force": "./src/strategies/force.ts",
     "./package.json": "./package.json"
   },
   "files": [
@@ -99,6 +100,10 @@
       "./examples": {
         "types": "./dist/examples.d.ts",
         "default": "./dist/examples.js"
+      },
+      "./strategies/force": {
+        "types": "./dist/strategies/force.d.ts",
+        "default": "./dist/strategies/force.js"
       },
       "./package.json": "./package.json"
     }
