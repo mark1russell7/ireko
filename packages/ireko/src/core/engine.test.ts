@@ -437,7 +437,7 @@ describe("edge cases", () => {
 
   it("extends an engine with an empty configuration", () => {
     const more = createEngine().extend({});
-    expect([...more.strategies.keys()]).toEqual(["grid", "radial", "tree", "layers"]);
+    expect([...more.strategies.keys()]).toEqual(["grid", "radial", "tree", "layers", "force"]);
     expect(BUILTIN_STRATEGY_NAMES).toEqual(builtinStrategies.map((s) => s.type));
   });
 

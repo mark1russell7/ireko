@@ -38,6 +38,7 @@ const grid: Builder<GridOptions>;
 const radial: Builder<RadialOptions>;
 const tree: Builder<TreeOptions>;
 const layers: Builder<LayersOptions>;
+const force: Builder<ForceOptions>;
 function builder<O>(type: string): Builder<O>; // a builder for a strategy that you register
 function node(id: string, options?: { label?; size?; fit?; data? }): NodeSpec;
 
@@ -59,7 +60,9 @@ const gridStrategy: Strategy<GridOptions>;
 const radialStrategy: Strategy<RadialOptions>;
 const treeStrategy: Strategy<TreeOptions>;
 const layersStrategy: Strategy<LayersOptions>;
-const BUILTIN_STRATEGY_NAMES: readonly string[]; // grid, radial, tree, layers
+const forceStrategy: Strategy<ForceOptions>;
+const BUILTIN_STRATEGY_NAMES: readonly string[]; // grid, radial, tree, layers, force
+function relaxForces(nodes: RelaxNode[], edges: RelaxEdge[], options: Partial<RelaxOptions> & { bound }): Map<string, Point>;
 const straight: Router;
 const orthogonal: Router;
 const avoid: Router;      // around the other boxes

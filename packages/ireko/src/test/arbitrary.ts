@@ -74,12 +74,25 @@ const layersLayout = fc.record(
   { requiredKeys: ["type"] },
 );
 
+const forceLayout = fc.record(
+  {
+    type: fc.constant("force"),
+    iterations: fc.integer({ min: 0, max: 60 }),
+    strength: fc.constantFrom(0, 0.02, 0.08, 0.24),
+    margin: fc.integer({ min: 0, max: 30 }),
+    distance: fc.integer({ min: 0, max: 40 }),
+    gap: fc.integer({ min: 0, max: 40 }),
+    padding: fc.integer({ min: 0, max: 40 }),
+  },
+  { requiredKeys: ["type"] },
+);
+
 const size = fc.record({ width: fc.integer({ min: 4, max: 300 }), height: fc.integer({ min: 4, max: 200 }) });
 
 function shape(depth: number, settings: Required<TreeSettings>): fc.Arbitrary<Shape> {
   const children = depth <= 0 ? fc.constant([]) : fc.array(shape(depth - 1, settings), { maxLength: settings.maxChildren });
   return fc.record({
-    layout: fc.oneof(gridLayout, radialLayout, treeLayout, layersLayout),
+    layout: fc.oneof(gridLayout, radialLayout, treeLayout, layersLayout, forceLayout),
     mode: fc.constantFrom<Mode>("nested", "linked"),
     fit: fc.option(fc.constantFrom(...settings.fits), { nil: undefined }),
     size: fc.option(size, { nil: undefined }),

@@ -14,6 +14,7 @@ import type { GridOptions } from "./strategies/grid.ts";
 import type { RadialOptions } from "./strategies/radial.ts";
 import type { TreeOptions } from "./strategies/tree.ts";
 import type { LayersOptions } from "./strategies/layers.ts";
+import type { ForceOptions } from "./strategies/force.ts";
 
 /** A child of a builder call: a node, or the identifier of a leaf. */
 export type Child = NodeSpec | string;
@@ -83,6 +84,8 @@ export const radial: Builder<RadialOptions> = builder<RadialOptions>("radial");
 export const tree: Builder<TreeOptions> = builder<TreeOptions>("tree");
 /** The builder of the strategy `layers`. */
 export const layers: Builder<LayersOptions> = builder<LayersOptions>("layers");
+/** The builder of the strategy `force`. */
+export const force: Builder<ForceOptions> = builder<ForceOptions>("force");
 
 function toNode(c: Child): NodeSpec {
   return typeof c === "string" ? { id: c } : c;

@@ -14,6 +14,10 @@ A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other ver
 
 ## Unreleased
 
+- The new strategy `force` arranges the children with a force-directed relaxation. The children repel each other, and each edge between two children is a spring. The start is a grid in the order of the identifiers, so the result does not depend on the order of the children. The builder `force` makes a node with this strategy.
+- The new function `relaxForces` relaxes boxes that have positions. It is pure and deterministic. A fixed box does not move. After the relaxation, no two boxes are nearer than the margin.
+- The layouts of the other strategies do not change.
+
 ## 0.1.2
 
 - The live renderers `mountSvg` and `mountDom` keep the paint order of `mountCanvas`. Before, a node that became a container around other containers painted above them. The loop of the home page showed this.
