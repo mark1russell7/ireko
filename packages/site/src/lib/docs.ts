@@ -3,13 +3,15 @@
  * shows the same source that the reader can type in the playground.
  */
 import { createEngine, type Engine, type Layout, type LayoutOptions } from "ireko";
+import { forceStrategy } from "ireko/strategies/force";
 import { parse } from "ireko/text";
 import { href } from "./site.ts";
 
 /** The options of the figures: smaller boxes than the defaults of the library, so a figure fits the column. */
 export const DOC_OPTIONS: LayoutOptions = { spacing: 12, nodeSize: { width: 64, height: 28 }, header: 20 };
 
-const engine = createEngine();
+// The figures also show the opt-in strategy force.
+const engine = createEngine({ strategies: [forceStrategy] });
 
 /**
  * This function gives the layout of a text. A text with a syntax error stops the build, so a figure of the guide

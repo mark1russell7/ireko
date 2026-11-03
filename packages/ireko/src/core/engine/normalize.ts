@@ -93,7 +93,7 @@ function layoutOf(spec: NodeSpec, id: string, ctx: Context, issues: Issue[]): Pi
   }
   if (!ctx.strategies.has(type)) {
     const known = [...ctx.strategies.keys()].join(", ");
-    issues.push({ code: "UNKNOWN_LAYOUT", severity: "error", message: `The node "${id}" uses the strategy "${type}", which is not registered. The engine uses "grid". The registered strategies are: ${known}.`, node: id, detail: { layout: type } });
+    issues.push({ code: "UNKNOWN_LAYOUT", severity: "error", message: `The node "${id}" uses the strategy "${type}", which is not registered. The engine uses "grid". The registered strategies are: ${known}. To use another strategy, give it to createEngine({ strategies }).${type === "force" ? ' The strategy "force" is opt-in: import forceStrategy from "ireko/strategies/force".' : ""}`, node: id, detail: { layout: type } });
     return { layout: "grid", rawLayout: undefined };
   }
   return { layout: type, rawLayout: raw };

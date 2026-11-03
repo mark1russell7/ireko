@@ -20,6 +20,8 @@ export interface TreeSettings {
   readonly maxChildren?: number;
   /** The sizing policies that the generator can give to a nested node. */
   readonly fits?: readonly Fit[];
+  /** If true, the generator also gives the opt-in strategy `force`. The engine must then have `forceStrategy`. */
+  readonly force?: boolean;
 }
 
 const gridLayout = fc.record(
@@ -74,12 +76,25 @@ const layersLayout = fc.record(
   { requiredKeys: ["type"] },
 );
 
+const forceLayout = fc.record(
+  {
+    type: fc.constant("force"),
+    iterations: fc.integer({ min: 0, max: 60 }),
+    strength: fc.constantFrom(0, 0.02, 0.08, 0.24, 0.5),
+    margin: fc.integer({ min: 0, max: 30 }),
+    distance: fc.integer({ min: 0, max: 40 }),
+    gap: fc.integer({ min: 0, max: 40 }),
+    padding: fc.integer({ min: 0, max: 40 }),
+  },
+  { requiredKeys: ["type"] },
+);
+
 const size = fc.record({ width: fc.integer({ min: 4, max: 300 }), height: fc.integer({ min: 4, max: 200 }) });
 
 function shape(depth: number, settings: Required<TreeSettings>): fc.Arbitrary<Shape> {
   const children = depth <= 0 ? fc.constant([]) : fc.array(shape(depth - 1, settings), { maxLength: settings.maxChildren });
   return fc.record({
-    layout: fc.oneof(gridLayout, radialLayout, treeLayout, layersLayout),
+    layout: settings.force ? fc.oneof(gridLayout, radialLayout, treeLayout, layersLayout, forceLayout) : fc.oneof(gridLayout, radialLayout, treeLayout, layersLayout),
     mode: fc.constantFrom<Mode>("nested", "linked"),
     fit: fc.option(fc.constantFrom(...settings.fits), { nil: undefined }),
     size: fc.option(size, { nil: undefined }),
@@ -89,7 +104,7 @@ function shape(depth: number, settings: Required<TreeSettings>): fc.Arbitrary<Sh
 
 /** This function gives a generator of random trees. Each node has a different identifier: `n0`, `n1`, and so on. */
 export function treeArbitrary(settings: TreeSettings = {}): fc.Arbitrary<NodeSpec> {
-  const full: Required<TreeSettings> = { maxDepth: 4, maxChildren: 4, fits: ["grow", "scale"], ...settings };
+  const full: Required<TreeSettings> = { maxDepth: 4, maxChildren: 4, fits: ["grow", "scale"], force: false, ...settings };
   return shape(full.maxDepth, full).map((s) => {
     let next = 0;
     const toSpec = (x: Shape): NodeSpec => ({

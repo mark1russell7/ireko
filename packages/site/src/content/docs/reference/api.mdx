@@ -107,6 +107,18 @@ Give `fitText()` to the `measure` option. `widthOfCanvas(fontFamily)` from `irek
 
 `Point`, `Size` and `Rect`, and small functions on them: `centerOf`, `union`, `unionAll`, `translate`, `inflate`, `overlaps`, `contains`, `rectAt`.
 
+## ireko/strategies/force
+
+The opt-in strategy `force`. Register it with `createEngine({ strategies: [forceStrategy] })`.
+
+```ts
+const forceStrategy: Strategy<ForceOptions>;
+const force: Builder<ForceOptions>;
+function relaxForces(nodes: RelaxNode[], edges: RelaxEdge[], options: Partial<RelaxOptions> & { bound }): Map<string, Point>;
+const RELAX_DEFAULTS; // { iterations: 150, springLength: 340, repulsion: 90000, margin: 12, inset: 4, minDistance: 20, centering: 0.005, maxStep: 30, separationPasses: 300 }
+const MAX_SPRING_STRENGTH: number; // 0.5: a larger strength throws a RangeError
+```
+
 ## ireko/text
 
 ```ts

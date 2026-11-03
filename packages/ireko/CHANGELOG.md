@@ -6,13 +6,19 @@ This file records the changes to `ireko` in each version. The release workflow c
 
 `ireko` uses semantic versioning. Before version 1.0.0, these rules apply:
 
-- A minor version (`0.2.0`) can change the API. Its section here tells you what to change.
-- A patch version (`0.1.1`) only corrects errors. It does not change the API.
-- The layout of an input can change in a minor version, for example when a strategy gets better. A patch version keeps each layout the same, except to correct an overlap or another defect.
+- A minor version (`0.2.0`) can change the API in a way that is not compatible. Its section here tells you what to change.
+- A patch version (`0.1.3`) corrects errors, or adds a feature that is compatible, for example a new strategy or a new export. It does not remove or change an existing API.
+- The layout of an input can change in a minor version, for example when a strategy gets better. A patch version keeps each existing layout the same, except to correct an overlap or another defect.
 
 A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other version goes to `latest`.
 
-## Unreleased
+## 0.1.3
+
+- The new opt-in strategy `force`, from the new subpath `ireko/strategies/force`, arranges the children with a force-directed relaxation. Register it with `createEngine({ strategies: [forceStrategy] })`. `layout` and the built-in strategies do not change, so a caller that does not import the subpath does not pay for it. The children repel each other, and each edge between two children is a spring. The start is a grid in the order of the identifiers, so the result does not depend on the order of the children. The builder `force` makes a node with this strategy.
+- The subpath also exports the builder `force` and the function `relaxForces`. `relaxForces` relaxes boxes that have positions. It is pure and deterministic. A fixed box does not move. After the relaxation, no two boxes are nearer than the margin.
+- Each constant of the relaxation is an option with a default: `minDistance`, `centering`, `maxStep` and `separationPasses`. A strength above `MAX_SPRING_STRENGTH` (0.5), or a size or an option that is not a finite number of 0 or more, gives a `RangeError`. The strategy option `strength` has the same limit.
+- The finding `UNKNOWN_LAYOUT` tells you to give the strategy to `createEngine`. For `force`, it names the subpath.
+- The layouts of the other strategies do not change.
 
 ## 0.1.2
 

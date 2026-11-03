@@ -1,7 +1,7 @@
 ---
 title: Strategies
-seoTitle: "Layout strategies: grid, radial, tidy tree and layers"
-description: Grid puts children in rows and columns, radial on a ring, tree makes a tidy tree, and layers makes a flowchart. Try each option live.
+seoTitle: "Layout strategies: grid, radial, tidy tree, layers and force"
+description: Grid puts children in rows and columns, radial on a ring, tree makes a tidy tree, layers makes a flowchart, and force arranges a network. Try each option live.
 ---
 
 import Configurator from "../../../components/Configurator.tsx";
@@ -51,6 +51,17 @@ approve -> stage
 stage -> deploy
 deploy -> push "next"`;
 
+export const network = `team "Team" nested force(strength: 0.24) {
+  ana ben cho dev eli fay gus
+}
+ana -> ben
+ana -> cho
+ben -> cho
+dev -> eli
+eli -> fay
+fay -> dev
+cho -> dev`;
+
 export const rings = `hub radial nested {
   tiny
   big radial nested { a b c d e f }
@@ -65,7 +76,7 @@ export const sweeps = [
   { label: "90°", source: "root radial(sweep: 90, startAngle: 0) { a b c d e }", note: "sweep: 90: a fan." },
 ];
 
-ireko has four strategies: `grid`, `radial`, `tree` and `layers`. A strategy arranges the children of one node. It gets the size of each child and the extent of its subtree, and it gives an offset for each child. The engine does all other work: the recursion, the padding, the fit and the absolute positions. Thus a strategy is a small function, and you can [write your own](/learn/custom-strategy/).
+ireko has four built-in strategies: `grid`, `radial`, `tree` and `layers`. The strategy `force` is opt-in. A strategy arranges the children of one node. It gets the size of each child and the extent of its subtree, and it gives an offset for each child. The engine does all other work: the recursion, the padding, the fit and the absolute positions. Thus a strategy is a small function, and you can [write your own](/learn/custom-strategy/).
 
 ## Try each option
 
@@ -132,6 +143,36 @@ Each layer is as deep as its deepest subtree, and the subtrees in a layer keep t
 For a large directed graph with many crossings, use dagre or ELK: they have better crossing reduction. The layers strategy is for the flow inside one container.
 
 <OptionsTable strategy="layers" />
+
+## force
+
+The force strategy arranges a network with no hierarchy. The children repel each other, and each edge between two children is a spring. Thus children with edges between them come near to each other.
+
+The strategy is opt-in, so a caller that does not use it does not pay for it. Import it from `ireko/strategies/force`, and register it with `createEngine`:
+
+```ts
+import { createEngine } from "ireko";
+import { force, forceStrategy } from "ireko/strategies/force";
+
+const engine = createEngine({ strategies: [forceStrategy] });
+const out = engine.layout({ root: force.nested("team", { strength: 0.24 }, "ana", "ben", "cho") });
+```
+
+Without the registration, the engine gives the finding `UNKNOWN_LAYOUT` and uses `grid`.
+
+<Figure source={network} options={{ router: "straight", nodeSize: { width: 60, height: 30 }, spacing: 16 }} caption="Two groups with one edge between them. The springs keep each group together." height="20rem" />
+
+The strategy has three steps:
+
+1. It puts the extents of the children in a grid, in the order of their identifiers.
+2. It relaxes the extents with `relaxForces`: the repulsion, the springs and a pull to the center.
+3. It moves each two extents that are nearer than the margin apart.
+
+The start is in the order of the identifiers, not of the children. Thus the result does not depend on the order of the children. A new name for each child that keeps the order of the identifiers gives the same layout.
+
+`relaxForces` is also an export. Use it for boxes that already have positions, for example to make a layout better after an edit.
+
+<OptionsTable strategy="force" />
 
 ## Options of each container
 

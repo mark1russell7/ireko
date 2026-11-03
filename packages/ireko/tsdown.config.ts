@@ -13,6 +13,7 @@ export default defineConfig({
     react: "src/react/index.tsx",
     xyflow: "src/xyflow/index.tsx",
     examples: "src/examples/index.ts",
+    "strategies/force": "src/strategies/force.ts",
   },
   outDir: "dist",
   format: "esm",

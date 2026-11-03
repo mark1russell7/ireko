@@ -3,6 +3,7 @@
  * The side panel has the settings of the selected node and the findings of the audit. A link holds the whole state.
  */
 import { createEngine, fitText, type Engine, type Issue, type Layout, type LayoutInput, type LayoutOptions, type NodeSpec } from "ireko";
+import { forceStrategy } from "ireko/strategies/force";
 import { examples } from "ireko/examples";
 import { LayoutView } from "ireko/react";
 import { createViewport, widthOfCanvas } from "ireko/render";
@@ -69,7 +70,8 @@ function download(name: string, type: string, text: string): void {
 
 /** The playground. */
 export default function Playground(): ReactElement {
-  const engine = useMemo(() => createEngine(), []);
+  // The playground also knows the opt-in strategy force, so the link of a figure of force opens.
+  const engine = useMemo(() => createEngine({ strategies: [forceStrategy] }), []);
   const names = useMemo(() => [...engine.strategies.keys()], [engine]);
   const strategies = useMemo(() => new Set(names), [names]);
   const [state, setState] = useState<PlaygroundState>(DEFAULT);
