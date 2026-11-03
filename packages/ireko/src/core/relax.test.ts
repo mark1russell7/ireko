@@ -2,7 +2,7 @@ import * as fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import { at as item } from "./at.ts";
 import type { Point } from "./geometry.ts";
-import { relaxForces, type RelaxEdge, type RelaxNode } from "./relax.ts";
+import { MAX_SPRING_STRENGTH, RELAX_DEFAULTS, relaxForces, type RelaxEdge, type RelaxNode } from "./relax.ts";
 
 const MARGIN = 12;
 const box = (id: string, x: number, y: number, width: number, height: number, fixed = false): RelaxNode => ({ id, rect: { x, y, width, height }, ...(fixed ? { fixed } : {}) });
@@ -83,9 +83,9 @@ describe("relaxForces: fixed inputs", () => {
   it("ignores a spring from a box to the same box, and throws for a duplicate or an unknown identifier", () => {
     const nodes = [box("a", 0, 0, 100, 100), box("b", 300, 0, 100, 100)];
     const bound = { width: 800, height: 400 };
-    expect(sorted(relaxForces(nodes, [{ from: "a", to: "a", strength: 1 }], { bound }))).toEqual(sorted(relaxForces(nodes, [], { bound })));
+    expect(sorted(relaxForces(nodes, [{ from: "a", to: "a", strength: 0.5 }], { bound }))).toEqual(sorted(relaxForces(nodes, [], { bound })));
     expect(() => relaxForces([...nodes, box("a", 5, 5, 10, 10)], [], { bound })).toThrow(RangeError);
-    expect(() => relaxForces(nodes, [{ from: "a", to: "zz", strength: 1 }], { bound })).toThrow(/unknown node "zz"/);
+    expect(() => relaxForces(nodes, [{ from: "a", to: "zz", strength: 0.5 }], { bound })).toThrow(/unknown node "zz"/);
   });
 
   it("keeps each box inside the width and below the top, by the inset", () => {
@@ -102,6 +102,49 @@ describe("relaxForces: fixed inputs", () => {
   it("keeps the margin of the options", () => {
     const nodes = [box("a", 10, 10, 200, 150), box("b", 10, 10, 200, 150), box("c", 20, 15, 100, 100)];
     expect(overlaps(nodes, relaxForces(nodes, [], { bound: { width: 600, height: 400 }, margin: 40 }), 40)).toEqual([]);
+  });
+});
+
+describe("relaxForces: options and errors", () => {
+  const nodes = [box("a", 10, 10, 200, 150), box("b", 40, 30, 120, 90), box("c", 400, 300, 100, 100)];
+  const edges: RelaxEdge[] = [{ from: "a", to: "c", strength: 0.08 }];
+  const bound = { width: 900, height: 700 };
+
+  it("gives the same positions with the defaults written out", () => {
+    expect(sorted(relaxForces(nodes, edges, { bound, ...RELAX_DEFAULTS }))).toEqual(sorted(relaxForces(nodes, edges, { bound })));
+    expect(RELAX_DEFAULTS).toMatchObject({ minDistance: 20, centering: 0.005, maxStep: 30, separationPasses: 300 });
+  });
+
+  it("uses the options minDistance, centering and maxStep", () => {
+    const base = sorted(relaxForces(nodes, edges, { bound }));
+    for (const option of [{ minDistance: 200 }, { centering: 0.05 }, { maxStep: 2 }]) expect(sorted(relaxForces(nodes, edges, { bound, ...option }))).not.toEqual(base);
+  });
+
+  it("brings the two ends of a spring of strength 0.5 to the spring length in one step, and refuses a larger strength", () => {
+    // With no repulsion and no centering, only the spring moves the boxes: each end goes (d - L) * k.
+    const two = [box("a", 0, 0, 10, 10), box("b", 1000, 0, 10, 10)];
+    const only = { bound: { width: 2000, height: 100 }, iterations: 1, repulsion: 0, centering: 0, springLength: 340 };
+    const at = relaxForces(two, [{ from: "a", to: "b", strength: MAX_SPRING_STRENGTH }], only);
+    expect((at.get("b") as Point).x - (at.get("a") as Point).x).toBeCloseTo(340, 9);
+    expect(() => relaxForces(two, [{ from: "a", to: "b", strength: 0.6 }], only)).toThrow(/0.5 or less/);
+  });
+
+  it("throws a RangeError for a value that is not a finite number of 0 or more", () => {
+    // Each entry names its case, for the reader.
+    const bad: [string, () => unknown][] = [
+      ["a width of NaN", () => relaxForces([box("a", 0, 0, Number.NaN, 10)], [], { bound })],
+      ["a negative height", () => relaxForces([box("a", 0, 0, 10, -1)], [], { bound })],
+      ["a position of Infinity", () => relaxForces([box("a", Infinity, 0, 10, 10)], [], { bound })],
+      ["a negative strength", () => relaxForces(nodes, [{ from: "a", to: "b", strength: -0.1 }], { bound })],
+      ["a strength of NaN", () => relaxForces(nodes, [{ from: "a", to: "b", strength: Number.NaN }], { bound })],
+      ["iterations of 1.5", () => relaxForces(nodes, [], { bound, iterations: 1.5 })],
+      ["negative iterations", () => relaxForces(nodes, [], { bound, iterations: -1 })],
+      ["a negative margin", () => relaxForces(nodes, [], { bound, margin: -1 })],
+      ["a margin of NaN", () => relaxForces(nodes, [], { bound, margin: Number.NaN })],
+      ["a minDistance of 0", () => relaxForces(nodes, [], { bound, minDistance: 0 })],
+      ["a bound of Infinity", () => relaxForces(nodes, [], { bound: { width: Infinity, height: 10 } })],
+    ];
+    for (const [, run] of bad) expect(run).toThrow(RangeError);
   });
 });
 

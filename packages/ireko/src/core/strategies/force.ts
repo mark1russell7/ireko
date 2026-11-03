@@ -18,7 +18,7 @@ export interface ForceOptions {
   readonly springLength: number;
   /** The strength of the repulsion between two children. The value 0 means the square of the spring length. */
   readonly repulsion: number;
-  /** The stiffness of the spring of each edge. */
+  /** The stiffness of the spring of each edge, 0.5 at most. With more, one spring step moves the two ends past the spring length. */
   readonly strength: number;
   /** The smallest distance between two extents. The value 0 means the gap. */
   readonly margin: number;
@@ -37,7 +37,7 @@ export const force: Strategy<ForceOptions> = defineStrategy<ForceOptions>({
     iterations: { type: "number", default: 150, min: 0, integer: true, description: "The number of force steps." },
     springLength: { type: "number", default: 0, min: 0, description: "The length at which a spring has no force. With 0, it is 2 times the mean of the larger side of each extent." },
     repulsion: { type: "number", default: 0, min: 0, description: "The strength of the repulsion between two children. With 0, it is the square of the spring length." },
-    strength: { type: "number", default: 0.08, min: 0, description: "The stiffness of the spring of each edge." },
+    strength: { type: "number", default: 0.08, min: 0, max: 0.5, description: "The stiffness of the spring of each edge, 0.5 at most. With more, one spring step moves the two ends past the spring length." },
     margin: { type: "number", default: 0, min: 0, description: "The smallest distance between two extents. With 0, it is the gap." },
     distance: { type: "number", default: 0, min: 0, description: "In the linked mode, the distance between the node and its children. With 0, it is 1.5 times the gap." },
   },

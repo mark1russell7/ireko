@@ -85,6 +85,11 @@ describe("force", () => {
     }), { numRuns: 50 });
   });
 
+  it("refuses a strength above 0.5 with a finding of the engine", () => {
+    const out = layout({ root: { id: "r", layout: { type: "force", strength: 0.9 }, mode: "nested", children: ["a", "b"].map((id) => ({ id, size: { width: 80, height: 40 } })) } });
+    expect(out.issues.map((i) => i.code)).toContain("INVALID_OPTION");
+  });
+
   it("gives a layout with no defects through the engine", () => {
     const out = layout({
       root: { id: "r", layout: { type: "force", strength: 0.24 }, mode: "nested", children: ["a", "b", "c", "d", "e", "f"].map((id) => ({ id, size: { width: 80, height: 40 } })) },
