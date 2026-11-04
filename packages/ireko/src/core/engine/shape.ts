@@ -7,8 +7,23 @@ import { at } from "../at.ts";
 import type { Size } from "../geometry.ts";
 import type { Band, Shape } from "../strategy.ts";
 
+/** One part of the shape of a linked node: the shape of a child and its offset in the box of the node. */
+export interface ShapePart {
+  readonly shape: Shape;
+  readonly x: number;
+  readonly y: number;
+}
+
+/** The code that gives the shape of a linked node. It joins the box of the node with the shape of each child at its offset. */
+export type LinkedShape = (own: Size, parts: readonly ShapePart[]) => Shape;
+
 /** The largest number of bands on each axis of a shape. */
 export const MAX_BANDS = 64;
+
+/** This function gives the shape of a linked node: `joinShapes` of the box and the moved parts. */
+export function handLinkedShape(own: Size, parts: readonly ShapePart[]): Shape {
+  return joinShapes([boxShape(own), ...parts.map((p) => moveShape(p.shape, p.x, p.y))]);
+}
 
 /** This function gives the shape of one box with its top-left corner at the origin. */
 export function boxShape(size: Size): Shape {

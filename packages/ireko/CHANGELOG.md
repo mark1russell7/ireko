@@ -12,6 +12,11 @@ This file records the changes to `ireko` in each version. The release workflow c
 
 A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other version goes to `latest`.
 
+## 0.1.4
+
+- The new subpath `ireko/shapes` exports `layout`. It gives the same layout as `ireko`, to the bit, and it gets the shapes of linked nodes from a module of the Vex compiler.
+- The new option `linkedShape` of `createEngine` sets the code that gives the shape of a linked node. The default is the code of ireko, so a layout of `ireko` does not change.
+
 ## 0.1.3
 
 - The new opt-in strategy `force`, from the new subpath `ireko/strategies/force`, arranges the children with a force-directed relaxation. Register it with `createEngine({ strategies: [forceStrategy] })`. `layout` and the built-in strategies do not change, so a caller that does not import the subpath does not pay for it. The children repel each other, and each edge between two children is a spring. The start is a grid in the order of the identifiers, so the result does not depend on the order of the children. The builder `force` makes a node with this strategy.

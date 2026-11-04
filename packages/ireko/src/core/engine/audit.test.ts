@@ -6,11 +6,13 @@ import { measure } from "./measure.ts";
 import { createEngine } from "../engine.ts";
 import type { Context } from "./types.ts";
 import { straight } from "../routers.ts";
+import { handLinkedShape } from "./shape.ts";
 
 const engine = createEngine();
 const ctx: Context = {
   strategies: engine.strategies,
   limits: engine.limits,
+  linkedShape: handLinkedShape,
   options: { spacing: 24, nodeSize: { width: 120, height: 48 }, header: 0, router: straight, treeEdges: "linked", origin: { x: 0, y: 0 }, measure: undefined, audit: true, strict: false, trace: undefined },
 };
 

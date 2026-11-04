@@ -10,7 +10,7 @@ import { resolveOptions } from "../options.ts";
 import { grid } from "../strategies/grid.ts";
 import type { AnyStrategy, Arrangement, ChildEdge, Direction, MeasuredChild, Shape } from "../strategy.ts";
 import { measureOf, type MeasureColumn, type MeasureRecord } from "./measure.generated.js";
-import { boxShape, joinShapes, moveShape } from "./shape.ts";
+import { boxShape, moveShape } from "./shape.ts";
 import type { Context, Normalized, Placement } from "./types.ts";
 
 /** The keys of a layout object that belong to the engine, not to the strategy. */
@@ -145,9 +145,9 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
           const o = at(offsets, k);
           // A child without a shape counts with its extent: a shape that covers more is still correct.
           const shape = shapes[c] ?? moveShape(boxShape(at(extent, c)), at(extent, c).x, at(extent, c).y);
-          return moveShape(shape, o.x, o.y);
+          return { shape, x: o.x, y: o.y };
         });
-        shapes[i] = joinShapes([boxShape(own.size), ...parts]);
+        shapes[i] = ctx.linkedShape(own.size, parts);
       }
       continue;
     }

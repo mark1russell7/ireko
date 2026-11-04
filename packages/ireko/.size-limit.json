@@ -1,6 +1,7 @@
 [
   { "name": "ireko: layout", "path": "dist/index.js", "import": "{ layout }", "gzip": true, "limit": "17.4 kB" },
   { "name": "ireko: all of the core", "path": "dist/index.js", "import": "*", "gzip": true, "limit": "18.1 kB" },
+  { "name": "ireko/shapes: layout", "path": "dist/shapes.js", "import": "{ layout }", "gzip": true, "limit": "20.5 kB" },
   { "name": "ireko/strategies/force: all", "path": "dist/strategies/force.js", "import": "*", "gzip": true, "limit": "3.2 kB" },
   { "name": "ireko/text: parse and print", "path": "dist/text.js", "import": "{ parse, print }", "gzip": true, "limit": "3.3 kB" },
   { "name": "ireko/svg: toSVG", "path": "dist/svg.js", "import": "{ toSVG }", "gzip": true, "limit": "2.1 kB" },

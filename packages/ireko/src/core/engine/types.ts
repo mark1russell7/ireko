@@ -5,6 +5,7 @@ import type { Point, Size } from "../geometry.ts";
 import type { EdgeSpec, Fit, LayoutOptions, Mode, NodeSpec, TraceEvent, TreeEdges } from "../model.ts";
 import type { Router } from "../router.ts";
 import type { AnyStrategy } from "../strategy.ts";
+import type { LinkedShape } from "./shape.ts";
 
 /** The safety limits of an engine. */
 export interface Limits {
@@ -35,6 +36,7 @@ export interface Context {
   readonly strategies: ReadonlyMap<string, AnyStrategy>;
   readonly limits: Limits;
   readonly options: Resolved;
+  readonly linkedShape: LinkedShape;
 }
 
 /** One node after the normalize phase. The index of a record is its place in the pre-order of the tree. */

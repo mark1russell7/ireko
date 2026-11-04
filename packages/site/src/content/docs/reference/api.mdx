@@ -107,6 +107,14 @@ Give `fitText()` to the `measure` option. `widthOfCanvas(fontFamily)` from `irek
 
 `Point`, `Size` and `Rect`, and small functions on them: `centerOf`, `union`, `unionAll`, `translate`, `inflate`, `overlaps`, `contains`, `rectAt`.
 
+## ireko/shapes
+
+The layout of `ireko`, with the shapes of linked nodes from a module of the Vex compiler. It gives the same layout, to the bit. The bundle is larger than the bundle of `ireko`.
+
+```ts
+function layout(input: LayoutInput, options?: LayoutOptions): Layout;
+```
+
 ## ireko/strategies/force
 
 The opt-in strategy `force`. Register it with `createEngine({ strategies: [forceStrategy] })`.
