@@ -31,6 +31,8 @@ class IrekoError extends Error {
 
 `layout` uses a shared engine with the built-in strategies and routers. It throws only in the strict mode, or for an input that is not an object with a root.
 
+The option `linkedShape` of `EngineConfig` sets the code that gives the shape of a linked node. The default is the code of `ireko`. This option and its types `LinkedShape` and `ShapePart` have the tag `@beta`, so a release can change them.
+
 ### The builder
 
 ```ts
@@ -109,11 +111,25 @@ Give `fitText()` to the `measure` option. `widthOfCanvas(fontFamily)` from `irek
 
 ## ireko/shapes
 
-The layout of `ireko`, with the shapes of linked nodes from a module of the Vex compiler. It gives the same layout, to the bit. The bundle is larger than the bundle of `ireko`.
+The layout of `ireko`, with the shapes of linked nodes from a module of the Vex compiler. It gives the same layout, to the bit. This entry shows the module of Vex. `ireko` is the choice for production use.
 
 ```ts
 function layout(input: LayoutInput, options?: LayoutOptions): Layout;
 ```
+
+The bundle of this entry is 18.99 kB with gzip. The bundle of `ireko` is 17.09 kB.
+
+This table gives the time of a layout with this entry, divided by the time with `ireko`. A value above 1 is slower. The A/A column is a second copy of `ireko`, and it shows the noise of the measure.
+
+| Input | A/A | `ireko/shapes` |
+| --- | --- | --- |
+| Full tree, 111 nodes | 1.013 | 1.098 |
+| Full tree, 1111 nodes | 1.001 | 1.026 |
+| Full tree, 11111 nodes | 1.006 | 1.073 |
+| Examples | 0.995 | 1.026 |
+| Random trees | 0.999 | 0.990 |
+
+The entry is slower on full trees and on the examples, and 1 % faster on random trees. The values are medians of 9 processes with 31 rounds each, on Node 24 in CI. Both layouts run in one process, so one call in the measure pass receives two functions. A program that imports one entry does not have this condition, and this measure does not give its time.
 
 ## ireko/strategies/force
 
