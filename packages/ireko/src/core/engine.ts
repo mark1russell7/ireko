@@ -31,7 +31,10 @@ export interface EngineConfig {
   /** The default options of each layout of this engine. The options of one call replace them. */
   readonly defaults?: LayoutOptions;
   readonly limits?: Partial<Limits>;
-  /** The code that gives the shape of a linked node. The default is the code of ireko. */
+  /**
+   * The code that gives the shape of a linked node. The default is the code of ireko.
+   * @beta
+   */
   readonly linkedShape?: LinkedShape;
 }
 

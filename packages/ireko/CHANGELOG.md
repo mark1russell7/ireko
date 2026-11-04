@@ -15,7 +15,7 @@ A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other ver
 ## 0.1.4
 
 - The new subpath `ireko/shapes` exports `layout`. It gives the same layout as `ireko`, to the bit, and it gets the shapes of linked nodes from a module of the Vex compiler.
-- The new option `linkedShape` of `createEngine` sets the code that gives the shape of a linked node. The default is the code of ireko, so a layout of `ireko` does not change.
+- The new option `linkedShape` of `createEngine` sets the code that gives the shape of a linked node. The default is the code of ireko, so a layout of `ireko` does not change. The option and the types `LinkedShape` and `ShapePart` are `@beta`.
 
 ## 0.1.3
 

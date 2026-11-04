@@ -7,14 +7,20 @@ import { at } from "../at.ts";
 import type { Size } from "../geometry.ts";
 import type { Band, Shape } from "../strategy.ts";
 
-/** One part of the shape of a linked node: the shape of a child and its offset in the box of the node. */
+/**
+ * One part of the shape of a linked node: the shape of a child and its offset in the box of the node.
+ * @beta
+ */
 export interface ShapePart {
   readonly shape: Shape;
   readonly x: number;
   readonly y: number;
 }
 
-/** The code that gives the shape of a linked node. It joins the box of the node with the shape of each child at its offset. */
+/**
+ * The code that gives the shape of a linked node. It joins the box of the node with the shape of each child at its offset.
+ * @beta
+ */
 export type LinkedShape = (own: Size, parts: readonly ShapePart[]) => Shape;
 
 /** The largest number of bands on each axis of a shape. */

@@ -16,4 +16,5 @@ export { tree as treeStrategy, type TreeOptions } from "./strategies/tree.ts";
 export { layers as layersStrategy, type LayersOptions } from "./strategies/layers.ts";
 export { BUILTIN_STRATEGY_NAMES } from "./strategies/names.ts";
 export { builder, grid, layers, node, radial, tree, type Builder, type BuildOptions, type Child, type ContainerOptions } from "./build.ts";
+export type { LinkedShape, ShapePart } from "./engine/shape.ts";
 export { createEngine, layout, builtinStrategies, builtinRouters, defaultLimits, type Engine, type EngineConfig, type Limits } from "./engine.ts";
