@@ -62,7 +62,7 @@
       }
     },
     {
-      "files": ["packages/site/*.mjs", "packages/site/scripts/**", "packages/site/src/content.config.ts", "packages/ireko/scripts/**"],
+      "files": ["packages/site/*.mjs", "packages/site/scripts/**", "packages/site/src/content.config.ts", "packages/ireko/scripts/**", "packages/ireko/size-probe/**"],
       "rules": {
         "typescript/no-unsafe-call": "off",
         "typescript/no-unsafe-member-access": "off",

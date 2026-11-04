@@ -5,6 +5,8 @@
 #   profile packages/ireko/scripts/profile-shapes.mjs and profile-summary.mjs: a CPU profile of the shapes pass on the
 #           full tree of 1111 nodes (the wrapper and the module, the module alone, the code of ireko), with the self
 #           time in groups (wrap, envelope, alloc, dispatch, bandops, other), and the .cpuprofile files as an artifact
+#   size    only with the input size_only: packages/ireko/size-probe/measure.mjs gives the size of each case as a table
+#           in the summary of the run and a JSON artifact. The input skips all the other jobs.
 name: Shapes bench
 
 # A run starts only by hand, at a time with free runner slots (the fleet rule of 2026-10-30), not at each push.
@@ -17,17 +19,22 @@ on:
       profile_seconds:
         description: The seconds of samples of each CPU profile
         default: "4"
+      size_only:
+        description: Do only the size cases of packages/ireko/size-probe, with no suite, bench or profile
+        type: boolean
+        default: false
 
 permissions: {}
 
-# One run for each branch: a newer run stops the older one.
+# One run for each branch: a newer run stops the older one. A size run has its own group, so it does not stop a bench.
 concurrency:
-  group: shapes-bench-${{ github.ref }}
+  group: shapes-bench-${{ github.ref }}${{ inputs.size_only && '-size' || '' }}
   cancel-in-progress: true
 
 jobs:
   suite:
     name: Tests with the switch on
+    if: ${{ !inputs.size_only }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -133,7 +140,7 @@ jobs:
   profile:
     name: CPU profile
     needs: bench
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && !inputs.size_only }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -166,4 +173,30 @@ jobs:
         with:
           name: shapes-profile
           path: packages/ireko/shapes-profile/
+          retention-days: 90
+
+  size:
+    name: Size probe
+    if: ${{ inputs.size_only }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: The size cases
+        working-directory: packages/ireko
+        run: node size-probe/measure.mjs --out size-probe.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: shapes-size
+          path: packages/ireko/size-probe.json
           retention-days: 90
