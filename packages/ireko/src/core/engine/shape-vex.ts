@@ -1,6 +1,6 @@
 /**
  * The shape of a linked node with a module of the Vex compiler (`shape.generated.js`). The module comes from the
- * program `NODE_SHAPE` of mark1russell7/vex at commit 18282a1. Commit 94905e8 gives the same bytes. The entry
+ * program `NODE_SHAPE` of mark1russell7/vex at the commit that the job `bytes` of `ci.yml` pins. The entry
  * `ireko/shapes` uses this code, and the entry `ireko` does not import it.
  */
 import { at } from "../at.ts";

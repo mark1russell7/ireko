@@ -12,6 +12,17 @@ This file records the changes to `ireko` in each version. The release workflow c
 
 A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other version goes to `latest`.
 
+## 0.1.5
+
+This version is a patch. It changes no API, and each layout stays the same.
+
+- The five generated modules (`measure`, `place`, `shape`, `grid` and `radial`) come from one commit of Vex. The new CI job `bytes` holds each file equal to its print.
+- Old and new files gave the same values on 128,508 calls, with 0 differences. The calls include each side of 256 children, up to 9,000 children.
+- The `radial` strategy takes 11 % to 12 % less time for a layout of 1,111 or 11,111 nodes. One call takes 37 % less time at 12 children, 52 % less at 200 and 6 % less at 1,000.
+- One call of `grid` takes 3 % to 5 % less time, but a full layout shows no change. The time of `measure`, `place` and `shape` stays inside the check that compares a file with a copy of itself.
+- The gzip size of `layout` goes from 17,095 B to 17,337 B in `ireko`, and from 18,986 B to 19,229 B in `ireko/shapes`.
+- The size limits do not change.
+
 ## 0.1.4
 
 - The new subpath `ireko/shapes` exports `layout`. It gives the same layout as `ireko`, to the bit, and it gets the shapes of linked nodes from a module of the Vex compiler.
