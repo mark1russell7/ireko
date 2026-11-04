@@ -9,6 +9,7 @@ import { measure } from "./engine/measure.ts";
 import { normalize } from "./engine/normalize.ts";
 import { place } from "./engine/place.ts";
 import { route } from "./engine/route.ts";
+import { handLinkedShape, type LinkedShape } from "./engine/shape.ts";
 import type { Context, Limits, Resolved } from "./engine/types.ts";
 import type { Router } from "./router.ts";
 import { orthogonal, straight } from "./routers.ts";
@@ -30,6 +31,11 @@ export interface EngineConfig {
   /** The default options of each layout of this engine. The options of one call replace them. */
   readonly defaults?: LayoutOptions;
   readonly limits?: Partial<Limits>;
+  /**
+   * The code that gives the shape of a linked node. The default is the code of ireko.
+   * @beta
+   */
+  readonly linkedShape?: LinkedShape;
 }
 
 /** An engine: it makes layouts with its strategies and routers. */
@@ -58,13 +64,14 @@ export function createEngine(config: EngineConfig = {}): Engine {
   for (const r of [...builtinRouters, ...(config.routers ?? [])]) routers.set(r.type, r);
   const limits: Limits = { ...defaultLimits, ...config.limits };
   const defaults = config.defaults ?? {};
+  const linkedShape = config.linkedShape ?? handLinkedShape;
 
   const engine: Engine = {
     strategies,
     routers,
     limits,
     layout(input, options = {}) {
-      return run(input, { ...defaults, ...options }, strategies, routers, limits);
+      return run(input, { ...defaults, ...options }, strategies, routers, limits, linkedShape);
     },
     extend(more) {
       return createEngine({
@@ -72,6 +79,7 @@ export function createEngine(config: EngineConfig = {}): Engine {
         routers: [...routers.values(), ...(more.routers ?? [])],
         defaults: { ...defaults, ...more.defaults },
         limits: { ...limits, ...more.limits },
+        linkedShape: more.linkedShape ?? linkedShape,
       });
     },
   };
@@ -91,13 +99,14 @@ function run(
   strategies: ReadonlyMap<string, AnyStrategy>,
   routers: ReadonlyMap<string, Router>,
   limits: Limits,
+  linkedShape: LinkedShape,
 ): Layout {
   if (typeof input !== "object" || input === null || typeof input.root !== "object" || input.root === null) {
     throw new TypeError("ireko: the input must be an object with a root node: { root: { id: \"...\" } }.");
   }
   const issues: Issue[] = [];
   const resolved = resolve(options, routers, issues);
-  const ctx: Context = { strategies, limits, options: resolved };
+  const ctx: Context = { strategies, limits, options: resolved, linkedShape };
   const trace = resolved.trace;
 
   const norm = normalize(input, ctx, issues);

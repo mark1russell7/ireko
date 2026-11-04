@@ -14,6 +14,7 @@ export default defineConfig({
     xyflow: "src/xyflow/index.tsx",
     examples: "src/examples/index.ts",
     "strategies/force": "src/strategies/force.ts",
+    shapes: "src/shapes/index.ts",
   },
   outDir: "dist",
   format: "esm",
