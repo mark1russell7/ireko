@@ -77,3 +77,39 @@ function coarsen(bands: Band[], limit: number): Band[] {
   }
   return out;
 }
+
+/** One part of the shape of a linked node: the shape of a child and its offset in the box of the node. */
+export interface ShapePart {
+  readonly shape: Shape;
+  readonly x: number;
+  readonly y: number;
+}
+
+/**
+ * The code that gives the shape of a linked node with children. It joins the box of the node with the shape of each
+ * child at its offset.
+ */
+export type LinkedShape = (own: Size, parts: readonly ShapePart[]) => Shape;
+
+/** This function gives the shape of a linked node with the code of ireko: `joinShapes` of the moved parts. */
+export function handLinkedShape(own: Size, parts: readonly ShapePart[]): Shape {
+  return joinShapes([boxShape(own), ...parts.map((p) => moveShape(p.shape, p.x, p.y))]);
+}
+
+// The switch of the shapes: the code that the measure pass uses. The default is the code of ireko.
+let linked: LinkedShape = handLinkedShape;
+
+/** This function gives the shape of a linked node with the code of the switch. The measure pass uses it. */
+export function linkedShape(own: Size, parts: readonly ShapePart[]): Shape {
+  return linked(own, parts);
+}
+
+/**
+ * This function sets the code of the switch, and gives the code that it replaces. The package does not export it. The
+ * tests and the benchmarks use it to compare the code of ireko with the shapes module of Vex (`shape-vex.ts`).
+ */
+export function setLinkedShape(code: LinkedShape): LinkedShape {
+  const before = linked;
+  linked = code;
+  return before;
+}
