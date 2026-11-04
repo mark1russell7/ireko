@@ -66,42 +66,42 @@ export function placeOf(records, vars, parents) {
   const K0 = KO(H, RT, false, false);
   for (const o of K0) {
     try {
-      D[2][o] = (((R[o]["p"])<(0)) ? 1 : k_number((G(D[2][UP(P, o)]))*(R[o]["ps"])));
+      D[2][o] = (((R[o]["p"]) < (0)) ? 1 : k_number((G(D[2][UP(P, o)])) * (R[o]["ps"])));
     } catch {
       D[2][o] = E;
     }
     try {
-      D[3][o] = (((R[o]["p"])<(0)) ? -1 : (R[UP(P, o)]["nested"] ? R[o]["p"] : G(D[3][UP(P, o)])));
+      D[3][o] = (((R[o]["p"]) < (0)) ? -1 : (R[UP(P, o)]["nested"] ? R[o]["p"] : G(D[3][UP(P, o)])));
     } catch {
       D[3][o] = E;
     }
     try {
-      D[0][o] = (((R[o]["p"])<(0)) ? v0 : k_number((G(D[0][UP(P, o)]))+(k_number((G(D[2][UP(P, o)]))*(R[o]["px"])))));
+      D[0][o] = (((R[o]["p"]) < (0)) ? v0 : k_number((G(D[0][UP(P, o)])) + (k_number((G(D[2][UP(P, o)])) * (R[o]["px"])))));
     } catch {
       D[0][o] = E;
     }
     try {
-      D[1][o] = (((R[o]["p"])<(0)) ? v1 : k_number((G(D[1][UP(P, o)]))+(k_number((G(D[2][UP(P, o)]))*(R[o]["py"])))));
+      D[1][o] = (((R[o]["p"]) < (0)) ? v1 : k_number((G(D[1][UP(P, o)])) + (k_number((G(D[2][UP(P, o)])) * (R[o]["py"])))));
     } catch {
       D[1][o] = E;
     }
     try {
-      D[6][o] = k_number((R[o]["bw"])*(G(D[2][o])));
+      D[6][o] = k_number((R[o]["bw"]) * (G(D[2][o])));
     } catch {
       D[6][o] = E;
     }
     try {
-      D[7][o] = k_number((R[o]["bh"])*(G(D[2][o])));
+      D[7][o] = k_number((R[o]["bh"]) * (G(D[2][o])));
     } catch {
       D[7][o] = E;
     }
     try {
-      D[4][o] = (((k_number(Math.abs((G(D[0][o])))))<(1e-9)) ? 0 : G(D[0][o]));
+      D[4][o] = (((k_number(Math.abs((G(D[0][o]))))) < (1e-9)) ? 0 : G(D[0][o]));
     } catch {
       D[4][o] = E;
     }
     try {
-      D[5][o] = (((k_number(Math.abs((G(D[1][o])))))<(1e-9)) ? 0 : G(D[1][o]));
+      D[5][o] = (((k_number(Math.abs((G(D[1][o]))))) < (1e-9)) ? 0 : G(D[1][o]));
     } catch {
       D[5][o] = E;
     }

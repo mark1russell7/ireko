@@ -7,7 +7,6 @@ const E = {};
 const Z = {};
 const N = {}, W = {};
 function F() { throw E; }
-function B(x) { return typeof x === "boolean" ? x : F(); }
 function C(m) { throw new VexContractError(m); }
 function G(x) { return x === E ? F() : x; }
 function M1(f) {
@@ -124,14 +123,14 @@ export function gridOf(records, vars) {
   const v7 = vars["justify"];
   const v8 = vars["selfW"];
   const v9 = vars["selfH"];
-  const c1 = ((v0)===("linked"));
-  const c2 = T(() => (((v1)>(0)) ? k_number(Math.min((v1),(n))) : (c1 ? ((((v2)===("left")) || ((v2)===("right"))) ? 1 : n) : k_number(Math.ceil((k_number(Math.sqrt((n)))))))));
-  const c3 = T(() => k_number(Math.ceil((k_number((n)/(G(c2)))))));
-  const c6 = (((v3)===("auto")) ? (c1 ? "start" : "center") : v3);
-  const c7 = T(() => (((v4)>(0)) ? v4 : k_number((v5)*(1.5))));
-  const c8 = ((v2)===("bottom"));
-  const c9 = ((v2)===("top"));
-  const c10 = ((v2)===("right"));
+  const c1 = ((v0) === ("linked"));
+  const c2 = T(() => (((v1) > (0)) ? k_number(Math.min((v1), (n))) : (c1 ? ((((v2) === ("left")) || ((v2) === ("right"))) ? 1 : n) : k_number(Math.ceil((k_number(Math.sqrt((n)))))))));
+  const c3 = T(() => k_number(Math.ceil((k_number((n) / (G(c2)))))));
+  const c6 = (((v3) === ("auto")) ? (c1 ? "start" : "center") : v3);
+  const c7 = T(() => (((v4) > (0)) ? v4 : k_number((v5) * (1.5))));
+  const c8 = ((v2) === ("bottom"));
+  const c9 = ((v2) === ("top"));
+  const c10 = ((v2) === ("right"));
   let c15;
   try {
     let a12, n13 = 0;
@@ -144,25 +143,25 @@ export function gridOf(records, vars) {
     c15 = E;
   }
   const m17 = S(n, 1, false, undefined, s_max, r_one,
-    (j18) => k_number((R[j18]["i"])%(G(c2))),
+    (j18) => k_number((R[j18]["i"]) % (G(c2))),
     (j18) => R[j18]["w"],
-    (t, q) => (t)===(q)
+    (t, q) => (t) === (q)
   );
-  const c19 = T(() => k_number(Math.max((0),(G(c15)))));
+  const c19 = T(() => k_number(Math.max((0), (G(c15)))));
   const m22 = S(n, 2, false, 0, s_add, k_number,
     (j23) => R[j23]["i"],
     (j23) => {
       try {
         const b24 = R[j23]["i"];
-        return k_number(((v6 ? G(c19) : k_number(Math.max((0),(m17(b24))))))+(v5));
+        return k_number(((v6 ? G(c19) : k_number(Math.max((0), (m17(b24)))))) + (v5));
       } catch {
         return E;
       }
     },
-    (t, q) => (t)<(q)
+    (t, q) => (t) < (q)
   );
-  const c30 = ((v7)===("center"));
-  const c31 = ((v7)===("start"));
+  const c30 = ((v7) === ("center"));
+  const c31 = ((v7) === ("start"));
   let c37;
   try {
     let a34, n35 = 0;
@@ -175,40 +174,40 @@ export function gridOf(records, vars) {
     c37 = E;
   }
   const m39 = S(n, 1, false, undefined, s_max, r_one,
-    (j40) => k_number(Math.floor((k_number((R[j40]["i"])/(G(c2)))))),
+    (j40) => k_number(Math.floor((k_number((R[j40]["i"]) / (G(c2)))))),
     (j40) => R[j40]["h"],
-    (t, q) => (t)===(q)
+    (t, q) => (t) === (q)
   );
-  const c41 = T(() => k_number(Math.max((0),(G(c37)))));
+  const c41 = T(() => k_number(Math.max((0), (G(c37)))));
   const m44 = S(n, 2, false, 0, s_add, k_number,
     (j45) => R[j45]["i"],
     (j45) => {
       try {
         let b46;
         try {
-          b46 = k_number(Math.floor((k_number((R[j45]["i"])/(G(c2))))));
+          b46 = k_number(Math.floor((k_number((R[j45]["i"]) / (G(c2))))));
         } catch {
           b46 = E;
         }
-        return k_number(((v6 ? G(c41) : k_number(Math.max((0),(m39(b46))))))+(v5));
+        return k_number(((v6 ? G(c41) : k_number(Math.max((0), (m39(b46)))))) + (v5));
       } catch {
         return E;
       }
     },
-    (t, q) => (t)<(q),
-    (j45) => ((k_number((R[j45]["i"])%(G(c2))))===(0))
+    (t, q) => (t) < (q),
+    (j45) => ((k_number((R[j45]["i"]) % (G(c2)))) === (0))
   );
-  const c53 = ((c6)===("center"));
-  const c54 = ((c6)===("start"));
+  const c53 = ((c6) === ("center"));
+  const c54 = ((c6) === ("start"));
   let c66;
   try {
     let a63 = 0;
     for (let j56 = 0; j56 < n; j56++) {
       let x65;
       try {
-        if (!((R[j56]["i"])<(G(c2)))) continue;
+        if (!((R[j56]["i"]) < (G(c2)))) continue;
         const b57 = R[j56]["i"];
-        x65 = (v6 ? G(c19) : k_number(Math.max((0),(m17(b57)))));
+        x65 = (v6 ? G(c19) : k_number(Math.max((0), (m17(b57)))));
       } catch {
         continue;
       }
@@ -218,21 +217,21 @@ export function gridOf(records, vars) {
   } catch {
     c66 = E;
   }
-  const c67 = T(() => k_number((G(c66))+(k_number((v5)*(k_number((G(c2))-(1)))))));
+  const c67 = T(() => k_number((G(c66)) + (k_number((v5) * (k_number((G(c2)) - (1)))))));
   let c78;
   try {
     let a75 = 0;
     for (let j68 = 0; j68 < n; j68++) {
       let x77;
       try {
-        if (!((k_number((R[j68]["i"])%(G(c2))))===(0))) continue;
+        if (!((k_number((R[j68]["i"]) % (G(c2)))) === (0))) continue;
         let b69;
         try {
-          b69 = k_number(Math.floor((k_number((R[j68]["i"])/(G(c2))))));
+          b69 = k_number(Math.floor((k_number((R[j68]["i"]) / (G(c2))))));
         } catch {
           b69 = E;
         }
-        x77 = (v6 ? G(c41) : k_number(Math.max((0),(m39(b69)))));
+        x77 = (v6 ? G(c41) : k_number(Math.max((0), (m39(b69)))));
       } catch {
         continue;
       }
@@ -242,21 +241,21 @@ export function gridOf(records, vars) {
   } catch {
     c78 = E;
   }
-  const c79 = T(() => k_number((G(c78))+(k_number((v5)*(k_number((G(c3))-(1)))))));
-  const c80 = T(() => (c8 ? k_number((k_number((v8)/(2)))-(k_number((G(c67))/(2)))) : (c9 ? k_number((k_number((v8)/(2)))-(k_number((G(c67))/(2)))) : (c10 ? k_number((v8)+(G(c7))) : k_number((k_number(-(G(c7))))-(G(c67)))))));
-  const c81 = T(() => (c8 ? k_number((v9)+(G(c7))) : (c9 ? k_number((k_number(-(G(c7))))-(G(c79))) : (c10 ? k_number((k_number((v9)/(2)))-(k_number((G(c79))/(2)))) : k_number((k_number((v9)/(2)))-(k_number((G(c79))/(2))))))));
-  const out = [];
+  const c79 = T(() => k_number((G(c78)) + (k_number((v5) * (k_number((G(c3)) - (1)))))));
+  const c80 = T(() => (c8 ? k_number((k_number((v8) / (2))) - (k_number((G(c67)) / (2)))) : (c9 ? k_number((k_number((v8) / (2))) - (k_number((G(c67)) / (2)))) : (c10 ? k_number((v8) + (G(c7))) : k_number((k_number(-(G(c7)))) - (G(c67)))))));
+  const c81 = T(() => (c8 ? k_number((v9) + (G(c7))) : (c9 ? k_number((k_number(-(G(c7)))) - (G(c79))) : (c10 ? k_number((k_number((v9) / (2))) - (k_number((G(c79)) / (2)))) : k_number((k_number((v9) / (2))) - (k_number((G(c79)) / (2))))))));
+  const out = new Array(n);
   for (let o = 0; o < n; o++) {
     try {
       let b4;
       try {
-        b4 = k_number((R[o]["i"])%(G(c2)));
+        b4 = k_number((R[o]["i"]) % (G(c2)));
       } catch {
         b4 = E;
       }
       let b5;
       try {
-        b5 = k_number(Math.floor((k_number((R[o]["i"])/(G(c2))))));
+        b5 = k_number(Math.floor((k_number((R[o]["i"]) / (G(c2))))));
       } catch {
         b5 = E;
       }
@@ -264,11 +263,11 @@ export function gridOf(records, vars) {
       try {
         let b20;
         try {
-          b20 = k_number(((v6 ? G(c19) : k_number(Math.max((0),(m17(b4))))))-(R[o]["w"]));
+          b20 = k_number(((v6 ? G(c19) : k_number(Math.max((0), (m17(b4)))))) - (R[o]["w"]));
         } catch {
           b20 = E;
         }
-        b32 = k_number((k_number((m22(b4))+((c31 ? 0 : (c30 ? k_number((G(b20))/(2)) : G(b20))))))-(R[o]["x"]));
+        b32 = k_number((k_number((m22(b4)) + ((c31 ? 0 : (c30 ? k_number((G(b20)) / (2)) : G(b20)))))) - (R[o]["x"]));
       } catch {
         b32 = E;
       }
@@ -276,23 +275,23 @@ export function gridOf(records, vars) {
       try {
         let b42;
         try {
-          b42 = k_number(((v6 ? G(c41) : k_number(Math.max((0),(m39(b5))))))-(R[o]["h"]));
+          b42 = k_number(((v6 ? G(c41) : k_number(Math.max((0), (m39(b5)))))) - (R[o]["h"]));
         } catch {
           b42 = E;
         }
         let k52;
         try {
-          k52 = k_number((G(b5))*(G(c2)));
+          k52 = k_number((G(b5)) * (G(c2)));
         } catch {
           k52 = E;
         }
-        b55 = k_number((k_number((m44(k52))+((c54 ? 0 : (c53 ? k_number((G(b42))/(2)) : G(b42))))))-(R[o]["y"]));
+        b55 = k_number((k_number((m44(k52)) + ((c54 ? 0 : (c53 ? k_number((G(b42)) / (2)) : G(b42)))))) - (R[o]["y"]));
       } catch {
         b55 = E;
       }
-      out.push((c1 ? ({ "x": k_number((G(c80))+(G(b32))), "y": k_number((G(c81))+(G(b55))), "width": G(c67), "height": G(c79) }) : ({ "x": G(b32), "y": G(b55), "width": G(c67), "height": G(c79) })));
+      out[o] = (c1 ? ({ "x": k_number((G(c80)) + (G(b32))), "y": k_number((G(c81)) + (G(b55))), "width": G(c67), "height": G(c79) }) : ({ "x": G(b32), "y": G(b55), "width": G(c67), "height": G(c79) }));
     } catch {
-      out.push(VEX_ERROR);
+      out[o] = VEX_ERROR;
     }
   }
   return out;

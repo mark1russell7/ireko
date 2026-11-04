@@ -2,6 +2,7 @@
 #   check   the type check, Oxlint, the tests and the prose lint, on each supported Node.js version
 #   package the package as npm gives it: the build, the size budgets, publint, attw and the smoke test
 #   site    the type check and the build of the site, the share cards and the browser tests
+#   bytes   each committed module of Vex equals the print of the pinned commit of vex
 #   ci-ok   the one check that a pull request must pass
 # release.yml calls this workflow before it builds a release.
 name: CI
@@ -123,10 +124,19 @@ jobs:
             packages/site/test-results
           retention-days: 7
 
+  # To move the pin, change both lines and print the files again in one pull request. Then the size budgets read the change.
+  bytes:
+    name: Module bytes
+    permissions:
+      contents: read
+    uses: mark1russell7/vex/.github/workflows/module-bytes.yml@ead65a70bde9f31b9fef4a8cc35cb69289167298 # main
+    with:
+      vex-ref: ead65a70bde9f31b9fef4a8cc35cb69289167298
+
   ci-ok:
     name: CI OK
     if: always()
-    needs: [check, package, site]
+    needs: [check, package, site, bytes]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     permissions: {}

@@ -80,9 +80,9 @@ export function measureOf(records, vars, parents) {
   const v16 = vars["nodeH"];
   const v17 = vars["scale"];
   const v18 = vars["clip"];
-  const c40 = T(() => k_number(Math.max((v8),(v9))));
-  const c41 = T(() => k_number((2)*(v8)));
-  const c42 = T(() => k_number((k_number((2)*(v8)))+(1)));
+  const c40 = T(() => k_number(Math.max((v8), (v9))));
+  const c41 = T(() => k_number((2) * (v8)));
+  const c42 = T(() => k_number((k_number((2) * (v8))) + (1)));
   const D = [new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n), new Array(n)];
   const K43 = KO(H, RT, false, false);
   for (const o of K43) {
@@ -90,13 +90,12 @@ export function measureOf(records, vars, parents) {
       let l0 = (v0 || v1);
       let l1 = (v0 ? 0 : v2);
       let l2 = (v0 ? v3 : v4);
-      const f4 = o;
-      const A5 = H[f4];
+      const A5 = H[o];
       for (let q6 = 0; q6 < A5.length; q6++) {
         const j3 = A5[q6];
         const t7 = true;
-        const t8 = (l0 ? k_number(Math.min((l1),(k_number((R[j3]["ox"])+(R[j3]["ex"]))))) : k_number((R[j3]["ox"])+(R[j3]["ex"])));
-        const t9 = (l0 ? k_number((k_number(Math.max((k_number((l1)+(l2))),(k_number((k_number((R[j3]["ox"])+(R[j3]["ex"])))+(R[j3]["ew"]))))))-(k_number(Math.min((l1),(k_number((R[j3]["ox"])+(R[j3]["ex"]))))))) : R[j3]["ew"]);
+        const t8 = (l0 ? k_number(Math.min((l1), (k_number((R[j3]["ox"]) + (R[j3]["ex"]))))) : k_number((R[j3]["ox"]) + (R[j3]["ex"])));
+        const t9 = (l0 ? k_number((k_number(Math.max((k_number((l1) + (l2))), (k_number((k_number((R[j3]["ox"]) + (R[j3]["ex"]))) + (R[j3]["ew"])))))) - (k_number(Math.min((l1), (k_number((R[j3]["ox"]) + (R[j3]["ex"]))))))) : R[j3]["ew"]);
         l0 = t7;
         l1 = t8;
         l2 = t9;
@@ -109,13 +108,12 @@ export function measureOf(records, vars, parents) {
       let l10 = (v0 || v1);
       let l11 = (v0 ? 0 : v5);
       let l12 = (v0 ? v6 : v7);
-      const f14 = o;
-      const A15 = H[f14];
+      const A15 = H[o];
       for (let q16 = 0; q16 < A15.length; q16++) {
         const j13 = A15[q16];
         const t17 = true;
-        const t18 = (l10 ? k_number(Math.min((l11),(k_number((R[j13]["oy"])+(R[j13]["ey"]))))) : k_number((R[j13]["oy"])+(R[j13]["ey"])));
-        const t19 = (l10 ? k_number((k_number(Math.max((k_number((l11)+(l12))),(k_number((k_number((R[j13]["oy"])+(R[j13]["ey"])))+(R[j13]["eh"]))))))-(k_number(Math.min((l11),(k_number((R[j13]["oy"])+(R[j13]["ey"]))))))) : R[j13]["eh"]);
+        const t18 = (l10 ? k_number(Math.min((l11), (k_number((R[j13]["oy"]) + (R[j13]["ey"]))))) : k_number((R[j13]["oy"]) + (R[j13]["ey"])));
+        const t19 = (l10 ? k_number((k_number(Math.max((k_number((l11) + (l12))), (k_number((k_number((R[j13]["oy"]) + (R[j13]["ey"]))) + (R[j13]["eh"])))))) - (k_number(Math.min((l11), (k_number((R[j13]["oy"]) + (R[j13]["ey"]))))))) : R[j13]["eh"]);
         l10 = t17;
         l11 = t18;
         l12 = t19;
@@ -128,13 +126,12 @@ export function measureOf(records, vars, parents) {
       let l20 = (v0 || v1);
       let l21 = (v0 ? 0 : v2);
       let l22 = (v0 ? v3 : v4);
-      const f24 = o;
-      const A25 = H[f24];
+      const A25 = H[o];
       for (let q26 = 0; q26 < A25.length; q26++) {
         const j23 = A25[q26];
         const t27 = true;
-        const t28 = (l20 ? k_number(Math.min((l21),(k_number((R[j23]["ox"])+(R[j23]["ex"]))))) : k_number((R[j23]["ox"])+(R[j23]["ex"])));
-        const t29 = (l20 ? k_number((k_number(Math.max((k_number((l21)+(l22))),(k_number((k_number((R[j23]["ox"])+(R[j23]["ex"])))+(R[j23]["ew"]))))))-(k_number(Math.min((l21),(k_number((R[j23]["ox"])+(R[j23]["ex"]))))))) : R[j23]["ew"]);
+        const t28 = (l20 ? k_number(Math.min((l21), (k_number((R[j23]["ox"]) + (R[j23]["ex"]))))) : k_number((R[j23]["ox"]) + (R[j23]["ex"])));
+        const t29 = (l20 ? k_number((k_number(Math.max((k_number((l21) + (l22))), (k_number((k_number((R[j23]["ox"]) + (R[j23]["ex"]))) + (R[j23]["ew"])))))) - (k_number(Math.min((l21), (k_number((R[j23]["ox"]) + (R[j23]["ex"]))))))) : R[j23]["ew"]);
         l20 = t27;
         l21 = t28;
         l22 = t29;
@@ -147,13 +144,12 @@ export function measureOf(records, vars, parents) {
       let l30 = (v0 || v1);
       let l31 = (v0 ? 0 : v5);
       let l32 = (v0 ? v6 : v7);
-      const f34 = o;
-      const A35 = H[f34];
+      const A35 = H[o];
       for (let q36 = 0; q36 < A35.length; q36++) {
         const j33 = A35[q36];
         const t37 = true;
-        const t38 = (l30 ? k_number(Math.min((l31),(k_number((R[j33]["oy"])+(R[j33]["ey"]))))) : k_number((R[j33]["oy"])+(R[j33]["ey"])));
-        const t39 = (l30 ? k_number((k_number(Math.max((k_number((l31)+(l32))),(k_number((k_number((R[j33]["oy"])+(R[j33]["ey"])))+(R[j33]["eh"]))))))-(k_number(Math.min((l31),(k_number((R[j33]["oy"])+(R[j33]["ey"]))))))) : R[j33]["eh"]);
+        const t38 = (l30 ? k_number(Math.min((l31), (k_number((R[j33]["oy"]) + (R[j33]["ey"]))))) : k_number((R[j33]["oy"]) + (R[j33]["ey"])));
+        const t39 = (l30 ? k_number((k_number(Math.max((k_number((l31) + (l32))), (k_number((k_number((R[j33]["oy"]) + (R[j33]["ey"]))) + (R[j33]["eh"])))))) - (k_number(Math.min((l31), (k_number((R[j33]["oy"]) + (R[j33]["ey"]))))))) : R[j33]["eh"]);
         l30 = t37;
         l31 = t38;
         l32 = t39;
@@ -168,77 +164,77 @@ export function measureOf(records, vars, parents) {
       D[4][o] = E;
     }
     try {
-      D[5][o] = k_number((G(D[2][o]))+(G(c41)));
+      D[5][o] = k_number((G(D[2][o])) + (G(c41)));
     } catch {
       D[5][o] = E;
     }
     try {
-      D[6][o] = k_number((k_number((G(D[3][o]))+(G(D[4][o]))))+(v8));
+      D[6][o] = k_number((k_number((G(D[3][o])) + (G(D[4][o])))) + (v8));
     } catch {
       D[6][o] = E;
     }
     try {
-      D[7][o] = (v10 ? k_number(Math.max((G(D[5][o])),(v11))) : (v12 ? v13 : G(D[5][o])));
+      D[7][o] = (v10 ? k_number(Math.max((G(D[5][o])), (v11))) : (v12 ? v13 : G(D[5][o])));
     } catch {
       D[7][o] = E;
     }
     try {
-      D[8][o] = (v10 ? k_number(Math.max((G(D[6][o])),(v14))) : (v15 ? v16 : G(D[6][o])));
+      D[8][o] = (v10 ? k_number(Math.max((G(D[6][o])), (v14))) : (v15 ? v16 : G(D[6][o])));
     } catch {
       D[8][o] = E;
     }
     try {
-      D[9][o] = (v10 ? false : (((k_number((G(D[7][o]))-(G(c41))))<(1)) || ((k_number((k_number((G(D[8][o]))-(G(D[4][o]))))-(v8)))<(1))));
+      D[9][o] = (v10 ? false : (((k_number((G(D[7][o])) - (G(c41)))) < (1)) || ((k_number((k_number((G(D[8][o])) - (G(D[4][o])))) - (v8))) < (1))));
     } catch {
       D[9][o] = E;
     }
     try {
-      D[10][o] = (G(D[9][o]) ? k_number(Math.max((G(D[7][o])),(G(c42)))) : G(D[7][o]));
+      D[10][o] = (G(D[9][o]) ? k_number(Math.max((G(D[7][o])), (G(c42)))) : G(D[7][o]));
     } catch {
       D[10][o] = E;
     }
     try {
-      D[11][o] = (G(D[9][o]) ? k_number(Math.max((G(D[8][o])),(k_number((k_number((G(D[4][o]))+(v8)))+(1))))) : G(D[8][o]));
+      D[11][o] = (G(D[9][o]) ? k_number(Math.max((G(D[8][o])), (k_number((k_number((G(D[4][o])) + (v8))) + (1))))) : G(D[8][o]));
     } catch {
       D[11][o] = E;
     }
     try {
-      D[12][o] = k_number((G(D[10][o]))-(G(c41)));
+      D[12][o] = k_number((G(D[10][o])) - (G(c41)));
     } catch {
       D[12][o] = E;
     }
     try {
-      D[13][o] = k_number((k_number((G(D[11][o]))-(G(D[4][o]))))-(v8));
+      D[13][o] = k_number((k_number((G(D[11][o])) - (G(D[4][o])))) - (v8));
     } catch {
       D[13][o] = E;
     }
     try {
-      D[14][o] = ((((R[o]["p"])<(0)) && v17) ? k_number(Math.min((k_number(Math.min((1),(k_number((G(D[12][o]))/(G(D[2][o]))))))),(k_number((G(D[13][o]))/(G(D[3][o])))))) : 1);
+      D[14][o] = ((((R[o]["p"]) < (0)) && v17) ? k_number(Math.min((k_number(Math.min((1), (k_number((G(D[12][o])) / (G(D[2][o]))))))), (k_number((G(D[13][o])) / (G(D[3][o])))))) : 1);
     } catch {
       D[14][o] = E;
     }
     try {
-      D[15][o] = k_number((v8)+((v18 ? k_number(Math.max((0),(k_number((k_number((G(D[12][o]))-(k_number((G(D[2][o]))*(G(D[14][o]))))))/(2))))) : k_number((k_number((G(D[12][o]))-(k_number((G(D[2][o]))*(G(D[14][o]))))))/(2)))));
+      D[15][o] = k_number((v8) + ((v18 ? k_number(Math.max((0), (k_number((k_number((G(D[12][o])) - (k_number((G(D[2][o])) * (G(D[14][o])))))) / (2))))) : k_number((k_number((G(D[12][o])) - (k_number((G(D[2][o])) * (G(D[14][o])))))) / (2)))));
     } catch {
       D[15][o] = E;
     }
     try {
-      D[16][o] = k_number((G(D[4][o]))+((v18 ? k_number(Math.max((0),(k_number((k_number((G(D[13][o]))-(k_number((G(D[3][o]))*(G(D[14][o]))))))/(2))))) : k_number((k_number((G(D[13][o]))-(k_number((G(D[3][o]))*(G(D[14][o]))))))/(2)))));
+      D[16][o] = k_number((G(D[4][o])) + ((v18 ? k_number(Math.max((0), (k_number((k_number((G(D[13][o])) - (k_number((G(D[3][o])) * (G(D[14][o])))))) / (2))))) : k_number((k_number((G(D[13][o])) - (k_number((G(D[3][o])) * (G(D[14][o])))))) / (2)))));
     } catch {
       D[16][o] = E;
     }
     try {
-      D[19][o] = ((((R[o]["p"])<(0)) || v0) ? 1 : G(D[14][UP(P, o)]));
+      D[19][o] = ((((R[o]["p"]) < (0)) || v0) ? 1 : G(D[14][UP(P, o)]));
     } catch {
       D[19][o] = E;
     }
     try {
-      D[17][o] = (((R[o]["p"])<(0)) ? 0 : (v0 ? R[o]["ox"] : k_number((G(D[15][UP(P, o)]))+(k_number((G(D[14][UP(P, o)]))*(k_number((R[o]["ox"])-(G(D[0][UP(P, o)])))))))));
+      D[17][o] = (((R[o]["p"]) < (0)) ? 0 : (v0 ? R[o]["ox"] : k_number((G(D[15][UP(P, o)])) + (k_number((G(D[14][UP(P, o)])) * (k_number((R[o]["ox"]) - (G(D[0][UP(P, o)])))))))));
     } catch {
       D[17][o] = E;
     }
     try {
-      D[18][o] = (((R[o]["p"])<(0)) ? 0 : (v0 ? R[o]["oy"] : k_number((G(D[16][UP(P, o)]))+(k_number((G(D[14][UP(P, o)]))*(k_number((R[o]["oy"])-(G(D[1][UP(P, o)])))))))));
+      D[18][o] = (((R[o]["p"]) < (0)) ? 0 : (v0 ? R[o]["oy"] : k_number((G(D[16][UP(P, o)])) + (k_number((G(D[14][UP(P, o)])) * (k_number((R[o]["oy"]) - (G(D[1][UP(P, o)])))))))));
     } catch {
       D[18][o] = E;
     }
