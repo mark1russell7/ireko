@@ -8,7 +8,7 @@
 // For each group of trees it measures, as the median of the runs:
 //   1. the shapes pass alone: each call of the linked shape of one layout, with the code of ireko and with the module
 //      (the module time includes the change of the bands into lists of Vex and back);
-//   2. the module call alone, with the records made before the run (plain arrays of bands);
+//   2. the module call alone, with the records made before the run;
 //   3. a full layout with the switch off and on;
 //   5. the null arm of the plain wrapper: the same, with the wrapper that gives the module plain arrays. The switch on
 //      uses the plain wrapper, so "Module share, plain wrapper" is the share of the module in that layout.
@@ -23,13 +23,12 @@ import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PerformanceObserver } from "node:perf_hooks";
-import { cpus } from "node:os";
 import { parseArgs } from "node:util";
 import { gzipSync } from "node:zlib";
 import { layout } from "../src/core/engine.ts";
 import { handLinkedShape, MAX_BANDS, setLinkedShape } from "../src/core/engine/shape.ts";
 import { vexLinkedShape } from "../src/core/engine/shape-vex.ts";
-import { nodeShape, VEX_ERROR } from "../src/core/engine/shape.generated.js";
+import { nodeShape } from "../src/core/engine/shape.generated.js";
 import { at } from "../src/core/at.ts";
 import { exampleTrees, fullTrees, randomTrees } from "../src/test/shape-trees.ts";
 
@@ -98,20 +97,9 @@ function nullPlainLinkedShape(own, parts) {
   }
   if (records.length !== parts.length) throw new RangeError("ireko: a record is missing.");
   const shape = handLinkedShape(own, parts);
-  // The module gives plain arrays (the option lists: "plain"), and the wrapper copies them with a check of each item.
-  const value = at([[[...shape.rows], [...shape.columns]]], 0);
-  const plain = (list) => {
-    if (list === VEX_ERROR) throw new RangeError("ireko: the shape of a node is not finite.");
-    const o = new Array(list.length);
-    for (let i = 0; i < list.length; i++) {
-      const v = list[i];
-      if (v === VEX_ERROR) throw new RangeError("ireko: the shape of a node is not finite.");
-      o[i] = v;
-    }
-    return o;
-  };
-  const axes = plain(value);
-  return { rows: plain(axes[0]), columns: plain(axes[1]) };
+  const value = at([listOfBands([listOfBands(shape.rows), listOfBands(shape.columns)])], 0);
+  if (!("kind" in value)) throw new RangeError("ireko: the shape of a node is not finite.");
+  return { rows: valuesOfLoop(valueOfItem(value.items[0])), columns: valuesOfLoop(valueOfItem(value.items[1])) };
 }
 
 /** The time of one pass in ms: the median of RUNS samples. The two functions alternate, so a slow moment hits both. */
@@ -153,6 +141,8 @@ function sample(f, reps) {
   return (performance.now() - t) / reps;
 }
 
+const listOf = (bands) => ({ kind: "vex.list", items: bands.map((value, k) => ({ key: String(k), result: { ok: true, value } })) });
+
 const groups = [
   { name: "examples (golden files)", trees: exampleTrees() },
   ...fullTrees(values.large).map((t) => ({ name: t.name, trees: [t] })),
@@ -181,7 +171,7 @@ for (const group of groups) {
         for (const [own, parts] of calls) vexLinkedShape(own, parts);
       },
     );
-    const prepared = calls.map(([own, parts]) => [parts.map((p) => ({ ox: p.x, oy: p.y, rows: p.shape.rows, cols: p.shape.columns })), { w: own.width, h: own.height, limit: MAX_BANDS }]);
+    const prepared = calls.map(([own, parts]) => [parts.map((p) => ({ ox: p.x, oy: p.y, rows: listOf(p.shape.rows), cols: listOf(p.shape.columns) })), { w: own.width, h: own.height, limit: MAX_BANDS }]);
     const moduleOnly = compare(
       () => {
         for (const [own, parts] of calls) handLinkedShape(own, parts);
@@ -190,7 +180,7 @@ for (const group of groups) {
         for (const [records, vars] of prepared) nodeShape(records, vars);
       },
     );
-    Object.assign(row, { handPassMs: pass.a, vexPassMs: pass.b, passRatio: pass.b / pass.a, moduleCallHandMs: moduleOnly.a, moduleCallMs: moduleOnly.b, moduleCallRatio: moduleOnly.b / moduleOnly.a });
+    Object.assign(row, { handPassMs: pass.a, vexPassMs: pass.b, passRatio: pass.b / pass.a, moduleCallMs: moduleOnly.b, moduleCallRatio: moduleOnly.b / moduleOnly.a });
   }
   const full = compare(
     () => {
@@ -237,18 +227,15 @@ function countNodes(n) {
 
 const here = dirname(fileURLToPath(import.meta.url));
 const moduleSource = readFileSync(resolve(here, "..", "src", "core", "engine", "shape.generated.js"));
-// Each record names the CPU of the runner and the mode of the run (the fleet rule of 2026-10-30).
-const CPU = cpus()[0]?.model.trim() ?? "unknown";
-const MODE = [process.env.BENCH_MODE ?? (process.env.CI === "true" ? "ci" : "local"), ...process.execArgv].join(" ");
 const size = { bytes: moduleSource.length, gzip: gzipSync(moduleSource, { level: 9 }).length };
 
 const f = (x, d = 3) => (x === undefined ? "-" : x.toFixed(d));
 const lines = [
   "## SHAPEWIRE: the shapes module of Vex against the shapes code of ireko",
   "",
-  `${CPU}, mode ${MODE}, Node.js ${process.version}, ${String(RUNS)} runs, median. Times are ms for one pass over the group.`,
+  `Node.js ${process.version}, ${String(RUNS)} runs, median. Times are ms for one pass over the group.`,
   "",
-  "| Trees | Nodes | Linked shapes | Shapes pass, ireko | Shapes pass, Vex | Vex/hand time (lower is better) | Module call only | Vex/hand time (lower is better) | Layout, switch off | Layout, switch on | On/off time (lower is better) | Null arm | On/off time (lower is better) | Fixed share | Module share | GC off | GC on | GC null | Fixed share, plain wrapper | Module share, plain wrapper |",
+  "| Trees | Nodes | Linked shapes | Shapes pass, ireko | Shapes pass, Vex | Ratio | Module call only | Ratio | Layout, switch off | Layout, switch on | Ratio | Null arm | Ratio | Fixed share | Module share | GC off | GC on | GC null | Fixed share, plain wrapper | Module share, plain wrapper |",
   "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
   ...rows.map((r) => `| ${r.group} | ${String(r.nodes)} | ${String(r.linkedShapes)} | ${f(r.handPassMs)} | ${f(r.vexPassMs)} | ${f(r.passRatio, 2)} | ${f(r.moduleCallMs)} | ${f(r.moduleCallRatio, 2)} | ${f(r.layoutOffMs)} | ${f(r.layoutOnMs)} | ${f(r.layoutRatio, 2)} | ${f(r.layoutNullMs)} | ${f(r.nullRatio, 2)} | ${f(r.fixedShare, 2)} | ${f(r.moduleShare, 2)} | ${f(r.gcOffMs)} | ${f(r.gcOnMs)} | ${f(r.gcNullMs)} | ${f(r.plainFixedShare, 2)} | ${f(r.plainModuleShare, 2)} |`),
   "",
@@ -258,7 +245,4 @@ const lines = [
 const text = lines.join("\n");
 process.stdout.write(`${text}\n`);
 if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, `${text}\n`);
-// Each ratio is a cost, not a speed-up: lower is better, and 1.00 is no overhead. The CPU of the runner goes in
-// the file too, because the spread between runners is larger than the spread inside one run.
-const RATIOS = "time with Vex / time of the hand code of ireko (layoutRatio: switch on / switch off); lower is better, 1.00 is no overhead";
-if (values.out !== undefined) writeFileSync(values.out, `${JSON.stringify({ node: process.version, cpu: CPU, mode: MODE, ratios: RATIOS, runs: RUNS, size, rows }, null, 2)}\n`);
+if (values.out !== undefined) writeFileSync(values.out, `${JSON.stringify({ node: process.version, runs: RUNS, size, rows }, null, 2)}\n`);

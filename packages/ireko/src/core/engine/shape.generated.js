@@ -14,58 +14,63 @@ function FI(n, v) {
 }
 function G(x) { return x === E ? F() : x; }
 function L(f) { let done = false, v; return () => { if (!done) { done = true; try { v = f(); } catch { v = E; } } return v; }; }
-function LA(x, h, t) {
-  if (!Array.isArray(x)) return undefined;
+function LI(x, h, t) {
+  if (typeof x !== "object" || x === null || x.kind !== "vex.list" || !Array.isArray(x.items)) return undefined;
   const o = [];
-  for (let i = 0; i < x.length; i++) {
-    const y = x[i];
-    if (y === VEX_ERROR) {
-      o.push([i, E]);
-      continue;
+  for (let i = 0; i < x.items.length; i++) {
+    const it = x.items[i];
+    const r = typeof it === "object" && it !== null ? it.result : undefined;
+    if (typeof r !== "object" || r === null || typeof it.key !== "string") return undefined;
+    if (r.ok === true) {
+      const v = h > 0 ? LI(r.value, h - 1, t) : r.value !== undefined && t(r.value) ? r.value : undefined;
+      if (v === undefined) return undefined;
+      o.push([it.key, v]);
+    } else {
+      const e = r.error;
+      if (r.ok !== false || typeof e !== "object" || e === null || typeof e.code !== "string" || typeof e.kind !== "string" || typeof e.message !== "string" || !Array.isArray(e.path) || e.kind === "depth") return undefined;
+      o.push([it.key, E]);
     }
-    const v = h > 0 ? LA(y, h - 1, t) : y !== undefined && t(y) ? y : undefined;
-    if (v === undefined) return undefined;
-    o.push([i, v]);
   }
   return o;
 }
-function LPC(l, h) { return l.map(h > 0 ? (x) => LPC(x[1], h - 1) : (x) => x[1]); }
+function LSC(l, h) { return Object.freeze({ kind: "vex.list", items: Object.freeze(l.map(([k, v]) => ({ key: `${k}`, result: { ok: true, value: h > 0 ? LSC(v, h - 1) : v } }))) }); }
 function Q(f) { const m = []; return (j) => { let v = m[j]; if (v === undefined) { try { v = f(j); } catch { v = E; } m[j] = v; } return v; }; }
 function SKI(l, f) {
-  const n = l.length;
-  for (let i = 0; i < n; i++) l[i] = [l[i], f(l[i][1])];
-  const t = n > 0 ? typeof l[0][1] : "number";
-  for (const [, v] of l) if (typeof v !== t || (t !== "number" && t !== "string") || v !== v) F();
-  l.sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0));
-  for (let i = 0; i < n; i++) l[i] = l[i][0];
+  const n = l.length, k = new Array(n);
+  for (let i = 0; i < n; i++) k[i] = f(l[i][1]);
+  const t = n > 0 ? typeof k[0] : "number";
+  for (const v of k) if (typeof v !== t || (t !== "number" && t !== "string") || v !== v) F();
+  if (n > 64) {
+    const o = new Array(n), c = l.slice();
+    for (let i = 0; i < n; i++) o[i] = i;
+    o.sort((a, b) => (k[a] < k[b] ? -1 : k[a] > k[b] ? 1 : 0));
+    for (let i = 0; i < n; i++) l[i] = c[o[i]];
+  } else for (let i = 1; i < n; i++) {
+    const v = k[i], x = l[i];
+    let j = i - 1;
+    for (; j >= 0 && k[j] > v; j--) { k[j + 1] = k[j]; l[j + 1] = l[j]; }
+    k[j + 1] = v; l[j + 1] = x;
+  }
   return l;
 }
 function T(f) { try { return f(); } catch { return E; } }
-const op_2_0 = (from, to, min, max) => ({ from, to, min, max });
-const v_3 = (b) => !Number.isNaN(b.from) && !Number.isNaN(b.to) && !Number.isNaN(b.min) && !Number.isNaN(b.max);
+const op_2_0 = (from,to,min,max)=>({from,to,min,max});
+const v_3 = b=>!Number.isNaN(b.from)&&!Number.isNaN(b.to)&&!Number.isNaN(b.min)&&!Number.isNaN(b.max);
 const k_domain_Band = (x) => (v_3(x) ? x : F());
-const op_3_1 = (a, along, across) => ({ from: a.from + along, to: a.to + along, min: a.min + across, max: a.max + across });
-const op_3_2 = (a) => a.to > a.from && a.max >= a.min;
-const op_3_3 = (a) => ({ from: a.to, to: a.to, min: 0, max: 0 });
-const op_3_4 = (a) => (a.from === Number.NEGATIVE_INFINITY ? -1 : a.from === Number.POSITIVE_INFINITY ? 1 : 0);
+const op_3_1 = (a,along,across)=>({from:a.from+along,to:a.to+along,min:a.min+across,max:a.max+across});
+const op_3_2 = a=>a.to>a.from&&a.max>=a.min;
+const op_3_3 = a=>({from:a.to,to:a.to,min:0,max:0});
+const op_3_4 = a=>a.from===Number.NEGATIVE_INFINITY?-1:a.from===Number.POSITIVE_INFINITY?1:0;
 const k_number = (x) => (Number.isFinite(x) ? x : F());
-const op_3_6 = (a) => a.from;
-const op_3_7 = (a, b) => a.from === b.from;
-const op_3_9 = (a, b) => a.to > b.from;
-const op_3_11 = (a, b) => ({ from: a.from, to: a.to, min: b.min < a.min ? b.min : a.min, max: b.max > a.max ? b.max : a.max });
-const op_3_12 = (c, a, b) => ({ from: a.from, to: b.from, min: c.min, max: c.max });
-const op_3_13 = (a, b) => a.to === b.from && a.min === b.min && a.max === b.max;
-const op_3_14 = (a, b) => ({ from: a.from, to: b.to, min: a.min, max: a.max });
-const op_3_16 = (a, b) => ({ from: Math.min(a.from, b.from), to: Math.max(a.to, b.to), min: Math.min(a.min, b.min), max: Math.max(a.max, b.max) });
-const is_3 = (u) =>
-    typeof u === "object" &&
-    u !== null &&
-    [Object.prototype, null].includes(Object.getPrototypeOf(u)) &&
-    Object.keys(u).length === 4 &&
-    typeof u.from === "number" &&
-    typeof u.to === "number" &&
-    typeof u.min === "number" &&
-    typeof u.max === "number";
+const op_3_6 = a=>a.from;
+const op_3_7 = (a,b)=>a.from===b.from;
+const op_3_9 = (a,b)=>a.to>b.from;
+const op_3_11 = (a,b)=>({from:a.from,to:a.to,min:b.min<a.min?b.min:a.min,max:b.max>a.max?b.max:a.max});
+const op_3_12 = (c,a,b)=>({from:a.from,to:b.from,min:c.min,max:c.max});
+const op_3_13 = (a,b)=>a.to===b.from&&a.min===b.min&&a.max===b.max;
+const op_3_14 = (a,b)=>({from:a.from,to:b.to,min:a.min,max:a.max});
+const op_3_16 = (a,b)=>({from:Math.min(a.from,b.from),to:Math.max(a.to,b.to),min:Math.min(a.min,b.min),max:Math.max(a.max,b.max)});
+const is_3 = u=>typeof u==="object"&&u!==null&&[Object.prototype,null].includes(Object.getPrototypeOf(u))&&Object.keys(u).length===4&&typeof u.from==="number"&&typeof u.to==="number"&&typeof u.min==="number"&&typeof u.max==="number";
 export function nodeShape(records, vars) {
   if (!Array.isArray(records)) C("the records are not an array");
   const R = records;
@@ -74,7 +79,7 @@ export function nodeShape(records, vars) {
   const LF120 = [];
   for (let i = 0; i < n; i++) {
     const r = R[i];
-    if (typeof r !== "object" || r === null || typeof r["ox"] !== "number" || typeof r["oy"] !== "number" || (LF3[i] = LA(r["rows"], 0, is_3)) === undefined || (LF120[i] = LA(r["cols"], 0, is_3)) === undefined) C(`the record ${i} does not keep the schema`);
+    if (typeof r !== "object" || r === null || typeof r["ox"] !== "number" || typeof r["oy"] !== "number" || (LF3[i] = LI(r["rows"], 0, is_3)) === undefined || (LF120[i] = LI(r["cols"], 0, is_3)) === undefined) C(`the record ${i} does not keep the schema`);
   }
   if (typeof vars !== "object" || vars === null || typeof vars["w"] !== "number" || typeof vars["h"] !== "number" || typeof vars["limit"] !== "number") C("the variables do not keep the schema");
   const v0 = vars["h"];
@@ -153,7 +158,7 @@ export function nodeShape(records, vars) {
         const y33 = A31[q32][1];
         const m36 = o34.length;
         try {
-          if (((k_number(op_3_4(y33))) === (-1))) {
+          if (((k_number(op_3_4(y33)))===(-1))) {
             o34.push([0, y33]);
           } else {
             const z35 = G(c25);
@@ -169,7 +174,7 @@ export function nodeShape(records, vars) {
         const y40 = A38[q39][1];
         const m43 = o41.length;
         try {
-          if (((k_number(op_3_4(y40))) === (0))) {
+          if (((k_number(op_3_4(y40)))===(0))) {
             o41.push([0, y40]);
           } else {
             const z42 = G(c25);
@@ -187,7 +192,7 @@ export function nodeShape(records, vars) {
         const y48 = A46[q47][1];
         const m51 = o49.length;
         try {
-          if (((k_number(op_3_4(y48))) === (1))) {
+          if (((k_number(op_3_4(y48)))===(1))) {
             o49.push([0, y48]);
           } else {
             const z50 = G(c25);
@@ -257,9 +262,9 @@ export function nodeShape(records, vars) {
           t79 = G(b76);
         }
         const t80 = t79;
-        const t81 = ((l54 && (!(op_3_7(y65, l55)))) && ((l56.length) > (0)));
+        const t81 = ((l54 && (!(op_3_7(y65, l55)))) && ((l56.length)>(0)));
         let t91;
-        if (((l54 && (!(op_3_7(y65, l55)))) && ((l56.length) > (0)))) {
+        if (((l54 && (!(op_3_7(y65, l55)))) && ((l56.length)>(0)))) {
           let l82 = false;
           let l83 = k_domain_Band(op_2_0(0, 0, 0, 0));
           const A85 = l56;
@@ -307,7 +312,7 @@ export function nodeShape(records, vars) {
     }
     let l101 = G(b100);
     for (let k114 = 0; ; k114++) {
-      if (((l101.length) <= (v2))) break;
+      if (((l101.length)<=(v2))) break;
       if (k114 === 64) F();
       let l102 = false;
       let l103 = k_domain_Band(op_2_0(0, 0, 0, 0));
@@ -379,12 +384,15 @@ export function nodeShape(records, vars) {
     o135.push([0, G(c134())]);
     return o135;
   });
-  const out = [];
+  const c137 = L(() => {
+    return LSC(G(c136()), 1);
+  });
+  const out = new Array(n);
   for (let o = 0; o < n; o++) {
     try {
-      out.push(LPC(G(c136()), 1));
+      out[o] = G(c137());
     } catch {
-      out.push(VEX_ERROR);
+      out[o] = VEX_ERROR;
     }
   }
   return out;
