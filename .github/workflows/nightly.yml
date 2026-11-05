@@ -11,6 +11,10 @@ on:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   bench:
     name: Benchmarks
