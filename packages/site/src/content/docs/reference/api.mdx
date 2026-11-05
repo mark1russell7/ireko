@@ -43,12 +43,19 @@ const radial: Builder<RadialOptions>;
 const tree: Builder<TreeOptions>;
 const layers: Builder<LayersOptions>;
 function builder<O>(type: string): Builder<O>; // a builder for a strategy that you register
-function node(id: string, options?: { label?; size?; fit?; data? }): NodeSpec;
+function node(id: string, options?: Omit<ContainerOptions, "gap" | "padding" | "header">): NodeSpec;
+
+type Child = NodeSpec | string; // a node, or the identifier of a leaf
+type BuildOptions<O> = Partial<O> & ContainerOptions;
+interface ContainerOptions { label?; size?; fit?; data?; gap?; padding?; header? } // each container has these options, for each strategy
 
 interface Builder<O> {
-  (id: string, ...children: (NodeSpec | string)[]): NodeSpec;                         // a linked node
-  (id: string, options: BuildOptions<O>, ...children: (NodeSpec | string)[]): NodeSpec;
-  nested: Builder<O>;                                                                 // a container
+  (id: string, ...children: readonly Child[]): NodeSpec;                         // a linked node
+  (id: string, options: BuildOptions<O>, ...children: readonly Child[]): NodeSpec;
+  nested: {                                                                      // a container
+    (id: string, ...children: readonly Child[]): NodeSpec;
+    (id: string, options: BuildOptions<O>, ...children: readonly Child[]): NodeSpec;
+  };
 }
 ```
 
@@ -75,7 +82,27 @@ function borderPoint(box: Rect, toward: Point): Point; // where the line to a po
 function defaultsOf<O>(schema: OptionSchema<O>): O;
 ```
 
-[Write a strategy](/learn/custom-strategy/) has the contract of `Strategy`, and [edges](/learn/edges/#write-a-router) has the contract of `Router`.
+[Write a strategy](/learn/custom-strategy/) has the contract of `Strategy`, and [edges](/learn/edges/#write-a-router) has the contract of `Router`. These types are the inputs and the outputs of those contracts.
+
+```ts
+interface ArrangeInput<O> { id; mode: Mode; self: Size; children: readonly MeasuredChild[]; options: O; gap; depth; edges?: readonly ChildEdge[] } // the input of Strategy.arrange
+interface Arrangement { direction?: Direction; flow?: Direction; offsets: readonly Point[]; content?: Rect } // the output of Strategy.arrange
+interface AuditInput<O> { node: PlacedNode; children: readonly PlacedNode[]; options: O; gap } // the input of Strategy.audit, with absolute rectangles
+interface RouteInput { id; kind: "tree" | "extra"; source: Rect; target: Rect; direction?: Direction; obstacles?: readonly Rect[] } // the input of Router.route, with absolute rectangles
+interface MeasuredChild { id; box: Size; extent: Rect; mode: Mode; shape?: Shape } // a child after the measure pass
+interface ChildEdge { from; to } // an edge between the subtrees of two children, as their indexes
+interface Shape { rows: readonly Band[]; columns: readonly Band[] } // the shape of a subtree, relative to the top-left corner of its root box
+interface Band { from; to; min; max } // one band of a shape
+type Direction = "down" | "up" | "left" | "right"; // the direction from a node to its children
+
+type OptionSpec = NumberOption | BooleanOption | EnumOption; // the schema of one option
+interface NumberOption { type: "number"; default: number; min?; max?; integer?; description }
+interface BooleanOption { type: "boolean"; default: boolean; description }
+interface EnumOption<V extends string = string> { type: "enum"; values: readonly V[]; default: V; description }
+type OptionSpecFor<T> = [T] extends [number] ? NumberOption : [T] extends [boolean] ? BooleanOption : [T] extends [string] ? EnumOption<T> : never;
+```
+
+Between `from` and `to` on one axis, a subtree is between `min` and `max` on the other axis. In the rows of a shape, `from` and `to` are y values. In the columns, they are x values. A tidy strategy uses the shape to put a subtree closer to its neighbors than the extent permits.
 
 ### The model
 
@@ -94,14 +121,26 @@ interface PlacedNode extends Rect {
   id; label; parent?; container?; depth; mode; layout; scale; clip; childCount; data?;
 }
 interface PlacedEdge { id; source; target; kind: "tree" | "extra"; points: Point[]; label?; data? }
+
+type LayoutRef = string | LayoutWithOptions; // the name of a strategy, or the name with options
+interface LayoutWithOptions { type: string; [option: string]: unknown }
+type Mode = "nested" | "linked"; // the children are inside the box of the node, or around it
+type Fit = "grow" | "scale" | "clip";
+type TreeEdges = "linked" | "all" | "none"; // the tree edges that the engine adds
+type Severity = "error" | "warning"; // an error changes the output, and a warning does not
+type IssueCode = "DUPLICATE_ID" | "EMPTY_ID" | "UNKNOWN_LAYOUT" | "UNKNOWN_ROUTER" | "INVALID_OPTION" | "INVALID_SIZE" | "UNKNOWN_EDGE_END" | "SELF_LOOP" | "LIMIT_NODES" | "LIMIT_DEPTH" | "LIMIT_CHILDREN" | "STRATEGY_FAILED" | "ROUTER_FAILED" | "OVERLAP" | "ESCAPE" | (string & {});
+interface TraceEvent { phase: "normalize" | "measure" | "place" | "route" | "audit"; data: unknown } // the output of one phase of the pipeline
 ```
 
 All types are plain data. JSON holds each value with no loss.
 
+With the fit `grow`, the container grows to fit its content. With `scale`, the content becomes smaller to fit the container. With `clip`, the content keeps its size and the renderer cuts it at the edge of the container.
+
 ### Label sizes
 
 ```ts
-function fitText(options?: { fontSize?; padding?: { x; y }; minWidth?; minHeight?; widthOf? }): (node: NodeSpec) => Size;
+function fitText(options?: FitTextOptions): (node: NodeSpec) => Size;
+interface FitTextOptions { fontSize?; padding?: { x; y }; minWidth?; minHeight?; widthOf? }
 function estimateWidth(text: string, fontSize: number): number; // a sans-serif font, with no font engine
 ```
 
@@ -148,8 +187,10 @@ const MAX_SPRING_STRENGTH: number; // 0.5: a larger strength throws a RangeError
 ## ireko/text
 
 ```ts
-function parse(text: string, options?: { strategies?: string[] }): ParseResult;
-function print(input: LayoutInput, options?: { strategies?: string[]; width?: number }): string;
+function parse(text: string, options?: ParseOptions): ParseResult;
+function print(input: LayoutInput, options?: PrintOptions): string;
+interface ParseOptions { strategies?: readonly string[] }
+interface PrintOptions { strategies?: readonly string[]; width?: number }
 const KEYWORDS: ReadonlySet<string>; // nested, linked, grow, scale, clip
 
 type ParseResult = { ok: true; input: LayoutInput } | { ok: false; error: SyntaxIssue };
@@ -200,7 +241,8 @@ interface Renderer {
 
 function mount(container: HTMLElement, create: (host, theme) => Surface, options?: RendererOptions): Renderer;
 
-function createViewport(options?: { minZoom?: number; maxZoom?: number }): Viewport;
+function createViewport(options?: ViewportOptions): Viewport;
+interface ViewportOptions { minZoom?: number; maxZoom?: number }
 interface Viewport {
   get(): View;                 // { x, y, k }
   set(view: Partial<View>): void;
@@ -221,14 +263,30 @@ function interpolate(from: Frame, to: Layout, t: number): Frame;
 function easeInOut(t: number): number;
 function labelAt(points: Point[]): Point; // the middle of a route, for its label
 function widthOfCanvas(fontFamily: string): (text: string, fontSize: number) => number;
+
+interface FrameNode extends PlacedNode { opacity: number } // a box of one frame of an animation
+interface FrameEdge extends PlacedEdge { opacity: number } // an edge of one frame of an animation
+function morph(a: readonly Point[], b: readonly Point[], t: number): Point[]; // moves one polyline to another
+function resample(points: readonly Point[], count: number): Point[]; // count points, at equal distances along a polyline
+function pickIn(frame: Frame, p: Point): string | undefined; // the identifier of the top box at a point
+function isContainer(n: { mode: string; childCount: number }): boolean; // a node in the nested mode with children
+function paintOrder(nodes: readonly FrameNode[]): { containers: FrameNode[]; leaves: FrameNode[] }; // the two layers of the paint order
+function clipRoots(nodes: readonly FrameNode[]): Map<string, FrameNode>; // for each node, the nearest container with the fit clip that holds it
+function haloOf(theme: Theme): string; // the color of the halo of a label
+const LABEL_SCALE: number; // 0.85: the size of the text of an edge label, relative to the text of a node
 ```
+
+`ireko/svg` also exports `isContainer`.
 
 ## ireko/react
 
 ```tsx
 function useLayout(input: LayoutInput, options?: LayoutOptions, engine?: Engine): Layout;
-function LayoutSvg(props: { layout; theme?; padding?; title?; className?; style? }): ReactElement;
-function LayoutView(props: { layout; renderer?; theme?; viewport?; duration?; interactive?; selected?; onPick?; className?; style? }): ReactElement;
+function LayoutSvg(props: LayoutSvgProps): ReactElement;
+function LayoutView(props: LayoutViewProps): ReactElement;
+interface LayoutSvgProps { layout; theme?; padding?; title?; className?; style? }
+interface LayoutViewProps { layout; renderer?: RendererKind; theme?; viewport?; duration?; interactive?; selected?; onPick?; className?; style? }
+type RendererKind = "svg" | "dom" | "canvas"; // the live renderers of LayoutView
 ```
 
 `useLayout` makes the layout again only when `input`, `options` or `engine` change, so keep them in a memo or a state. `LayoutSvg` has no state and no effects. `LayoutView` mounts a live renderer in an effect.
@@ -236,12 +294,18 @@ function LayoutView(props: { layout; renderer?; theme?; viewport?; duration?; in
 ## ireko/xyflow
 
 ```tsx
-function layoutFlow<N extends Node, E extends Edge>(nodes: N[], edges: E[], options?: LayoutFlowOptions): { nodes: N[]; edges: E[]; layout: Layout };
-function toXYFlow(layout: Layout, options?: { nodeType?; edgeType? }): { nodes: IrekoNode[]; edges: IrekoEdge[] };
+function layoutFlow<N extends Node, E extends Edge>(nodes: readonly N[], edges: readonly E[], options?: LayoutFlowOptions): { nodes: N[]; edges: E[]; layout: Layout };
+function toXYFlow(layout: Layout, options?: ToXYFlowOptions): { nodes: IrekoNode[]; edges: IrekoEdge[] };
 function PolylineEdge(props: EdgeProps): ReactElement;
 function GroupNode(props: NodeProps): ReactElement;
 const edgeTypes: { ireko: typeof PolylineEdge };
 const nodeTypes: { group: typeof GroupNode };
+function pathOf(points: readonly Point[]): string; // the SVG path of a polyline
+
+interface ToXYFlowOptions { nodeType?: (node: PlacedNode) => string | undefined; edgeType?: string }
+interface FlowNodeSpec { layout?: LayoutRef; mode?: Mode; fit?: Fit } // the layout settings of one node of a flow
+interface IrekoNodeData extends Record<string, unknown> { label: string; ireko: PlacedNode } // the data of a node that toXYFlow makes
+interface IrekoEdgeData extends Record<string, unknown> { points: readonly Point[] } // the data of an edge that toXYFlow or layoutFlow makes
 ```
 
 Refer to [the React Flow guide](/guides/react-flow/).

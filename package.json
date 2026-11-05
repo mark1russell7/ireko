@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
+    "@mark1russell7/api-report": "^0.3.2",
     "@mark1russell7/cue": "github:mark1russell7/cue",
     "@mark1russell7/ste-lint": "github:mark1russell7/ste-lint",
     "@mark1russell7/template-cli": "^0.1.2",
@@ -35,5 +36,18 @@
     "tsdown": "^0.23.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
+  },
+  "apiReport": {
+    "packages": [
+      "packages/ireko"
+    ],
+    "pages": [
+      {
+        "package": "packages/ireko",
+        "pages": [
+          "packages/site/src/content/docs/reference/api.mdx"
+        ]
+      }
+    ]
   }
 }
