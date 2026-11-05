@@ -111,7 +111,8 @@ export default defineConfig({
         { label: "Guides", items: ["guides/react-flow", "guides/server-svg"] },
         { label: "Compare", items: ["compare"] },
         { label: "Reference", items: ["reference/api", "reference/options", "reference/issues"] },
-        { label: "About", items: ["about"] },
+        // These two pages are not of this build: the Pages workflow adds them, so each link is a full URL.
+        { label: "About", items: ["about", { label: "Releases", link: `${site}${base}/releases/` }, { label: "Status", link: `${site}${base}/status/` }] },
       ],
     }),
     react(),

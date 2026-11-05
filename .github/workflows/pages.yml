@@ -1,7 +1,8 @@
 # The deployment of the site to GitHub Pages, at https://mark1russell7.github.io/<repository>/.
 #   build   the site, with the base path from the name of the repository, and the share cards
 #   deploy  the upload to Pages
-# The deployment starts after a green CI run of a push to the main branch. It can also start by hand.
+# The deployment starts after a green CI run of a push to the main branch, after a release, and on each day.
+# It can also start by hand. A pull request builds and checks the site in a browser, with no deployment.
 # After a CI run, the build checks out the default ref of the event: the last commit of the default branch.
 # The build runs only when that commit is the commit that CI examined. When a newer commit is on the branch,
 # the CI run of that commit deploys it. Thus the build never checks out a commit from the event payload.
@@ -9,33 +10,45 @@
 name: Pages
 
 on:
+  # After a release too, so that the Releases page has the new version
   workflow_run:
-    workflows: [CI]
+    workflows: [CI, Release]
     types: [completed]
     branches: [main]
+  # Each day, in case a release fails after it publishes, and for the open work of the Status page
+  schedule:
+    - cron: "17 5 * * *"
   workflow_dispatch:
+  pull_request:
 
 permissions: {}
 
 # One deployment at a time. A deployment that started always completes.
+# Each pull request has its own group, and a newer push cancels its run.
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: pages-${{ github.event_name == 'pull_request' && github.ref || 'deploy' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   # The build installs and runs the code of the repository, so it gets only "contents: read".
   build:
     # A CI run for a pull request does not deploy. Only a green CI run of a push deploys, and only for the
-    # commit that is now the last commit of the default branch (github.sha).
+    # commit that is now the last commit of the default branch (github.sha). A release counts the same, also a
+    # release that a person starts.
     if: >-
-      github.event_name == 'workflow_dispatch' || (
+      github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'pull_request' || (
       github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push' &&
+      (github.event.workflow_run.event == 'push' || (github.event.workflow_run.name == 'Release' && github.event.workflow_run.event == 'workflow_dispatch')) &&
       github.event.workflow_run.head_sha == github.sha)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
       contents: read
+      # site-pages reads the pull requests, the issues and the checks for the Status page
+      issues: read
+      pull-requests: read
+      checks: read
+      statuses: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -66,6 +79,18 @@ jobs:
       # Chromium draws the share cards.
       - run: pnpm --filter @ireko/site exec playwright install --with-deps chromium
       - run: pnpm --filter @ireko/site og
+      # The Releases page and the Status page. The list comes from the changelog, the tags and npm at each build.
+      - uses: mark1russell7/template/.github/actions/site-pages@81444cf43ac2867103131542992dbb4a2453100a # main
+        with:
+          out: packages/site/dist
+          packages: ireko
+          changesets: packages/ireko/CHANGELOG.md
+          site-name: ireko
+      # A failed check stops the deployment. The artifact site-check has the screenshots.
+      - uses: mark1russell7/template/.github/actions/site-check@81444cf43ac2867103131542992dbb4a2453100a # main
+        with:
+          out: packages/site/dist
+          site-check-pages: /,/playground/,/releases/,/status/
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: packages/site/dist
@@ -73,6 +98,7 @@ jobs:
   # The deployment runs no code of the repository. Only this job can write to Pages.
   deploy:
     needs: build
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
