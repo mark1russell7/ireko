@@ -72,7 +72,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       # tsdown writes an ES module and its declarations for each entry point to packages/ireko/dist
       - run: pnpm build
-      # The budgets of .size-limit.json, minified and gzipped. The core must stay under 12 kB.
+      # The budgets of .size-limit.json, minified and gzipped
       - run: pnpm size
       # pnpm pack, publint, attw, an install in an empty project, plain Node.js and two TypeScript consumers
       - run: pnpm --filter ireko smoke

@@ -63,6 +63,10 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # The sizes on the pages come from this build, so no size is typed in a page
+      - run: pnpm --filter ireko build
+      - name: Measure the sizes
+        run: node packages/site/scripts/measure-size.ts
       - name: Build the site
         run: pnpm --filter @ireko/site build
         env:
@@ -90,7 +94,11 @@ jobs:
       - uses: mark1russell7/template/.github/actions/site-check@81444cf43ac2867103131542992dbb4a2453100a # main
         with:
           out: packages/site/dist
-          site-check-pages: /,/playground/,/releases/,/status/
+          site-check-pages: /,/playground/,/releases/,/status/,/compare/,/design/two-passes/
+      # Old data on a page, or an old engine, stops the deployment
+      - uses: mark1russell7/template/.github/actions/data-stamps@81444cf43ac2867103131542992dbb4a2453100a # main
+        with:
+          stamps: packages/site/dist/data-stamps.json
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: packages/site/dist

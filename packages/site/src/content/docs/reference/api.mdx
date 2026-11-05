@@ -4,6 +4,8 @@ seoTitle: "The API of ireko: each export of each entry point"
 description: The functions, components and types of each entry point of ireko - the core, the text language, the renderers, React and React Flow - with their signatures.
 ---
 
+import Size from "../../../components/Size.astro";
+
 Each section is one entry point of the package. The [options reference](/reference/options/) has the fields of each options object.
 
 ## ireko
@@ -117,7 +119,7 @@ The layout of `ireko`, with the shapes of linked nodes from a module of the Vex 
 function layout(input: LayoutInput, options?: LayoutOptions): Layout;
 ```
 
-The bundle of this entry is 18.99 kB with gzip. The bundle of `ireko` is 17.09 kB.
+The bundle of this entry is <Size of="ireko/shapes: layout" /> with gzip. The bundle of `ireko` is <Size of="ireko: layout" />. These sizes come from the build of this page.
 
 This table gives the time of a layout with this entry, divided by the time with `ireko`. A value above 1 is slower. The A/A column is a second copy of `ireko`, and it shows the noise of the measure.
 
@@ -129,7 +131,7 @@ This table gives the time of a layout with this entry, divided by the time with 
 | Examples | 0.995 | 1.026 |
 | Random trees | 0.999 | 0.990 |
 
-The entry is slower on full trees and on the examples, and 1 % faster on random trees. The values are medians of 9 processes with 31 rounds each, on Node 24 in CI. Both layouts run in one process, so one call in the measure pass receives two functions. A program that imports one entry does not have this condition, and this measure does not give its time.
+This table is a fixed study of ireko 0.1.4, from the commit `1d575a6` of 2026-11-04. The entry is slower on full trees and on the examples, and 1 % faster on random trees. The values are medians of 9 processes with 31 rounds each, on Node 24 in CI. Both layouts run in one process, so one call in the measure pass receives two functions. A program that imports one entry does not have this condition, and this measure does not give its time.
 
 ## ireko/strategies/force
 

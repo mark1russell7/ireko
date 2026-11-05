@@ -5,6 +5,7 @@
 import type { CollectionEntry } from "astro:content";
 import { examples } from "ireko/examples";
 import { NAME, NPM, REPOSITORY, SITE, TAGLINE } from "./site.ts";
+import { sizeText } from "./size.ts";
 
 type Page = CollectionEntry<"docs">;
 
@@ -96,6 +97,7 @@ export function llmsTxt(pages: readonly Page[]): string {
 const plainOf = (body: string): string =>
   body
     .replace(/^import\s.*$/gm, "")
+    .replace(/<Size of="([^"]+)" \/>/g, (_, name: string) => sizeText(name))
     .replace(/^\s*<[A-Z][\w.]*\b[^>]*\/>\s*$/gm, "")
     .replace(/\n{3,}/g, "\n\n")
     .trim();

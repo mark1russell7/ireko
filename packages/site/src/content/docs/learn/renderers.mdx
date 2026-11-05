@@ -5,6 +5,7 @@ description: One layout, many renderers. Export SVG on a server, or draw a live 
 ---
 
 import RendererParity from "../../../components/RendererParity.tsx";
+import Size from "../../../components/Size.astro";
 
 A layout is plain data, so any code can draw it. ireko has renderers for the usual targets. They use the same theme, the same paint order and the same frames, so they give the same picture.
 
@@ -22,7 +23,7 @@ A layout is plain data, so any code can draw it. ireko has renderers for the usu
 | `ireko/react` | `<LayoutView layout renderer />` | One of the three live views in React. |
 | `ireko/xyflow` | `toXYFlow(layout)`, `layoutFlow(nodes, edges)` | React Flow: nodes, groups and routed edges. See the [React Flow guide](/guides/react-flow/). |
 
-Each entry point imports only what it needs. `ireko/svg` with `toSVG` adds approximately 1.5 KB after gzip.
+Each entry point imports only what it needs. `ireko/svg` with `toSVG` adds <Size of="ireko/svg: toSVG" /> after gzip.
 
 ## A live view
 
