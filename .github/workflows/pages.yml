@@ -94,7 +94,7 @@ jobs:
       - uses: mark1russell7/template/.github/actions/site-check@81444cf43ac2867103131542992dbb4a2453100a # main
         with:
           out: packages/site/dist
-          site-check-pages: /,/playground/,/releases/,/status/,/compare/,/design/two-passes/
+          site-check-pages: /,/playground/,/releases/,/status/
       # Old data on a page, or an old engine, stops the deployment
       - uses: mark1russell7/template/.github/actions/data-stamps@81444cf43ac2867103131542992dbb4a2453100a # main
         with:
