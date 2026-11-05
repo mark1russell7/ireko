@@ -1,12 +1,12 @@
 {
   "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
-  "testRunner": "command",
+  "testRunner": "vitest",
   "mutate": [
     "src/core/**/*.ts",
     "!src/core/**/*.test.ts",
     "!src/core/**/*.bench.ts"
   ],
-  "coverageAnalysis": "off",
+  "coverageAnalysis": "perTest",
   "reporters": [
     "clear-text",
     "progress",
@@ -29,7 +29,7 @@
   "tempDirName": ".stryker-tmp",
   "cleanTempDir": "always",
   "tsconfigFile": "",
-  "commandRunner": {
-    "command": "npx vitest run --bail 1"
+  "vitest": {
+    "configFile": "vitest.config.ts"
   }
 }

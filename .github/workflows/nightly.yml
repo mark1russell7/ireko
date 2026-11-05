@@ -69,7 +69,7 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      # Stryker starts the tests once for each mutant. IREKO_FAST=1 makes the property tests 10 times shorter.
+      # Stryker runs for each mutant only the tests that cover it (coverageAnalysis perTest). IREKO_FAST=1 makes the property tests 10 times shorter.
       - name: The mutation tests of the core
         env:
           IREKO_FAST: "1"
