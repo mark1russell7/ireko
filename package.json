@@ -17,6 +17,7 @@
     "lint": "oxlint",
     "lint:ste": "ste-lint",
     "check": "pnpm typecheck && pnpm lint && pnpm test:coverage && pnpm test && pnpm lint:ste",
+    "check:api": "api-report check",
     "dump:src": "cd packages/ireko/src && node ../../../external/concat-src/concat-src.js ../../../src-catalog.md",
     "test:coverage": "pnpm --filter ireko test:coverage",
     "size": "pnpm --filter ireko size",

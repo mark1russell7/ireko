@@ -73,7 +73,7 @@ jobs:
       # tsdown writes an ES module and its declarations for each entry point to packages/ireko/dist
       - run: pnpm build
       # The report of the API is current, and the API page shows each export of the package
-      - run: pnpm exec api-report check
+      - run: pnpm check:api
       # The budgets of .size-limit.json, minified and gzipped
       - run: pnpm size
       # pnpm pack, publint, attw, an install in an empty project, plain Node.js and two TypeScript consumers
