@@ -1,0 +1,8 @@
+---
+/** A size from the build of this site, by its name in `.size-limit.json`. */
+import { sizeText } from "../lib/size.ts";
+
+const { of: name } = Astro.props as { of: string };
+---
+
+{sizeText(name)}

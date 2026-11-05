@@ -1,0 +1,3 @@
+# The Pages workflow writes these two files before the build.
+/src/data/size.json
+/public/data-stamps.json

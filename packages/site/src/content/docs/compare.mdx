@@ -4,6 +4,8 @@ seoTitle: "ireko compared with dagre, ELK, d3-hierarchy, Cytoscape and Graphviz"
 description: When to use ireko, and when to use dagre, elkjs, d3-hierarchy, d3-flextree, Cytoscape.js, Graphviz or Mermaid. An honest comparison of nested graph layout libraries.
 ---
 
+import Size from "../../components/Size.astro";
+
 ireko does one thing: it lays out a **tree of containers**, with a different layout for each container. Other libraries do other things better. This page helps you select one.
 
 ## The short answer
@@ -31,10 +33,10 @@ ireko does one thing: it lays out a **tree of containers**, with a different lay
 | Text language | yes | no | no (JSON) | no | no | DOT |
 | Renderers | SVG, DOM, Canvas, React, React Flow | no | no | no | its own | SVG |
 | API | synchronous | synchronous | asynchronous (worker) | synchronous | synchronous | asynchronous (WASM) |
-| Size, min + gzip | 13 KB | 17 KB | 467 KB | 6 KB | not measured | not measured (WASM) |
+| Size, min + gzip | <Size of="ireko: layout" /> | 17 KB | 467 KB | 6 KB | not measured | not measured (WASM) |
 | License | MIT | MIT | EPL-2.0 | ISC | MIT | EPL-1.0 (Graphviz) |
 
-The sizes are measurements of the minified bundle after gzip, in October 2026: ireko 0.1, `@dagrejs/dagre` 3.1.1, `elkjs` 0.12.0 (`elk.bundled.js`) and `d3-hierarchy` 3.1.2.
+All sizes are of the minified bundle after gzip. The size of ireko comes from the build of this page. The other sizes are a fixed study from October 2026 of `@dagrejs/dagre` 3.1.1, `elkjs` 0.12.0 (`elk.bundled.js`) and `d3-hierarchy` 3.1.2.
 
 ## How each library treats nested groups
 
