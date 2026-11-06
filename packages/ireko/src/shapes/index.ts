@@ -1,5 +1,6 @@
 /**
- * ireko/shapes: the layout of `ireko`, with the shapes of linked nodes from a module of the Vex compiler.
+ * ireko/shapes: the layout of `ireko`, with the shapes of linked nodes and the strategy `tree` from modules of the Vex
+ * compiler.
  *
  * ```ts
  * import { layout } from "ireko/shapes";
@@ -7,15 +8,17 @@
  * const result = layout({ root: { id: "root", layout: "tree", children: [{ id: "a" }, { id: "b" }] } });
  * ```
  *
- * This entry gives the same layout as `ireko`, to the bit. Only the code of the shapes is different.
+ * This entry gives the same layout as `ireko`, to the bit. Only the code of the shapes and of the strategy `tree` is
+ * different.
  *
  * @packageDocumentation
  */
 import { createEngine } from "../core/engine.ts";
 import { vexLinkedShape } from "../core/engine/shape-vex.ts";
+import { vexTree } from "../core/strategies/tree-vex.ts";
 import type { Layout, LayoutInput, LayoutOptions } from "../core/model.ts";
 
-const engine = createEngine({ linkedShape: vexLinkedShape });
+const engine = createEngine({ linkedShape: vexLinkedShape, strategies: [vexTree] });
 
 /** This function gives the layout of `input`, as `layout` of `ireko` does. */
 export function layout(input: LayoutInput, options?: LayoutOptions): Layout {
