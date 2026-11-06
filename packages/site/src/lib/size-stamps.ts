@@ -16,11 +16,18 @@ export interface StampRun {
   readonly engines: Readonly<Record<string, string>>;
 }
 
+/** Why a fixed study has no age limit (site-pages 0.3.0): no run of the current code gives its numbers, and its page claims nothing about today. */
+export interface NoLimit {
+  readonly reproduce: string;
+  readonly today: string;
+}
+
 /** One entry of the file `data-stamps.json`. */
 export interface PageStamp {
   readonly page: string;
   readonly runs: readonly StampRun[];
   readonly study?: true;
+  readonly noLimit?: NoLimit;
 }
 
 const COMMITS = "https://github.com/mark1russell7/ireko/commit";
@@ -40,16 +47,30 @@ export const STUDIES: readonly PageStamp[] = [
     page: "compare/index.html",
     study: true,
     runs: [{ id: "a823ef0", url: `${COMMITS}/a823ef0c3b22959ed1cc8430aeda0b0f0a0559d8`, date: "2026-10-13", engines: { "@dagrejs/dagre": "3.1.1", elkjs: "0.12.0", "d3-hierarchy": "3.1.2" } }],
+    noLimit: {
+      reproduce:
+        "The sizes are of the exact versions @dagrejs/dagre 3.1.1, elkjs 0.12.0 and d3-hierarchy 3.1.2. The build of the current code measures only ireko, not these engines.",
+      today: "The page says that these sizes are a fixed study from October 2026 of those versions. It claims nothing about newer releases of the three engines.",
+    },
   },
   {
     page: "design/two-passes/index.html",
     study: true,
     runs: [{ id: "c1f2eba", url: `${COMMITS}/c1f2ebaa7f202529fdaca4e9b9072bab46fb9a6c`, date: "2026-10-13", engines: { ireko: "0.1.0" } }],
+    noLimit: {
+      reproduce: "The times are of ireko 0.1.0 at commit c1f2eba. A run of the current code measures a newer release, not 0.1.0.",
+      today: "The page says that the table is a fixed study of ireko 0.1.0 on one machine, and that only the ratio is to be compared.",
+    },
   },
   {
     page: "reference/api/index.html",
     study: true,
     runs: [{ id: "1d575a6", url: `${COMMITS}/1d575a642cee164bfe65687680afe19b40ed4d13`, date: "2026-11-04", engines: { ireko: "0.1.4" } }],
+    noLimit: {
+      reproduce:
+        "The ratios are of ireko 0.1.4 at commit 1d575a6, from run 41804066495 of the branch entry-time. The paired measure with an A/A arm is not on main, so no run of the current code gives this table.",
+      today: "The page says that the table is a fixed study of ireko 0.1.4, and that it tells nothing about a newer release.",
+    },
   },
 ];
 
