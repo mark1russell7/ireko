@@ -3,6 +3,11 @@
 name: Tree profile
 
 on:
+  push:
+    branches: [tree-swap]
+    paths:
+      - ".github/workflows/tree-profile.yml"
+      - "packages/ireko/scripts/**"
   workflow_dispatch:
 
 permissions: {}
