@@ -4,95 +4,95 @@
 # and private members. The command `api-report check` compares this file with the built .d.ts files.
 # To accept a change of the API, start the build, then `api-report update`, and review the diff.
 
-## . (dist/index.d.ts): 85 names
+## . (dist/index.d.ts): names
 
-AnyStrategy: dist/strategy-Dn03j_9m.d.ts#AnyStrategy
-ArrangeInput: dist/strategy-Dn03j_9m.d.ts#ArrangeInput
-Arrangement: dist/strategy-Dn03j_9m.d.ts#Arrangement
-AuditInput: dist/strategy-Dn03j_9m.d.ts#AuditInput
+AnyStrategy: dist/strategy.chunk.d.ts#AnyStrategy
+ArrangeInput: dist/strategy.chunk.d.ts#ArrangeInput
+Arrangement: dist/strategy.chunk.d.ts#Arrangement
+AuditInput: dist/strategy.chunk.d.ts#AuditInput
 BUILTIN_STRATEGY_NAMES: dist/index.d.ts#BUILTIN_STRATEGY_NAMES
-Band: dist/strategy-Dn03j_9m.d.ts#Band
-type BooleanOption: dist/strategy-Dn03j_9m.d.ts#BooleanOption
-type BuildOptions: dist/build-BFZIkltN.d.ts#BuildOptions
-type Builder: dist/build-BFZIkltN.d.ts#Builder
-type Child: dist/build-BFZIkltN.d.ts#Child
-ChildEdge: dist/strategy-Dn03j_9m.d.ts#ChildEdge
-type ContainerOptions: dist/build-BFZIkltN.d.ts#ContainerOptions
-Direction: dist/strategy-Dn03j_9m.d.ts#Direction
-EdgeSpec: dist/model-CBnSIfmV.d.ts#EdgeSpec
-type Engine: dist/engine-S2oH2P9v.d.ts#Engine
-type EngineConfig: dist/engine-S2oH2P9v.d.ts#EngineConfig
-type EnumOption: dist/strategy-Dn03j_9m.d.ts#EnumOption
-Fit: dist/model-CBnSIfmV.d.ts#Fit
+Band: dist/strategy.chunk.d.ts#Band
+type BooleanOption: dist/strategy.chunk.d.ts#BooleanOption
+type BuildOptions: dist/build.chunk.d.ts#BuildOptions
+type Builder: dist/build.chunk.d.ts#Builder
+type Child: dist/build.chunk.d.ts#Child
+ChildEdge: dist/strategy.chunk.d.ts#ChildEdge
+type ContainerOptions: dist/build.chunk.d.ts#ContainerOptions
+Direction: dist/strategy.chunk.d.ts#Direction
+EdgeSpec: dist/model.chunk.d.ts#EdgeSpec
+type Engine: dist/engine.chunk.d.ts#Engine
+type EngineConfig: dist/engine.chunk.d.ts#EngineConfig
+type EnumOption: dist/strategy.chunk.d.ts#EnumOption
+Fit: dist/model.chunk.d.ts#Fit
 type FitTextOptions: dist/index.d.ts#FitTextOptions
-type GridOptions: dist/build-BFZIkltN.d.ts#GridOptions
-IrekoError: dist/model-CBnSIfmV.d.ts#IrekoError
-Issue: dist/model-CBnSIfmV.d.ts#Issue
-IssueCode: dist/model-CBnSIfmV.d.ts#IssueCode
-type LayersOptions: dist/build-BFZIkltN.d.ts#LayersOptions
-Layout: dist/model-CBnSIfmV.d.ts#Layout
-LayoutInput: dist/model-CBnSIfmV.d.ts#LayoutInput
-LayoutOptions: dist/model-CBnSIfmV.d.ts#LayoutOptions
-LayoutRef: dist/model-CBnSIfmV.d.ts#LayoutRef
-LayoutWithOptions: dist/model-CBnSIfmV.d.ts#LayoutWithOptions
-type Limits: dist/engine-S2oH2P9v.d.ts#Limits
-type LinkedShape: dist/engine-S2oH2P9v.d.ts#LinkedShape
-MeasuredChild: dist/strategy-Dn03j_9m.d.ts#MeasuredChild
-Mode: dist/model-CBnSIfmV.d.ts#Mode
-NodeSpec: dist/model-CBnSIfmV.d.ts#NodeSpec
-type NumberOption: dist/strategy-Dn03j_9m.d.ts#NumberOption
-type OptionSchema: dist/strategy-Dn03j_9m.d.ts#OptionSchema
-type OptionSpec: dist/strategy-Dn03j_9m.d.ts#OptionSpec
-type OptionSpecFor: dist/strategy-Dn03j_9m.d.ts#OptionSpecFor
-PlacedEdge: dist/model-CBnSIfmV.d.ts#PlacedEdge
-PlacedNode: dist/model-CBnSIfmV.d.ts#PlacedNode
-type Point: dist/model-CBnSIfmV.d.ts#Point
-type RadialOptions: dist/build-BFZIkltN.d.ts#RadialOptions
-type Rect: dist/model-CBnSIfmV.d.ts#Rect
-type RouteInput: dist/engine-S2oH2P9v.d.ts#RouteInput
-type Router: dist/engine-S2oH2P9v.d.ts#Router
-Severity: dist/model-CBnSIfmV.d.ts#Severity
-Shape: dist/strategy-Dn03j_9m.d.ts#Shape
-type ShapePart: dist/engine-S2oH2P9v.d.ts#ShapePart
-type Size: dist/model-CBnSIfmV.d.ts#Size
-Strategy: dist/strategy-Dn03j_9m.d.ts#Strategy
-TraceEvent: dist/model-CBnSIfmV.d.ts#TraceEvent
-TreeEdges: dist/model-CBnSIfmV.d.ts#TreeEdges
-type TreeOptions: dist/build-BFZIkltN.d.ts#TreeOptions
+type GridOptions: dist/build.chunk.d.ts#GridOptions
+IrekoError: dist/model.chunk.d.ts#IrekoError
+Issue: dist/model.chunk.d.ts#Issue
+IssueCode: dist/model.chunk.d.ts#IssueCode
+type LayersOptions: dist/build.chunk.d.ts#LayersOptions
+Layout: dist/model.chunk.d.ts#Layout
+LayoutInput: dist/model.chunk.d.ts#LayoutInput
+LayoutOptions: dist/model.chunk.d.ts#LayoutOptions
+LayoutRef: dist/model.chunk.d.ts#LayoutRef
+LayoutWithOptions: dist/model.chunk.d.ts#LayoutWithOptions
+type Limits: dist/engine.chunk.d.ts#Limits
+type LinkedShape: dist/engine.chunk.d.ts#LinkedShape
+MeasuredChild: dist/strategy.chunk.d.ts#MeasuredChild
+Mode: dist/model.chunk.d.ts#Mode
+NodeSpec: dist/model.chunk.d.ts#NodeSpec
+type NumberOption: dist/strategy.chunk.d.ts#NumberOption
+type OptionSchema: dist/strategy.chunk.d.ts#OptionSchema
+type OptionSpec: dist/strategy.chunk.d.ts#OptionSpec
+type OptionSpecFor: dist/strategy.chunk.d.ts#OptionSpecFor
+PlacedEdge: dist/model.chunk.d.ts#PlacedEdge
+PlacedNode: dist/model.chunk.d.ts#PlacedNode
+type Point: dist/model.chunk.d.ts#Point
+type RadialOptions: dist/build.chunk.d.ts#RadialOptions
+type Rect: dist/model.chunk.d.ts#Rect
+type RouteInput: dist/engine.chunk.d.ts#RouteInput
+type Router: dist/engine.chunk.d.ts#Router
+Severity: dist/model.chunk.d.ts#Severity
+Shape: dist/strategy.chunk.d.ts#Shape
+type ShapePart: dist/engine.chunk.d.ts#ShapePart
+type Size: dist/model.chunk.d.ts#Size
+Strategy: dist/strategy.chunk.d.ts#Strategy
+TraceEvent: dist/model.chunk.d.ts#TraceEvent
+TreeEdges: dist/model.chunk.d.ts#TreeEdges
+type TreeOptions: dist/build.chunk.d.ts#TreeOptions
 avoid: dist/index.d.ts#avoid
-borderPoint: dist/engine-S2oH2P9v.d.ts#borderPoint
-builder: dist/build-BFZIkltN.d.ts#builder
-builtinRouters: dist/engine-S2oH2P9v.d.ts#builtinRouters
-builtinStrategies: dist/engine-S2oH2P9v.d.ts#builtinStrategies
-centerOf: dist/model-CBnSIfmV.d.ts#centerOf
-contains: dist/model-CBnSIfmV.d.ts#contains
-createEngine: dist/engine-S2oH2P9v.d.ts#createEngine
-defaultLimits: dist/engine-S2oH2P9v.d.ts#defaultLimits
-defaultsOf: dist/strategy-Dn03j_9m.d.ts#defaultsOf
-defineRouter: dist/engine-S2oH2P9v.d.ts#defineRouter
-defineStrategy: dist/strategy-Dn03j_9m.d.ts#defineStrategy
+borderPoint: dist/engine.chunk.d.ts#borderPoint
+builder: dist/build.chunk.d.ts#builder
+builtinRouters: dist/engine.chunk.d.ts#builtinRouters
+builtinStrategies: dist/engine.chunk.d.ts#builtinStrategies
+centerOf: dist/model.chunk.d.ts#centerOf
+contains: dist/model.chunk.d.ts#contains
+createEngine: dist/engine.chunk.d.ts#createEngine
+defaultLimits: dist/engine.chunk.d.ts#defaultLimits
+defaultsOf: dist/strategy.chunk.d.ts#defaultsOf
+defineRouter: dist/engine.chunk.d.ts#defineRouter
+defineStrategy: dist/strategy.chunk.d.ts#defineStrategy
 estimateWidth: dist/index.d.ts#estimateWidth
 fitText: dist/index.d.ts#fitText
-grid: dist/build-BFZIkltN.d.ts#grid
-gridStrategy: dist/build-BFZIkltN.d.ts#grid$1
-inflate: dist/model-CBnSIfmV.d.ts#inflate
-layers: dist/build-BFZIkltN.d.ts#layers
-layersStrategy: dist/build-BFZIkltN.d.ts#layers$1
-layout: dist/engine-S2oH2P9v.d.ts#layout
-node: dist/build-BFZIkltN.d.ts#node
+grid: dist/build.chunk.d.ts#grid
+gridStrategy: dist/build.chunk.d.ts#grid$1
+inflate: dist/model.chunk.d.ts#inflate
+layers: dist/build.chunk.d.ts#layers
+layersStrategy: dist/build.chunk.d.ts#layers$1
+layout: dist/engine.chunk.d.ts#layout
+node: dist/build.chunk.d.ts#node
 orthogonal: dist/index.d.ts#orthogonal
-overlaps: dist/model-CBnSIfmV.d.ts#overlaps
-radial: dist/build-BFZIkltN.d.ts#radial
-radialStrategy: dist/build-BFZIkltN.d.ts#radial$1
-rectAt: dist/model-CBnSIfmV.d.ts#rectAt
+overlaps: dist/model.chunk.d.ts#overlaps
+radial: dist/build.chunk.d.ts#radial
+radialStrategy: dist/build.chunk.d.ts#radial$1
+rectAt: dist/model.chunk.d.ts#rectAt
 straight: dist/index.d.ts#straight
-translate: dist/model-CBnSIfmV.d.ts#translate
-tree: dist/build-BFZIkltN.d.ts#tree
-treeStrategy: dist/build-BFZIkltN.d.ts#tree$1
-union: dist/model-CBnSIfmV.d.ts#union
-unionAll: dist/model-CBnSIfmV.d.ts#unionAll
+translate: dist/model.chunk.d.ts#translate
+tree: dist/build.chunk.d.ts#tree
+treeStrategy: dist/build.chunk.d.ts#tree$1
+union: dist/model.chunk.d.ts#union
+unionAll: dist/model.chunk.d.ts#unionAll
 
-## ./text (dist/text.d.ts): 7 names
+## ./text (dist/text.d.ts): names
 
 KEYWORDS: dist/text.d.ts#KEYWORDS
 type ParseOptions: dist/text.d.ts#ParseOptions
@@ -102,65 +102,65 @@ type SyntaxIssue: dist/text.d.ts#SyntaxIssue
 parse: dist/text.d.ts#parse
 print: dist/text.d.ts#print
 
-## ./svg (dist/svg.d.ts): 7 names
+## ./svg (dist/svg.d.ts): names
 
-type Renderer: dist/renderer-Bo5opdH-.d.ts#Renderer
-type RendererOptions: dist/renderer-Bo5opdH-.d.ts#RendererOptions
+type Renderer: dist/renderer.chunk.d.ts#Renderer
+type RendererOptions: dist/renderer.chunk.d.ts#RendererOptions
 SvgOptions: dist/svg.d.ts#SvgOptions
-isContainer: dist/renderer-Bo5opdH-.d.ts#isContainer
+isContainer: dist/renderer.chunk.d.ts#isContainer
 mountSvg: dist/svg.d.ts#mountSvg
 svgSurface: dist/svg.d.ts#svgSurface
 toSVG: dist/svg.d.ts#toSVG
 
-## ./dom (dist/dom.d.ts): 4 names
+## ./dom (dist/dom.d.ts): names
 
-type Renderer: dist/renderer-Bo5opdH-.d.ts#Renderer
-type RendererOptions: dist/renderer-Bo5opdH-.d.ts#RendererOptions
+type Renderer: dist/renderer.chunk.d.ts#Renderer
+type RendererOptions: dist/renderer.chunk.d.ts#RendererOptions
 domSurface: dist/dom.d.ts#domSurface
 mountDom: dist/dom.d.ts#mountDom
 
-## ./canvas (dist/canvas.d.ts): 7 names
+## ./canvas (dist/canvas.d.ts): names
 
 Context2D: dist/canvas.d.ts#Context2D
-type Renderer: dist/renderer-Bo5opdH-.d.ts#Renderer
-type RendererOptions: dist/renderer-Bo5opdH-.d.ts#RendererOptions
+type Renderer: dist/renderer.chunk.d.ts#Renderer
+type RendererOptions: dist/renderer.chunk.d.ts#RendererOptions
 Screen: dist/canvas.d.ts#Screen
 canvasSurface: dist/canvas.d.ts#canvasSurface
 drawFrame: dist/canvas.d.ts#drawFrame
 mountCanvas: dist/canvas.d.ts#mountCanvas
 
-## ./render (dist/render.d.ts): 28 names
+## ./render (dist/render.d.ts): names
 
-type Frame: dist/renderer-Bo5opdH-.d.ts#Frame
-type FrameEdge: dist/renderer-Bo5opdH-.d.ts#FrameEdge
-type FrameNode: dist/renderer-Bo5opdH-.d.ts#FrameNode
+type Frame: dist/renderer.chunk.d.ts#Frame
+type FrameEdge: dist/renderer.chunk.d.ts#FrameEdge
+type FrameNode: dist/renderer.chunk.d.ts#FrameNode
 LABEL_SCALE: dist/render.d.ts#LABEL_SCALE
-type Renderer: dist/renderer-Bo5opdH-.d.ts#Renderer
-type RendererOptions: dist/renderer-Bo5opdH-.d.ts#RendererOptions
-type Surface: dist/renderer-Bo5opdH-.d.ts#Surface
-type Theme: dist/viewport-CDcjPmhL.d.ts#Theme
-type View: dist/viewport-CDcjPmhL.d.ts#View
-type Viewport: dist/viewport-CDcjPmhL.d.ts#Viewport
-type ViewportOptions: dist/viewport-CDcjPmhL.d.ts#ViewportOptions
-clipRoots: dist/renderer-Bo5opdH-.d.ts#clipRoots
-createViewport: dist/viewport-CDcjPmhL.d.ts#createViewport
-darkTheme: dist/viewport-CDcjPmhL.d.ts#darkTheme
-easeInOut: dist/renderer-Bo5opdH-.d.ts#easeInOut
-frameOf: dist/renderer-Bo5opdH-.d.ts#frameOf
+type Renderer: dist/renderer.chunk.d.ts#Renderer
+type RendererOptions: dist/renderer.chunk.d.ts#RendererOptions
+type Surface: dist/renderer.chunk.d.ts#Surface
+type Theme: dist/viewport.chunk.d.ts#Theme
+type View: dist/viewport.chunk.d.ts#View
+type Viewport: dist/viewport.chunk.d.ts#Viewport
+type ViewportOptions: dist/viewport.chunk.d.ts#ViewportOptions
+clipRoots: dist/renderer.chunk.d.ts#clipRoots
+createViewport: dist/viewport.chunk.d.ts#createViewport
+darkTheme: dist/viewport.chunk.d.ts#darkTheme
+easeInOut: dist/renderer.chunk.d.ts#easeInOut
+frameOf: dist/renderer.chunk.d.ts#frameOf
 haloOf: dist/render.d.ts#haloOf
-interpolate: dist/renderer-Bo5opdH-.d.ts#interpolate
-isContainer: dist/renderer-Bo5opdH-.d.ts#isContainer
+interpolate: dist/renderer.chunk.d.ts#interpolate
+isContainer: dist/renderer.chunk.d.ts#isContainer
 labelAt: dist/render.d.ts#labelAt
-lightTheme: dist/viewport-CDcjPmhL.d.ts#lightTheme
-morph: dist/renderer-Bo5opdH-.d.ts#morph
-mount: dist/renderer-Bo5opdH-.d.ts#mount
-paintOrder: dist/renderer-Bo5opdH-.d.ts#paintOrder
-pickIn: dist/renderer-Bo5opdH-.d.ts#pickIn
-resample: dist/renderer-Bo5opdH-.d.ts#resample
-themeOf: dist/viewport-CDcjPmhL.d.ts#themeOf
+lightTheme: dist/viewport.chunk.d.ts#lightTheme
+morph: dist/renderer.chunk.d.ts#morph
+mount: dist/renderer.chunk.d.ts#mount
+paintOrder: dist/renderer.chunk.d.ts#paintOrder
+pickIn: dist/renderer.chunk.d.ts#pickIn
+resample: dist/renderer.chunk.d.ts#resample
+themeOf: dist/viewport.chunk.d.ts#themeOf
 widthOfCanvas: dist/render.d.ts#widthOfCanvas
 
-## ./react (dist/react.d.ts): 6 names
+## ./react (dist/react.d.ts): names
 
 LayoutSvg: dist/react.d.ts#LayoutSvg
 LayoutSvgProps: dist/react.d.ts#LayoutSvgProps
@@ -169,7 +169,7 @@ LayoutViewProps: dist/react.d.ts#LayoutViewProps
 RendererKind: dist/react.d.ts#RendererKind
 useLayout: dist/react.d.ts#useLayout
 
-## ./xyflow (dist/xyflow.d.ts): 14 names
+## ./xyflow (dist/xyflow.d.ts): names
 
 FlowNodeSpec: dist/xyflow.d.ts#FlowNodeSpec
 GroupNode: dist/xyflow.d.ts#GroupNode
@@ -186,12 +186,12 @@ nodeTypes: dist/xyflow.d.ts#nodeTypes
 pathOf: dist/xyflow.d.ts#pathOf
 toXYFlow: dist/xyflow.d.ts#toXYFlow
 
-## ./examples (dist/examples.d.ts): 2 names
+## ./examples (dist/examples.d.ts): names
 
 Example: dist/examples.d.ts#Example
 examples: dist/examples.d.ts#examples
 
-## ./strategies/force (dist/strategies/force.d.ts): 9 names
+## ./strategies/force (dist/strategies/force.d.ts): names
 
 type ForceOptions: dist/strategies/force.d.ts#ForceOptions
 MAX_SPRING_STRENGTH: dist/strategies/force.d.ts#MAX_SPRING_STRENGTH
@@ -203,16 +203,16 @@ force: dist/strategies/force.d.ts#force
 forceStrategy: dist/strategies/force.d.ts#force$1
 relaxForces: dist/strategies/force.d.ts#relaxForces
 
-## ./shapes (dist/shapes.d.ts): 1 names
+## ./shapes (dist/shapes.d.ts): names
 
 layout: dist/shapes.d.ts#layout
 
 ## Declarations
 
-### dist/build-BFZIkltN.d.ts#BuildOptions
+### dist/build.chunk.d.ts#BuildOptions
 type BuildOptions<O> = Partial<O> & ContainerOptions;
 
-### dist/build-BFZIkltN.d.ts#Builder
+### dist/build.chunk.d.ts#Builder
 interface Builder<O> {
   (id: string, ...children: readonly Child[]): NodeSpec;
   (id: string, options: BuildOptions<O>, ...children: readonly Child[]): NodeSpec;
@@ -222,10 +222,10 @@ interface Builder<O> {
   };
 }
 
-### dist/build-BFZIkltN.d.ts#Child
+### dist/build.chunk.d.ts#Child
 type Child = NodeSpec | string;
 
-### dist/build-BFZIkltN.d.ts#ContainerOptions
+### dist/build.chunk.d.ts#ContainerOptions
 interface ContainerOptions {
   readonly label?: string;
   readonly size?: Partial<Size>;
@@ -236,7 +236,7 @@ interface ContainerOptions {
   readonly header?: number;
 }
 
-### dist/build-BFZIkltN.d.ts#GridOptions
+### dist/build.chunk.d.ts#GridOptions
 interface GridOptions {
   readonly columns: number;
   readonly justify: "start" | "center" | "end";
@@ -246,14 +246,14 @@ interface GridOptions {
   readonly distance: number;
 }
 
-### dist/build-BFZIkltN.d.ts#LayersOptions
+### dist/build.chunk.d.ts#LayersOptions
 interface LayersOptions {
   readonly side: Side;
   readonly distance: number;
   readonly align: "center" | "start" | "end";
 }
 
-### dist/build-BFZIkltN.d.ts#RadialOptions
+### dist/build.chunk.d.ts#RadialOptions
 interface RadialOptions {
   readonly startAngle: number;
   readonly sweep: number;
@@ -261,41 +261,41 @@ interface RadialOptions {
   readonly distance: number;
 }
 
-### dist/build-BFZIkltN.d.ts#TreeOptions
+### dist/build.chunk.d.ts#TreeOptions
 interface TreeOptions {
   readonly side: "bottom" | "top" | "left" | "right";
   readonly distance: number;
   readonly align: "center" | "start" | "end";
 }
 
-### dist/build-BFZIkltN.d.ts#builder
+### dist/build.chunk.d.ts#builder
 declare function builder<O>(type: string): Builder<O>;
 
-### dist/build-BFZIkltN.d.ts#grid
+### dist/build.chunk.d.ts#grid
 declare const grid: Builder<GridOptions>;
 
-### dist/build-BFZIkltN.d.ts#grid$1
+### dist/build.chunk.d.ts#grid$1
 declare const grid$1: Strategy<GridOptions>;
 
-### dist/build-BFZIkltN.d.ts#layers
+### dist/build.chunk.d.ts#layers
 declare const layers: Builder<LayersOptions>;
 
-### dist/build-BFZIkltN.d.ts#layers$1
+### dist/build.chunk.d.ts#layers$1
 declare const layers$1: Strategy<LayersOptions>;
 
-### dist/build-BFZIkltN.d.ts#node
+### dist/build.chunk.d.ts#node
 declare function node(id: string, options?: Omit<ContainerOptions, "gap" | "padding" | "header">): NodeSpec;
 
-### dist/build-BFZIkltN.d.ts#radial
+### dist/build.chunk.d.ts#radial
 declare const radial: Builder<RadialOptions>;
 
-### dist/build-BFZIkltN.d.ts#radial$1
+### dist/build.chunk.d.ts#radial$1
 declare const radial$1: Strategy<RadialOptions>;
 
-### dist/build-BFZIkltN.d.ts#tree
+### dist/build.chunk.d.ts#tree
 declare const tree: Builder<TreeOptions>;
 
-### dist/build-BFZIkltN.d.ts#tree$1
+### dist/build.chunk.d.ts#tree$1
 declare const tree$1: Strategy<TreeOptions>;
 
 ### dist/canvas.d.ts#Context2D
@@ -324,7 +324,7 @@ export declare function domSurface(host: HTMLElement, theme: Theme): Surface;
 ### dist/dom.d.ts#mountDom
 export declare function mountDom(container: HTMLElement, options?: RendererOptions): Renderer;
 
-### dist/engine-S2oH2P9v.d.ts#Engine
+### dist/engine.chunk.d.ts#Engine
 interface Engine {
   layout(input: LayoutInput, options?: LayoutOptions): Layout;
   extend(config: EngineConfig): Engine;
@@ -333,7 +333,7 @@ interface Engine {
   readonly limits: Limits;
 }
 
-### dist/engine-S2oH2P9v.d.ts#EngineConfig
+### dist/engine.chunk.d.ts#EngineConfig
 interface EngineConfig {
   readonly strategies?: readonly AnyStrategy[];
   readonly routers?: readonly Router[];
@@ -342,17 +342,17 @@ interface EngineConfig {
   readonly linkedShape?: LinkedShape;
 }
 
-### dist/engine-S2oH2P9v.d.ts#Limits
+### dist/engine.chunk.d.ts#Limits
 interface Limits {
   readonly maxNodes: number;
   readonly maxDepth: number;
   readonly maxChildren: number;
 }
 
-### dist/engine-S2oH2P9v.d.ts#LinkedShape
+### dist/engine.chunk.d.ts#LinkedShape
 type LinkedShape = (own: Size, parts: readonly ShapePart[]) => Shape;
 
-### dist/engine-S2oH2P9v.d.ts#RouteInput
+### dist/engine.chunk.d.ts#RouteInput
 interface RouteInput {
   readonly id: string;
   readonly kind: "tree" | "extra";
@@ -362,7 +362,7 @@ interface RouteInput {
   readonly obstacles?: readonly Rect[];
 }
 
-### dist/engine-S2oH2P9v.d.ts#Router
+### dist/engine.chunk.d.ts#Router
 interface Router {
   readonly type: string;
   readonly description: string;
@@ -370,32 +370,32 @@ interface Router {
   route(input: RouteInput): readonly Point[];
 }
 
-### dist/engine-S2oH2P9v.d.ts#ShapePart
+### dist/engine.chunk.d.ts#ShapePart
 interface ShapePart {
   readonly shape: Shape;
   readonly x: number;
   readonly y: number;
 }
 
-### dist/engine-S2oH2P9v.d.ts#borderPoint
+### dist/engine.chunk.d.ts#borderPoint
 declare function borderPoint(box: Rect, toward: Point): Point;
 
-### dist/engine-S2oH2P9v.d.ts#builtinRouters
+### dist/engine.chunk.d.ts#builtinRouters
 declare const builtinRouters: readonly Router[];
 
-### dist/engine-S2oH2P9v.d.ts#builtinStrategies
+### dist/engine.chunk.d.ts#builtinStrategies
 declare const builtinStrategies: readonly AnyStrategy[];
 
-### dist/engine-S2oH2P9v.d.ts#createEngine
+### dist/engine.chunk.d.ts#createEngine
 declare function createEngine(config?: EngineConfig): Engine;
 
-### dist/engine-S2oH2P9v.d.ts#defaultLimits
+### dist/engine.chunk.d.ts#defaultLimits
 declare const defaultLimits: Limits;
 
-### dist/engine-S2oH2P9v.d.ts#defineRouter
+### dist/engine.chunk.d.ts#defineRouter
 declare function defineRouter(router: Router): Router;
 
-### dist/engine-S2oH2P9v.d.ts#layout
+### dist/engine.chunk.d.ts#layout
 declare function layout(input: LayoutInput, options?: LayoutOptions): Layout;
 
 ### dist/examples.d.ts#Example
@@ -440,7 +440,7 @@ export declare const orthogonal: Router;
 ### dist/index.d.ts#straight
 export declare const straight: Router;
 
-### dist/model-CBnSIfmV.d.ts#EdgeSpec
+### dist/model.chunk.d.ts#EdgeSpec
 interface EdgeSpec {
   readonly id?: string;
   readonly source: string;
@@ -449,16 +449,16 @@ interface EdgeSpec {
   readonly data?: unknown;
 }
 
-### dist/model-CBnSIfmV.d.ts#Fit
+### dist/model.chunk.d.ts#Fit
 type Fit = "grow" | "scale" | "clip";
 
-### dist/model-CBnSIfmV.d.ts#IrekoError
+### dist/model.chunk.d.ts#IrekoError
 declare class IrekoError extends Error {
   readonly issues: readonly Issue[];
   constructor(issues: readonly Issue[]);
 }
 
-### dist/model-CBnSIfmV.d.ts#Issue
+### dist/model.chunk.d.ts#Issue
 interface Issue {
   readonly code: IssueCode;
   readonly severity: Severity;
@@ -468,10 +468,10 @@ interface Issue {
   readonly detail?: Readonly<Record<string, unknown>>;
 }
 
-### dist/model-CBnSIfmV.d.ts#IssueCode
+### dist/model.chunk.d.ts#IssueCode
 type IssueCode = "DUPLICATE_ID" | "EMPTY_ID" | "UNKNOWN_LAYOUT" | "UNKNOWN_ROUTER" | "INVALID_OPTION" | "INVALID_SIZE" | "UNKNOWN_EDGE_END" | "SELF_LOOP" | "LIMIT_NODES" | "LIMIT_DEPTH" | "LIMIT_CHILDREN" | "STRATEGY_FAILED" | "ROUTER_FAILED" | "OVERLAP" | "ESCAPE" | (string & {});
 
-### dist/model-CBnSIfmV.d.ts#Layout
+### dist/model.chunk.d.ts#Layout
 interface Layout {
   readonly nodes: readonly PlacedNode[];
   readonly edges: readonly PlacedEdge[];
@@ -479,13 +479,13 @@ interface Layout {
   readonly issues: readonly Issue[];
 }
 
-### dist/model-CBnSIfmV.d.ts#LayoutInput
+### dist/model.chunk.d.ts#LayoutInput
 interface LayoutInput {
   readonly root: NodeSpec;
   readonly edges?: readonly EdgeSpec[];
 }
 
-### dist/model-CBnSIfmV.d.ts#LayoutOptions
+### dist/model.chunk.d.ts#LayoutOptions
 interface LayoutOptions {
   readonly spacing?: number;
   readonly nodeSize?: Size;
@@ -499,19 +499,19 @@ interface LayoutOptions {
   readonly trace?: (event: TraceEvent) => void;
 }
 
-### dist/model-CBnSIfmV.d.ts#LayoutRef
+### dist/model.chunk.d.ts#LayoutRef
 type LayoutRef = string | LayoutWithOptions;
 
-### dist/model-CBnSIfmV.d.ts#LayoutWithOptions
+### dist/model.chunk.d.ts#LayoutWithOptions
 interface LayoutWithOptions {
   readonly type: string;
   readonly [option: string]: unknown;
 }
 
-### dist/model-CBnSIfmV.d.ts#Mode
+### dist/model.chunk.d.ts#Mode
 type Mode = "nested" | "linked";
 
-### dist/model-CBnSIfmV.d.ts#NodeSpec
+### dist/model.chunk.d.ts#NodeSpec
 interface NodeSpec {
   readonly id: string;
   readonly label?: string;
@@ -523,7 +523,7 @@ interface NodeSpec {
   readonly data?: unknown;
 }
 
-### dist/model-CBnSIfmV.d.ts#PlacedEdge
+### dist/model.chunk.d.ts#PlacedEdge
 interface PlacedEdge {
   readonly id: string;
   readonly source: string;
@@ -534,7 +534,7 @@ interface PlacedEdge {
   readonly data?: unknown;
 }
 
-### dist/model-CBnSIfmV.d.ts#PlacedNode
+### dist/model.chunk.d.ts#PlacedNode
 interface PlacedNode extends Rect {
   readonly id: string;
   readonly label: string;
@@ -549,55 +549,55 @@ interface PlacedNode extends Rect {
   readonly data?: unknown;
 }
 
-### dist/model-CBnSIfmV.d.ts#Point
+### dist/model.chunk.d.ts#Point
 interface Point {
   readonly x: number;
   readonly y: number;
 }
 
-### dist/model-CBnSIfmV.d.ts#Rect
+### dist/model.chunk.d.ts#Rect
 interface Rect extends Point, Size {}
 
-### dist/model-CBnSIfmV.d.ts#Severity
+### dist/model.chunk.d.ts#Severity
 type Severity = "error" | "warning";
 
-### dist/model-CBnSIfmV.d.ts#Size
+### dist/model.chunk.d.ts#Size
 interface Size {
   readonly width: number;
   readonly height: number;
 }
 
-### dist/model-CBnSIfmV.d.ts#TraceEvent
+### dist/model.chunk.d.ts#TraceEvent
 interface TraceEvent {
   readonly phase: "normalize" | "measure" | "place" | "route" | "audit";
   readonly data: unknown;
 }
 
-### dist/model-CBnSIfmV.d.ts#TreeEdges
+### dist/model.chunk.d.ts#TreeEdges
 type TreeEdges = "linked" | "all" | "none";
 
-### dist/model-CBnSIfmV.d.ts#centerOf
+### dist/model.chunk.d.ts#centerOf
 declare function centerOf(r: Rect): Point;
 
-### dist/model-CBnSIfmV.d.ts#contains
+### dist/model.chunk.d.ts#contains
 declare function contains(outer: Rect, inner: Rect, tolerance?: number): boolean;
 
-### dist/model-CBnSIfmV.d.ts#inflate
+### dist/model.chunk.d.ts#inflate
 declare function inflate(r: Rect, pad: number): Rect;
 
-### dist/model-CBnSIfmV.d.ts#overlaps
+### dist/model.chunk.d.ts#overlaps
 declare function overlaps(a: Rect, b: Rect, tolerance?: number): boolean;
 
-### dist/model-CBnSIfmV.d.ts#rectAt
+### dist/model.chunk.d.ts#rectAt
 declare function rectAt(at: Point, size: Size): Rect;
 
-### dist/model-CBnSIfmV.d.ts#translate
+### dist/model.chunk.d.ts#translate
 declare function translate(r: Rect, dx: number, dy: number): Rect;
 
-### dist/model-CBnSIfmV.d.ts#union
+### dist/model.chunk.d.ts#union
 declare function union(a: Rect, b: Rect): Rect;
 
-### dist/model-CBnSIfmV.d.ts#unionAll
+### dist/model.chunk.d.ts#unionAll
 declare function unionAll(rects: Iterable<Rect>): Rect;
 
 ### dist/react.d.ts#LayoutSvg
@@ -648,24 +648,24 @@ export declare function labelAt(points: readonly Point[]): Point;
 ### dist/render.d.ts#widthOfCanvas
 export declare function widthOfCanvas(fontFamily: string): (text: string, fontSize: number) => number;
 
-### dist/renderer-Bo5opdH-.d.ts#Frame
+### dist/renderer.chunk.d.ts#Frame
 interface Frame {
   readonly nodes: readonly FrameNode[];
   readonly edges: readonly FrameEdge[];
   readonly bounds: Rect;
 }
 
-### dist/renderer-Bo5opdH-.d.ts#FrameEdge
+### dist/renderer.chunk.d.ts#FrameEdge
 interface FrameEdge extends PlacedEdge {
   readonly opacity: number;
 }
 
-### dist/renderer-Bo5opdH-.d.ts#FrameNode
+### dist/renderer.chunk.d.ts#FrameNode
 interface FrameNode extends PlacedNode {
   readonly opacity: number;
 }
 
-### dist/renderer-Bo5opdH-.d.ts#Renderer
+### dist/renderer.chunk.d.ts#Renderer
 interface Renderer {
   readonly element: HTMLElement;
   readonly viewport: Viewport;
@@ -676,7 +676,7 @@ interface Renderer {
   destroy(): void;
 }
 
-### dist/renderer-Bo5opdH-.d.ts#RendererOptions
+### dist/renderer.chunk.d.ts#RendererOptions
 interface RendererOptions {
   readonly theme?: Partial<Theme>;
   readonly viewport?: Viewport;
@@ -685,47 +685,47 @@ interface RendererOptions {
   readonly fit?: boolean;
 }
 
-### dist/renderer-Bo5opdH-.d.ts#Surface
+### dist/renderer.chunk.d.ts#Surface
 interface Surface {
   draw(frame: Frame, view: View, selected: ReadonlySet<string>): void;
   resize?(width: number, height: number): void;
   destroy(): void;
 }
 
-### dist/renderer-Bo5opdH-.d.ts#clipRoots
+### dist/renderer.chunk.d.ts#clipRoots
 declare function clipRoots(nodes: readonly FrameNode[]): Map<string, FrameNode>;
 
-### dist/renderer-Bo5opdH-.d.ts#easeInOut
+### dist/renderer.chunk.d.ts#easeInOut
 declare function easeInOut(t: number): number;
 
-### dist/renderer-Bo5opdH-.d.ts#frameOf
+### dist/renderer.chunk.d.ts#frameOf
 declare function frameOf(layout: Layout): Frame;
 
-### dist/renderer-Bo5opdH-.d.ts#interpolate
+### dist/renderer.chunk.d.ts#interpolate
 declare function interpolate(from: Frame, to: Layout, t: number): Frame;
 
-### dist/renderer-Bo5opdH-.d.ts#isContainer
+### dist/renderer.chunk.d.ts#isContainer
 declare function isContainer(n: {
   readonly mode: string;
   readonly childCount: number;
 }): boolean;
 
-### dist/renderer-Bo5opdH-.d.ts#morph
+### dist/renderer.chunk.d.ts#morph
 declare function morph(a: readonly Point[], b: readonly Point[], t: number): Point[];
 
-### dist/renderer-Bo5opdH-.d.ts#mount
+### dist/renderer.chunk.d.ts#mount
 declare function mount(container: HTMLElement, create: (host: HTMLElement, theme: Theme) => Surface, options?: RendererOptions): Renderer;
 
-### dist/renderer-Bo5opdH-.d.ts#paintOrder
+### dist/renderer.chunk.d.ts#paintOrder
 declare function paintOrder(nodes: readonly FrameNode[]): {
   containers: FrameNode[];
   leaves: FrameNode[];
 };
 
-### dist/renderer-Bo5opdH-.d.ts#pickIn
+### dist/renderer.chunk.d.ts#pickIn
 declare function pickIn(frame: Frame, p: Point): string | undefined;
 
-### dist/renderer-Bo5opdH-.d.ts#resample
+### dist/renderer.chunk.d.ts#resample
 declare function resample(points: readonly Point[], count: number): Point[];
 
 ### dist/shapes.d.ts#layout
@@ -787,7 +787,7 @@ declare const force$1: Strategy<ForceOptions>;
 ### dist/strategies/force.d.ts#relaxForces
 export declare function relaxForces(nodes: readonly RelaxNode[], edges: readonly RelaxEdge[], options: Partial<RelaxOptions> & Pick<RelaxOptions, "bound">): Map<string, Point>;
 
-### dist/strategy-Dn03j_9m.d.ts#AnyStrategy
+### dist/strategy.chunk.d.ts#AnyStrategy
 interface AnyStrategy {
   readonly type: string;
   readonly description: string;
@@ -797,7 +797,7 @@ interface AnyStrategy {
   audit?(input: AuditInput<unknown>): readonly Issue[];
 }
 
-### dist/strategy-Dn03j_9m.d.ts#ArrangeInput
+### dist/strategy.chunk.d.ts#ArrangeInput
 interface ArrangeInput<O> {
   readonly id: string;
   readonly mode: Mode;
@@ -809,7 +809,7 @@ interface ArrangeInput<O> {
   readonly edges?: readonly ChildEdge[];
 }
 
-### dist/strategy-Dn03j_9m.d.ts#Arrangement
+### dist/strategy.chunk.d.ts#Arrangement
 interface Arrangement {
   readonly direction?: Direction;
   readonly flow?: Direction;
@@ -817,7 +817,7 @@ interface Arrangement {
   readonly content?: Rect;
 }
 
-### dist/strategy-Dn03j_9m.d.ts#AuditInput
+### dist/strategy.chunk.d.ts#AuditInput
 interface AuditInput<O> {
   readonly node: PlacedNode;
   readonly children: readonly PlacedNode[];
@@ -825,7 +825,7 @@ interface AuditInput<O> {
   readonly gap: number;
 }
 
-### dist/strategy-Dn03j_9m.d.ts#Band
+### dist/strategy.chunk.d.ts#Band
 interface Band {
   readonly from: number;
   readonly to: number;
@@ -833,23 +833,23 @@ interface Band {
   readonly max: number;
 }
 
-### dist/strategy-Dn03j_9m.d.ts#BooleanOption
+### dist/strategy.chunk.d.ts#BooleanOption
 interface BooleanOption {
   readonly type: "boolean";
   readonly default: boolean;
   readonly description: string;
 }
 
-### dist/strategy-Dn03j_9m.d.ts#ChildEdge
+### dist/strategy.chunk.d.ts#ChildEdge
 interface ChildEdge {
   readonly from: number;
   readonly to: number;
 }
 
-### dist/strategy-Dn03j_9m.d.ts#Direction
+### dist/strategy.chunk.d.ts#Direction
 type Direction = "down" | "up" | "left" | "right";
 
-### dist/strategy-Dn03j_9m.d.ts#EnumOption
+### dist/strategy.chunk.d.ts#EnumOption
 interface EnumOption<V extends string = string> {
   readonly type: "enum";
   readonly values: readonly V[];
@@ -857,7 +857,7 @@ interface EnumOption<V extends string = string> {
   readonly description: string;
 }
 
-### dist/strategy-Dn03j_9m.d.ts#MeasuredChild
+### dist/strategy.chunk.d.ts#MeasuredChild
 interface MeasuredChild {
   readonly id: string;
   readonly box: Size;
@@ -866,7 +866,7 @@ interface MeasuredChild {
   readonly shape?: Shape;
 }
 
-### dist/strategy-Dn03j_9m.d.ts#NumberOption
+### dist/strategy.chunk.d.ts#NumberOption
 interface NumberOption {
   readonly type: "number";
   readonly default: number;
@@ -876,22 +876,22 @@ interface NumberOption {
   readonly description: string;
 }
 
-### dist/strategy-Dn03j_9m.d.ts#OptionSchema
+### dist/strategy.chunk.d.ts#OptionSchema
 type OptionSchema<O> = { readonly [K in keyof O]-?: OptionSpecFor<O[K]>; };
 
-### dist/strategy-Dn03j_9m.d.ts#OptionSpec
+### dist/strategy.chunk.d.ts#OptionSpec
 type OptionSpec = NumberOption | BooleanOption | EnumOption;
 
-### dist/strategy-Dn03j_9m.d.ts#OptionSpecFor
+### dist/strategy.chunk.d.ts#OptionSpecFor
 type OptionSpecFor<T> = [T] extends [number] ? NumberOption : [T] extends [boolean] ? BooleanOption : [T] extends [string] ? EnumOption<T> : never;
 
-### dist/strategy-Dn03j_9m.d.ts#Shape
+### dist/strategy.chunk.d.ts#Shape
 interface Shape {
   readonly rows: readonly Band[];
   readonly columns: readonly Band[];
 }
 
-### dist/strategy-Dn03j_9m.d.ts#Strategy
+### dist/strategy.chunk.d.ts#Strategy
 interface Strategy<O = Record<string, never>> {
   readonly type: string;
   readonly description: string;
@@ -901,10 +901,10 @@ interface Strategy<O = Record<string, never>> {
   audit?(input: AuditInput<O>): readonly Issue[];
 }
 
-### dist/strategy-Dn03j_9m.d.ts#defaultsOf
+### dist/strategy.chunk.d.ts#defaultsOf
 declare function defaultsOf<O>(schema: OptionSchema<O>): O;
 
-### dist/strategy-Dn03j_9m.d.ts#defineStrategy
+### dist/strategy.chunk.d.ts#defineStrategy
 declare function defineStrategy<O>(strategy: Strategy<O>): Strategy<O>;
 
 ### dist/svg.d.ts#SvgOptions
@@ -963,7 +963,7 @@ export declare function parse(text: string, options?: ParseOptions): ParseResult
 ### dist/text.d.ts#print
 export declare function print(input: LayoutInput, options?: PrintOptions): string;
 
-### dist/viewport-CDcjPmhL.d.ts#Theme
+### dist/viewport.chunk.d.ts#Theme
 interface Theme {
   readonly background: string;
   readonly nodeFill: string;
@@ -980,14 +980,14 @@ interface Theme {
   readonly fontFamily: string;
 }
 
-### dist/viewport-CDcjPmhL.d.ts#View
+### dist/viewport.chunk.d.ts#View
 interface View {
   readonly x: number;
   readonly y: number;
   readonly k: number;
 }
 
-### dist/viewport-CDcjPmhL.d.ts#Viewport
+### dist/viewport.chunk.d.ts#Viewport
 interface Viewport {
   get(): View;
   set(view: Partial<View>): void;
@@ -999,22 +999,22 @@ interface Viewport {
   attach(element: HTMLElement): () => void;
 }
 
-### dist/viewport-CDcjPmhL.d.ts#ViewportOptions
+### dist/viewport.chunk.d.ts#ViewportOptions
 interface ViewportOptions {
   readonly minZoom?: number;
   readonly maxZoom?: number;
 }
 
-### dist/viewport-CDcjPmhL.d.ts#createViewport
+### dist/viewport.chunk.d.ts#createViewport
 declare function createViewport(options?: ViewportOptions): Viewport;
 
-### dist/viewport-CDcjPmhL.d.ts#darkTheme
+### dist/viewport.chunk.d.ts#darkTheme
 declare const darkTheme: Theme;
 
-### dist/viewport-CDcjPmhL.d.ts#lightTheme
+### dist/viewport.chunk.d.ts#lightTheme
 declare const lightTheme: Theme;
 
-### dist/viewport-CDcjPmhL.d.ts#themeOf
+### dist/viewport.chunk.d.ts#themeOf
 declare function themeOf(partial: Partial<Theme> | undefined, base?: Theme): Theme;
 
 ### dist/xyflow.d.ts#FlowNodeSpec
