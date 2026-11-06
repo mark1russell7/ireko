@@ -2,6 +2,7 @@
 // The time of the strategy `tree` from the module of Vex against the code of ireko, in one process, with an A/A arm.
 //
 //   node scripts/bench-tree.mjs [--rounds 31] [--out file.json] [--check]
+//   node --cpu-prof scripts/bench-tree.mjs --group "arrange, 12 children" --arm branch --passes 200000
 //
 // Two parts. Each part has three arms, and each round runs them in a turned order. Each sample repeats a pass until it
 // lasts at least MIN_SAMPLE_MS. A round gives one ratio for each arm over the first arm (arm / base: more than 1 is slower).
@@ -12,6 +13,7 @@
 //           `vexTree.arrange`.
 //
 // With --check, each arm runs one pass of each group, and the script prints no time.
+// With --group, one arm (--arm, base by default) runs --passes passes of one group, for a CPU profile. It prints no time.
 
 import { writeFileSync } from "node:fs";
 import { parseArgs } from "node:util";
@@ -23,7 +25,16 @@ import { vexTree } from "../src/core/strategies/tree-vex.ts";
 import { layout as shapesLayout } from "../src/shapes/index.ts";
 import { exampleTrees, fullTree, randomTrees } from "../src/test/shape-trees.ts";
 
-const { values } = parseArgs({ options: { rounds: { type: "string", default: "31" }, out: { type: "string" }, check: { type: "boolean", default: false } } });
+const { values } = parseArgs({
+  options: {
+    rounds: { type: "string", default: "31" },
+    out: { type: "string" },
+    check: { type: "boolean", default: false },
+    group: { type: "string" },
+    arm: { type: "string", default: "base" },
+    passes: { type: "string", default: "1000" },
+  },
+});
 const ROUNDS = Number(values.rounds);
 const MIN_SAMPLE_MS = 5;
 const WARM_ROUNDS = 5;
@@ -104,6 +115,22 @@ function measure(part, arms, groups) {
   return rows;
 }
 
-const rows = [...measure("layout", LAYOUT_ARMS, layoutGroups), ...measure("arrange", ARRANGE_ARMS, arrangeGroups)];
-for (const r of rows) console.info(`${r.name.padEnd(28)} base ${r.baseMs.toFixed(3)} ms  branch ${r.branchMs.toFixed(3)} ms  branch/base ${r.branch.toFixed(3)}  A/A ${r.aa.toFixed(3)}`);
-if (values.out) writeFileSync(values.out, JSON.stringify({ node: process.version, rounds: ROUNDS, rows }));
+if (values.group !== undefined) {
+  const parts = [
+    [LAYOUT_ARMS, layoutGroups],
+    [ARRANGE_ARMS, arrangeGroups],
+  ];
+  const found = parts.flatMap(([arms, groups]) => groups.filter((g) => g.name === values.group).map((g) => [arms, g]));
+  if (found.length !== 1) throw new Error(`no group "${values.group}"`);
+  const [arms, g] = found[0];
+  const arm = arms.find(([n]) => n === values.arm);
+  if (arm === undefined) throw new Error(`no arm "${values.arm}"`);
+  const passes = Number(values.passes);
+  let sink = 0;
+  for (let i = 0; i < passes; i++) sink += pass(arm, g.items);
+  console.info(`${g.name}: arm ${values.arm}, ${String(passes)} passes, count ${String(sink)}`);
+} else {
+  const rows = [...measure("layout", LAYOUT_ARMS, layoutGroups), ...measure("arrange", ARRANGE_ARMS, arrangeGroups)];
+  for (const r of rows) console.info(`${r.name.padEnd(28)} base ${r.baseMs.toFixed(3)} ms  branch ${r.branchMs.toFixed(3)} ms  branch/base ${r.branch.toFixed(3)}  A/A ${r.aa.toFixed(3)}`);
+  if (values.out) writeFileSync(values.out, JSON.stringify({ node: process.version, rounds: ROUNDS, rows }));
+}
