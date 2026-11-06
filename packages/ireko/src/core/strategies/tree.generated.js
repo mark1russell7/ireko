@@ -4,10 +4,11 @@ export class VexContractError extends Error {}
 /** The value of a key where the program gives an error of Vex. */
 export const VEX_ERROR = Object.freeze({ vexError: true });
 const E = {};
-function AOC(l, o, w) { if (l !== w) return l.concat(o); const n = o.length; for (let i = 0; i < n; i++) l.push(o[i]); return l; }
 function F() { throw E; }
 function V(l, s) { if (!l.some((x) => x[1] === E)) return l; if (s) F(); return l.filter((x) => x[1] !== E); }
 function AP(l, o, s) { return V(l, s).concat(V(o, s)); }
+function AO(l, o, s, w) { if (l !== w) return AP(l, o, s); const a = V(o, s), n = a.length; for (let i = 0; i < n; i++) l.push(a[i]); return l; }
+function AOC(l, o, w) { if (l !== w) return l.concat(o); const n = o.length; for (let i = 0; i < n; i++) l.push(o[i]); return l; }
 function C(m) { throw new VexContractError(m); }
 function VW(l) {
   let o = l.vw;
@@ -203,197 +204,198 @@ export function treeOf(records, vars) {
     }
     return L50;
   });
-  const c169 = T(() => k_domain_Band(op_3_8(0, 0, 0, 0)));
-  const fn194 = (p102) => {
-    let b133;
+  const c170 = T(() => k_domain_Band(op_3_8(0, 0, 0, 0)));
+  const fn195 = (p103) => {
+    let b134;
     try {
-      let b111;
+      let b112;
       try {
-        const A106 = G(p102);
-        const o109 = [];
-        for (let q107 = 0; q107 < A106.length; q107++) {
-          const y108 = A106[q107][1];
-          const m110 = o109.length;
+        const A107 = G(p103);
+        const o110 = [];
+        for (let q108 = 0; q108 < A107.length; q108++) {
+          const y109 = A107[q108][1];
+          const m111 = o110.length;
           try {
-            if (op_4_16(y108)) {
-              o109.push([0, y108]);
-              o109.push([0, k_domain_Band((({ from: y108.to, to: y108.to, min: 0, max: 0 })))]);
+            if (op_4_16(y109)) {
+              o110.push([0, y109]);
+              o110.push([0, k_domain_Band((({ from: y109.to, to: y109.to, min: 0, max: 0 })))]);
             }
           } catch {
-            o109.length = m110;
+            o110.length = m111;
           }
         }
-        b111 = o109;
+        b112 = o110;
       } catch {
-        b111 = E;
+        b112 = E;
       }
-      const o112 = [];
-      const A114 = G(b111);
-      for (let q115 = 0; q115 < A114.length; q115++) {
-        const y116 = A114[q115][1];
-        const m118 = o112.length;
+      const o113 = [];
+      const A115 = G(b112);
+      for (let q116 = 0; q116 < A115.length; q116++) {
+        const y117 = A115[q116][1];
+        const m119 = o113.length;
         try {
-          if (((k_number(op_4_18(y116))) === (-1))) {
-            o112.push([0, y116]);
+          if (((k_number(op_4_18(y117))) === (-1))) {
+            o113.push([0, y117]);
           }
         } catch {
-          o112.length = m118;
+          o113.length = m119;
         }
       }
-      const A120 = G(b111);
-      const o123 = [];
-      for (let q121 = 0; q121 < A120.length; q121++) {
-        const y122 = A120[q121][1];
-        const m124 = o123.length;
+      const A121 = G(b112);
+      const o124 = [];
+      for (let q122 = 0; q122 < A121.length; q122++) {
+        const y123 = A121[q122][1];
+        const m125 = o124.length;
         try {
-          if (((k_number(op_4_18(y122))) === (0))) {
-            o123.push([0, y122]);
+          if (((k_number(op_4_18(y123))) === (0))) {
+            o124.push([0, y123]);
           }
         } catch {
-          o123.length = m124;
+          o124.length = m125;
         }
       }
-      const z132 = SKI(o123, ((x125) => k_number((x125.from))));
-      for (let i = 0; i < z132.length; i++) o112.push(z132[i]);
-      const A127 = G(b111);
-      for (let q128 = 0; q128 < A127.length; q128++) {
-        const y129 = A127[q128][1];
-        const m131 = o112.length;
+      const z133 = SKI(o124, ((x126) => k_number((x126.from))));
+      for (let i = 0; i < z133.length; i++) o113.push(z133[i]);
+      const A128 = G(b112);
+      for (let q129 = 0; q129 < A128.length; q129++) {
+        const y130 = A128[q129][1];
+        const m132 = o113.length;
         try {
-          if (((k_number(op_4_18(y129))) === (1))) {
-            o112.push([0, y129]);
+          if (((k_number(op_4_18(y130))) === (1))) {
+            o113.push([0, y130]);
           }
         } catch {
-          o112.length = m131;
+          o113.length = m132;
         }
       }
-      b133 = o112;
+      b134 = o113;
     } catch {
-      b133 = E;
+      b134 = E;
     }
-    let b179;
+    let b180;
     try {
-      let l134 = false;
-      let l135 = k_domain_Band(op_3_8(0, 0, 0, 0));
-      let l136 = [];
-      let l137 = false;
-      let l138 = k_domain_Band(op_3_8(0, 0, 0, 0));
-      let l139 = false;
-      let l140 = k_domain_Band(op_3_8(0, 0, 0, 0));
-      let l141 = [];
-      let w174 = l141;
-      const A143 = G(b133);
-      for (let q144 = 0; q144 < A143.length; q144++) {
-        const y145 = A143[q144][1];
-        const t146 = true;
-        const t147 = ((l134 && (!((l134 && (!(op_4_20(y145, l135))))))) ? l135 : y145);
-        let b155;
+      let l135 = false;
+      let l136 = k_domain_Band(op_3_8(0, 0, 0, 0));
+      let l137 = [];
+      let l138 = false;
+      let l139 = k_domain_Band(op_3_8(0, 0, 0, 0));
+      let l140 = false;
+      let l141 = k_domain_Band(op_3_8(0, 0, 0, 0));
+      let l142 = [];
+      let w175 = l142;
+      const A144 = G(b134);
+      for (let q145 = 0; q145 < A144.length; q145++) {
+        const y146 = A144[q145][1];
+        const t147 = true;
+        const t148 = ((l135 && (!((l135 && (!(op_4_20(y146, l136))))))) ? l136 : y146);
+        let b156;
         try {
-          let t154;
-          if ((l134 && (!(op_4_20(y145, l135))))) {
-            const o152 = [];
-            for (let q150 = 0; q150 < l136.length; q150++) {
-              const y151 = l136[q150][1];
-              const m153 = o152.length;
+          let t155;
+          if ((l135 && (!(op_4_20(y146, l136))))) {
+            const o153 = [];
+            for (let q151 = 0; q151 < l137.length; q151++) {
+              const y152 = l137[q151][1];
+              const m154 = o153.length;
               try {
-                if ((y151.to > y145.from)) {
-                  o152.push([0, y151]);
+                if ((y152.to > y146.from)) {
+                  o153.push([0, y152]);
                 }
               } catch {
-                o152.length = m153;
+                o153.length = m154;
               }
             }
-            t154 = o152;
+            t155 = o153;
           } else {
-            t154 = l136;
+            t155 = l137;
           }
-          b155 = t154;
+          b156 = t155;
         } catch {
-          b155 = E;
+          b156 = E;
         }
-        let t158;
-        if (op_4_16(y145)) {
-          const o156 = [];
-          const z157 = G(b155);
-          for (let i = 0; i < z157.length; i++) o156.push(z157[i]);
-          o156.push([0, y145]);
-          t158 = o156;
+        let t159;
+        if (op_4_16(y146)) {
+          const o157 = [];
+          const z158 = G(b156);
+          for (let i = 0; i < z158.length; i++) o157.push(z158[i]);
+          o157.push([0, y146]);
+          t159 = o157;
         } else {
-          t158 = G(b155);
+          t159 = G(b156);
         }
-        const t160 = ((l134 && (!(op_4_20(y145, l135)))) && ((l136.length) > (0)));
-        let t170;
-        if (((l134 && (!(op_4_20(y145, l135)))) && ((l136.length) > (0)))) {
-          let l161 = false;
-          let l162 = k_domain_Band(op_3_8(0, 0, 0, 0));
-          for (let q165 = 0; q165 < l136.length; q165++) {
-            const y166 = l136[q165][1];
-            const t167 = true;
-            const t168 = (l161 ? k_domain_Band((({ from: l162.from, to: l162.to, min: y166.min < l162.min ? y166.min : l162.min, max: y166.max > l162.max ? y166.max : l162.max }))) : y166);
-            l161 = t167;
+        const t161 = ((l135 && (!(op_4_20(y146, l136)))) && ((l137.length) > (0)));
+        let t171;
+        if (((l135 && (!(op_4_20(y146, l136)))) && ((l137.length) > (0)))) {
+          let l162 = false;
+          let l163 = k_domain_Band(op_3_8(0, 0, 0, 0));
+          for (let q166 = 0; q166 < l137.length; q166++) {
+            const y167 = l137[q166][1];
+            const t168 = true;
+            const t169 = (l162 ? k_domain_Band((({ from: l163.from, to: l163.to, min: y167.min < l163.min ? y167.min : l163.min, max: y167.max > l163.max ? y167.max : l163.max }))) : y167);
             l162 = t168;
+            l163 = t169;
           }
-          t170 = k_domain_Band((({ from: l135.from, to: y145.from, min: l162.min, max: l162.max })));
+          t171 = k_domain_Band((({ from: l136.from, to: y146.from, min: l163.min, max: l163.max })));
         } else {
-          t170 = G(c169);
+          t171 = G(c170);
         }
-        const t172 = (l139 || l137);
-        const t173 = (l137 ? ((l139 && op_4_25(l140, l138)) ? k_domain_Band(op_4_26(l140, l138)) : l138) : l140);
-        const t175 = ((l137 && (l139 && (!((l139 && op_4_25(l140, l138)))))) ? (l141.push([0, l140]), w174) : l141);
-        l134 = t146;
+        const t173 = (l140 || l138);
+        const t174 = (l138 ? ((l140 && op_4_25(l141, l139)) ? k_domain_Band(op_4_26(l141, l139)) : l139) : l141);
+        const t176 = ((l138 && (l140 && (!((l140 && op_4_25(l141, l139)))))) ? (l142.push([0, l141]), w175) : l142);
         l135 = t147;
-        l136 = t158;
-        l137 = t160;
-        l138 = t170;
-        l139 = t172;
+        l136 = t148;
+        l137 = t159;
+        l138 = t161;
+        l139 = t171;
         l140 = t173;
-        l141 = t175;
+        l141 = t174;
+        l142 = t176;
       }
-      const b176 = (l139 || l137);
-      let b177;
-      try {
-        b177 = (l137 ? ((l139 && op_4_25(l140, l138)) ? k_domain_Band(op_4_26(l140, l138)) : l138) : l140);
-      } catch {
-        b177 = E;
-      }
+      const b177 = (l140 || l138);
       let b178;
       try {
-        b178 = ((l137 && (l139 && (!((l139 && op_4_25(l140, l138)))))) ? (l141.push([0, l140]), w174) : l141);
+        b178 = (l138 ? ((l140 && op_4_25(l141, l139)) ? k_domain_Band(op_4_26(l141, l139)) : l139) : l141);
       } catch {
         b178 = E;
       }
-      b179 = (b176 ? (G(b178).push([0, G(b177)]), w174) : G(b178));
-    } catch {
-      b179 = E;
-    }
-    let l180 = G(b179);
-    for (let k193 = 0; ; k193++) {
-      if (((l180.length) <= (128))) break;
-      if (k193 === 64) F();
-      let l181 = false;
-      let l182 = k_domain_Band(op_3_8(0, 0, 0, 0));
-      let l183 = [];
-      let w190 = l183;
-      const A185 = l180;
-      for (let q186 = 0; q186 < A185.length; q186++) {
-        const y187 = A185[q186][1];
-        const t188 = (!(l181));
-        const t191 = (l181 ? (l183.push([0, k_domain_Band((({ from: Math.min(l182.from, y187.from), to: Math.max(l182.to, y187.to), min: Math.min(l182.min, y187.min), max: Math.max(l182.max, y187.max) })))]), w190) : l183);
-        l181 = t188;
-        l182 = y187;
-        l183 = t191;
+      let b179;
+      try {
+        b179 = ((l138 && (l140 && (!((l140 && op_4_25(l141, l139)))))) ? (l142.push([0, l141]), w175) : l142);
+      } catch {
+        b179 = E;
       }
-      const t192 = (l181 ? (l183.push([0, l182]), w190) : l183);
-      l180 = t192;
+      b180 = (b177 ? (G(b179).push([0, G(b178)]), w175) : G(b179));
+    } catch {
+      b180 = E;
     }
-    return l180;
+    let l181 = G(b180);
+    for (let k194 = 0; ; k194++) {
+      if (((l181.length) <= (128))) break;
+      if (k194 === 64) F();
+      let l182 = false;
+      let l183 = k_domain_Band(op_3_8(0, 0, 0, 0));
+      let l184 = [];
+      let w191 = l184;
+      const A186 = l181;
+      for (let q187 = 0; q187 < A186.length; q187++) {
+        const y188 = A186[q187][1];
+        const t189 = (!(l182));
+        const t192 = (l182 ? (l184.push([0, k_domain_Band((({ from: Math.min(l183.from, y188.from), to: Math.max(l183.to, y188.to), min: Math.min(l183.min, y188.min), max: Math.max(l183.max, y188.max) })))]), w191) : l184);
+        l182 = t189;
+        l183 = y188;
+        l184 = t192;
+      }
+      const t193 = (l182 ? (l184.push([0, l183]), w191) : l184);
+      l181 = t193;
+    }
+    return l181;
   };
-  const c197 = T(() => FI(128, 0));
-  const fn209 = (p53) => {
+  const c198 = T(() => FI(128, 0));
+  const fn210 = (p53) => {
     let l56 = 0;
     let l57 = [];
     let l58 = [];
     let w86 = l57;
+    let w101 = l58;
     const A60 = FI(k_number((2) * (G(p53).length)), 0);
     let z64 = 0;
     for (let q61 = 0; q61 < A60.length; q61++) {
@@ -440,9 +442,9 @@ export function treeOf(records, vars) {
         t84 = l56;
       }
       const t87 = (((k_number((i63) % (2))) === (0)) ? l57 : (l57.push([0, l56]), w86));
-      let t207;
+      let t208;
       if (((k_number((i63) % (2))) === (0))) {
-        t207 = l58;
+        t208 = l58;
       } else {
         let b94;
         try {
@@ -464,7 +466,7 @@ export function treeOf(records, vars) {
         } catch {
           b94 = E;
         }
-        let b101;
+        let b102;
         try {
           const A96 = G(b94);
           const L99 = [];
@@ -480,271 +482,272 @@ export function treeOf(records, vars) {
             }
             L99.push([j95, x100]);
           }
-          b101 = AP(l58, L99, false);
+          b102 = (w101 = AO(l58, L99, false, w101));
         } catch {
-          b101 = E;
+          b102 = E;
         }
-        let t206;
-        if (((G(b101).length) > (256))) {
-          let b195;
+        let t207;
+        if (((G(b102).length) > (256))) {
+          let b196;
           try {
-            b195 = fn194(b101);
+            b196 = fn195(b102);
           } catch {
-            b195 = E;
+            b196 = E;
           }
-          const A198 = TKC(G(c197), G(b195).length);
-          let z202 = 0;
-          const L204 = [];
-          for (let q199 = 0; q199 < A198.length; q199++) {
-            const j196 = A198[q199][0];
-            let x205;
+          const A199 = TKC(G(c198), G(b196).length);
+          let z203 = 0;
+          const L205 = [];
+          for (let q200 = 0; q200 < A199.length; q200++) {
+            const j197 = A199[q200][0];
+            let x206;
             try {
-              const y200 = A198[q199][1];
-              const i201 = z202++;
-              let b203;
+              const y201 = A199[q200][1];
+              const i202 = z203++;
+              let b204;
               try {
-                b203 = NTC(G(b195), i201);
+                b204 = NTC(G(b196), i202);
               } catch {
-                b203 = E;
+                b204 = E;
               }
-              x205 = k_domain_Band(op_4_26(G(b203), G(b203)));
+              x206 = k_domain_Band(op_4_26(G(b204), G(b204)));
             } catch {
-              x205 = E;
+              x206 = E;
             }
-            L204.push([j196, x205]);
+            L205.push([j197, x206]);
           }
-          t206 = L204;
+          t207 = L205;
         } else {
-          t206 = G(b101);
+          t207 = G(b102);
         }
-        t207 = t206;
+        t208 = t207;
       }
       l56 = t84;
       l57 = t87;
-      l58 = t207;
+      l58 = t208;
     }
     return l57;
   };
-  const c210 = L(() => {
-    return fn209(c39());
+  const c211 = L(() => {
+    return fn210(c39());
   });
-  const fn274 = (p212) => {
-    let l215 = 0;
-    let l216 = [];
+  const fn276 = (p213) => {
+    let l216 = 0;
     let l217 = [];
-    let w245 = l216;
-    const A219 = FI(k_number((2) * (G(p212).length)), 0);
-    let z223 = 0;
-    for (let q220 = 0; q220 < A219.length; q220++) {
-      const y221 = A219[q220][1];
-      const i222 = z223++;
-      let t243;
-      if (((k_number((i222) % (2))) === (0))) {
-        let b230;
+    let l218 = [];
+    let w246 = l217;
+    let w261 = l218;
+    const A220 = FI(k_number((2) * (G(p213).length)), 0);
+    let z224 = 0;
+    for (let q221 = 0; q221 < A220.length; q221++) {
+      const y222 = A220[q221][1];
+      const i223 = z224++;
+      let t244;
+      if (((k_number((i223) % (2))) === (0))) {
+        let b231;
         try {
-          const A225 = NTC(G(p212), k_number(Math.floor((k_number((i222) / (2))))));
-          const L228 = [];
-          for (let q226 = 0; q226 < A225.length; q226++) {
-            const j224 = A225[q226][0];
-            let x229;
+          const A226 = NTC(G(p213), k_number(Math.floor((k_number((i223) / (2))))));
+          const L229 = [];
+          for (let q227 = 0; q227 < A226.length; q227++) {
+            const j225 = A226[q227][0];
+            let x230;
             try {
-              if (A225[q226][1] === E) F();
-              const y227 = A225[q226][1];
-              x229 = y227;
+              if (A226[q227][1] === E) F();
+              const y228 = A226[q227][1];
+              x230 = y228;
             } catch {
-              x229 = E;
+              x230 = E;
             }
-            L228.push([j224, x229]);
+            L229.push([j225, x230]);
           }
-          b230 = L228;
+          b231 = L229;
         } catch {
-          b230 = E;
+          b231 = E;
         }
-        let l231 = l215;
-        const A233 = G(b230);
-        for (let q234 = 0; q234 < A233.length; q234++) {
-          if (A233[q234][1] === E) F();
-          const y235 = A233[q234][1];
-          let l236 = l231;
-          for (let q239 = 0; q239 < l217.length; q239++) {
-            if (l217[q239][1] === E) F();
-            const y240 = l217[q239][1];
-            const t241 = (op_4_14(y240, y235) ? k_number(op_4_15(y240, y235, l236, v3)) : l236);
-            l236 = t241;
+        let l232 = l216;
+        const A234 = G(b231);
+        for (let q235 = 0; q235 < A234.length; q235++) {
+          if (A234[q235][1] === E) F();
+          const y236 = A234[q235][1];
+          let l237 = l232;
+          for (let q240 = 0; q240 < l218.length; q240++) {
+            if (l218[q240][1] === E) F();
+            const y241 = l218[q240][1];
+            const t242 = (op_4_14(y241, y236) ? k_number(op_4_15(y241, y236, l237, v3)) : l237);
+            l237 = t242;
           }
-          l231 = l236;
+          l232 = l237;
         }
-        t243 = l231;
+        t244 = l232;
       } else {
-        t243 = l215;
+        t244 = l216;
       }
-      const t246 = (((k_number((i222) % (2))) === (0)) ? l216 : (l216.push([0, l215]), w245));
-      let t272;
-      if (((k_number((i222) % (2))) === (0))) {
-        t272 = l217;
+      const t247 = (((k_number((i223) % (2))) === (0)) ? l217 : (l217.push([0, l216]), w246));
+      let t274;
+      if (((k_number((i223) % (2))) === (0))) {
+        t274 = l218;
       } else {
-        let b253;
+        let b254;
         try {
-          const A248 = NTC(G(p212), k_number(Math.floor((k_number((i222) / (2))))));
-          const L251 = [];
-          for (let q249 = 0; q249 < A248.length; q249++) {
-            const j247 = A248[q249][0];
-            let x252;
+          const A249 = NTC(G(p213), k_number(Math.floor((k_number((i223) / (2))))));
+          const L252 = [];
+          for (let q250 = 0; q250 < A249.length; q250++) {
+            const j248 = A249[q250][0];
+            let x253;
             try {
-              if (A248[q249][1] === E) F();
-              const y250 = A248[q249][1];
-              x252 = y250;
+              if (A249[q250][1] === E) F();
+              const y251 = A249[q250][1];
+              x253 = y251;
             } catch {
-              x252 = E;
+              x253 = E;
             }
-            L251.push([j247, x252]);
+            L252.push([j248, x253]);
           }
-          b253 = L251;
+          b254 = L252;
         } catch {
-          b253 = E;
+          b254 = E;
         }
-        let b260;
+        let b262;
         try {
-          const A255 = G(b253);
-          const L258 = [];
-          for (let q256 = 0; q256 < A255.length; q256++) {
-            const j254 = A255[q256][0];
-            let x259;
+          const A256 = G(b254);
+          const L259 = [];
+          for (let q257 = 0; q257 < A256.length; q257++) {
+            const j255 = A256[q257][0];
+            let x260;
             try {
-              if (A255[q256][1] === E) F();
-              const y257 = A255[q256][1];
-              x259 = k_domain_Band(op_4_9(y257, 0, l215));
+              if (A256[q257][1] === E) F();
+              const y258 = A256[q257][1];
+              x260 = k_domain_Band(op_4_9(y258, 0, l216));
             } catch {
-              x259 = E;
+              x260 = E;
             }
-            L258.push([j254, x259]);
+            L259.push([j255, x260]);
           }
-          b260 = AP(l217, L258, false);
+          b262 = (w261 = AO(l218, L259, false, w261));
         } catch {
-          b260 = E;
+          b262 = E;
         }
-        let t271;
-        if (((G(b260).length) > (256))) {
-          let b261;
+        let t273;
+        if (((G(b262).length) > (256))) {
+          let b263;
           try {
-            b261 = fn194(b260);
+            b263 = fn195(b262);
           } catch {
-            b261 = E;
+            b263 = E;
           }
-          const A263 = TKC(G(c197), G(b261).length);
-          let z267 = 0;
-          const L269 = [];
-          for (let q264 = 0; q264 < A263.length; q264++) {
-            const j262 = A263[q264][0];
-            let x270;
+          const A265 = TKC(G(c198), G(b263).length);
+          let z269 = 0;
+          const L271 = [];
+          for (let q266 = 0; q266 < A265.length; q266++) {
+            const j264 = A265[q266][0];
+            let x272;
             try {
-              const y265 = A263[q264][1];
-              const i266 = z267++;
-              let b268;
+              const y267 = A265[q266][1];
+              const i268 = z269++;
+              let b270;
               try {
-                b268 = NTC(G(b261), i266);
+                b270 = NTC(G(b263), i268);
               } catch {
-                b268 = E;
+                b270 = E;
               }
-              x270 = k_domain_Band(op_4_26(G(b268), G(b268)));
+              x272 = k_domain_Band(op_4_26(G(b270), G(b270)));
             } catch {
-              x270 = E;
+              x272 = E;
             }
-            L269.push([j262, x270]);
+            L271.push([j264, x272]);
           }
-          t271 = L269;
+          t273 = L271;
         } else {
-          t271 = G(b260);
+          t273 = G(b262);
         }
-        t272 = t271;
+        t274 = t273;
       }
-      l215 = t243;
-      l216 = t246;
-      l217 = t272;
+      l216 = t244;
+      l217 = t247;
+      l218 = t274;
     }
-    return l216;
+    return l217;
   };
-  const c281 = L(() => {
-    const A276 = G(fn274(c52()));
-    const L279 = [];
-    for (let q277 = A276.length - 1; q277 >= 0; q277--) {
-      const j211 = A276[q277][0];
-      let x280;
+  const c283 = L(() => {
+    const A278 = G(fn276(c52()));
+    const L281 = [];
+    for (let q279 = A278.length - 1; q279 >= 0; q279--) {
+      const j212 = A278[q279][0];
+      let x282;
       try {
-        const y278 = A276[q277][1];
-        x280 = k_number(-(y278));
+        const y280 = A278[q279][1];
+        x282 = k_number(-(y280));
       } catch {
-        x280 = E;
+        x282 = E;
       }
-      L279.push([j211, x280]);
+      L281.push([j212, x282]);
     }
-    return L279;
+    return L281;
   });
-  const c282 = L(() => {
-    return k_number((NTC(G(c210()), 0)) - (NT(G(c281()), 0, false)));
+  const c284 = L(() => {
+    return k_number((NTC(G(c211()), 0)) - (NT(G(c283()), 0, false)));
   });
-  const c291 = L(() => {
-    const A284 = G(c210());
-    let z288 = 0;
-    const L289 = [];
-    for (let q285 = 0; q285 < A284.length; q285++) {
-      const j283 = A284[q285][0];
-      let x290;
+  const c293 = L(() => {
+    const A286 = G(c211());
+    let z290 = 0;
+    const L291 = [];
+    for (let q287 = 0; q287 < A286.length; q287++) {
+      const j285 = A286[q287][0];
+      let x292;
       try {
-        const y286 = A284[q285][1];
-        const i287 = z288++;
-        x290 = k_number((k_number((k_number((y286) + (NT(G(c281()), i287, false)))) + (G(c282())))) / (2));
+        const y288 = A286[q287][1];
+        const i289 = z290++;
+        x292 = k_number((k_number((k_number((y288) + (NT(G(c283()), i289, false)))) + (G(c284())))) / (2));
       } catch {
-        x290 = E;
+        x292 = E;
       }
-      L289.push([j283, x290]);
+      L291.push([j285, x292]);
     }
-    return L289;
+    return L291;
   });
-  const L293 = [];
-  for (let j292 = 0; j292 < n; j292++) {
-    L293.push([j292, (c0 ? R[j292]["bw"] : R[j292]["bh"])]);
+  const L295 = [];
+  for (let j294 = 0; j294 < n; j294++) {
+    L295.push([j294, (c0 ? R[j294]["bw"] : R[j294]["bh"])]);
   }
-  const c296 = L(() => {
-    return NT(G(c291()), 0, false);
-  });
-  const c297 = L(() => {
-    return k_number((CT(G(c291()), false)) - (1));
-  });
   const c298 = L(() => {
-    return NT(G(c291()), G(c297()), false);
+    return NT(G(c293()), 0, false);
   });
   const c299 = L(() => {
-    return NTC(L293, G(c297()));
+    return k_number((CT(G(c293()), false)) - (1));
   });
-  const c300 = T(() => NTC(L293, 0));
-  const c301 = (c0 ? v4 : v5);
-  const c302 = L(() => {
-    return (c1 ? 0 : (((v6) === ("start")) ? k_number(-(G(c296()))) : (((v6) === ("end")) ? k_number((c301) - (k_number((G(c298())) + (G(c299()))))) : k_number((k_number((c301) / (2))) - (k_number((k_number((k_number((k_number((G(c296())) + (k_number((G(c300)) / (2))))) + (G(c298())))) + (k_number((G(c299())) / (2))))) / (2)))))));
+  const c300 = L(() => {
+    return NT(G(c293()), G(c299()), false);
   });
-  const c306 = (c1 ? "" : (((v0) === ("bottom")) ? "down" : (((v0) === ("top")) ? "up" : v0)));
+  const c301 = L(() => {
+    return NTC(L295, G(c299()));
+  });
+  const c302 = T(() => NTC(L295, 0));
+  const c303 = (c0 ? v4 : v5);
+  const c304 = L(() => {
+    return (c1 ? 0 : (((v6) === ("start")) ? k_number(-(G(c298()))) : (((v6) === ("end")) ? k_number((c303) - (k_number((G(c300())) + (G(c301()))))) : k_number((k_number((c303) / (2))) - (k_number((k_number((k_number((k_number((G(c298())) + (k_number((G(c302)) / (2))))) + (G(c300())))) + (k_number((G(c301())) / (2))))) / (2)))))));
+  });
+  const c308 = (c1 ? "" : (((v0) === ("bottom")) ? "down" : (((v0) === ("top")) ? "up" : v0)));
   const out = new Array(n);
   for (let o = 0; o < n; o++) {
     try {
-      let b303;
-      try {
-        b303 = NT(G(c291()), R[o]["i"], false);
-      } catch {
-        b303 = E;
-      }
-      let b304;
-      try {
-        b304 = NTC(G(c19()), R[o]["i"]);
-      } catch {
-        b304 = E;
-      }
       let b305;
       try {
-        b305 = (c1 ? G(b303) : k_number((G(b303)) + (G(c302()))));
+        b305 = NT(G(c293()), R[o]["i"], false);
       } catch {
         b305 = E;
       }
-      out[o] = ({ "x": (c0 ? G(b305) : G(b304)), "y": (c0 ? G(b304) : G(b305)), "direction": c306 });
+      let b306;
+      try {
+        b306 = NTC(G(c19()), R[o]["i"]);
+      } catch {
+        b306 = E;
+      }
+      let b307;
+      try {
+        b307 = (c1 ? G(b305) : k_number((G(b305)) + (G(c304()))));
+      } catch {
+        b307 = E;
+      }
+      out[o] = ({ "x": (c0 ? G(b307) : G(b306)), "y": (c0 ? G(b306) : G(b307)), "direction": c308 });
     } catch {
       out[o] = VEX_ERROR;
     }
