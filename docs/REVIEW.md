@@ -704,6 +704,12 @@ The research ranks these actions by effect:
 |---|---|---|---|
 | DEBT-1 | The core is over its budget of 15 kB gzip (§7.3, §16.2). In 0.2.0, `layout` is 17.72 kB. The crossing reduction of `layers` added 0.38 kB, and the size limits went up with it. | 1. Measure the gzip size that each built-in strategy and router adds to each entry. 2. Move the largest parts that most callers do not use out of the core, as `ireko/strategies/force` is at this time. A candidate is the crossing reduction, as its own entry or as an option that a bundler can remove. 3. Lower the size limits after each move. | `layout` is 15 kB gzip or less. Or the owner sets a new budget and writes its reason in §16.2. |
 
+### 13.2 Gaps
+
+| Id | Gap | Case | Plan | Exit criteria |
+|---|---|---|---|---|
+| GAP-1 | The strategy `layers` has no limit on the breadth of a layer. A wide layer makes the layout wide across the flow. With the side `bottom`, a phone of 360 px then scrolls far. | A dependency map of 15 items, with boxes of 176 by 58 px: 644 px wide with the side `right`, but 1364 px wide with the side `bottom`. Its widest layer has 7 items. | An option, for example `breadth`, gives the largest number of items or pixels in a layer. A layer that is wider goes on in more rows of the same layer, with the order of the crossing reduction. The rows of one layer stay before the next layer. | With `breadth`, the map of the case is 360 px wide or less with the side `bottom`. Each edge still goes forward, and the properties P1 to P8 pass. |
+
 ---
 
 ## 14. Decisions for the owner
