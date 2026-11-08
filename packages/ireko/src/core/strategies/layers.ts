@@ -1,11 +1,14 @@
 /**
  * The strategy `layers` puts the children in layers, in the direction of the edges between them: a flowchart.
+ *
  * It is a small layered layout. It turns the edges of each cycle around. It gives each child the layer of its longest
- * path from a source, and it orders each layer by the mean place of its neighbors. Each layer is as deep as its deepest
- * extent, and the extents in a layer keep the gap, so no two subtrees overlap.
+ * path from a source. A long edge gets a virtual node in each layer that it goes through. The barycenter ordering keeps
+ * the order with the fewest crossings (`crossings.ts`). Each layer is as deep as its deepest extent, and the
+ * extents in a layer keep the gap, so no two subtrees overlap.
  */
 import { at } from "../at.ts";
 import { defineStrategy, type ChildEdge, type MeasuredChild, type Strategy } from "../strategy.ts";
+import { orderLayers } from "./crossings.ts";
 import { DIRECTION, type Side } from "./side.ts";
 
 /** The options of the strategy `layers`. */
@@ -18,9 +21,6 @@ export interface LayersOptions {
   readonly align: "center" | "start" | "end";
 }
 
-/** The number of passes of the barycenter ordering. */
-const SWEEPS = 8;
-
 /** The strategy `layers`. */
 export const layers: Strategy<LayersOptions> = defineStrategy<LayersOptions>({
   type: "layers",
@@ -32,7 +32,7 @@ export const layers: Strategy<LayersOptions> = defineStrategy<LayersOptions>({
   },
   arrange({ mode, self, children, options, gap, edges = [] }) {
     const k = children.length;
-    const order = orderOf(k, layersOf(k, edges), edges);
+    const { order } = orderLayers(k, layersOf(k, edges), edges);
     // The axis of the flow: y for the sides bottom and top, x for the sides left and right.
     const down = options.side === "bottom" || options.side === "top";
     const forward = options.side === "bottom" || options.side === "right";
@@ -139,37 +139,3 @@ function layersOf(k: number, edges: readonly ChildEdge[]): number[] {
   return layer;
 }
 
-/**
- * This function gives the children of each layer, in order. It starts from the order of the children, and then each
- * pass sorts a layer by the mean place of the neighbors of each child. A child with no neighbor keeps its place.
- */
-function orderOf(k: number, layer: readonly number[], edges: readonly ChildEdge[]): number[][] {
-  const count = Math.max(0, ...layer) + 1;
-  const order: number[][] = Array.from({ length: count }, () => []);
-  for (let v = 0; v < k; v++) at(order, at(layer, v)).push(v);
-  const neighbors: number[][] = Array.from({ length: k }, () => []);
-  for (const e of edges) {
-    if (e.from === e.to || e.from < 0 || e.to < 0 || e.from >= k || e.to >= k) continue;
-    at(neighbors, e.from).push(e.to);
-    at(neighbors, e.to).push(e.from);
-  }
-  const place = new Float64Array(k);
-  const remember = (): void => order.forEach((l) => l.forEach((v, i) => (place[v] = i)));
-  remember();
-  for (let pass = 0; pass < SWEEPS; pass++) {
-    const down = pass % 2 === 0;
-    for (let s = 0; s < count; s++) {
-      const l = down ? s : count - 1 - s;
-      // Only the neighbors in the layer before (down) or after (up) count.
-      const near = down ? l - 1 : l + 1;
-      const keyOf = (v: number): number => {
-        const ns = at(neighbors, v).filter((u) => at(layer, u) === near);
-        return ns.length === 0 ? at(place, v) : ns.reduce((sum, u) => sum + at(place, u), 0) / ns.length;
-      };
-      const keys = new Map(at(order, l).map((v) => [v, keyOf(v)]));
-      order[l] = at(order, l).toSorted((a, b) => (keys.get(a) ?? 0) - (keys.get(b) ?? 0) || a - b);
-      remember();
-    }
-  }
-  return order;
-}

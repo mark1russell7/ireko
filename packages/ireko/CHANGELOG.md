@@ -12,6 +12,15 @@ This file records the changes to `ireko` in each version. The release workflow c
 
 A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other version goes to `latest`.
 
+## 0.2.0
+
+This version is a minor version. It changes no API. The layout of a graph with crossed edges in the strategy `layers` can change.
+
+- A long edge in the strategy `layers` gets a virtual node in each layer between its ends. Thus the barycenter ordering also counts the long edges.
+- The ordering counts the crossings after each pass, and it keeps the order with the fewest crossings. Thus a pass does not make the order worse.
+- Each example of the gallery keeps its layout: the golden files do not change.
+- A dependency map of 250 boxes and 293 edges had 3710 crossings of its routed edges with 0.1.5. With 0.2.0, it has 1982.
+
 ## 0.1.5
 
 This version is a patch. It changes no API, and each layout stays the same.
