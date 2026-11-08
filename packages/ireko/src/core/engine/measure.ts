@@ -8,7 +8,8 @@ import { rectAt, type Rect, type Size } from "../geometry.ts";
 import type { Issue, NodeSpec } from "../model.ts";
 import { resolveOptions } from "../options.ts";
 import { grid } from "../strategies/grid.ts";
-import type { AnyStrategy, Arrangement, ChildEdge, Direction, MeasuredChild, Shape } from "../strategy.ts";
+import type { AnyStrategy, ArrangeInput, Arrangement, ChildEdge, Direction, MeasuredChild, Shape } from "../strategy.ts";
+import { finite } from "./finite.ts";
 import { measureOf, type MeasureColumn, type MeasureRecord } from "./measure.generated.js";
 import { boxShape, moveShape } from "./shape.ts";
 import type { Context, Normalized, Placement } from "./types.ts";
@@ -64,6 +65,8 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
   }
   const shapes: (Shape | undefined)[] = Array.from({ length: n }, () => undefined);
   const { between, owner } = edgesBetweenChildren(norm);
+  // A value of the sheet that is not finite gives the finding NON_FINITE and a finite value.
+  const num = (column: MeasureColumn, k: number, id: string, field: string, fallback: number): number => finite(at(column, k), fallback, { node: id, field, phase: "measure" }, issues);
 
   for (let i = n - 1; i >= 0; i--) {
     const node = at(norm.nodes, i);
@@ -134,12 +137,14 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
       records.map((r) => r.p),
     );
     node.children.forEach((child, k) => {
-      placement[child] = { x: numberAt(fit.lx, k + 1), y: numberAt(fit.ly, k + 1), scale: numberAt(fit.ls, k + 1) };
+      const id = at(norm.nodes, child).id;
+      placement[child] = { x: num(fit.lx, k + 1, id, "x", 0), y: num(fit.ly, k + 1, id, "y", 0), scale: num(fit.ls, k + 1, id, "scale", 1) };
     });
 
     if (node.mode === "linked") {
       box[i] = own.size;
-      extent[i] = { x: numberAt(fit.bx, 0), y: numberAt(fit.by, 0), width: numberAt(fit.bw, 0), height: numberAt(fit.bh, 0) };
+      // The fallback of the extent is the box of the node.
+      extent[i] = { x: num(fit.bx, 0, node.id, "extent.x", 0), y: num(fit.by, 0, node.id, "extent.y", 0), width: num(fit.bw, 0, node.id, "extent.width", own.size.width), height: num(fit.bh, 0, node.id, "extent.height", own.size.height) };
       if (at(needsShape, i)) {
         const parts = node.children.map((c, k) => {
           const o = at(offsets, k);
@@ -155,10 +160,11 @@ export function measure(norm: Normalized, ctx: Context, issues: Issue[]): Measur
     // The nested mode: the sheet moves the content into the box, inside the padding and below the header.
     if (at(fit.small, 0) === true) {
       // A fixed size that cannot hold its own padding: the box grows to hold one pixel of content.
-      const size: Size = { width: numberAt(fit.firstW, 0), height: numberAt(fit.firstH, 0) };
+      // The size is only a detail of the finding, so a value that is not finite gives no second finding here.
+      const size = { width: at(fit.firstW, 0), height: at(fit.firstH, 0) };
       issues.push({ code: "INVALID_SIZE", severity: "warning", message: `The size of the node "${node.id}" is smaller than its padding and header. The engine makes the box larger.`, node: node.id, detail: { size, padding, header } });
     }
-    const size: Size = { width: numberAt(fit.sw, 0), height: numberAt(fit.sh, 0) };
+    const size: Size = { width: num(fit.sw, 0, node.id, "width", own.size.width), height: num(fit.sh, 0, node.id, "height", own.size.height) };
     box[i] = size;
     extent[i] = rectAt({ x: 0, y: 0 }, size);
     // The children of a nested node are inside its box, so the box is its shape.
@@ -186,13 +192,6 @@ function positive(v: number): boolean {
   return Number.isFinite(v) && v > 0;
 }
 
-/** This function gives the number of a column at the index `i`. An error of Vex is a value that is not finite, for example an overflow of a sum. */
-function numberAt(column: MeasureColumn, i: number): number {
-  const v = at(column, i);
-  if (typeof v !== "number") throw new RangeError("ireko: the measure of a node is not finite.");
-  return v;
-}
-
 function commonNumber(raw: Readonly<Record<string, unknown>> | undefined, key: string, fallback: number, node: string, issues: Issue[]): number {
   const v = raw?.[key];
   if (v === undefined) return fallback;
@@ -209,7 +208,8 @@ interface Arranged {
 
 /**
  * This function starts the strategy of a node. A strategy that throws, or that gives a bad arrangement, gives the
- * finding `STRATEGY_FAILED`, and the engine uses the grid strategy for this node.
+ * finding `STRATEGY_FAILED`, and the engine uses the grid strategy for this node. The grid fails only for sizes that
+ * overflow. Then the finding is `NON_FINITE`, and each child goes to the origin of the node.
  */
 function arrangeSafely(
   strategy: AnyStrategy,
@@ -219,18 +219,33 @@ function arrangeSafely(
 ): Arranged {
   const context = { node: node.id, layout: strategy.type, ignore: COMMON_OPTIONS };
   const options = resolveOptions(strategy.options, node.rawLayout, context, issues);
-  let problem: string | undefined;
-  try {
-    const arrangement = strategy.arrange({ id: node.id, mode: node.mode, self: input.self, children: input.children, options, gap: input.gap, depth: node.depth, edges: input.edges });
-    problem = check(arrangement, input.children.length);
-    if (problem === undefined) return { arrangement, layout: strategy.type, options };
-  } catch (error) {
-    problem = `It threw: ${error instanceof Error ? error.message : String(error)}`;
+  const first = attempt(strategy, node, { ...input, options });
+  if (typeof first !== "string") return { arrangement: first, layout: strategy.type, options };
+  const fallback = strategy === grid ? options : resolveOptions(grid.options, undefined, context, issues);
+  let problem = first;
+  if (strategy !== grid) {
+    issues.push({ code: "STRATEGY_FAILED", severity: "error", message: `The strategy "${strategy.type}" failed for the node "${node.id}". ${first} The engine uses "grid".`, node: node.id, detail: { layout: strategy.type } });
+    const second = attempt(grid, node, { self: input.self, children: input.children, gap: input.gap, options: fallback });
+    if (typeof second !== "string") return { arrangement: second, layout: "grid", options: fallback };
+    problem = second;
   }
-  issues.push({ code: "STRATEGY_FAILED", severity: "error", message: `The strategy "${strategy.type}" failed for the node "${node.id}". ${problem} The engine uses "grid".`, node: node.id, detail: { layout: strategy.type } });
-  const fallback = resolveOptions(grid.options, undefined, context, issues);
-  const safe: AnyStrategy = grid;
-  return { arrangement: safe.arrange({ id: node.id, mode: node.mode, self: input.self, children: input.children, options: fallback, gap: input.gap, depth: node.depth }), layout: "grid", options: fallback };
+  // The built-in grid fails only when a sum of sizes is not finite.
+  issues.push({ code: "NON_FINITE", severity: "error", message: `The strategy "grid" cannot arrange the children of the node "${node.id}". ${problem} The engine puts each child at the origin of the node.`, node: node.id, detail: { field: "offsets", phase: "measure", layout: strategy.type } });
+  return { arrangement: { offsets: input.children.map(() => ({ x: 0, y: 0 })) }, layout: "grid", options: fallback };
+}
+
+/** This function starts `arrange` of a strategy. It gives the arrangement, or the problem as a sentence. */
+function attempt(
+  strategy: AnyStrategy,
+  node: Normalized["nodes"][number],
+  input: Omit<ArrangeInput<unknown>, "id" | "mode" | "depth">,
+): Arrangement | string {
+  try {
+    const arrangement = strategy.arrange({ id: node.id, mode: node.mode, depth: node.depth, ...input });
+    return check(arrangement, input.children.length) ?? arrangement;
+  } catch (error) {
+    return `It threw: ${error instanceof Error ? error.message : String(error)}`;
+  }
 }
 
 function check(arrangement: Arrangement, count: number): string | undefined {

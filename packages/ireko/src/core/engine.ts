@@ -5,6 +5,7 @@
 import { clean, unionAll, type Rect } from "./geometry.ts";
 import { IrekoError, type Issue, type Layout, type LayoutInput, type LayoutOptions } from "./model.ts";
 import { audit } from "./engine/audit.ts";
+import { finite } from "./engine/finite.ts";
 import { measure } from "./engine/measure.ts";
 import { normalize } from "./engine/normalize.ts";
 import { place } from "./engine/place.ts";
@@ -113,7 +114,7 @@ function run(
   trace?.({ phase: "normalize", data: norm });
   const m = measure(norm, ctx, issues);
   trace?.({ phase: "measure", data: m });
-  const placed = place(norm, m, ctx);
+  const placed = place(norm, m, ctx, issues);
   trace?.({ phase: "place", data: placed });
   const edges = route(norm, placed.nodes, ctx, issues, m);
   trace?.({ phase: "route", data: edges });
@@ -124,7 +125,9 @@ function run(
 
   const points: Rect[] = edges.flatMap((e) => e.points.map((p) => ({ x: p.x, y: p.y, width: 0, height: 0 })));
   const b = unionAll([...placed.nodes, ...points]);
-  const bounds: Rect = { x: clean(b.x), y: clean(b.y), width: clean(b.width), height: clean(b.height) };
+  // Each box is finite, but the union of two far boxes can be wider than the largest number.
+  const edge = (v: number, field: string): number => clean(finite(v, 0, { field: `bounds.${field}`, phase: "place" }, issues));
+  const bounds: Rect = { x: edge(b.x, "x"), y: edge(b.y, "y"), width: edge(b.width, "width"), height: edge(b.height, "height") };
   const result: Layout = { nodes: placed.nodes, edges, bounds, issues };
   if (resolved.strict) {
     const errors = issues.filter((i) => i.severity === "error");

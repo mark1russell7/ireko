@@ -3,7 +3,8 @@
  * the placements into absolute positions and scales.
  */
 import { at } from "../at.ts";
-import type { PlacedNode } from "../model.ts";
+import type { Issue, PlacedNode } from "../model.ts";
+import { finite } from "./finite.ts";
 import type { Measurement } from "./measure.ts";
 import { placeOf, type PlaceColumn, type PlaceRecord } from "./place.generated.js";
 import type { Context, Normalized } from "./types.ts";
@@ -15,8 +16,8 @@ export interface Placed {
   readonly container: readonly number[];
 }
 
-/** This function gives the absolute box of each node. */
-export function place(norm: Normalized, m: Measurement, ctx: Context): Placed {
+/** This function gives the absolute box of each node. It adds its findings to `issues`. */
+export function place(norm: Normalized, m: Measurement, ctx: Context, issues: Issue[]): Placed {
   // The Vex sheet of the pass gives the absolute values: place.generated.js, from the pilot of Vex.
   const records: PlaceRecord[] = norm.nodes.map((node, i) => {
     const placement = at(m.placement, i);
@@ -28,7 +29,9 @@ export function place(norm: Normalized, m: Measurement, ctx: Context): Placed {
     { ox: ctx.options.origin.x, oy: ctx.options.origin.y },
     norm.nodes.map((node) => node.parent),
   );
-  const container = numbers(sheet.container);
+  // A value of the sheet that is not finite gives the finding NON_FINITE and a finite value.
+  const num = (column: PlaceColumn, i: number, field: string, fallback: number): number => finite(at(column, i), fallback, { node: at(norm.nodes, i).id, field, phase: "place" }, issues);
+  const container = sheet.container.map((_, i) => num(sheet.container, i, "container", -1));
 
   const out: PlacedNode[] = norm.nodes.map((node, i) => {
     const p = node.parent;
@@ -37,32 +40,20 @@ export function place(norm: Normalized, m: Measurement, ctx: Context): Placed {
     return {
       id: node.id,
       label: typeof spec.label === "string" ? spec.label : node.id,
-      x: numberAt(sheet.x, i),
-      y: numberAt(sheet.y, i),
-      width: numberAt(sheet.width, i),
-      height: numberAt(sheet.height, i),
+      x: num(sheet.x, i, "x", 0),
+      y: num(sheet.y, i, "y", 0),
+      width: num(sheet.width, i, "width", 0),
+      height: num(sheet.height, i, "height", 0),
       ...(p < 0 ? {} : { parent: at(norm.nodes, p).id }),
       ...(c < 0 ? {} : { container: at(norm.nodes, c).id }),
       depth: node.depth,
       mode: node.mode,
       layout: at(m.layout, i),
-      scale: numberAt(sheet.as, i),
+      scale: num(sheet.as, i, "scale", 1),
       clip: node.mode === "nested" && node.fit === "clip" && node.children.length > 0,
       childCount: node.children.length,
       ...(spec.data === undefined ? {} : { data: spec.data }),
     };
   });
   return { nodes: out, container };
-}
-
-/** This function gives the number of a column at the index `i`. An error of Vex is a value that is not finite, for example an overflow of a sum. */
-function numberAt(column: PlaceColumn, i: number): number {
-  const v = at(column, i);
-  if (typeof v !== "number") throw new RangeError("ireko: the place of a node is not finite.");
-  return v;
-}
-
-/** This function gives the numbers of a column. */
-function numbers(column: PlaceColumn): number[] {
-  return column.map((_, i) => numberAt(column, i));
 }

@@ -702,7 +702,7 @@ The research ranks these actions by effect:
 
 | Id | Debt | Plan | Exit criteria |
 |---|---|---|---|
-| DEBT-1 | The core is over its budget of 15 kB gzip (§7.3, §16.2). In 0.2.0, `layout` is 17.72 kB. The crossing reduction of `layers` added 0.38 kB, and the size limits went up with it. | 1. Measure the gzip size that each built-in strategy and router adds to each entry. 2. Move the largest parts that most callers do not use out of the core, as `ireko/strategies/force` is at this time. A candidate is the crossing reduction, as its own entry or as an option that a bundler can remove. 3. Lower the size limits after each move. | `layout` is 15 kB gzip or less. Or the owner sets a new budget and writes its reason in §16.2. |
+| DEBT-1 | The core is over its budget of 15 kB gzip (§7.3, §16.2). In 0.2.0, `layout` is 17.72 kB. The crossing reduction of `layers` added 0.38 kB, and the size limits went up with it. In 0.2.1, `layout` is 18.05 kB. The finding `NON_FINITE` added 0.33 kB, and the size limits went up by 0.4 kB. | 1. Measure the gzip size that each built-in strategy and router adds to each entry. 2. Move the largest parts that most callers do not use out of the core, as `ireko/strategies/force` is at this time. A candidate is the crossing reduction, as its own entry or as an option that a bundler can remove. 3. Lower the size limits after each move. | `layout` is 15 kB gzip or less. Or the owner sets a new budget and writes its reason in §16.2. |
 
 ### 13.2 Gaps
 

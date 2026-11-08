@@ -2,7 +2,8 @@ import { BUILTIN_STRATEGY_NAMES } from "./strategies/names.ts";
 import { describe, expect, it } from "vitest";
 import { defectsOf } from "../test/invariants.ts";
 import { createEngine, layout, builtinStrategies } from "./engine.ts";
-import { IrekoError, type Layout, type NodeSpec, type TraceEvent } from "./model.ts";
+import { finite } from "./engine/finite.ts";
+import { IrekoError, type Issue, type Layout, type NodeSpec, type TraceEvent } from "./model.ts";
 import { defineRouter } from "./router.ts";
 import { defineStrategy } from "./strategy.ts";
 
@@ -12,6 +13,12 @@ const node = (out: Layout, id: string) => {
   return n;
 };
 const codes = (out: Layout): string[] => out.issues.map((i) => i.code);
+/** This function gives the path of each number of a layout that is not finite. It does not examine the details of the findings. */
+const notFinite = (value: unknown, path = "out"): string[] => {
+  if (typeof value === "number") return Number.isFinite(value) ? [] : [path];
+  if (typeof value !== "object" || value === null) return [];
+  return Object.entries(value).flatMap(([k, v]) => (k === "detail" ? [] : notFinite(v, `${path}.${k}`)));
+};
 
 /** The default demo of Jqy 0.x. The old engine put 55 overlapping pairs in it. */
 const DEMO: NodeSpec = {
@@ -251,6 +258,54 @@ describe("limits", () => {
   });
 });
 
+describe("numbers that are not finite", () => {
+  // Each size is valid, but the sum of the two widths is more than the largest number.
+  const huge: NodeSpec = { id: "r", layout: "grid", children: [{ id: "a", size: { width: 1e308, height: 1 } }, { id: "b", size: { width: 1e308, height: 1 } }] };
+
+  it("gives a layout with finite numbers and one NON_FINITE error, not a throw", () => {
+    const out = layout({ root: huge });
+    expect(out.nodes.map((n) => n.id)).toEqual(["r", "a", "b"]);
+    expect(notFinite(out)).toEqual([]);
+    const found = out.issues.filter((i) => i.code === "NON_FINITE");
+    expect(found).toHaveLength(1);
+    expect(found[0]).toMatchObject({ severity: "error", node: "r", detail: { field: "offsets", phase: "measure" } });
+  });
+
+  it("throws an IrekoError with the NON_FINITE error in the strict mode", () => {
+    let caught: unknown;
+    try {
+      layout({ root: huge }, { strict: true });
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(IrekoError);
+    expect((caught as IrekoError).issues.map((i) => i.code)).toEqual(["NON_FINITE"]);
+  });
+
+  it("gives NON_FINITE, not a throw, for a measure function with very large sizes", () => {
+    const out = layout({ root: { id: "r", children: [{ id: "a" }, { id: "b" }, { id: "c" }] } }, { measure: () => ({ width: 1e308, height: 1e308 }) });
+    expect(notFinite(out)).toEqual([]);
+    expect(out.issues.filter((i) => i.code === "NON_FINITE").map((i) => i.node)).toEqual(["r"]);
+  });
+
+  it("reports a strategy that fails, then NON_FINITE when the grid fallback also overflows", () => {
+    const big = { width: 1e308, height: 1e308 };
+    const out = layout({ root: { id: "r", layout: "radial", children: [{ id: "a", size: big }, { id: "b", size: big }, { id: "c", size: big }] } });
+    expect(notFinite(out)).toEqual([]);
+    expect(codes(out).filter((c) => c !== "OVERLAP")).toEqual(["STRATEGY_FAILED", "NON_FINITE"]);
+    expect(node(out, "r").layout).toBe("grid");
+  });
+
+  it("gives the fallback of the helper, and a finding without a node for a value of the whole layout", () => {
+    const issues: Issue[] = [];
+    expect(finite(3, 0, { node: "n", field: "x", phase: "place" }, issues)).toBe(3);
+    expect(finite(Number.POSITIVE_INFINITY, 1, { node: "n", field: "scale", phase: "place" }, issues)).toBe(1);
+    expect(finite({ vexError: true }, 0, { field: "bounds.width", phase: "place" }, issues)).toBe(0);
+    expect(issues.map((i) => [i.node, i.detail?.["field"]])).toEqual([["n", "scale"], [undefined, "bounds.width"]]);
+    expect(issues[1]?.message).toContain("of the layout");
+  });
+});
+
 describe("strict mode", () => {
   it("throws an IrekoError with each error", () => {
     let caught: unknown;
@@ -323,13 +378,20 @@ describe("extension points", () => {
     }
   });
 
-  it("throws a RangeError when the fit of a node is not finite", () => {
+  it("gives NON_FINITE, not a throw, when the fit of a node from a strategy is not finite", () => {
     // Each offset is finite, but the union of the two children is wider than the largest number.
     const far = defineStrategy({ type: "far", description: "It puts two children very far apart.", options: {}, arrange: ({ children }) => ({ offsets: children.map((_, k) => ({ x: k === 0 ? -1.7e308 : 1.7e308, y: 0 })) }) });
     const engine = createEngine({ strategies: [far] });
     for (const mode of ["nested", "linked"] as const) {
-      expect(() => engine.layout({ root: { id: "r", layout: "far", mode, children: [{ id: "a" }, { id: "b" }] } })).toThrow(RangeError);
+      const out = engine.layout({ root: { id: "r", layout: "far", mode, children: [{ id: "a" }, { id: "b" }] } });
+      expect(notFinite(out)).toEqual([]);
+      expect(codes(out)).toContain("NON_FINITE");
+      expect(out.issues.filter((i) => i.code === "NON_FINITE").every((i) => i.severity === "error")).toBe(true);
     }
+    // In the linked mode, the boxes stay far apart, so the union of the boxes is not finite.
+    const linked = engine.layout({ root: { id: "r", layout: "far", mode: "linked", children: [{ id: "a" }, { id: "b" }] } });
+    expect(linked.issues.find((i) => i.detail?.["field"] === "bounds.width")?.node).toBeUndefined();
+    expect(linked.bounds.width).toBe(0);
   });
 
   it("starts the audit of a strategy, and reports an audit that throws", () => {

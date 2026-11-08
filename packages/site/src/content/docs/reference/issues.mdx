@@ -34,6 +34,7 @@ interface Issue {
 | [`LIMIT_NODES`](#limit_nodes), [`LIMIT_DEPTH`](#limit_depth), [`LIMIT_CHILDREN`](#limit_children) | error | normalize |
 | [`STRATEGY_FAILED`](#strategy_failed) | error (arrange), warning (audit) | measure, audit |
 | [`ROUTER_FAILED`](#router_failed) | error | route |
+| [`NON_FINITE`](#non_finite) | error | measure, place |
 | [`OVERLAP`](#overlap) | warning | audit |
 | [`ESCAPE`](#escape) | warning | audit |
 
@@ -96,6 +97,16 @@ The message has the name of the strategy and the problem. Refer to [Write a stra
 ## `ROUTER_FAILED`
 
 A router threw, or gave fewer than two points, or a point that is not finite. The engine uses `straight` for that edge.
+
+## `NON_FINITE`
+
+A position, a size or a scale of the layout is not a finite number. Each size of the input is finite, but a sum of very large sizes can overflow. The engine does not throw. It uses a finite value, so each number of the layout stays finite:
+
+- 0 for a position, and the size of the node for its box.
+- 1 for a scale, and 0 for a value of `bounds`.
+- When the `grid` fallback cannot arrange the children, the engine puts each child at the origin of the node.
+
+The `detail` has the `field`, for example `width` or `offsets`, and the `phase`. Use smaller sizes, or a `measure` function that gives smaller sizes.
 
 ## `OVERLAP`
 
