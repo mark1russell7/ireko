@@ -698,6 +698,12 @@ The research ranks these actions by effect:
 | **P4 Site** | §11: the site with each signature piece, SEO, the Pages workflow | The site is live. The Playwright gates pass. |
 | **P5 Release** | §10 and §12: the `tsdown` build, the package checks, the release workflow, the README, `CHANGELOG.md`, the owner steps | `ireko` 0.1.0 is on npm. |
 
+### 13.1 Debt
+
+| Id | Debt | Plan | Exit criteria |
+|---|---|---|---|
+| DEBT-1 | The core is over its budget of 15 kB gzip (§7.3, §16.2). In 0.2.0, `layout` is 17.72 kB. The crossing reduction of `layers` added 0.38 kB, and the size limits went up with it. | 1. Measure the gzip size that each built-in strategy and router adds to each entry. 2. Move the largest parts that most callers do not use out of the core, as `ireko/strategies/force` is at this time. A candidate is the crossing reduction, as its own entry or as an option that a bundler can remove. 3. Lower the size limits after each move. | `layout` is 15 kB gzip or less. Or the owner sets a new budget and writes its reason in §16.2. |
+
 ---
 
 ## 14. Decisions for the owner
