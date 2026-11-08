@@ -12,6 +12,18 @@ This file records the changes to `ireko` in each version. The release workflow c
 
 A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other version goes to `latest`.
 
+## 0.2.1
+
+This version is a patch. It corrects an error, and it adds the issue code `NON_FINITE`. Each layout of finite numbers stays the same.
+
+- Each size of a node was valid, but a sum of very large sizes can overflow. Then `layout` threw a `RangeError`, also without the strict mode. Version 0.1.3 and later had this error.
+- In this version, `layout` does not throw for it. It gives the finding `NON_FINITE` with the severity `error`. The `detail` has the field and the phase.
+- The engine uses a finite value in its place. It is 0 for a position, the size of the node for its box, and 1 for a scale.
+- When the grid fallback cannot arrange the children, each child goes to the origin of the node.
+- The union of two far boxes can be wider than the largest number. Then the value of `bounds` is 0, with a `NON_FINITE` finding without a node.
+- Thus each number of a layout is finite. With `strict: true`, `layout` throws an `IrekoError` for this finding, as for each other error.
+- The check adds approximately 0.33 kB gzip to each entry with `layout`. The gzip size of `layout` goes from 17.72 kB to 18.05 kB. The size limits of `layout`, the core, `ireko/shapes`, `ireko/react` and `ireko/xyflow` go up by 0.4 kB.
+
 ## 0.2.0
 
 This version is a minor version. It changes no API. The layout of a graph with crossed edges in the strategy `layers` can change.

@@ -118,6 +118,7 @@ export type IssueCode =
   | "LIMIT_CHILDREN"
   | "STRATEGY_FAILED"
   | "ROUTER_FAILED"
+  | "NON_FINITE"
   | "OVERLAP"
   | "ESCAPE"
   | (string & {});

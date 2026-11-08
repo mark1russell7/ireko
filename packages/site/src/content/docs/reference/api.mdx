@@ -128,7 +128,7 @@ type Mode = "nested" | "linked"; // the children are inside the box of the node,
 type Fit = "grow" | "scale" | "clip";
 type TreeEdges = "linked" | "all" | "none"; // the tree edges that the engine adds
 type Severity = "error" | "warning"; // an error changes the output, and a warning does not
-type IssueCode = "DUPLICATE_ID" | "EMPTY_ID" | "UNKNOWN_LAYOUT" | "UNKNOWN_ROUTER" | "INVALID_OPTION" | "INVALID_SIZE" | "UNKNOWN_EDGE_END" | "SELF_LOOP" | "LIMIT_NODES" | "LIMIT_DEPTH" | "LIMIT_CHILDREN" | "STRATEGY_FAILED" | "ROUTER_FAILED" | "OVERLAP" | "ESCAPE" | (string & {});
+type IssueCode = "DUPLICATE_ID" | "EMPTY_ID" | "UNKNOWN_LAYOUT" | "UNKNOWN_ROUTER" | "INVALID_OPTION" | "INVALID_SIZE" | "UNKNOWN_EDGE_END" | "SELF_LOOP" | "LIMIT_NODES" | "LIMIT_DEPTH" | "LIMIT_CHILDREN" | "STRATEGY_FAILED" | "ROUTER_FAILED" | "NON_FINITE" | "OVERLAP" | "ESCAPE" | (string & {});
 interface TraceEvent { phase: "normalize" | "measure" | "place" | "route" | "audit"; data: unknown } // the output of one phase of the pipeline
 ```
 
