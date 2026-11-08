@@ -1,12 +1,36 @@
 import * as fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import type { ChildEdge } from "../strategy.ts";
-import { countCrossings, orderLayers, PASSES, properGraph } from "./crossings.ts";
+import { countCrossings, orderLayers, PASSES, type ProperGraph, properGraph } from "./crossings.ts";
 
 /** The number of random cases. A mutation run (IREKO_FAST=1) repeats the tests for each mutant, so it uses a tenth. */
 const runs = (n: number): { numRuns: number } => ({ numRuns: process.env["IREKO_FAST"] === "1" ? Math.ceil(n / 10) : n });
 
 const edge = (from: number, to: number): ChildEdge => ({ from, to });
+
+/** The order of each layer, with its virtual nodes, by a sort key for each node. Equal keys keep the node numbers. */
+const orderBy = (graph: ProperGraph, key: (v: number) => number): number[][] => {
+  const order: number[][] = [];
+  graph.layer.forEach((l, v) => (order[l] ??= []).push(v));
+  for (let l = 0; l < order.length; l++) order[l] ??= [];
+  return order.map((nodes) => nodes.toSorted((a, b) => key(a) - key(b) || a - b));
+};
+
+/** The crossing count of each pair of segments: the plain oracle of `countCrossings`. */
+const pairwise = (order: readonly (readonly number[])[], graph: ProperGraph): number => {
+  const place = new Map<number, number>();
+  for (const nodes of order) nodes.forEach((v, i) => place.set(v, i));
+  const pos = (v: number): number => place.get(v) ?? 0;
+  let count = 0;
+  graph.segments.forEach(([u1, l1], i) =>
+    graph.segments.slice(i + 1).forEach(([u2, l2]) => {
+      // Two segments of one gap cross when their upper places and their lower places are in the opposite order.
+      if (graph.layer[u1] !== graph.layer[u2] || u1 === u2 || l1 === l2) return;
+      if ((pos(u1) - pos(u2)) * (pos(l1) - pos(l2)) < 0) count++;
+    }),
+  );
+  return count;
+};
 
 describe("the crossing count", () => {
   it("counts two segments that change their order between two layers", () => {
@@ -59,7 +83,7 @@ describe("the barycenter ordering", () => {
   });
 
   it("gives no layer for no child", () => {
-    expect(orderLayers(0, [], [])).toEqual({ order: [], crossings: Array.from({ length: PASSES + 1 }, () => 0) });
+    expect(orderLayers(0, [], [])).toEqual({ order: [], proper: [], crossings: Array.from({ length: PASSES + 1 }, () => 0) });
   });
 });
 
@@ -78,12 +102,28 @@ const layered = fc.integer({ min: 1, max: 24 }).chain((k) =>
 });
 
 describe("properties of the barycenter ordering", () => {
-  it("the crossing count never rises after a pass", () => {
+  it("the best order has the last count, and no more crossings than the start order", () => {
     fc.assert(
       fc.property(layered, ({ k, layer, edges }) => {
-        const { crossings } = orderLayers(k, layer, edges);
+        const graph = properGraph(k, layer, edges);
+        const { proper, crossings } = orderLayers(k, layer, edges);
         expect(crossings).toHaveLength(PASSES + 1);
-        for (let i = 1; i < crossings.length; i++) expect(crossings[i]).toBeLessThanOrEqual(crossings[i - 1] ?? 0);
+        // The counts come from countCrossings, not from the field crossings that orderLayers builds.
+        const start = countCrossings(orderBy(graph, (v) => v), graph);
+        expect(countCrossings(proper, graph)).toBe(crossings.at(-1));
+        expect(countCrossings(proper, graph)).toBeLessThanOrEqual(start);
+        expect(crossings[0]).toBe(start);
+      }),
+      runs(300),
+    );
+  });
+
+  it("the crossing count equals the plain count of each pair of segments, in any order of the layers", () => {
+    fc.assert(
+      fc.property(layered, fc.array(fc.integer(), { minLength: 200, maxLength: 200 }), ({ k, layer, edges }, keys) => {
+        const graph = properGraph(k, layer, edges);
+        const order = orderBy(graph, (v) => keys[v % keys.length] ?? 0);
+        expect(countCrossings(order, graph)).toBe(pairwise(order, graph));
       }),
       runs(300),
     );

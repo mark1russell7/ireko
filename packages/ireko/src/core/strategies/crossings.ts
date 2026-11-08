@@ -22,6 +22,8 @@ export interface ProperGraph {
 export interface Ordering {
   /** The children of each layer, in order, with no virtual node. */
   readonly order: number[][];
+  /** The best order of each layer with its virtual nodes. Its crossing count is the last value of `crossings`. */
+  readonly proper: number[][];
   /** The crossing count of the best order: the start, then the count after each pass. The count does not rise. */
   readonly crossings: readonly number[];
 }
@@ -93,7 +95,7 @@ function inversions(values: number[]): number {
  * layer by the mean place of the neighbors of each node. On the way down, the neighbors are in the layer before it. On
  * the way up, they are in the layer after it.
  *
- * A node with no such neighbor keeps its place. Equal places keep the order of the node numbers.
+ * A node with no such neighbor keeps its place. Nodes with equal keys keep their current order.
  */
 export function orderLayers(k: number, layer: readonly number[], edges: readonly ChildEdge[], passes: number = PASSES): Ordering {
   const graph = properGraph(k, layer, edges);
@@ -116,7 +118,7 @@ export function orderLayers(k: number, layer: readonly number[], edges: readonly
       const ns = at(near, v);
       keys.set(v, ns.length === 0 ? at(place, v) : ns.reduce((sum, u) => sum + at(place, u), 0) / ns.length);
     }
-    order[l] = at(order, l).toSorted((a, b) => (keys.get(a) ?? 0) - (keys.get(b) ?? 0) || a - b);
+    order[l] = at(order, l).toSorted((a, b) => (keys.get(a) ?? 0) - (keys.get(b) ?? 0) || at(place, a) - at(place, b));
     remember();
   };
   let best = order.map((nodes) => [...nodes]);
@@ -136,5 +138,5 @@ export function orderLayers(k: number, layer: readonly number[], edges: readonly
     }
     crossings.push(fewest);
   }
-  return { order: best.map((nodes) => nodes.filter((v) => v < k)), crossings };
+  return { order: best.map((nodes) => nodes.filter((v) => v < k)), proper: best, crossings };
 }
