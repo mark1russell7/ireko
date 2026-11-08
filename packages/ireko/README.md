@@ -111,7 +111,7 @@ The [React Flow guide](https://mark1russell7.github.io/ireko/guides/react-flow/)
 
 ## When to use another library
 
-This library lays out trees of containers. For a large directed graph with layers, for example a flow chart with long chains, use dagre or ELK. This library has no crossing reduction, no ports and no routing around obstacles. The [comparison](https://mark1russell7.github.io/ireko/compare/) has the details.
+This library lays out trees of containers. For a large directed graph with layers, for example a flow chart with long chains, use dagre or ELK. The strategy `layers` has a barycenter crossing reduction, but no exact crossing minimization, no straight long edges and no ports. The [comparison](https://mark1russell7.github.io/ireko/compare/) has the details.
 
 ## Requirements
 

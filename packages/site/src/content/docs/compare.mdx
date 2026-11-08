@@ -50,7 +50,7 @@ Good layout engines for nested graphs do the same thing at the core. They lay ou
 
 ## What ireko does not do
 
-- **A small layered layout.** The `layers` strategy orders each layer by the mean place of the neighbors. It has no global crossing reduction and no placement that straightens long edges. For a large graph with long chains, use dagre or ELK.
+- **A small layered layout.** The `layers` strategy orders each layer by the mean place of the neighbors. A long edge has a virtual node in each layer that it goes through, and the strategy keeps the order with the fewest crossings. It has no exact crossing minimization and no placement that straightens long edges. For a large graph with long chains, use dagre or ELK.
 - **No ports.** An edge starts at the border of a box, on the line to the other box.
 - **No edge label space.** A label goes at the middle of its route, on top of the line. The layout does not keep space for it.
 - **No edge bundling.** The `avoid` router goes around boxes, but it does not keep edges apart from each other, and it does not reduce crossings between edges.

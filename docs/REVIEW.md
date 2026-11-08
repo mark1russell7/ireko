@@ -698,6 +698,12 @@ The research ranks these actions by effect:
 | **P4 Site** | §11: the site with each signature piece, SEO, the Pages workflow | The site is live. The Playwright gates pass. |
 | **P5 Release** | §10 and §12: the `tsdown` build, the package checks, the release workflow, the README, `CHANGELOG.md`, the owner steps | `ireko` 0.1.0 is on npm. |
 
+### 13.1 Debt
+
+| Id | Debt | Plan | Exit criteria |
+|---|---|---|---|
+| DEBT-1 | The core is over its budget of 15 kB gzip (§7.3, §16.2). In 0.2.0, `layout` is 17.72 kB. The crossing reduction of `layers` added 0.38 kB, and the size limits went up with it. | 1. Measure the gzip size that each built-in strategy and router adds to each entry. 2. Move the largest parts that most callers do not use out of the core, as `ireko/strategies/force` is at this time. A candidate is the crossing reduction, as its own entry or as an option that a bundler can remove. 3. Lower the size limits after each move. | `layout` is 15 kB gzip or less. Or the owner sets a new budget and writes its reason in §16.2. |
+
 ---
 
 ## 14. Decisions for the owner
@@ -760,7 +766,7 @@ The research ranks these actions by effect:
 | §11: IndexNow | Not done. | IndexNow needs a key file and a request after each deployment. Do it after the first deployment. |
 | (new) Edge labels | Each renderer draws the label of an edge at the middle of its route, with a halo. `toXYFlow` gives the label to React Flow. | The model and the text language had labels, but no renderer drew them. The guide found the gap. |
 | §13 P3: `tree` with tidy contours | The engine gives a shape to the children of a strategy with `shapes: true`: bands on each axis, at most 64. The strategy packs the row forward and backward and takes the mean. | The contract of §6.3 sees only extents, and a tidy tree needs more. The bands are a contour with a fixed cost for each node. |
-| §13 P3: `layers` for graphs | Each strategy gets the extra edges between the subtrees of its children. `layers` turns the back edges of a depth-first search around, uses the longest path for the layers, and orders each layer with 8 barycenter passes. Its `flow` gives the direction to the router. | A flowchart inside one container is the common case. A large graph needs the crossing reduction of dagre or ELK. |
+| §13 P3: `layers` for graphs | Each strategy gets the extra edges between the subtrees of its children. `layers` turns the back edges of a depth-first search around, uses the longest path for the layers, and orders each layer with 8 barycenter passes. A long edge has a virtual node in each layer between its ends, and the passes keep the order with the fewest crossings (2026-11-08). Its `flow` gives the direction to the router. | A flowchart inside one container is the common case. A large graph needs the crossing reduction of dagre or ELK. |
 | L10: Stryker with its Vitest runner | Stryker with its command runner: it starts `vitest run --bail 1` for each mutant. The property tests use a tenth of their cases (`IREKO_FAST=1`). No gate at this time. | The Vitest runner of Stryker 10 does not activate a mutant under Vitest 5: it gives the active mutant once, and the workers keep the old value. The command runner gives it in an environment variable. Set the gate of 90 % after the first full score. |
 | §4: a budget of 12 kB for the core | 15 kB. The built-in router `avoid` and the strategies `tree` and `layers` made the core 12.7 kB for `layout`. | Each built-in strategy and router is in each bundle, so `router: "avoid"` works by name in the text language and the playground. An opt-in router object keeps the core near 10 kB, but it makes the API less uniform. ireko stays smaller than dagre (17 kB). |
 | §5 `avoid`: A* on a sparse grid | The engine gives a router with `obstacles: true` the 32 nearest boxes of each edge, without the ends and their containers. The grid lines are the edges of the obstacles, grown by a margin. The search costs one bend as 40 pixels. | The obstacles of an edge are the boxes that it can cross. A limit of 32 keeps the cost of an edge fixed. |
