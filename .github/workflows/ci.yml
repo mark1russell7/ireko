@@ -137,7 +137,7 @@ jobs:
 
   ci-ok:
     name: CI OK
-    if: always()
+    if: ${{ !cancelled() }}
     needs: [check, package, site, bytes]
     runs-on: ubuntu-latest
     timeout-minutes: 2
