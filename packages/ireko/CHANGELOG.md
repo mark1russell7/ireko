@@ -20,6 +20,7 @@ This version is a minor version. It changes no API. The layout of a graph with c
 - The ordering counts the crossings after each pass, and it keeps the order with the fewest crossings. Thus a pass does not make the order worse.
 - Each example of the gallery keeps its layout: the golden files do not change.
 - A dependency map of 250 boxes and 293 edges had 3710 crossings of its routed edges with 0.1.5. With 0.2.0, it has 2010.
+- The crossing reduction adds approximately 0.4 kB gzip to each entry with the strategy `layers`. The gzip size of `layout` goes from 17.34 kB to 17.72 kB. The size limits of `layout`, the core, `ireko/shapes`, `ireko/react` and `ireko/xyflow` go up by 0.3 kB to 0.5 kB.
 
 ## 0.1.5
 

@@ -96,7 +96,7 @@ const layered = fc.integer({ min: 1, max: 24 }).chain((k) =>
   }),
 ).map(({ k, layer, pairs }) => {
   // The layers have no gap: a layer with no child moves the next layers up.
-  const used = [...new Set(layer)].sort((a, b) => a - b);
+  const used = [...new Set(layer)].toSorted((a, b) => a - b);
   const dense = layer.map((l) => used.indexOf(l));
   return { k, layer: dense, edges: pairs.map(([a, b]) => edge(a, b)) };
 });
@@ -142,7 +142,7 @@ describe("properties of the barycenter ordering", () => {
     fc.assert(
       fc.property(layered, ({ k, layer, edges }) => {
         const { order } = orderLayers(k, layer, edges);
-        expect(order.flat().sort((a, b) => a - b)).toEqual(Array.from({ length: k }, (_, i) => i));
+        expect(order.flat().toSorted((a, b) => a - b)).toEqual(Array.from({ length: k }, (_, i) => i));
         order.forEach((nodes, l) => nodes.forEach((v) => expect(layer[v]).toBe(l)));
       }),
       runs(200),
