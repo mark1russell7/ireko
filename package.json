@@ -30,6 +30,7 @@
     "@mark1russell7/ste-lint": "github:mark1russell7/ste-lint",
     "@mark1russell7/template-cli": "^0.1.2",
     "@size-limit/preset-small-lib": "^14.1.0",
+    "@vitest/coverage-v8": "^5.0.3",
     "oxlint": "^1.87.0",
     "oxlint-tsgolint": "^7.0.2004",
     "publint": "^0.3.25",
