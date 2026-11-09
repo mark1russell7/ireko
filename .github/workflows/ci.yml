@@ -51,6 +51,18 @@ jobs:
       - run: pnpm test
       # The coverage of the core and the SVG export, with the gates of vitest.config.ts
       - run: pnpm test:coverage
+      # The function report (coverage-final.json) for the coverage view of the code atlas. The atlas reads the
+      # artifact "coverage" of the newest run on main. One cell uploads it, and a failed gate still leaves the file.
+      - name: Coverage reports
+        if: always() && matrix.node == '24'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: coverage
+          path: |
+            packages/ireko/coverage/coverage-summary.json
+            packages/ireko/coverage/coverage-final.json
+          if-no-files-found: error
+          retention-days: 14
       # The writing rules (ASD-STE100) of the README files, the docs and the doc comments
       - run: pnpm lint:ste
 
