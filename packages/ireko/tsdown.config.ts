@@ -24,6 +24,10 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   // React and React Flow are optional peers: the build imports them, and does not include them.
-  deps: { neverBundle: [/^react($|\/)/, /^react-dom($|\/)/, /^@xyflow\/react($|\/)/] },
+  // The escape of @mark1russell7/text goes into the build, so the package keeps no runtime dependencies.
+  deps: {
+    neverBundle: [/^react($|\/)/, /^react-dom($|\/)/, /^@xyflow\/react($|\/)/],
+    alwaysBundle: [/^@mark1russell7\/text$/],
+  },
   clean: true,
 });

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package",
   "name": "ireko",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Composable graph and tree layout for TypeScript. Select a layout for each container, and get boxes and routed edges for any renderer.",
   "keywords": [
     "graph-layout",
@@ -138,6 +138,7 @@
   },
   "devDependencies": {
     "@mark1russell7/cue": "github:mark1russell7/cue",
+    "@mark1russell7/text": "^0.0.2",
     "@stryker-mutator/core": "10.1.1",
     "@stryker-mutator/vitest-runner": "10.1.1",
     "@types/node": "^26.6.4",

@@ -12,6 +12,15 @@ This file records the changes to `ireko` in each version. The release workflow c
 
 A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other version goes to `latest`.
 
+## 0.2.2
+
+This version is a patch. It changes no export, no type and no layout. Its change is inside the build of `ireko/svg`.
+
+- The escape of the text of an SVG comes from `escapeAttribute` of `@mark1russell7/text`, the home of the escape functions. The build bundles it.
+- The SVG output is the same: `&amp;`, `&lt;`, `&gt;`, `&quot;` and `&#39;` in place of the five characters.
+
+Runtime dependencies: no change against `0.2.1` (none). `@mark1russell7/text` `^0.0.2` is a dev dependency, and the build bundles it.
+
 ## 0.2.1
 
 This version is a patch. It corrects an error, and it adds the issue code `NON_FINITE`. Each layout of finite numbers stays the same.

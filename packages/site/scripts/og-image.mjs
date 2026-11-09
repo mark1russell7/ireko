@@ -9,6 +9,7 @@ import { chromium } from "@playwright/test";
 import { layout } from "ireko";
 import { examples } from "ireko/examples";
 import { toSVG } from "ireko/svg";
+import { escapeAttribute as esc } from "@mark1russell7/text";
 
 const WIDTH = 1200;
 const HEIGHT = 630;
@@ -142,8 +143,6 @@ h1 { font-weight: 750; letter-spacing: -0.02em; line-height: 1.06; text-wrap: ba
 .home .pills { display: flex; flex-wrap: wrap; gap: 10px; }
 .home .pill { font-family: "Atkinson Hyperlegible Mono Variable", monospace; font-size: 17px; padding: 5px 11px; border-radius: 999px; border: 1px solid #aeb6c7; background: #ffffff; color: #454f67; }
 `;
-
-const esc = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 /** This function decodes the character references of an attribute or a title of the built HTML. */
 const decode = (text) =>
