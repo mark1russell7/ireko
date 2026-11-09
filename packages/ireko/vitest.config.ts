@@ -10,6 +10,8 @@ export default defineConfig({
     benchmark: { include: ["src/**/*.bench.ts"] },
     coverage: {
       provider: "v8",
+      // The default reporters, and json-summary. The code atlas reads coverage-final.json (json) from the CI artifact.
+      reporter: ["text", "html", "clover", "json", "json-summary"],
       include: ["src/**/*.{ts,tsx}"],
       // The test helpers and the example data are not the product.
       exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.bench.ts", "src/test/**", "src/examples/**"],
