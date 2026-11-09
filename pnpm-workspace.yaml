@@ -11,3 +11,11 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - "@mark1russell7/*"
   - "@procedures/*"
+
+# Security fixes for dependencies of Stryker (dev only) that its own ranges do not let in.
+# Remove each line when a Stryker release takes the fixed version by itself.
+overrides:
+  # typed-rest-client 2.3.1 pins qs 6.15.1 (alerts 1, 2, 3, 9); 6.16.1 is the fixed MINOR.
+  "typed-rest-client>qs": "^6.16.1"
+  # @stryker-mutator/core 10.1.1 pins minimatch ~10.2.4 (alert 11); 11.0.1 is the fix. The nightly mutation job checks it.
+  "@stryker-mutator/core>minimatch": "^11.0.1"
