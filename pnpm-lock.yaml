@@ -171,7 +171,7 @@ importers:
         version: 0.18.5
       '@mark1russell7/api-report':
         specifier: ^0.5.3
-        version: 0.5.3
+        version: 0.5.4
       '@mark1russell7/cue':
         specifier: github:mark1russell7/cue
         version: https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e
@@ -1255,13 +1255,13 @@ packages:
   '@loaderkit/resolve@1.0.6':
     resolution: {integrity: sha512-G8FdIoF5CypfwmD9rl8BXod5HDn8JqB0CCNBXDTaRZ+yRYhARrrSToX1zg1zy9jX3zLqigsELwhT4gNtkdQAUg==}
 
-  '@mark1russell7/api-report@0.5.3':
-    resolution: {integrity: sha512-tdg5rrwp1xTd19dEtfhZ3ZxDSx07AnUWFZuNpMr9zFnUjAx5AYL238L6EFfo6HnevfKlxzQWGOmvpkFB1v80sw==}
+  '@mark1russell7/api-report@0.5.4':
+    resolution: {integrity: sha512-mGVkKw691mC3JfLkUEvmRsnBY4LJAt3svJG5olGfySg7S+Bv3sR2eQuWeeXrrgoeE/diokEBiecYpLUOmjYWOw==}
     engines: {node: '>=22'}
     hasBin: true
 
-  '@mark1russell7/conventions@0.40.6':
-    resolution: {integrity: sha512-QKW7+0RketlRTVFAbPEK3TEJSj6v3JJmWuTaFV+fxI/83wdbVBedr1jNsdjplmaXWx1aEypUytsqIP7hihZDsA==}
+  '@mark1russell7/conventions@0.41.1':
+    resolution: {integrity: sha512-FFBoKGXCzW1HFnF4kd0XjOguh1hGxMk4e6N4lK4uvfkLho7AD9ZahVa5e3QStO/vGDb5ZcnsJRkBvFkMB6hB1A==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -4981,11 +4981,11 @@ snapshots:
     dependencies:
       '@braidai/lang': 1.1.2
 
-  '@mark1russell7/api-report@0.5.3':
+  '@mark1russell7/api-report@0.5.4':
     dependencies:
-      '@mark1russell7/conventions': 0.40.6
+      '@mark1russell7/conventions': 0.41.1
 
-  '@mark1russell7/conventions@0.40.6':
+  '@mark1russell7/conventions@0.41.1':
     dependencies:
       yaml: 2.9.1
 
