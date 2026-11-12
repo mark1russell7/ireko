@@ -84,19 +84,19 @@ jobs:
       - run: pnpm --filter @ireko/site exec playwright install --with-deps chromium
       - run: pnpm --filter @ireko/site og
       # The Releases page and the Status page. The list comes from the changelog, the tags and npm at each build.
-      - uses: mark1russell7/template/.github/actions/site-pages@ddf7e495fc88b536e2ea89bb8271ac2d50b28baf # main
+      - uses: mark1russell7/template/.github/actions/site-pages@4466542421ef76bcb3ccf5b5e1765d4f509f8f4f # main
         with:
           out: packages/site/dist
           packages: ireko
           changesets: packages/ireko/CHANGELOG.md
           site-name: ireko
       # A failed check stops the deployment. The artifact site-check has the screenshots.
-      - uses: mark1russell7/template/.github/actions/site-check@ddf7e495fc88b536e2ea89bb8271ac2d50b28baf # main
+      - uses: mark1russell7/template/.github/actions/site-check@4466542421ef76bcb3ccf5b5e1765d4f509f8f4f # main
         with:
           out: packages/site/dist
           site-check-pages: /,/playground/,/releases/,/status/
       # Old data on a page, or an old engine, stops the deployment
-      - uses: mark1russell7/template/.github/actions/data-stamps@ddf7e495fc88b536e2ea89bb8271ac2d50b28baf # main
+      - uses: mark1russell7/template/.github/actions/data-stamps@4466542421ef76bcb3ccf5b5e1765d4f509f8f4f # main
         with:
           stamps: packages/site/dist/data-stamps.json
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
