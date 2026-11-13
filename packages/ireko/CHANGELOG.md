@@ -12,6 +12,14 @@ This file records the changes to `ireko` in each version. The release workflow c
 
 A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other version goes to `latest`.
 
+## 0.2.3
+
+This version is a patch. It changes no export, no type and no layout. Its change is inside the build of `ireko/svg`.
+
+- The build bundles `@mark1russell7/text` 0.0.5 (before, 0.0.2). The escape of the text of an SVG is the same, but the source map of the bundle changes.
+
+Runtime dependencies: no change against `0.2.2` (none). `@mark1russell7/text` `^0.0.5` is a dev dependency, and the build bundles it.
+
 ## 0.2.2
 
 This version is a patch. It changes no export, no type and no layout. Its change is inside the build of `ireko/svg`.
