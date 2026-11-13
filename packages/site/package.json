@@ -15,7 +15,7 @@
     "typecheck": "astro sync && tsc -p tsconfig.json"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.13.0",
+    "@axe-core/playwright": "^4.14.0",
     "@mark1russell7/cue": "github:mark1russell7/cue",
     "@mark1russell7/text": "^0.0.5",
     "@playwright/test": "^1.64.0",
