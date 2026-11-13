@@ -138,7 +138,7 @@
   },
   "devDependencies": {
     "@mark1russell7/cue": "github:mark1russell7/cue",
-    "@mark1russell7/text": "^0.0.2",
+    "@mark1russell7/text": "^0.0.5",
     "@stryker-mutator/core": "10.1.1",
     "@stryker-mutator/vitest-runner": "10.1.1",
     "@types/node": "^26.6.4",
