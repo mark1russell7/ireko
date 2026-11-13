@@ -147,13 +147,38 @@ jobs:
     with:
       vex-ref: ead65a70bde9f31b9fef4a8cc35cb69289167298
 
+  # On a pull request, start the release build on the commit, as the job build of release.yml does: the install, the
+  # build, pack.ts and tags.ts of the template. It fails when the release build fails on the same commit, for example when
+  # a dependency update changes a shipped file and the version is already on npm (ireko#101 on 11-13). The release on main
+  # then stops, so this job finds the fault before the merge. The template keeps the code (actions/release-check).
+  release-check:
+    name: release-check
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # The release build reads .nvmrc (node-version-file of release.yml), so the check uses the same version.
+      - name: Node.js version of the release build
+        id: node
+        run: echo "version=$(cat .nvmrc)" >> "$GITHUB_OUTPUT"
+      # The same template commit as the job build of release.yml, so the check runs the scripts of the release.
+      - uses: mark1russell7/template/.github/actions/release-check@4466542421ef76bcb3ccf5b5e1765d4f509f8f4f # main
+        with:
+          node-version: ${{ steps.node.outputs.version }}
+
   ci-ok:
     name: CI OK
     if: ${{ !cancelled() }}
-    needs: [check, package, site, bytes]
+    needs: [check, package, site, bytes, release-check]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     permissions: {}
     steps:
+      # release-check runs only on a pull request, so only its result can be skipped.
       - name: All jobs passed
-        run: test "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped') }}" = "false"
+        run: test "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || needs.check.result == 'skipped' || needs.package.result == 'skipped' || needs.site.result == 'skipped' || needs.bytes.result == 'skipped' }}" = "false"
