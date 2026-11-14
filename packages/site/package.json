@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.2",
-    "@astrojs/react": "^7.0.1",
+    "@astrojs/react": "^7.1.2",
     "@astrojs/sitemap": "^3.7.4",
     "@astrojs/starlight": "^0.42.6",
     "@fontsource-variable/atkinson-hyperlegible-mono": "^5.3.0",
