@@ -167,7 +167,7 @@ jobs:
         id: node
         run: echo "version=$(cat .nvmrc)" >> "$GITHUB_OUTPUT"
       # The same template commit as the job build of release.yml, so the check runs the scripts of the release.
-      - uses: mark1russell7/template/.github/actions/release-check@4466542421ef76bcb3ccf5b5e1765d4f509f8f4f # main
+      - uses: mark1russell7/template/.github/actions/release-check@2c041957ca014e4c95a92e2301d249b6b25d2c4f # main
         with:
           node-version: ${{ steps.node.outputs.version }}
 
