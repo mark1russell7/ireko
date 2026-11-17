@@ -23,6 +23,14 @@ export default defineConfig({
   target: "es2022",
   dts: true,
   sourcemap: true,
+  outputOptions: {
+    // A source map names a bundled package by its path in node_modules, not by its path in the pnpm store.
+    // The store path contains the version (.pnpm/<name>@<version>/node_modules/<name>/). With that path, an update of a
+    // dependency with the same code changes a shipped file, and the release check stops the update.
+    // On Windows the path comes with backslashes: the map gets forward slashes on each OS.
+    // scripts/smoke.mjs fails when a source map in the tarball names a store path.
+    sourcemapPathTransform: (source) => source.replaceAll("\\", "/").replace(/node_modules\/\.pnpm\/[^/]+\/node_modules\//g, "node_modules/"),
+  },
   // React and React Flow are optional peers: the build imports them, and does not include them.
   // The escape of @mark1russell7/text goes into the build, so the package keeps no runtime dependencies.
   deps: {
