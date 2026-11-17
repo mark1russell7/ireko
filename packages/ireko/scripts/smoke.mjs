@@ -97,6 +97,12 @@ try {
   }
   for (const file of ["README.md", "LICENSE", "CHANGELOG.md"]) check(has(file), `the tarball has ${file}`);
   check(![...files.keys()].some((f) => f.startsWith("package/src/")), "the tarball has no source folder");
+  // A path in the pnpm store contains the version of the package. With it, an update of a bundled dependency with the
+  // same code changes a shipped file (tsdown.config.ts, sourcemapPathTransform).
+  const storePaths = [...files]
+    .filter(([f]) => f.endsWith(".map"))
+    .flatMap(([f, content]) => (JSON.parse(content.toString("utf8")).sources ?? []).filter((s) => s.includes("node_modules/.pnpm/")).map((s) => `${f}: ${s}`));
+  check(storePaths.length === 0, `no source map names a path in the pnpm store${storePaths.length ? `: ${storePaths.join(", ")}` : ""}`);
   ok(`${String(files.size)} files`);
   check(manifest.dependencies === undefined || Object.keys(manifest.dependencies).length === 0, "the package has no runtime dependencies");
 
