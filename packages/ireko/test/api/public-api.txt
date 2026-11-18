@@ -195,6 +195,7 @@ examples: dist/examples.d.ts#examples
 
 type ForceOptions: dist/strategies/force.d.ts#ForceOptions
 MAX_SPRING_STRENGTH: dist/strategies/force.d.ts#MAX_SPRING_STRENGTH
+MAX_THETA: dist/strategies/force.d.ts#MAX_THETA
 RELAX_DEFAULTS: dist/strategies/force.d.ts#RELAX_DEFAULTS
 type RelaxEdge: dist/strategies/force.d.ts#RelaxEdge
 type RelaxNode: dist/strategies/force.d.ts#RelaxNode
@@ -739,10 +740,14 @@ interface ForceOptions {
   readonly strength: number;
   readonly margin: number;
   readonly distance: number;
+  readonly theta: number;
 }
 
 ### dist/strategies/force.d.ts#MAX_SPRING_STRENGTH
 export declare const MAX_SPRING_STRENGTH = .5;
+
+### dist/strategies/force.d.ts#MAX_THETA
+export declare const MAX_THETA = 1;
 
 ### dist/strategies/force.d.ts#RELAX_DEFAULTS
 export declare const RELAX_DEFAULTS: Omit<RelaxOptions, "bound">;
@@ -772,6 +777,7 @@ interface RelaxOptions {
   readonly centering: number;
   readonly maxStep: number;
   readonly separationPasses: number;
+  readonly theta: number;
   readonly bound: {
     readonly width: number;
     readonly height: number;

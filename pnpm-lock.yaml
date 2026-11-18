@@ -209,6 +209,40 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
 
+  packages/bench:
+    dependencies:
+      '@mark1russell7/rigor-bench':
+        specifier: ^0.2.60
+        version: 0.2.60(esbuild@0.28.2)
+      '@mark1russell7/rigor-generators':
+        specifier: ^0.2.0
+        version: 0.2.0
+      '@mark1russell7/rigor-statistics':
+        specifier: ^0.2.12
+        version: 0.2.12
+      ireko:
+        specifier: workspace:*
+        version: link:../ireko
+      ireko-base:
+        specifier: npm:ireko@0.2.4
+        version: ireko@0.2.4(@xyflow/react@12.12.0(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
+    devDependencies:
+      '@mark1russell7/cue':
+        specifier: github:mark1russell7/cue
+        version: https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e
+      '@types/node':
+        specifier: ^26.6.4
+        version: 26.6.5
+      '@vitest/coverage-v8':
+        specifier: ^5.0.3
+        version: 5.0.3(vitest@5.0.3)
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
+      vitest:
+        specifier: ^5.0.3
+        version: 5.0.3(@types/node@26.6.5)(@vitest/coverage-v8@5.0.3)(happy-dom@21.0.4)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))
+
   packages/ireko:
     devDependencies:
       '@mark1russell7/cue':
@@ -1284,6 +1318,24 @@ packages:
     version: 1.0.0
     engines: {node: '>=22'}
     hasBin: true
+
+  '@mark1russell7/rigor-bench@0.2.60':
+    resolution: {integrity: sha512-ShVHZ4IvX5EPVWqIFE5z0g45DsJs/pAHstRv26b8uhnCjU1GC6lYKSJL0egKYvxG5MaztruWV9NQ69uLdjZ27g==}
+    engines: {node: '>=22'}
+    hasBin: true
+    peerDependencies:
+      esbuild: ^0.28.2
+    peerDependenciesMeta:
+      esbuild:
+        optional: true
+
+  '@mark1russell7/rigor-generators@0.2.0':
+    resolution: {integrity: sha512-eTyJhK4Nowx1KQ3QrsQqLiAlhFoL+8m1OT6He+X0Lf0G/0f9OyQC8ponQLViQKRkP/ef10B6oACFjtjnKErobg==}
+    engines: {node: '>=22'}
+
+  '@mark1russell7/rigor-statistics@0.2.12':
+    resolution: {integrity: sha512-g37AZ4tqim2xp5rcwMgyNBYC75KT5Ai1TcEk7DWHvIlxKDlWquru2rDrwsN9H0pOSccl0o6gQ+eZ9QExERtB/w==}
+    engines: {node: '>=22'}
 
   '@mark1russell7/ste-lint@https://codeload.github.com/mark1russell7/ste-lint/tar.gz/f597d6c1e09bcfcb487bb575825d6d5f29e9e0c7':
     resolution: {gitHosted: true, integrity: sha512-HDxumpWNUeciZKaXbAGFPyoOTrt0trj7L3/koNvWnTN/vEuF0gYzqVJdsgfTQ9bE/DhSxfNMRxtrh4KYnbbimA==, tarball: https://codeload.github.com/mark1russell7/ste-lint/tar.gz/f597d6c1e09bcfcb487bb575825d6d5f29e9e0c7}
@@ -2820,6 +2872,18 @@ packages:
 
   inline-style-parser@0.2.7:
     resolution: {integrity: sha512-Nb2ctOyNR8DqQoR0OwRG95uNWIC0C1lCgf5Naz5H6Ji72KZ8OcFZLz2P5sNgwlyoJ8Yif11oMuYs5pBQa86csA==}
+
+  ireko@0.2.4:
+    resolution: {integrity: sha512-QAhkXLlBz1bwil6Ou2b2BL6cNYoysmiggqrsScU7poMST9fdEYMHQLFu9FNTt0UquEUYycDD7h6Cdv8WHuwLfw==}
+    engines: {node: '>=22.12'}
+    peerDependencies:
+      '@xyflow/react': ^12.0.0
+      react: '>=18'
+    peerDependenciesMeta:
+      '@xyflow/react':
+        optional: true
+      react:
+        optional: true
 
   iron-webcrypto@1.2.1:
     resolution: {integrity: sha512-feOM6FaSr6rEABp/eDfVseKyTMDt+KGpeB35SkVn9Tyn0CqvVsY3EwI0v5i8nMHyJnzCIQf7nsy3p41TPkJZhg==}
@@ -5083,6 +5147,20 @@ snapshots:
 
   '@mark1russell7/cue@https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e': {}
 
+  '@mark1russell7/rigor-bench@0.2.60(esbuild@0.28.2)':
+    dependencies:
+      '@mark1russell7/rigor-generators': 0.2.0
+      '@mark1russell7/rigor-statistics': 0.2.12
+      '@mark1russell7/text': 0.0.13
+    optionalDependencies:
+      esbuild: 0.28.2
+
+  '@mark1russell7/rigor-generators@0.2.0': {}
+
+  '@mark1russell7/rigor-statistics@0.2.12':
+    dependencies:
+      '@mark1russell7/rigor-generators': 0.2.0
+
   '@mark1russell7/ste-lint@https://codeload.github.com/mark1russell7/ste-lint/tar.gz/f597d6c1e09bcfcb487bb575825d6d5f29e9e0c7':
     dependencies:
       typescript: 6.0.3
@@ -6634,6 +6712,11 @@ snapshots:
   inherits@2.0.4: {}
 
   inline-style-parser@0.2.7: {}
+
+  ireko@0.2.4(@xyflow/react@12.12.0(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0):
+    optionalDependencies:
+      '@xyflow/react': 12.12.0(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      react: 19.3.0
 
   iron-webcrypto@1.2.1: {}
 

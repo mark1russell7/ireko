@@ -20,11 +20,22 @@
  *
  * A fixed box pushes the other boxes. It stays at its place.
  *
+ * With a `theta` of 0, step 1 reads each pair of boxes. Its time then grows with the square of the number of boxes.
+ * With more, a tree of square cells holds the centers (`relax-far.ts`). A cell that is far from a box repels that
+ * box as one box, from the mean of its centers. A cell is far when its width is less than `theta` times its distance.
+ * Thus the positions are near the positions of a `theta` of 0, but they are not the same.
+ *
+ * Step 3 reads only the pairs that a grid of cells gives (`relax-apart.ts`). Its result is the result of a test of
+ * each pair, bit for bit.
+ *
  * A strength has a limit of 0.5. With a larger strength, one spring step moves the two ends past the spring
  * length, and the springs can oscillate.
  */
 import { at } from "./at.ts";
 import type { Point, Rect } from "./geometry.ts";
+import { separation } from "./relax-apart.ts";
+import { farField } from "./relax-far.ts";
+import { flag, num } from "./typed.ts";
 
 /** A box of the relaxation. */
 export interface RelaxNode {
@@ -64,6 +75,11 @@ export interface RelaxOptions {
   readonly maxStep: number;
   /** The largest number of separation passes (step 3). */
   readonly separationPasses: number;
+  /**
+   * The accuracy of the repulsion of the far boxes, from 0 to 1. With 0, each pair of boxes repels exactly.
+   * With more, a group of far boxes repels as one box, and the relaxation of many boxes is faster.
+   */
+  readonly theta: number;
   /** The width and the height of the area. The boxes go to its center. */
   readonly bound: { readonly width: number; readonly height: number };
 }
@@ -79,7 +95,11 @@ export const RELAX_DEFAULTS: Omit<RelaxOptions, "bound"> = {
   centering: 0.005,
   maxStep: 30,
   separationPasses: 300,
+  theta: 0,
 };
+
+/** The largest value of the option `theta`. With more, a far group of boxes can contain the box that it repels. */
+export const MAX_THETA = 1;
 
 /** The largest strength of a spring. With a larger strength, one step moves the two ends past the spring length. */
 export const MAX_SPRING_STRENGTH = 0.5;
@@ -95,16 +115,6 @@ function check(what: string, value: number, integer = false, max = Infinity): vo
 /** The order of two identifiers: the order of their UTF-16 code units, the same in each locale. */
 const byId = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 
-/** A box during the relaxation: its center and its size. */
-interface Body {
-  readonly id: string;
-  x: number;
-  y: number;
-  readonly w: number;
-  readonly h: number;
-  readonly fixed: boolean;
-}
-
 /**
  * This function relaxes the boxes, and gives the top-left corner of each box, by its identifier.
  * It throws a `RangeError` in these conditions:
@@ -113,10 +123,12 @@ interface Body {
  * - A size, a strength or an option is not a finite number of 0 or more, or a position is not finite.
  * - The option `minDistance` is 0.
  * - A strength is more than `MAX_SPRING_STRENGTH`, or `iterations` or `separationPasses` is not an integer.
+ * - The option `theta` is more than `MAX_THETA`.
  */
 export function relaxForces(nodes: readonly RelaxNode[], edges: readonly RelaxEdge[], options: Partial<RelaxOptions> & Pick<RelaxOptions, "bound">): Map<string, Point> {
   const all = { ...RELAX_DEFAULTS, ...options };
-  const { iterations, springLength, repulsion, margin, inset, minDistance, centering, maxStep, separationPasses, bound } = all;
+  const { iterations, springLength, repulsion, margin, inset, minDistance, centering, maxStep, separationPasses, theta, bound } = all;
+  check("the option theta", theta, false, MAX_THETA);
   for (const key of ["springLength", "repulsion", "margin", "inset", "minDistance", "centering", "maxStep"] as const) check(`the option ${key}`, all[key]);
   if (minDistance === 0) throw new RangeError("ireko: the option minDistance must be more than 0.");
   check("the option iterations", iterations, true);
@@ -131,13 +143,19 @@ export function relaxForces(nodes: readonly RelaxNode[], edges: readonly RelaxEd
   for (const e of edges) check(`the strength of the spring "${e.from}" to "${e.to}"`, e.strength, false, MAX_SPRING_STRENGTH);
   const width = bound.width, height = bound.height;
   const floor = minDistance * minDistance;
-  const bodies: Body[] = nodes
-    .toSorted((a, b) => byId(a.id, b.id))
-    .map((n) => ({ id: n.id, x: n.rect.x + n.rect.width / 2, y: n.rect.y + n.rect.height / 2, w: n.rect.width, h: n.rect.height, fixed: n.fixed === true }));
+  // The boxes, in the order of their identifiers. The center and the size of each box are in lists of 64-bit numbers:
+  // the steps read each pair of boxes many times, and such a list keeps the numbers of all the boxes together in memory.
+  const sorted = nodes.toSorted((a, b) => byId(a.id, b.id));
+  const count = sorted.length;
+  const xs = Float64Array.from(sorted, (n) => n.rect.x + n.rect.width / 2);
+  const ys = Float64Array.from(sorted, (n) => n.rect.y + n.rect.height / 2);
+  const ws = Float64Array.from(sorted, (n) => n.rect.width);
+  const hs = Float64Array.from(sorted, (n) => n.rect.height);
+  const fixed = Uint8Array.from(sorted, (n) => (n.fixed === true ? 1 : 0));
   const index = new Map<string, number>();
-  bodies.forEach((b, i) => {
-    if (index.has(b.id)) throw new RangeError(`ireko: two nodes of the relaxation have the same id "${b.id}".`);
-    index.set(b.id, i);
+  sorted.forEach((n, i) => {
+    if (index.has(n.id)) throw new RangeError(`ireko: two nodes of the relaxation have the same id "${n.id}".`);
+    index.set(n.id, i);
   });
   const springs = edges
     .map((e) => {
@@ -147,87 +165,91 @@ export function relaxForces(nodes: readonly RelaxNode[], edges: readonly RelaxEd
     })
     .filter((s) => s.a !== s.b)
     .toSorted((p, q) => p.a - q.a || p.b - q.b || p.k - q.k);
-  const body = (i: number): Body => at(bodies, i);
+  const isFree = (i: number): boolean => !flag(fixed, i);
 
   // Step 1: the forces. Each free box moves in turn, so a box sees the new place of each box before it.
   const cx = width / 2, cy = height / 2;
+  const far = theta > 0 ? farField(xs, ys, theta, floor, repulsion) : undefined;
+  const sum = new Float64Array(2);
   for (let step = 0; step < iterations; step++) {
     const cooling = 1 - step / iterations;
-    for (let i = 0; i < bodies.length; i++) {
-      const n = body(i);
-      if (n.fixed) continue;
+    far?.build();
+    for (let i = 0; i < count; i++) {
+      if (!isFree(i)) continue;
+      const nx = num(xs, i), ny = num(ys, i);
       let fx = 0, fy = 0;
-      for (let j = 0; j < bodies.length; j++) {
-        if (i === j) continue;
-        const m = body(j);
-        const dx = n.x - m.x, dy = n.y - m.y;
-        const d2 = Math.max(floor, dx * dx + dy * dy);
-        const f = repulsion / d2;
-        const d = Math.sqrt(d2);
-        fx += (dx / d) * f;
-        fy += (dy / d) * f;
+      if (far === undefined) {
+        for (let j = 0; j < count; j++) {
+          if (i === j) continue;
+          const dx = nx - num(xs, j), dy = ny - num(ys, j);
+          const d2 = Math.max(floor, dx * dx + dy * dy);
+          const f = repulsion / d2;
+          const d = Math.sqrt(d2);
+          fx += (dx / d) * f;
+          fy += (dy / d) * f;
+        }
+      } else {
+        far.sum(i, nx, ny, sum);
+        fx = num(sum, 0);
+        fy = num(sum, 1);
       }
-      fx += (cx - n.x) * centering;
-      fy += (cy - n.y) * centering;
-      n.x += Math.max(-maxStep, Math.min(maxStep, fx)) * cooling;
-      n.y += Math.max(-maxStep, Math.min(maxStep, fy)) * cooling;
+      fx += (cx - nx) * centering;
+      fy += (cy - ny) * centering;
+      xs[i] = nx + Math.max(-maxStep, Math.min(maxStep, fx)) * cooling;
+      ys[i] = ny + Math.max(-maxStep, Math.min(maxStep, fy)) * cooling;
     }
     for (const s of springs) {
-      const a = body(s.a), b = body(s.b);
-      const dx = b.x - a.x, dy = b.y - a.y;
+      const ax = num(xs, s.a), ay = num(ys, s.a), bx = num(xs, s.b), by = num(ys, s.b);
+      const dx = bx - ax, dy = by - ay;
       const d = Math.max(1, Math.hypot(dx, dy));
       const pull = (d - springLength) * s.k;
       const ux = dx / d, uy = dy / d;
-      if (!a.fixed) { a.x += ux * pull; a.y += uy * pull; }
-      if (!b.fixed) { b.x -= ux * pull; b.y -= uy * pull; }
+      if (isFree(s.a)) { xs[s.a] = ax + ux * pull; ys[s.a] = ay + uy * pull; }
+      if (isFree(s.b)) { xs[s.b] = bx - ux * pull; ys[s.b] = by - uy * pull; }
     }
   }
 
   // Step 2: the clamp.
-  const clamp = (n: Body): void => {
-    n.x = Math.min(Math.max(n.x, n.w / 2 + inset), Math.max(n.w / 2 + inset, width - n.w / 2 - inset));
-    n.y = Math.max(n.y, n.h / 2 + inset);
+  const clamp = (i: number): void => {
+    const w = num(ws, i);
+    xs[i] = Math.min(Math.max(num(xs, i), w / 2 + inset), Math.max(w / 2 + inset, width - w / 2 - inset));
+    ys[i] = Math.max(num(ys, i), num(hs, i) / 2 + inset);
   };
-  const overlap = (a: Body, b: Body): boolean =>
-    (a.w + b.w) / 2 + margin - Math.abs(a.x - b.x) > 0 && (a.h + b.h) / 2 + margin - Math.abs(a.y - b.y) > 0;
-  for (const n of bodies) if (!n.fixed) clamp(n);
+  for (let i = 0; i < count; i++) if (isFree(i)) clamp(i);
 
-  // Step 3: the separation passes.
+  // Step 3: the separation passes. The even passes can use the x axis.
   let settled = false;
+  const separate = separation(xs, ys, ws, hs, fixed, margin);
   for (let pass = 0; pass < separationPasses && !settled; pass++) {
-    let moved = false;
-    for (let i = 0; i < bodies.length; i++) {
-      for (let j = i + 1; j < bodies.length; j++) {
-        const a = body(i), b = body(j);
-        const ox = (a.w + b.w) / 2 + margin - Math.abs(a.x - b.x);
-        const oy = (a.h + b.h) / 2 + margin - Math.abs(a.y - b.y);
-        if (ox <= 0 || oy <= 0) continue;
-        moved = true;
-        if (ox < oy && pass % 2 === 0) {
-          const push = (ox / 2 + 1) * (a.x < b.x ? -1 : 1);
-          if (!a.fixed) a.x += push;
-          if (!b.fixed) b.x -= push;
-        } else {
-          const push = (oy / 2 + 1) * (a.y < b.y ? -1 : 1);
-          if (!a.fixed) a.y += push;
-          if (!b.fixed) b.y -= push;
-        }
-      }
-    }
-    for (const n of bodies) if (!n.fixed) clamp(n);
-    settled = !moved;
+    settled = !separate(pass % 2 === 0);
+    for (let i = 0; i < count; i++) if (isFree(i)) clamp(i);
   }
 
   // Step 4: the sweep down, only when step 3 did not settle.
   if (!settled) {
-    const placed = bodies.filter((n) => n.fixed);
-    const free = bodies.filter((n) => !n.fixed).toSorted((a, b) => a.y - b.y || byId(a.id, b.id));
+    const placed: number[] = [];
+    const free: number[] = [];
+    for (let i = 0; i < count; i++) (isFree(i) ? free : placed).push(i);
+    // The index of a box is its place in the order of the identifiers.
+    free.sort((a, b) => num(ys, a) - num(ys, b) || a - b);
     for (const n of free) {
-      for (let hit = placed.find((o) => overlap(n, o)); hit !== undefined; hit = placed.find((o) => overlap(n, o))) {
-        n.y = hit.y + (n.h + hit.h) / 2 + margin + 1;
+      const nx = num(xs, n), nw = num(ws, n), nh = num(hs, n);
+      let ny = num(ys, n);
+      // After each move, the search of a placed box that overlaps starts again at the first placed box.
+      let k = 0;
+      while (k < placed.length) {
+        const o = at(placed, k);
+        const oh = num(hs, o), oy = num(ys, o);
+        if ((nw + num(ws, o)) / 2 + margin - Math.abs(nx - num(xs, o)) > 0 && (nh + oh) / 2 + margin - Math.abs(ny - oy) > 0) {
+          ny = oy + (nh + oh) / 2 + margin + 1;
+          k = 0;
+        } else k++;
       }
+      ys[n] = ny;
       placed.push(n);
     }
   }
-  return new Map(bodies.map((n) => [n.id, { x: n.x - n.w / 2, y: n.y - n.h / 2 }]));
+  const out = new Map<string, Point>();
+  sorted.forEach((n, i) => out.set(n.id, { x: num(xs, i) - num(ws, i) / 2, y: num(ys, i) - num(hs, i) / 2 }));
+  return out;
 }

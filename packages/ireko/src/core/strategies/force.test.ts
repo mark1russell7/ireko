@@ -65,9 +65,26 @@ describe("force", () => {
     expect(distance(arrange(list, [{ from: 0, to: 4 }], "nested", { strength: 0.24 }))).toBeLessThan(distance(arrange(list)));
   });
 
+  it("gives the option theta to the relaxation: far children repel as one child", () => {
+    // 60 children are a grid of 8 columns at the start, so each child has far groups.
+    const list = Array.from({ length: 60 }, (_, i) => leaf(`c${String(i).padStart(2, "0")}`, 60 + ((i * 37) % 90), 30 + ((i * 53) % 60)));
+    const edges = list.slice(6).map((_, i) => ({ from: i + 6, to: (i * 5) % 6 }));
+    const each = arrange(list, edges), group = arrange(list, edges, "nested", { theta: 1 });
+    expect(arrange(list, edges, "nested", { theta: 0 })).toEqual(each);
+    expect(group.offsets).not.toEqual(each.offsets);
+    const boxes = extents(list, group.offsets);
+    for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) expect(apart(at(boxes, i), at(boxes, j), 10)).toBe(true);
+    expect(defaultsOf(force.options).theta).toBe(0);
+  });
+
+  it("refuses a theta above 1 with a finding of the engine", () => {
+    const out = engine.layout({ root: { id: "r", layout: { type: "force", theta: 1.5 }, mode: "nested", children: ["a", "b"].map((id) => ({ id, size: { width: 80, height: 40 } })) } });
+    expect(out.issues.map((i) => i.code)).toContain("INVALID_OPTION");
+  });
+
   it("keeps the margin between each two extents", () => {
-    fc.assert(fc.property(withEdges, fc.integer({ min: 0, max: 30 }), ([list, edges], margin) => {
-      const boxes = extents(list, arrange(list, edges, "nested", { margin }).offsets);
+    fc.assert(fc.property(withEdges, fc.integer({ min: 0, max: 30 }), fc.constantFrom(0, 0.5, 1), ([list, edges], margin, theta) => {
+      const boxes = extents(list, arrange(list, edges, "nested", { margin, theta }).offsets);
       const used = margin > 0 ? margin : 10;
       for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) expect(apart(at(boxes, i), at(boxes, j), used)).toBe(true);
     }), { numRuns: 200 });
@@ -135,6 +152,7 @@ describe("force is opt-in", () => {
     expect(entry.forceStrategy).toBe(force);
     expect(typeof entry.relaxForces).toBe("function");
     expect(entry.MAX_SPRING_STRENGTH).toBe(0.5);
+    expect(entry.MAX_THETA).toBe(1);
     const out = engine.layout({ root: entry.force.nested("r", { strength: 0.24 }, "a", "b", "c") });
     expect(out.issues.filter((i) => i.severity === "error")).toEqual([]);
     expect(defectsOf(out)).toEqual([]);

@@ -24,6 +24,8 @@ export interface ForceOptions {
   readonly margin: number;
   /** In the linked mode, the distance between the node and its children. The value 0 means 1.5 times the gap. */
   readonly distance: number;
+  /** The accuracy of the repulsion of far children, from 0 to 1. With 0, each pair repels exactly. With more, many children are faster. */
+  readonly theta: number;
 }
 
 /** The order of two identifiers: the order of their UTF-16 code units. */
@@ -40,6 +42,7 @@ export const force: Strategy<ForceOptions> = defineStrategy<ForceOptions>({
     strength: { type: "number", default: 0.08, min: 0, max: 0.5, description: "The stiffness of the spring of each edge, 0.5 at most. With more, one spring step moves the two ends past the spring length." },
     margin: { type: "number", default: 0, min: 0, description: "The smallest distance between two extents. With 0, it is the gap." },
     distance: { type: "number", default: 0, min: 0, description: "In the linked mode, the distance between the node and its children. With 0, it is 1.5 times the gap." },
+    theta: { type: "number", default: 0, min: 0, max: 1, description: "The accuracy of the repulsion of far children. With 0, each pair repels exactly. With more, a far group repels as one child, and many children are faster." },
   },
   arrange({ mode, self, children, options, gap, edges = [] }) {
     const k = children.length;
@@ -65,6 +68,7 @@ export const force: Strategy<ForceOptions> = defineStrategy<ForceOptions>({
       repulsion,
       margin,
       inset: 0,
+      theta: options.theta,
       bound: { width: columns * cellW, height: rows * cellH },
     });
 

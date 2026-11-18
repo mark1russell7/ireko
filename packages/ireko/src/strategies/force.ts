@@ -13,7 +13,7 @@ import { builder, type Builder } from "../core/build.ts";
 import type { ForceOptions } from "../core/strategies/force.ts";
 
 export { force as forceStrategy, type ForceOptions } from "../core/strategies/force.ts";
-export { MAX_SPRING_STRENGTH, relaxForces, RELAX_DEFAULTS, type RelaxEdge, type RelaxNode, type RelaxOptions } from "../core/relax.ts";
+export { MAX_SPRING_STRENGTH, MAX_THETA, relaxForces, RELAX_DEFAULTS, type RelaxEdge, type RelaxNode, type RelaxOptions } from "../core/relax.ts";
 
 /** The builder of the strategy `force`. The engine of the layout must have the strategy `forceStrategy`. */
 export const force: Builder<ForceOptions> = builder<ForceOptions>("force");

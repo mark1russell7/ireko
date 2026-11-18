@@ -12,6 +12,21 @@ This file records the changes to `ireko` in each version. The release workflow c
 
 A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other version goes to `latest`.
 
+## 0.2.5
+
+This version is a patch. It makes `relaxForces` faster, and it adds the option `theta` to `relaxForces` and to the strategy `force`. With the default of the option, each layout stays the same.
+
+- `relaxForces` keeps the positions in typed lists of numbers, and the separation passes find the near boxes with a grid. The positions are the positions of 0.2.4, bit for bit. A test compares the function with the steps of 0.2.4 on random inputs.
+- The new option `theta` is a number from 0 to `MAX_THETA`, which is 1. The default is 0. Then the repulsion reads each pair of boxes, as in 0.2.4, and its time grows with the square of the number of boxes.
+- With a `theta` of more than 0, a far group of boxes repels a box as one box. This is the method of Barnes and Hut. The time of the repulsion then grows approximately as the number of boxes times its logarithm. A usual value is 0.9.
+- With a `theta` of more than 0, the positions are near the positions of a `theta` of 0, but they are not the same. No two boxes are nearer than the margin, as before.
+- The layout schema of the strategy `force` has the field `theta`, and the builder `force` accepts it. `ireko/strategies/force` exports the constant `MAX_THETA`.
+- `theta` is a field of the types `RelaxOptions` and `ForceOptions`. `relaxForces`, a layout document and the builder use the default, so they need no change. Code that makes a full value of one of these types by hand must add `theta: 0`.
+- The gzip size of `ireko/strategies/force` goes from 2.75 kB to 4.50 kB, and its size limit goes from 3.2 kB to 4.7 kB. The size of each other entry does not change.
+- The new workflow `bench-relax.yml` measures `relaxForces` against 0.2.4 on pictures of 50 to 1600 boxes, each arm in a fresh process. It fails when the default gives a different position.
+
+Runtime dependencies: no change against `0.2.4` (none).
+
 ## 0.2.4
 
 This version is a patch. It changes no export, no type and no layout. Its change is inside the build of `ireko/svg`.
