@@ -11,3 +11,4 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - "@mark1russell7/*"
   - "@procedures/*"
+  - ireko@0.2.4

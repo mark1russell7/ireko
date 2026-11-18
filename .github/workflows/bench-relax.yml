@@ -1,0 +1,119 @@
+# The bench of relaxForces: the source of packages/ireko against ireko 0.2.4 from npm.
+# It starts packages/bench, keeps the raw PairedTime records, the hashes, the facts of the computer and the report,
+# and a CPU profile of the arm theta on the case picture-800.
+# The job fails when the result of the head is not the same as the result of ireko 0.2.4 on a case, or has no read.
+# The time verdicts are a report. A limit on a time comes from 5 or more jobs of this workflow.
+# Start it on a branch with: gh workflow run bench-relax.yml -R mark1russell7/ireko --ref <branch>
+name: Bench relax
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    paths:
+      - packages/ireko/src/core/relax.ts
+      - packages/ireko/src/core/relax-far.ts
+      - packages/ireko/src/core/relax-apart.ts
+      - packages/ireko/src/core/typed.ts
+      - packages/ireko/src/strategies/force.ts
+      - packages/bench/**
+      - .github/workflows/bench-relax.yml
+  workflow_dispatch:
+    inputs:
+      rounds:
+        description: The rounds of each case and pair
+        default: "7"
+      cases:
+        description: The names of the cases, with commas. Empty means each case.
+        default: ""
+
+permissions: {}
+
+# A newer push cancels the job of a pull request. Each commit of main has its own group.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: read
+    outputs:
+      match: ${{ steps.changes.outputs.match }}
+    steps:
+      - id: changes
+        uses: mark1russell7/template/.github/actions/changes@eb7f3517aa8614e338a46acd37ab0c49395be5f9 # main
+        with:
+          paths: |
+            packages/ireko/src/core/relax.ts
+            packages/ireko/src/core/relax-far.ts
+            packages/ireko/src/core/relax-apart.ts
+            packages/ireko/src/core/typed.ts
+            packages/ireko/src/strategies/force.ts
+            packages/bench/**
+            pnpm-lock.yaml
+            .github/workflows/bench-relax.yml
+
+  bench:
+    needs: changes
+    if: needs.changes.outputs.match == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    env:
+      ROUNDS: ${{ inputs.rounds || '7' }}
+      CASES: ${{ inputs.cases }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # The pnpm version comes from "packageManager" in package.json
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: The computer
+        run: |
+          mkdir -p "$RUNNER_TEMP/out"
+          { lscpu; nproc; free -m; node --version; git rev-parse HEAD; } > "$RUNNER_TEMP/out/machine.txt"
+          cat "$RUNNER_TEMP/out/machine.txt"
+      - name: Bench
+        working-directory: packages/bench
+        run: node src/bench.ts --out "$RUNNER_TEMP/out" --rounds "$ROUNDS" ${CASES:+--cases "$CASES"}
+      # One more start of the arm theta on the case of a picture of 30 days, with the CPU profile of V8.
+      - name: CPU profile
+        if: always()
+        working-directory: packages/bench
+        run: node --cpu-prof --cpu-prof-dir "$RUNNER_TEMP/out/profile" src/arm.ts --arm theta --case picture-800
+      - name: Summary
+        if: always()
+        run: cat "$RUNNER_TEMP/out/report.md" >> "$GITHUB_STEP_SUMMARY" || true
+      # The raw records, the hashes, the profile and the report, kept 90 days.
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: bench-relax
+          path: ${{ runner.temp }}/out
+          if-no-files-found: error
+          retention-days: 90
+
+  bench-ok:
+    name: Bench relax OK
+    if: ${{ !cancelled() }}
+    needs: [changes, bench]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - uses: mark1russell7/template/.github/actions/gate-summary@eb7f3517aa8614e338a46acd37ab0c49395be5f9 # main
+        with:
+          needs: ${{ toJSON(needs) }}
