@@ -24,8 +24,9 @@ This version is a patch. It makes `relaxForces` faster, and it adds the option `
 - `theta` is a field of the types `RelaxOptions` and `ForceOptions`. `relaxForces`, a layout document and the builder use the default, so they need no change. Code that makes a full value of one of these types by hand must add `theta: 0`.
 - The gzip size of `ireko/strategies/force` goes from 2.75 kB to 4.50 kB, and its size limit goes from 3.2 kB to 4.7 kB. The size of each other entry does not change.
 - The new workflow `bench-relax.yml` measures `relaxForces` against 0.2.4 on pictures of 50 to 1600 boxes, each arm in a fresh process. It fails when the default gives a different position.
+- The build bundles `@mark1russell7/text` 0.0.15 (before, 0.0.5). The bundled code is the same. Thus only the files of `ireko/strategies/force` are different from 0.2.4.
 
-Runtime dependencies: no change against `0.2.4` (none).
+Runtime dependencies: no change against `0.2.4` (none). `@mark1russell7/text` `^0.0.15` is a dev dependency, and the build bundles it.
 
 ## 0.2.4
 
