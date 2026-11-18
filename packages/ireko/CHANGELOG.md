@@ -14,7 +14,7 @@ A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other ver
 
 ## 0.2.5
 
-This version is a patch. It makes `relaxForces` faster, and it adds the option `theta` to `relaxForces` and to the strategy `force`. With the default of the option, each layout stays the same.
+This version is a patch. It makes `relaxForces` faster for 200 boxes or more, and it adds the option `theta` to `relaxForces` and to the strategy `force`. With the default of the option, each layout stays the same.
 
 - `relaxForces` keeps the positions in typed lists of numbers, and the separation passes find the near boxes with a grid. The positions are the positions of 0.2.4, bit for bit. A test compares the function with the steps of 0.2.4 on random inputs.
 - The new option `theta` is a number from 0 to `MAX_THETA`, which is 1. The default is 0. Then the repulsion reads each pair of boxes, as in 0.2.4, and its time grows with the square of the number of boxes.
@@ -24,6 +24,10 @@ This version is a patch. It makes `relaxForces` faster, and it adds the option `
 - `theta` is a field of the types `RelaxOptions` and `ForceOptions`. `relaxForces`, a layout document and the builder use the default, so they need no change. Code that makes a full value of one of these types by hand must add `theta: 0`.
 - The gzip size of `ireko/strategies/force` goes from 2.75 kB to 4.50 kB, and its size limit goes from 3.2 kB to 4.7 kB. The size of each other entry does not change.
 - The new workflow `bench-relax.yml` measures `relaxForces` against 0.2.4 on pictures of 50 to 1600 boxes, each arm in a fresh process. It fails when the default gives a different position.
+- The first job of the workflow measured 7 rounds on an AMD EPYC 7763 with Node.js 24.22. Each number below is the median time divided by the median time of 0.2.4.
+- With the default, the number is 0.94 at 200 boxes, 0.86 at 400 boxes, 0.76 at 800 boxes and 0.73 at 1600 boxes.
+- With a `theta` of 0.9, the number is 0.69 at 200 boxes, 0.49 at 400 boxes, 0.28 at 800 boxes and 0.18 at 1600 boxes.
+- At 100 boxes or fewer, the first use in a new process is slower than 0.2.4. It adds approximately 10 ms at 50 boxes (34 ms before) and 5 ms at 100 boxes (65 ms before).
 - The build bundles `@mark1russell7/text` 0.0.15 (before, 0.0.5). The bundled code is the same. Thus only the files of `ireko/strategies/force` are different from 0.2.4.
 
 Runtime dependencies: no change against `0.2.4` (none). `@mark1russell7/text` `^0.0.15` is a dev dependency, and the build bundles it.
