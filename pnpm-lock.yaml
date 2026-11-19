@@ -171,7 +171,7 @@ importers:
         version: 0.18.5
       '@mark1russell7/api-report':
         specifier: ^0.5.3
-        version: 0.5.15
+        version: 0.5.16
       '@mark1russell7/cue':
         specifier: github:mark1russell7/cue
         version: https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e
@@ -1303,13 +1303,13 @@ packages:
   '@loaderkit/resolve@1.0.6':
     resolution: {integrity: sha512-G8FdIoF5CypfwmD9rl8BXod5HDn8JqB0CCNBXDTaRZ+yRYhARrrSToX1zg1zy9jX3zLqigsELwhT4gNtkdQAUg==}
 
-  '@mark1russell7/api-report@0.5.15':
-    resolution: {integrity: sha512-nnrRZqd4tMzwoHMr2E4vNbL2x7JSD0h7N21GnA9izmlCbrq0YKBSKUtVLDxjn/s7S5kN/9q7ge2AmN5tirUmBA==}
+  '@mark1russell7/api-report@0.5.16':
+    resolution: {integrity: sha512-SG45xcND7JPg9npmXIvQxp1xyFRuFeYQ8ZOoKxU8jIorKnUw+l0sCyj76JKTfsAPgAha6LCrNt6YAjoqtfTyTA==}
     engines: {node: '>=22'}
     hasBin: true
 
-  '@mark1russell7/conventions@0.47.3':
-    resolution: {integrity: sha512-SoEos2DI30kZJXFZxNWvpIOwji3jcKkmoif8UpeAIyJgW/YTVUburbysQ9W/wQfBw3SEhUehcK8m99vK7FirTA==}
+  '@mark1russell7/conventions@0.48.1':
+    resolution: {integrity: sha512-W/p/evPiTwMbe2sieLgVDlW6vr3AhQMuwedof9j5sLAki01J/4gCoLZxdInBLuSoFst6skukOFVSjDmZV3cOGg==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -1350,10 +1350,6 @@ packages:
 
   '@mark1russell7/text@0.0.13':
     resolution: {integrity: sha512-8Tu7DTTpfmpXIy0F2JCyOW1RD91X7tm38c5xiqz3cLdmEkUQViH/06kTBLj+hrzuQPMBGVyxd7snqVG6EpNLdQ==}
-    engines: {node: '>=22.12'}
-
-  '@mark1russell7/text@0.0.15':
-    resolution: {integrity: sha512-aNOINmlpbbHIO1VOVfZkMZf8Ts346sz7Y+iQOsclQPet4etHNjKm0KM1EW9K0UuxpbZEkUW2+qjrVFcoL1Juyw==}
     engines: {node: '>=22.12'}
 
   '@mark1russell7/text@0.0.16':
@@ -5140,13 +5136,13 @@ snapshots:
     dependencies:
       '@braidai/lang': 1.1.2
 
-  '@mark1russell7/api-report@0.5.15':
+  '@mark1russell7/api-report@0.5.16':
     dependencies:
-      '@mark1russell7/conventions': 0.47.3
+      '@mark1russell7/conventions': 0.48.1
 
-  '@mark1russell7/conventions@0.47.3':
+  '@mark1russell7/conventions@0.48.1':
     dependencies:
-      '@mark1russell7/text': 0.0.15
+      '@mark1russell7/text': 0.0.16
       yaml: 2.9.1
 
   '@mark1russell7/cue@https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e': {}
@@ -5174,8 +5170,6 @@ snapshots:
       '@clack/prompts': 1.8.1
 
   '@mark1russell7/text@0.0.13': {}
-
-  '@mark1russell7/text@0.0.15': {}
 
   '@mark1russell7/text@0.0.16': {}
 
