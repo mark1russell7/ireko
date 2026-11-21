@@ -70,11 +70,26 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       # Stryker runs for each mutant only the tests that cover it (coverageAnalysis perTest). IREKO_FAST=1 makes the property tests 10 times shorter.
+      # On 11-19, 11-20 and 11-21 the runner got a shutdown signal before the end of this step (at 118, 82 and 61 minutes),
+      # after the change of relax (#114) raised the mutants from 3,653 to 4,071. A cancelled job uploads no artifact, so
+      # the step writes the use of the runner to its own log each minute: memory, swap, free disk and the node processes.
       - name: The mutation tests of the core
         env:
           IREKO_FAST: "1"
           FORCE_COLOR: "0"
-        run: pnpm --filter ireko mutation
+        run: |
+          (
+            while sleep 60; do
+              mem=$(free -m | awk '/^Mem:/ {print "memory used " $3 " MB, available " $7 " MB of " $2 " MB"}')
+              swap=$(free -m | awk '/^Swap:/ {print "swap used " $3 " MB"}')
+              disk=$(df -m / | awk 'NR == 2 {print "disk free " $4 " MB"}')
+              nodes=$(ps -C node -o rss= | awk '{s += $1; n += 1} END {print n + 0 " node processes, " int(s / 1024) " MB"}')
+              echo "runner use $(date -u +%H:%M:%S): $mem; $swap; $disk; $nodes"
+            done
+          ) &
+          sampler=$!
+          trap 'kill "$sampler" 2>/dev/null || true' EXIT
+          pnpm --filter ireko mutation
       - name: The score
         if: always()
         working-directory: packages/ireko
