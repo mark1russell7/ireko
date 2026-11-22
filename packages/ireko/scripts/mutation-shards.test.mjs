@@ -1,7 +1,7 @@
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { coreFiles, mergeReports, shardsOf } from "./mutation-shards.mjs";
+import { byPath, coreFiles, mergeReports, shardsOf } from "./mutation-shards.mjs";
 
 const file = (path, weight) => ({ path, weight });
 const report = (files) => ({ schemaVersion: "2", thresholds: { high: 95, low: 90 }, files });
@@ -37,7 +37,7 @@ describe("the shards of the mutation tests", () => {
       paths.map((path, i) => file(path, 100 + (i % 7) * 10)),
       6,
     );
-    expect(shards.flatMap((shard) => shard.files).toSorted()).toEqual(paths);
+    expect(shards.flatMap((shard) => shard.files).toSorted(byPath)).toEqual(paths);
     const total = shards.reduce((sum, shard) => sum + shard.weight, 0);
     // the bound of each greedy split: the equal share plus the heaviest file (160)
     for (const shard of shards) expect(shard.weight).toBeLessThanOrEqual(total / 6 + 160);

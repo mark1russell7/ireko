@@ -9,12 +9,15 @@ import { readFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from "n
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+/** The order of two paths, the same on each runner and in each locale. */
+export const byPath = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+
 /** The files that Stryker mutates: the TypeScript files of src/core, without the tests and the benchmarks. */
 export const coreFiles = (root) =>
   readdirSync(join(root, "src/core"), { recursive: true })
     .map((name) => `src/core/${String(name).replaceAll("\\", "/")}`)
     .filter((path) => path.endsWith(".ts") && !path.endsWith(".test.ts") && !path.endsWith(".bench.ts"))
-    .toSorted();
+    .toSorted(byPath);
 
 /**
  * This function puts each file in one of `count` shards, so that the shards have near the same weight. The
@@ -25,13 +28,13 @@ export const coreFiles = (root) =>
 export const shardsOf = (files, count) => {
   if (!Number.isInteger(count) || count < 1) throw new Error(`the count of shards must be a whole number of 1 or more, not ${count}`);
   const shards = Array.from({ length: count }, () => ({ weight: 0, files: [] }));
-  const heaviest = files.toSorted((a, b) => b.weight - a.weight || (a.path < b.path ? -1 : 1));
+  const heaviest = files.toSorted((a, b) => b.weight - a.weight || byPath(a.path, b.path));
   for (const file of heaviest) {
     const lightest = shards.reduce((best, shard) => (shard.weight < best.weight ? shard : best));
     lightest.files.push(file.path);
     lightest.weight += file.weight;
   }
-  return shards.map((shard) => ({ weight: shard.weight, files: shard.files.toSorted() }));
+  return shards.map((shard) => ({ weight: shard.weight, files: shard.files.toSorted(byPath) }));
 };
 
 /**
