@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { coreFiles, mergeReports, shardsOf } from "./mutation-shards.mjs";
 
 const file = (path, weight) => ({ path, weight });
+const report = (files) => ({ schemaVersion: "2", thresholds: { high: 95, low: 90 }, files });
 
 describe("the shards of the mutation tests", () => {
   it("puts each file in one shard, the heaviest first to the lightest shard", () => {
@@ -44,8 +45,6 @@ describe("the shards of the mutation tests", () => {
 });
 
 describe("the merge of the reports of the shards", () => {
-  const report = (files) => ({ schemaVersion: "2", thresholds: { high: 95, low: 90 }, files });
-
   it("joins the files of each report", () => {
     const merged = mergeReports([report({ "a.ts": { mutants: [1] } }), report({ "b.ts": { mutants: [2] } })], 2);
     expect(merged).toEqual(report({ "a.ts": { mutants: [1] }, "b.ts": { mutants: [2] } }));
