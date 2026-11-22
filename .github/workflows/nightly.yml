@@ -64,6 +64,8 @@ jobs:
     strategy:
       # Each shard is a read of its files: a slow or lost shard does not stop the others.
       fail-fast: false
+      # At most 3 shards at a time, so one run does not take all the runners: 2 rounds of about 70 minutes.
+      max-parallel: 3
       matrix:
         # The count of shards is 6 here and in SHARDS below. One runner tested 1,545 of the 4,071 mutants of 11-22
         # in 78 minutes, about 7 h for all, and the runner got a shutdown signal before the end on 11-19 to 11-22.
