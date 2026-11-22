@@ -1,7 +1,9 @@
 # The work of each night (docs/REVIEW.md §9, L9 and L10).
 #   bench      the benchmarks of packages/ireko/src/core/engine.bench.ts, as a table in the summary of the run
-#   mutation   the mutation tests of the core (Stryker), with the score of each file in the summary of the run
-# Both jobs measure and do not fail. Compare two nights to find a change of the speed or of the score.
+#   mutation   the mutation tests of the core (Stryker), in 6 shards of the files of the core
+#   score      the reports of the shards as one report, with the score of each file in the summary of the run
+# The jobs measure and do not fail on a score. The job score fails when a shard gave no report: a score without
+# a shard is no read of the core. Compare two nights to find a change of the speed or of the score.
 name: Nightly
 
 on:
@@ -54,11 +56,21 @@ jobs:
           retention-days: 90
 
   mutation:
-    name: Mutation tests
+    name: Mutation tests (shard ${{ matrix.shard }} of 6)
     runs-on: ubuntu-latest
     timeout-minutes: 240
     permissions:
       contents: read
+    strategy:
+      # Each shard is a read of its files: a slow or lost shard does not stop the others.
+      fail-fast: false
+      # At most 3 shards at a time, so one run does not take all the runners: 2 rounds of about 70 minutes.
+      max-parallel: 3
+      matrix:
+        # The count of shards is 6 here and in SHARDS below. One runner tested 1,545 of the 4,071 mutants of 11-22
+        # in 78 minutes, about 7 h for all, and the runner got a shutdown signal before the end on 11-19 to 11-22.
+        # 6 shards give each job about 70 minutes.
+        shard: [0, 1, 2, 3, 4, 5]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -70,13 +82,15 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       # Stryker runs for each mutant only the tests that cover it (coverageAnalysis perTest). IREKO_FAST=1 makes the property tests 10 times shorter.
-      # On 11-19, 11-20 and 11-21 the runner got a shutdown signal before the end of this step (at 118, 82 and 61 minutes),
-      # after the change of relax (#114) raised the mutants from 3,653 to 4,071. A cancelled job uploads no artifact, so
-      # the step writes the use of the runner to its own log each minute: memory, swap, free disk and the node processes.
-      - name: The mutation tests of the core
+      # A cancelled job uploads no artifact, so the step writes the use of the runner to its own log each minute:
+      # memory, swap, free disk and the node processes.
+      - name: The mutation tests of the files of the shard
+        working-directory: packages/ireko
         env:
           IREKO_FAST: "1"
           FORCE_COLOR: "0"
+          SHARD: ${{ matrix.shard }}
+          SHARDS: "6"
         run: |
           (
             while sleep 60; do
@@ -89,14 +103,47 @@ jobs:
           ) &
           sampler=$!
           trap 'kill "$sampler" 2>/dev/null || true' EXIT
-          pnpm --filter ireko mutation
-      - name: The score
-        if: always()
-        working-directory: packages/ireko
-        run: node scripts/mutation-score.mjs >> "$GITHUB_STEP_SUMMARY"
+          files=$(node scripts/mutation-shards.mjs list "$SHARD" "$SHARDS")
+          echo "The files of shard $SHARD of $SHARDS: $files"
+          pnpm exec stryker run --mutate "$files"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
-          name: mutation
+          name: mutation-${{ matrix.shard }}
           path: packages/ireko/reports/mutation/
+          retention-days: 30
+
+  score:
+    name: Mutation score
+    needs: mutation
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: mutation-*
+          path: packages/ireko/reports/shards
+      # The merge needs only node: modules, so this job installs nothing.
+      - name: The report of the core
+        working-directory: packages/ireko
+        run: |
+          shopt -s nullglob
+          reports=(reports/shards/mutation-*/mutation.json)
+          node scripts/mutation-shards.mjs merge 6 reports/mutation/mutation.json "${reports[@]}"
+      - name: The score
+        working-directory: packages/ireko
+        run: node scripts/mutation-score.mjs >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mutation
+          path: packages/ireko/reports/mutation/mutation.json
           retention-days: 30

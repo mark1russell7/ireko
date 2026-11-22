@@ -2,7 +2,8 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    // The tests of the scripts of the package, for example the shards of the mutation tests, are with them.
+    include: ["src/**/*.{test,spec}.{ts,tsx}", "scripts/**/*.test.mjs"],
     passWithNoTests: true,
     // The property tests make thousands of random layouts. The coverage makes them slower.
     testTimeout: 60_000,
