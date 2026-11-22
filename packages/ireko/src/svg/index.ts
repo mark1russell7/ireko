@@ -4,6 +4,7 @@
  * container that holds its ends, and below the boxes that it connects.
  */
 import { round3 } from "../core/geometry.ts";
+import { LINE_HEIGHT } from "../core/text.ts";
 import type { Layout, PlacedEdge, PlacedNode } from "../core/model.ts";
 import { clipRoots, isContainer, mount, paintOrder, type Renderer, type RendererOptions, type Surface } from "../render/renderer.ts";
 import { haloOf, labelAt, LABEL_SCALE } from "../render/label.ts";
@@ -27,6 +28,8 @@ export interface SvgOptions {
   readonly labels?: boolean;
   /** If false, the export has no background rectangle. The default is true. */
   readonly background?: boolean;
+  /** If true, each edge has an arrowhead at its target. The default is false. */
+  readonly arrows?: boolean;
 }
 
 /** This function gives the layout as a standalone SVG document. */
@@ -59,8 +62,10 @@ export function toSVG(layout: Layout, options: SvgOptions = {}): string {
   out.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${num(vx)} ${num(vy)} ${num(vw)} ${num(vh)}" width="${num(vw)}" height="${num(vh)}" role="img" font-family="${esc(theme.fontFamily)}" font-size="${num(theme.fontSize)}">`);
   if (options.title !== undefined) out.push(`<title>${esc(options.title)}</title>`);
   const clips = containers.filter((n) => n.clip);
-  if (clips.length > 0) {
+  const arrows = options.arrows === true && layout.edges.length > 0;
+  if (clips.length > 0 || arrows) {
     out.push("<defs>");
+    if (arrows) out.push(arrowOf(ARROW, theme.edge), arrowOf(`${ARROW}-extra`, theme.extraEdge));
     for (const c of clips) out.push(`<clipPath id="${clipId(c.id)}"><rect x="${num(c.x)}" y="${num(c.y)}" width="${num(c.width)}" height="${num(c.height)}" rx="${num(theme.radius * c.scale)}"/></clipPath>`);
     out.push("</defs>");
   }
@@ -79,14 +84,14 @@ export function toSVG(layout: Layout, options: SvgOptions = {}): string {
   out.push("</g>");
 
   out.push(`<g class="ireko-edges" fill="none">`);
-  for (const e of layout.edges) out.push(edgeOf(e, theme, byId));
+  for (const e of layout.edges) out.push(edgeOf(e, theme, byId, arrows));
   out.push("</g>");
 
   out.push(`<g class="ireko-nodes">`);
   for (const n of others) {
     out.push(`<g class="ireko-node" data-id="${esc(n.id)}"${clipAttr(n)}>`);
     out.push(`<rect x="${num(n.x)}" y="${num(n.y)}" width="${num(n.width)}" height="${num(n.height)}" rx="${num(theme.radius * n.scale)}" fill="${esc(theme.nodeFill)}" stroke="${esc(theme.nodeStroke)}"/>`);
-    if (labels) out.push(`<text x="${num(n.x + n.width / 2)}" y="${num(n.y + n.height / 2)}" font-size="${num(theme.fontSize * n.scale)}" text-anchor="middle" dominant-baseline="central" fill="${esc(theme.text)}">${esc(n.label)}</text>`);
+    if (labels) out.push(nodeLabelOf(n, theme));
     out.push("</g>");
   }
   out.push("</g>");
@@ -105,18 +110,43 @@ export function toSVG(layout: Layout, options: SvgOptions = {}): string {
   return out.join("\n");
 }
 
+/** The identifier of the arrowhead of the edges. The arrowhead of the extra edges adds `-extra`. */
+const ARROW = "ireko-arrow";
+
+/** This function gives the marker of an arrowhead in a color. Its size follows the width of the line. */
+function arrowOf(id: string, color: string): string {
+  return `<marker id="${id}" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${esc(color)}"/></marker>`;
+}
+
+/**
+ * This function gives the label of a box, at its center. A label with line breaks (`\n`) has one line for each part,
+ * with the same line height as `fitText`.
+ */
+function nodeLabelOf(n: PlacedNode, theme: Theme): string {
+  const size = theme.fontSize * n.scale;
+  const x = num(n.x + n.width / 2);
+  const lines = n.label.split("\n");
+  const attributes = `font-size="${num(size)}" text-anchor="middle" dominant-baseline="central" fill="${esc(theme.text)}"`;
+  if (lines.length === 1) return `<text x="${x}" y="${num(n.y + n.height / 2)}" ${attributes}>${esc(n.label)}</text>`;
+  const step = size * LINE_HEIGHT;
+  const top = n.y + n.height / 2 - (step * (lines.length - 1)) / 2;
+  const spans = lines.map((line, index) => `<tspan x="${x}" y="${num(top + index * step)}">${esc(line)}</tspan>`);
+  return `<text ${attributes}>${spans.join("")}</text>`;
+}
+
 /** This function gives the scale of an edge: the smaller scale of its two ends. */
 function edgeScale(e: PlacedEdge, byId: ReadonlyMap<string, PlacedNode>): number {
   return Math.min(byId.get(e.source)?.scale ?? 1, byId.get(e.target)?.scale ?? 1);
 }
 
-function edgeOf(e: PlacedEdge, theme: Theme, byId: ReadonlyMap<string, PlacedNode>): string {
+function edgeOf(e: PlacedEdge, theme: Theme, byId: ReadonlyMap<string, PlacedNode>, arrows: boolean): string {
   const points = e.points.map((p) => `${num(p.x)},${num(p.y)}`).join(" ");
   const scale = edgeScale(e, byId);
   const extra = e.kind === "extra";
   const stroke = extra ? theme.extraEdge : theme.edge;
   const dash = extra ? ` stroke-dasharray="${num(4 * scale)} ${num(3 * scale)}"` : "";
-  return `<polyline class="ireko-edge" data-id="${esc(e.id)}" points="${points}" stroke="${esc(stroke)}" stroke-width="${num(1.25 * scale)}"${dash}/>`;
+  const arrow = arrows ? ` marker-end="url(#${extra ? `${ARROW}-extra` : ARROW})"` : "";
+  return `<polyline class="ireko-edge" data-id="${esc(e.id)}" points="${points}" stroke="${esc(stroke)}" stroke-width="${num(1.25 * scale)}"${dash}${arrow}/>`;
 }
 
 function clipId(id: string): string {

@@ -21,19 +21,25 @@ export interface FitTextOptions {
   readonly widthOf?: (text: string, fontSize: number) => number;
 }
 
-/** The height of one line of text, as a factor of the size of the font. */
-const LINE = 1.3;
+/** The height of one line of text, as a factor of the size of the font. The SVG export uses the same height. */
+export const LINE_HEIGHT = 1.3;
 
-/** This function gives a `measure` function: the size of each box is the size of its label, plus the padding. */
+/**
+ * This function gives a `measure` function: the size of each box is the size of its label, plus the padding. A label
+ * with line breaks (`\n`) has one line for each part. Then the box is as wide as the widest line.
+ */
 export function fitText(options: FitTextOptions = {}): (node: NodeSpec) => Size {
   const fontSize = options.fontSize ?? 13;
   const padding = options.padding ?? { x: 12, y: 8 };
   const widthOf = options.widthOf ?? estimateWidth;
-  const height = Math.max(options.minHeight ?? 0, fontSize * LINE + 2 * padding.y);
-  return (node) => ({
-    width: Math.max(options.minWidth ?? 0, Math.ceil(widthOf(node.label ?? node.id, fontSize) + 2 * padding.x)),
-    height: Math.ceil(height),
-  });
+  return (node) => {
+    const lines = (node.label ?? node.id).split("\n");
+    const widest = Math.max(...lines.map((line) => widthOf(line, fontSize)));
+    return {
+      width: Math.max(options.minWidth ?? 0, Math.ceil(widest + 2 * padding.x)),
+      height: Math.ceil(Math.max(options.minHeight ?? 0, lines.length * fontSize * LINE_HEIGHT + 2 * padding.y)),
+    };
+  };
 }
 
 /**

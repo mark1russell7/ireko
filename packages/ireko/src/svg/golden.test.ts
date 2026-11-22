@@ -34,6 +34,35 @@ describe("toSVG", () => {
     expect(esc("plain")).toBe("plain");
   });
 
+  it("draws an arrowhead at the target of each edge with arrows: true, in the color of the edge", () => {
+    const input = { root: { id: "r", children: [{ id: "a" }, { id: "b" }] }, edges: [{ source: "a", target: "b" }] };
+    const plain = toSVG(layout(input));
+    expect(plain).not.toContain("<marker");
+    expect(plain).not.toContain("marker-end");
+    const svg = toSVG(layout(input), { arrows: true, theme: { edge: "#111111", extraEdge: "#222222" } });
+    expect(svg.match(/<marker /g)).toHaveLength(2);
+    expect(svg).toContain('<marker id="ireko-arrow" ');
+    expect(svg).toContain('fill="#111111"');
+    expect(svg).toContain('fill="#222222"');
+    // The root adds a tree edge to each linked child. The edge from a to b is an extra edge.
+    expect(svg.match(/<polyline /g)).toHaveLength(3);
+    expect(svg.match(/<polyline [^>]*marker-end="url\(#ireko-arrow\)"/g)).toHaveLength(2);
+    expect(svg.match(/<polyline [^>]*marker-end="url\(#ireko-arrow-extra\)"/g)).toHaveLength(1);
+    expect(toSVG(layout({ root: { id: "r" } }), { arrows: true })).not.toContain("<defs>");
+  });
+
+  it("draws a label with line breaks as one line for each part, at the center of the box", () => {
+    const out = layout({ root: { id: "r", children: [{ id: "a", label: "first\nsecond & third" }, { id: "b", label: "one line" }] } });
+    const svg = toSVG(out);
+    const box = out.nodes.find((n) => n.id === "a")!;
+    const spans = [...svg.matchAll(/<tspan x="([\d.-]+)" y="([\d.-]+)">([^<]*)<\/tspan>/g)];
+    expect(spans.map((span) => span[3])).toEqual(["first", "second &amp; third"]);
+    const [first = Number.NaN, second = Number.NaN] = spans.map((span) => Number(span[2]));
+    expect((first + second) / 2).toBeCloseTo(box.y + box.height / 2, 2);
+    expect(second - first).toBeCloseTo(13 * 1.3, 2);
+    expect(svg).toContain(">one line</text>");
+  });
+
   it("draws the labels of the edges, and leaves them out with labels: false", () => {
     const out = layout({ root: { id: "r", children: [{ id: "a" }, { id: "b" }] }, edges: [{ source: "a", target: "b", label: "a & b" }, { source: "b", target: "a", label: "" }] });
     const svg = toSVG(out, { theme: { background: "transparent", nodeFill: "#fafafa" } });
