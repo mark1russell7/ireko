@@ -51,6 +51,12 @@ describe("toSVG", () => {
     expect(toSVG(layout({ root: { id: "r" } }), { arrows: true })).not.toContain("<defs>");
   });
 
+  it("draws the extra edges with dashes, and with solid lines with dashes: false", () => {
+    const input = { root: { id: "r", children: [{ id: "a" }, { id: "b" }] }, edges: [{ source: "a", target: "b" }] };
+    expect(toSVG(layout(input)).match(/stroke-dasharray=/g)).toHaveLength(1);
+    expect(toSVG(layout(input), { dashes: false })).not.toContain("stroke-dasharray");
+  });
+
   it("draws a label with line breaks as one line for each part, at the center of the box", () => {
     const out = layout({ root: { id: "r", children: [{ id: "a", label: "first\nsecond & third" }, { id: "b", label: "one line" }] } });
     const svg = toSVG(out);

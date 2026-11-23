@@ -30,6 +30,8 @@ export interface SvgOptions {
   readonly background?: boolean;
   /** If true, each edge has an arrowhead at its target. The default is false. */
   readonly arrows?: boolean;
+  /** If false, the extra edges have solid lines, as the tree edges. The default is true: the extra edges have dashes. */
+  readonly dashes?: boolean;
 }
 
 /** This function gives the layout as a standalone SVG document. */
@@ -84,7 +86,8 @@ export function toSVG(layout: Layout, options: SvgOptions = {}): string {
   out.push("</g>");
 
   out.push(`<g class="ireko-edges" fill="none">`);
-  for (const e of layout.edges) out.push(edgeOf(e, theme, byId, arrows));
+  const dashes = options.dashes !== false;
+  for (const e of layout.edges) out.push(edgeOf(e, theme, byId, arrows, dashes));
   out.push("</g>");
 
   out.push(`<g class="ireko-nodes">`);
@@ -139,12 +142,12 @@ function edgeScale(e: PlacedEdge, byId: ReadonlyMap<string, PlacedNode>): number
   return Math.min(byId.get(e.source)?.scale ?? 1, byId.get(e.target)?.scale ?? 1);
 }
 
-function edgeOf(e: PlacedEdge, theme: Theme, byId: ReadonlyMap<string, PlacedNode>, arrows: boolean): string {
+function edgeOf(e: PlacedEdge, theme: Theme, byId: ReadonlyMap<string, PlacedNode>, arrows: boolean, dashes: boolean): string {
   const points = e.points.map((p) => `${num(p.x)},${num(p.y)}`).join(" ");
   const scale = edgeScale(e, byId);
   const extra = e.kind === "extra";
   const stroke = extra ? theme.extraEdge : theme.edge;
-  const dash = extra ? ` stroke-dasharray="${num(4 * scale)} ${num(3 * scale)}"` : "";
+  const dash = extra && dashes ? ` stroke-dasharray="${num(4 * scale)} ${num(3 * scale)}"` : "";
   const arrow = arrows ? ` marker-end="url(#${extra ? `${ARROW}-extra` : ARROW})"` : "";
   return `<polyline class="ireko-edge" data-id="${esc(e.id)}" points="${points}" stroke="${esc(stroke)}" stroke-width="${num(1.25 * scale)}"${dash}${arrow}/>`;
 }
