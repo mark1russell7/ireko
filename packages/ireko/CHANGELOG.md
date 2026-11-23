@@ -12,6 +12,18 @@ This file records the changes to `ireko` in each version. The release workflow c
 
 A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other version goes to `latest`.
 
+## 0.2.6
+
+This version is a patch. It adds arrowheads and solid extra edges to the SVG export. It also gives `fitText` and the SVG export labels with more than one line.
+
+- The new option `arrows` of `toSVG` gives each edge an arrowhead at its target. The default is false.
+- The arrowhead has the color of its edge: the color `edge` of the theme, or `extraEdge` for an extra edge.
+- The new option `dashes` of `toSVG` draws the extra edges with solid lines when it is false. The default is true, and the extra edges have dashes, as in 0.2.5.
+- A label with line breaks (`\n`) has one line for each part. `fitText` makes the box as wide as the widest line, and as high as all the lines.
+- `toSVG` draws each line of such a label at the center of the box, with the line height of `fitText`.
+- In 0.2.5, `fitText` measured such a label as one line, and `toSVG` drew it on one line. A label with no line break gets the same box and the same SVG as in 0.2.5.
+- The live renderers `mountSvg`, `mountDom` and `mountCanvas` draw each label on one line, as before.
+
 ## 0.2.5
 
 This version is a patch. It makes `relaxForces` faster for 200 boxes or more, and it adds the option `theta` to `relaxForces` and to the strategy `force`. With the default of the option, each layout stays the same.

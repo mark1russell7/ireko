@@ -920,6 +920,8 @@ export interface SvgOptions {
   readonly title?: string;
   readonly labels?: boolean;
   readonly background?: boolean;
+  readonly arrows?: boolean;
+  readonly dashes?: boolean;
 }
 
 ### dist/svg.d.ts#mountSvg

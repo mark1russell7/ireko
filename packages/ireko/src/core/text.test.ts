@@ -22,6 +22,13 @@ describe("boxes that fit their labels", () => {
     expect(fitText()({ id: "abc" })).toEqual({ width: Math.ceil(estimateWidth("abc", 13) + 24), height: Math.ceil(13 * 1.3 + 16) });
   });
 
+  it("gives a label with line breaks one line for each part", () => {
+    const measure = fitText({ fontSize: 10, padding: { x: 5, y: 2 }, widthOf: (text) => text.length * 10 });
+    expect(measure({ id: "a", label: "one\nthree\nx" })).toEqual({ width: 60, height: Math.ceil(3 * 13 + 4) });
+    expect(measure({ id: "a", label: "one three x" }).height).toBe(17);
+    expect(fitText({ minHeight: 80 })({ id: "a", label: "a\nb" }).height).toBe(80);
+  });
+
   it("makes the boxes of a layout as wide as their labels", () => {
     const out = layout({ root: { id: "r", children: [{ id: "a" }, { id: "b", label: "A much longer label" }] } }, { measure: fitText() });
     const a = out.nodes.find((n) => n.id === "a");
