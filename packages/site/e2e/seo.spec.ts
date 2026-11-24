@@ -49,7 +49,7 @@ test("llms.txt lists the pages, and each link opens", async ({ request }) => {
   expect(response.status()).toBe(200);
   const text = await response.text();
   expect(text.startsWith("# ireko\n\n> ")).toBe(true);
-  const links = [...text.matchAll(/\]\((https:\/\/mark1russell7\.github\.io\/ireko\/[^)]*)\)/g)].map((m) => (m[1] ?? "").replace(PUBLISHED, ""));
+  const links = [...text.matchAll(/\]\((https:\/\/metrograph-labs\.github\.io\/ireko\/[^)]*)\)/g)].map((m) => (m[1] ?? "").replace(PUBLISHED, ""));
   expect(links.length).toBeGreaterThan(10);
   for (const link of links) expect((await request.get(link)).status(), link).toBe(200);
   const full = await request.get("llms-full.txt");

@@ -17,7 +17,7 @@ import rehypeBase from "./scripts/rehype-base.mjs";
  */
 const normalizeBase = (value) => `/${value.replace(/^.*[\\/](?=[^\\/]+[\\/]?$)/, "").replace(/^\/+|\/+$/g, "")}`;
 const base = normalizeBase(process.env.SITE_BASE ?? "ireko");
-const site = "https://mark1russell7.github.io";
+const site = "https://metrograph-labs.github.io";
 // The share card of the pages without their own card. scripts/og-image.mjs draws each card with ireko itself.
 const card = `${site}${base}/og/index.png`;
 const docs = fileURLToPath(new URL("./src/content/docs/", import.meta.url));

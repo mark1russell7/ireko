@@ -1,6 +1,6 @@
 /** The facts of the site. The base path comes from Astro, so a new name of the repository needs no change here. */
 export const NAME = "ireko";
-export const ORIGIN = "https://mark1russell7.github.io";
+export const ORIGIN = "https://metrograph-labs.github.io";
 /** The absolute URL of the home page, with a slash at the end. */
 export const SITE: string = `${ORIGIN}${import.meta.env.BASE_URL.replace(/\/?$/, "/")}`;
 export const REPOSITORY = "https://github.com/metrograph-labs/ireko";
