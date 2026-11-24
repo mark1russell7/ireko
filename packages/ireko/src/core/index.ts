@@ -6,7 +6,7 @@ export { centerOf, contains, inflate, overlaps, rectAt, translate, union, unionA
 export * from "./model.ts";
 export { defaultsOf, type BooleanOption, type EnumOption, type NumberOption, type OptionSchema, type OptionSpec, type OptionSpecFor } from "./options.ts";
 export * from "./strategy.ts";
-export { borderPoint, defineRouter, type RouteInput, type Router } from "./router.ts";
+export { borderPoint, defineRouter, type GraphBox, type GraphEdge, type GraphNode, type GraphRoute, type GraphRouter, type GraphRouterInput, type GraphRouterResult, type RouteInput, type Router } from "./router.ts";
 export { straight, orthogonal } from "./routers.ts";
 export { avoid } from "./avoid.ts";
 export { estimateWidth, fitText, type FitTextOptions } from "./text.ts";

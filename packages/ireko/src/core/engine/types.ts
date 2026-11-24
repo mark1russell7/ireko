@@ -3,7 +3,7 @@
  */
 import type { Point, Size } from "../geometry.ts";
 import type { EdgeSpec, Fit, LayoutOptions, Mode, NodeSpec, TraceEvent, TreeEdges } from "../model.ts";
-import type { Router } from "../router.ts";
+import type { GraphRouter, Router } from "../router.ts";
 import type { AnyStrategy } from "../strategy.ts";
 import type { LinkedShape } from "./shape.ts";
 
@@ -23,6 +23,7 @@ export interface Resolved {
   readonly nodeSize: Size;
   readonly header: number;
   readonly router: Router;
+  readonly graphRouter: GraphRouter | undefined;
   readonly treeEdges: TreeEdges;
   readonly origin: Point;
   readonly measure: LayoutOptions["measure"];

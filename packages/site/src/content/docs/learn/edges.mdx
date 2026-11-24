@@ -122,6 +122,39 @@ A router with `obstacles: true` also gets the boxes near the edge in `obstacles`
 
 The engine examines each route. A router that throws or gives fewer than two finite points gives the finding [`ROUTER_FAILED`](/reference/issues/#router_failed), and the engine uses `straight` for that edge. An unknown router name gives [`UNKNOWN_ROUTER`](/reference/issues/#unknown_router).
 
+## Route all edges together
+
+A router of the option `router` routes each edge alone. Thus an edge can go through a box that is not near its ends. The option `graphRouter` takes a router that sees all boxes and all edges together. The router `corners` of [`@mark1russell7/highways`](https://www.npmjs.com/package/@mark1russell7/highways) has the correct shape:
+
+```ts
+import { layout } from "ireko";
+import { cornersRouter, getStrategy, STRATEGIES } from "@mark1russell7/highways";
+
+const corners = cornersRouter({ name: "corners", plug: getStrategy(STRATEGIES, "plugs", "spread"), plugOptions: { plugGap: 6 } });
+const result = layout(input, { graphRouter: corners });
+const through = result.issues.filter((issue) => issue.code === "EDGE_THROUGH_BOX");
+```
+
+ireko has no dependency on highways. A graph router is an object with a `route` function and an optional `name`:
+
+```ts
+interface GraphRouter {
+  name?: string;
+  route(input: {
+    nodes: { id: string; box: { x: number; y: number; w: number; h: number }; parent?: string }[];
+    edges: { id: string; source: { node: string }; target: { node: string } }[];
+  }): { routes: { edge: string; points: { x: number; y: number }[]; through?: string[] }[] };
+}
+```
+
+- The engine uses the graph router after the router of the option `router`. The routes of the graph router replace the first routes.
+- The obstacles are all boxes, also the containers. A root in the nested mode holds each other box, so it is not an obstacle.
+- `parent` is the nested container of a box. A router can use it to route an edge between two boxes of one container inside that container.
+- An edge between a container and a box inside it keeps its first route.
+- The `bounds` of the layout grow to hold each new route.
+- A route with boxes in `through` gives the warning [`EDGE_THROUGH_BOX`](/reference/issues/#edge_through_box). The ends of the edge and the containers that hold an end do not count.
+- A router that throws, or a missing or bad route, gives [`ROUTER_FAILED`](/reference/issues/#router_failed). Then the edge keeps its first route.
+
 ## Draw the edges
 
 A route is a list of points. The renderers of ireko draw it as a polyline. To draw curves in your own renderer, use the points as control points. In React Flow, `PolylineEdge` draws the route of ireko, and React Flow keeps its markers and its labels.

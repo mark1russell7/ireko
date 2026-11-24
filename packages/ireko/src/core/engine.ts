@@ -6,6 +6,7 @@ import { clean, unionAll, type Rect } from "./geometry.ts";
 import { IrekoError, type Issue, type Layout, type LayoutInput, type LayoutOptions } from "./model.ts";
 import { audit } from "./engine/audit.ts";
 import { finite } from "./engine/finite.ts";
+import { graphRoute } from "./engine/graph-route.ts";
 import { measure } from "./engine/measure.ts";
 import { normalize } from "./engine/normalize.ts";
 import { place } from "./engine/place.ts";
@@ -116,7 +117,8 @@ function run(
   trace?.({ phase: "measure", data: m });
   const placed = place(norm, m, ctx, issues);
   trace?.({ phase: "place", data: placed });
-  const edges = route(norm, placed.nodes, ctx, issues, m);
+  const first = route(norm, placed.nodes, ctx, issues, m);
+  const edges = resolved.graphRouter === undefined ? first : graphRoute(resolved.graphRouter, placed.nodes, first, issues);
   trace?.({ phase: "route", data: edges });
   if (resolved.audit) {
     audit(norm, m, placed, ctx, issues);
@@ -151,6 +153,7 @@ function resolve(o: LayoutOptions, routers: ReadonlyMap<string, Router>, issues:
     nodeSize,
     header: nonNegative(o.header, 24, "header", issues),
     router,
+    graphRouter: o.graphRouter,
     treeEdges,
     origin,
     measure: o.measure,

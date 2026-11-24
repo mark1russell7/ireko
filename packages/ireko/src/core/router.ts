@@ -32,6 +32,61 @@ export interface Router {
   route(input: RouteInput): readonly Point[];
 }
 
+/** A box of the input of a graph router. `w` is the width and `h` is the height. The values are absolute. */
+export interface GraphBox {
+  readonly x: number;
+  readonly y: number;
+  readonly w: number;
+  readonly h: number;
+}
+
+/** A node of the input of a graph router: a box that the routes must not go through. */
+export interface GraphNode {
+  readonly id: string;
+  readonly box: GraphBox;
+  /** The identifier of the nested container that holds the node, if that container is a node of the input. */
+  readonly parent?: string;
+}
+
+/** An edge of the input of a graph router. */
+export interface GraphEdge {
+  readonly id: string;
+  readonly source: { readonly node: string };
+  readonly target: { readonly node: string };
+}
+
+/** The input of `GraphRouter.route`: all the boxes and all the edges of one layout. */
+export interface GraphRouterInput {
+  readonly nodes: readonly GraphNode[];
+  readonly edges: readonly GraphEdge[];
+}
+
+/** The route of one edge from a graph router. */
+export interface GraphRoute {
+  /** The identifier of the edge. */
+  readonly edge: string;
+  /** The points of the route, from the source box to the target box, in absolute coordinates. */
+  readonly points: readonly Point[];
+  /** The identifiers of the boxes that the route goes through. A clean route does not have this field. */
+  readonly through?: readonly string[];
+}
+
+/** The output of `GraphRouter.route`. */
+export interface GraphRouterResult {
+  readonly routes: readonly GraphRoute[];
+}
+
+/**
+ * A graph router routes all the edges of a layout together, with all the boxes in view. A router of
+ * `@mark1russell7/highways`, for example `cornersRouter`, has this shape.
+ */
+export interface GraphRouter {
+  /** The name of the router. The findings of the engine show it. */
+  readonly name?: string;
+  /** This function gives the routes of the edges. The same input must give the same routes. */
+  route(input: GraphRouterInput): GraphRouterResult;
+}
+
 /** This function gives its argument. It gives a new router the type `Router`. */
 export function defineRouter(router: Router): Router {
   return router;

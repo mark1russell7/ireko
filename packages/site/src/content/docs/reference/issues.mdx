@@ -34,6 +34,7 @@ interface Issue {
 | [`LIMIT_NODES`](#limit_nodes), [`LIMIT_DEPTH`](#limit_depth), [`LIMIT_CHILDREN`](#limit_children) | error | normalize |
 | [`STRATEGY_FAILED`](#strategy_failed) | error (arrange), warning (audit) | measure, audit |
 | [`ROUTER_FAILED`](#router_failed) | error | route |
+| [`EDGE_THROUGH_BOX`](#edge_through_box) | warning | route |
 | [`NON_FINITE`](#non_finite) | error | measure, place |
 | [`OVERLAP`](#overlap) | warning | audit |
 | [`ESCAPE`](#escape) | warning | audit |
@@ -97,6 +98,16 @@ The message has the name of the strategy and the problem. Refer to [Write a stra
 ## `ROUTER_FAILED`
 
 A router threw, or gave fewer than two points, or a point that is not finite. The engine uses `straight` for that edge.
+
+For a graph router (the option `graphRouter`), the finding also comes when the router gives no route for an edge. Then the edge keeps the route of the option `router`. When the graph router throws, the finding has no `edge`, and each edge keeps its route.
+
+## `EDGE_THROUGH_BOX`
+
+The route of a graph router (the option `graphRouter`) goes through a box. The router tells it in the field `through` of the route. The engine keeps the route. The `detail` has the `boxes` and the name of the `router`.
+
+The ends of the edge and the containers that hold an end do not count. An edge from a box in a container to a box outside it must cross the wall of the container.
+
+To stop on this finding, examine `issues` for the code. The option `strict` does not throw for a warning.
 
 ## `NON_FINITE`
 

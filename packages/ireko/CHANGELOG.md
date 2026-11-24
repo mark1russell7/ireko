@@ -12,6 +12,18 @@ This file records the changes to `ireko` in each version. The release workflow c
 
 A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other version goes to `latest`.
 
+## 0.2.7
+
+This version is a patch. It adds the option `graphRouter` of `layout`. A graph router routes all edges together, with all boxes in view. Without the option, each layout stays the same.
+
+- The new option `graphRouter` takes an object with a `route` function. The function gets all boxes and all edges, and gives a route for each edge. The router `cornersRouter` of `@mark1russell7/highways` has this shape. ireko has no dependency on highways.
+- The new types `GraphRouter`, `GraphRouterInput`, `GraphRouterResult`, `GraphNode`, `GraphEdge`, `GraphBox` and `GraphRoute` tell the shape.
+- The graph router operates after the router of the option `router`. Its routes replace the first routes, and the `bounds` grow to hold them.
+- The obstacles are all boxes, also the containers. A root in the nested mode is not an obstacle. An edge between a container and a box inside it keeps its first route.
+- A route that goes through a box gives the new warning `EDGE_THROUGH_BOX`, with the boxes in its `detail`. The ends of the edge and the containers that hold an end do not count.
+- A graph router that throws, or a missing or bad route, gives `ROUTER_FAILED`. Then the edge keeps its first route.
+- The gzip size of `layout` goes from 18.05 kB to 18.57 kB. The size limits of the entries that hold the engine go up by 0.5 kB.
+
 ## 0.2.6
 
 This version is a patch. It adds arrowheads and solid extra edges to the SVG export. It also gives `fitText` and the SVG export labels with more than one line.

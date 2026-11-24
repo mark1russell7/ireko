@@ -13,7 +13,7 @@ const ctx: Context = {
   strategies: engine.strategies,
   limits: engine.limits,
   linkedShape: handLinkedShape,
-  options: { spacing: 24, nodeSize: { width: 120, height: 48 }, header: 0, router: straight, treeEdges: "linked", origin: { x: 0, y: 0 }, measure: undefined, audit: true, strict: false, trace: undefined },
+  options: { spacing: 24, nodeSize: { width: 120, height: 48 }, header: 0, router: straight, graphRouter: undefined, treeEdges: "linked", origin: { x: 0, y: 0 }, measure: undefined, audit: true, strict: false, trace: undefined },
 };
 
 const box = (id: string, x: number, y: number, w: number, h: number, extra: Partial<PlacedNode> = {}): PlacedNode => ({

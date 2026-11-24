@@ -6,25 +6,32 @@
 
 ## . (dist/index.d.ts): names
 
-AnyStrategy: dist/strategy.chunk.d.ts#AnyStrategy
-ArrangeInput: dist/strategy.chunk.d.ts#ArrangeInput
-Arrangement: dist/strategy.chunk.d.ts#Arrangement
-AuditInput: dist/strategy.chunk.d.ts#AuditInput
+AnyStrategy: dist/model.chunk.d.ts#AnyStrategy
+ArrangeInput: dist/model.chunk.d.ts#ArrangeInput
+Arrangement: dist/model.chunk.d.ts#Arrangement
+AuditInput: dist/model.chunk.d.ts#AuditInput
 BUILTIN_STRATEGY_NAMES: dist/index.d.ts#BUILTIN_STRATEGY_NAMES
-Band: dist/strategy.chunk.d.ts#Band
-type BooleanOption: dist/strategy.chunk.d.ts#BooleanOption
+Band: dist/model.chunk.d.ts#Band
+type BooleanOption: dist/model.chunk.d.ts#BooleanOption
 type BuildOptions: dist/build.chunk.d.ts#BuildOptions
 type Builder: dist/build.chunk.d.ts#Builder
 type Child: dist/build.chunk.d.ts#Child
-ChildEdge: dist/strategy.chunk.d.ts#ChildEdge
+ChildEdge: dist/model.chunk.d.ts#ChildEdge
 type ContainerOptions: dist/build.chunk.d.ts#ContainerOptions
-Direction: dist/strategy.chunk.d.ts#Direction
+Direction: dist/model.chunk.d.ts#Direction
 EdgeSpec: dist/model.chunk.d.ts#EdgeSpec
 type Engine: dist/engine.chunk.d.ts#Engine
 type EngineConfig: dist/engine.chunk.d.ts#EngineConfig
-type EnumOption: dist/strategy.chunk.d.ts#EnumOption
+type EnumOption: dist/model.chunk.d.ts#EnumOption
 Fit: dist/model.chunk.d.ts#Fit
 type FitTextOptions: dist/index.d.ts#FitTextOptions
+type GraphBox: dist/model.chunk.d.ts#GraphBox
+type GraphEdge: dist/model.chunk.d.ts#GraphEdge
+type GraphNode: dist/model.chunk.d.ts#GraphNode
+type GraphRoute: dist/model.chunk.d.ts#GraphRoute
+type GraphRouter: dist/model.chunk.d.ts#GraphRouter
+type GraphRouterInput: dist/model.chunk.d.ts#GraphRouterInput
+type GraphRouterResult: dist/model.chunk.d.ts#GraphRouterResult
 type GridOptions: dist/build.chunk.d.ts#GridOptions
 IrekoError: dist/model.chunk.d.ts#IrekoError
 Issue: dist/model.chunk.d.ts#Issue
@@ -37,30 +44,30 @@ LayoutRef: dist/model.chunk.d.ts#LayoutRef
 LayoutWithOptions: dist/model.chunk.d.ts#LayoutWithOptions
 type Limits: dist/engine.chunk.d.ts#Limits
 type LinkedShape: dist/engine.chunk.d.ts#LinkedShape
-MeasuredChild: dist/strategy.chunk.d.ts#MeasuredChild
+MeasuredChild: dist/model.chunk.d.ts#MeasuredChild
 Mode: dist/model.chunk.d.ts#Mode
 NodeSpec: dist/model.chunk.d.ts#NodeSpec
-type NumberOption: dist/strategy.chunk.d.ts#NumberOption
-type OptionSchema: dist/strategy.chunk.d.ts#OptionSchema
-type OptionSpec: dist/strategy.chunk.d.ts#OptionSpec
-type OptionSpecFor: dist/strategy.chunk.d.ts#OptionSpecFor
+type NumberOption: dist/model.chunk.d.ts#NumberOption
+type OptionSchema: dist/model.chunk.d.ts#OptionSchema
+type OptionSpec: dist/model.chunk.d.ts#OptionSpec
+type OptionSpecFor: dist/model.chunk.d.ts#OptionSpecFor
 PlacedEdge: dist/model.chunk.d.ts#PlacedEdge
 PlacedNode: dist/model.chunk.d.ts#PlacedNode
 type Point: dist/model.chunk.d.ts#Point
 type RadialOptions: dist/build.chunk.d.ts#RadialOptions
 type Rect: dist/model.chunk.d.ts#Rect
-type RouteInput: dist/engine.chunk.d.ts#RouteInput
-type Router: dist/engine.chunk.d.ts#Router
+type RouteInput: dist/model.chunk.d.ts#RouteInput
+type Router: dist/model.chunk.d.ts#Router
 Severity: dist/model.chunk.d.ts#Severity
-Shape: dist/strategy.chunk.d.ts#Shape
+Shape: dist/model.chunk.d.ts#Shape
 type ShapePart: dist/engine.chunk.d.ts#ShapePart
 type Size: dist/model.chunk.d.ts#Size
-Strategy: dist/strategy.chunk.d.ts#Strategy
+Strategy: dist/model.chunk.d.ts#Strategy
 TraceEvent: dist/model.chunk.d.ts#TraceEvent
 TreeEdges: dist/model.chunk.d.ts#TreeEdges
 type TreeOptions: dist/build.chunk.d.ts#TreeOptions
 avoid: dist/index.d.ts#avoid
-borderPoint: dist/engine.chunk.d.ts#borderPoint
+borderPoint: dist/model.chunk.d.ts#borderPoint
 builder: dist/build.chunk.d.ts#builder
 builtinRouters: dist/engine.chunk.d.ts#builtinRouters
 builtinStrategies: dist/engine.chunk.d.ts#builtinStrategies
@@ -68,9 +75,9 @@ centerOf: dist/model.chunk.d.ts#centerOf
 contains: dist/model.chunk.d.ts#contains
 createEngine: dist/engine.chunk.d.ts#createEngine
 defaultLimits: dist/engine.chunk.d.ts#defaultLimits
-defaultsOf: dist/strategy.chunk.d.ts#defaultsOf
-defineRouter: dist/engine.chunk.d.ts#defineRouter
-defineStrategy: dist/strategy.chunk.d.ts#defineStrategy
+defaultsOf: dist/model.chunk.d.ts#defaultsOf
+defineRouter: dist/model.chunk.d.ts#defineRouter
+defineStrategy: dist/model.chunk.d.ts#defineStrategy
 estimateWidth: dist/index.d.ts#estimateWidth
 fitText: dist/index.d.ts#fitText
 grid: dist/build.chunk.d.ts#grid
@@ -353,33 +360,12 @@ interface Limits {
 ### dist/engine.chunk.d.ts#LinkedShape
 type LinkedShape = (own: Size, parts: readonly ShapePart[]) => Shape;
 
-### dist/engine.chunk.d.ts#RouteInput
-interface RouteInput {
-  readonly id: string;
-  readonly kind: "tree" | "extra";
-  readonly source: Rect;
-  readonly target: Rect;
-  readonly direction?: Direction;
-  readonly obstacles?: readonly Rect[];
-}
-
-### dist/engine.chunk.d.ts#Router
-interface Router {
-  readonly type: string;
-  readonly description: string;
-  readonly obstacles?: boolean;
-  route(input: RouteInput): readonly Point[];
-}
-
 ### dist/engine.chunk.d.ts#ShapePart
 interface ShapePart {
   readonly shape: Shape;
   readonly x: number;
   readonly y: number;
 }
-
-### dist/engine.chunk.d.ts#borderPoint
-declare function borderPoint(box: Rect, toward: Point): Point;
 
 ### dist/engine.chunk.d.ts#builtinRouters
 declare const builtinRouters: readonly Router[];
@@ -392,9 +378,6 @@ declare function createEngine(config?: EngineConfig): Engine;
 
 ### dist/engine.chunk.d.ts#defaultLimits
 declare const defaultLimits: Limits;
-
-### dist/engine.chunk.d.ts#defineRouter
-declare function defineRouter(router: Router): Router;
 
 ### dist/engine.chunk.d.ts#layout
 declare function layout(input: LayoutInput, options?: LayoutOptions): Layout;
@@ -441,6 +424,68 @@ export declare const orthogonal: Router;
 ### dist/index.d.ts#straight
 export declare const straight: Router;
 
+### dist/model.chunk.d.ts#AnyStrategy
+interface AnyStrategy {
+  readonly type: string;
+  readonly description: string;
+  readonly options: Readonly<Record<string, OptionSpec>>;
+  readonly shapes?: boolean;
+  arrange(input: ArrangeInput<unknown>): Arrangement;
+  audit?(input: AuditInput<unknown>): readonly Issue[];
+}
+
+### dist/model.chunk.d.ts#ArrangeInput
+interface ArrangeInput<O> {
+  readonly id: string;
+  readonly mode: Mode;
+  readonly self: Size;
+  readonly children: readonly MeasuredChild[];
+  readonly options: O;
+  readonly gap: number;
+  readonly depth: number;
+  readonly edges?: readonly ChildEdge[];
+}
+
+### dist/model.chunk.d.ts#Arrangement
+interface Arrangement {
+  readonly direction?: Direction;
+  readonly flow?: Direction;
+  readonly offsets: readonly Point[];
+  readonly content?: Rect;
+}
+
+### dist/model.chunk.d.ts#AuditInput
+interface AuditInput<O> {
+  readonly node: PlacedNode;
+  readonly children: readonly PlacedNode[];
+  readonly options: O;
+  readonly gap: number;
+}
+
+### dist/model.chunk.d.ts#Band
+interface Band {
+  readonly from: number;
+  readonly to: number;
+  readonly min: number;
+  readonly max: number;
+}
+
+### dist/model.chunk.d.ts#BooleanOption
+interface BooleanOption {
+  readonly type: "boolean";
+  readonly default: boolean;
+  readonly description: string;
+}
+
+### dist/model.chunk.d.ts#ChildEdge
+interface ChildEdge {
+  readonly from: number;
+  readonly to: number;
+}
+
+### dist/model.chunk.d.ts#Direction
+type Direction = "down" | "up" | "left" | "right";
+
 ### dist/model.chunk.d.ts#EdgeSpec
 interface EdgeSpec {
   readonly id?: string;
@@ -450,8 +495,66 @@ interface EdgeSpec {
   readonly data?: unknown;
 }
 
+### dist/model.chunk.d.ts#EnumOption
+interface EnumOption<V extends string = string> {
+  readonly type: "enum";
+  readonly values: readonly V[];
+  readonly default: V;
+  readonly description: string;
+}
+
 ### dist/model.chunk.d.ts#Fit
 type Fit = "grow" | "scale" | "clip";
+
+### dist/model.chunk.d.ts#GraphBox
+interface GraphBox {
+  readonly x: number;
+  readonly y: number;
+  readonly w: number;
+  readonly h: number;
+}
+
+### dist/model.chunk.d.ts#GraphEdge
+interface GraphEdge {
+  readonly id: string;
+  readonly source: {
+    readonly node: string;
+  };
+  readonly target: {
+    readonly node: string;
+  };
+}
+
+### dist/model.chunk.d.ts#GraphNode
+interface GraphNode {
+  readonly id: string;
+  readonly box: GraphBox;
+  readonly parent?: string;
+}
+
+### dist/model.chunk.d.ts#GraphRoute
+interface GraphRoute {
+  readonly edge: string;
+  readonly points: readonly Point[];
+  readonly through?: readonly string[];
+}
+
+### dist/model.chunk.d.ts#GraphRouter
+interface GraphRouter {
+  readonly name?: string;
+  route(input: GraphRouterInput): GraphRouterResult;
+}
+
+### dist/model.chunk.d.ts#GraphRouterInput
+interface GraphRouterInput {
+  readonly nodes: readonly GraphNode[];
+  readonly edges: readonly GraphEdge[];
+}
+
+### dist/model.chunk.d.ts#GraphRouterResult
+interface GraphRouterResult {
+  readonly routes: readonly GraphRoute[];
+}
 
 ### dist/model.chunk.d.ts#IrekoError
 declare class IrekoError extends Error {
@@ -470,7 +573,7 @@ interface Issue {
 }
 
 ### dist/model.chunk.d.ts#IssueCode
-type IssueCode = "DUPLICATE_ID" | "EMPTY_ID" | "UNKNOWN_LAYOUT" | "UNKNOWN_ROUTER" | "INVALID_OPTION" | "INVALID_SIZE" | "UNKNOWN_EDGE_END" | "SELF_LOOP" | "LIMIT_NODES" | "LIMIT_DEPTH" | "LIMIT_CHILDREN" | "STRATEGY_FAILED" | "ROUTER_FAILED" | "NON_FINITE" | "OVERLAP" | "ESCAPE" | (string & {});
+type IssueCode = "DUPLICATE_ID" | "EMPTY_ID" | "UNKNOWN_LAYOUT" | "UNKNOWN_ROUTER" | "INVALID_OPTION" | "INVALID_SIZE" | "UNKNOWN_EDGE_END" | "SELF_LOOP" | "LIMIT_NODES" | "LIMIT_DEPTH" | "LIMIT_CHILDREN" | "STRATEGY_FAILED" | "ROUTER_FAILED" | "EDGE_THROUGH_BOX" | "NON_FINITE" | "OVERLAP" | "ESCAPE" | (string & {});
 
 ### dist/model.chunk.d.ts#Layout
 interface Layout {
@@ -492,6 +595,7 @@ interface LayoutOptions {
   readonly nodeSize?: Size;
   readonly header?: number;
   readonly router?: string;
+  readonly graphRouter?: GraphRouter;
   readonly treeEdges?: TreeEdges;
   readonly origin?: Point;
   readonly measure?: (node: NodeSpec) => Size | undefined;
@@ -509,6 +613,15 @@ interface LayoutWithOptions {
   readonly [option: string]: unknown;
 }
 
+### dist/model.chunk.d.ts#MeasuredChild
+interface MeasuredChild {
+  readonly id: string;
+  readonly box: Size;
+  readonly extent: Rect;
+  readonly mode: Mode;
+  readonly shape?: Shape;
+}
+
 ### dist/model.chunk.d.ts#Mode
 type Mode = "nested" | "linked";
 
@@ -523,6 +636,25 @@ interface NodeSpec {
   readonly children?: readonly NodeSpec[];
   readonly data?: unknown;
 }
+
+### dist/model.chunk.d.ts#NumberOption
+interface NumberOption {
+  readonly type: "number";
+  readonly default: number;
+  readonly min?: number;
+  readonly max?: number;
+  readonly integer?: boolean;
+  readonly description: string;
+}
+
+### dist/model.chunk.d.ts#OptionSchema
+type OptionSchema<O> = { readonly [K in keyof O]-?: OptionSpecFor<O[K]>; };
+
+### dist/model.chunk.d.ts#OptionSpec
+type OptionSpec = NumberOption | BooleanOption | EnumOption;
+
+### dist/model.chunk.d.ts#OptionSpecFor
+type OptionSpecFor<T> = [T] extends [number] ? NumberOption : [T] extends [boolean] ? BooleanOption : [T] extends [string] ? EnumOption<T> : never;
 
 ### dist/model.chunk.d.ts#PlacedEdge
 interface PlacedEdge {
@@ -559,13 +691,47 @@ interface Point {
 ### dist/model.chunk.d.ts#Rect
 interface Rect extends Point, Size {}
 
+### dist/model.chunk.d.ts#RouteInput
+interface RouteInput {
+  readonly id: string;
+  readonly kind: "tree" | "extra";
+  readonly source: Rect;
+  readonly target: Rect;
+  readonly direction?: Direction;
+  readonly obstacles?: readonly Rect[];
+}
+
+### dist/model.chunk.d.ts#Router
+interface Router {
+  readonly type: string;
+  readonly description: string;
+  readonly obstacles?: boolean;
+  route(input: RouteInput): readonly Point[];
+}
+
 ### dist/model.chunk.d.ts#Severity
 type Severity = "error" | "warning";
+
+### dist/model.chunk.d.ts#Shape
+interface Shape {
+  readonly rows: readonly Band[];
+  readonly columns: readonly Band[];
+}
 
 ### dist/model.chunk.d.ts#Size
 interface Size {
   readonly width: number;
   readonly height: number;
+}
+
+### dist/model.chunk.d.ts#Strategy
+interface Strategy<O = Record<string, never>> {
+  readonly type: string;
+  readonly description: string;
+  readonly options: OptionSchema<O>;
+  readonly shapes?: boolean;
+  arrange(input: ArrangeInput<O>): Arrangement;
+  audit?(input: AuditInput<O>): readonly Issue[];
 }
 
 ### dist/model.chunk.d.ts#TraceEvent
@@ -577,11 +743,23 @@ interface TraceEvent {
 ### dist/model.chunk.d.ts#TreeEdges
 type TreeEdges = "linked" | "all" | "none";
 
+### dist/model.chunk.d.ts#borderPoint
+declare function borderPoint(box: Rect, toward: Point): Point;
+
 ### dist/model.chunk.d.ts#centerOf
 declare function centerOf(r: Rect): Point;
 
 ### dist/model.chunk.d.ts#contains
 declare function contains(outer: Rect, inner: Rect, tolerance?: number): boolean;
+
+### dist/model.chunk.d.ts#defaultsOf
+declare function defaultsOf<O>(schema: OptionSchema<O>): O;
+
+### dist/model.chunk.d.ts#defineRouter
+declare function defineRouter(router: Router): Router;
+
+### dist/model.chunk.d.ts#defineStrategy
+declare function defineStrategy<O>(strategy: Strategy<O>): Strategy<O>;
 
 ### dist/model.chunk.d.ts#inflate
 declare function inflate(r: Rect, pad: number): Rect;
@@ -792,126 +970,6 @@ declare const force$1: Strategy<ForceOptions>;
 
 ### dist/strategies/force.d.ts#relaxForces
 export declare function relaxForces(nodes: readonly RelaxNode[], edges: readonly RelaxEdge[], options: Partial<RelaxOptions> & Pick<RelaxOptions, "bound">): Map<string, Point>;
-
-### dist/strategy.chunk.d.ts#AnyStrategy
-interface AnyStrategy {
-  readonly type: string;
-  readonly description: string;
-  readonly options: Readonly<Record<string, OptionSpec>>;
-  readonly shapes?: boolean;
-  arrange(input: ArrangeInput<unknown>): Arrangement;
-  audit?(input: AuditInput<unknown>): readonly Issue[];
-}
-
-### dist/strategy.chunk.d.ts#ArrangeInput
-interface ArrangeInput<O> {
-  readonly id: string;
-  readonly mode: Mode;
-  readonly self: Size;
-  readonly children: readonly MeasuredChild[];
-  readonly options: O;
-  readonly gap: number;
-  readonly depth: number;
-  readonly edges?: readonly ChildEdge[];
-}
-
-### dist/strategy.chunk.d.ts#Arrangement
-interface Arrangement {
-  readonly direction?: Direction;
-  readonly flow?: Direction;
-  readonly offsets: readonly Point[];
-  readonly content?: Rect;
-}
-
-### dist/strategy.chunk.d.ts#AuditInput
-interface AuditInput<O> {
-  readonly node: PlacedNode;
-  readonly children: readonly PlacedNode[];
-  readonly options: O;
-  readonly gap: number;
-}
-
-### dist/strategy.chunk.d.ts#Band
-interface Band {
-  readonly from: number;
-  readonly to: number;
-  readonly min: number;
-  readonly max: number;
-}
-
-### dist/strategy.chunk.d.ts#BooleanOption
-interface BooleanOption {
-  readonly type: "boolean";
-  readonly default: boolean;
-  readonly description: string;
-}
-
-### dist/strategy.chunk.d.ts#ChildEdge
-interface ChildEdge {
-  readonly from: number;
-  readonly to: number;
-}
-
-### dist/strategy.chunk.d.ts#Direction
-type Direction = "down" | "up" | "left" | "right";
-
-### dist/strategy.chunk.d.ts#EnumOption
-interface EnumOption<V extends string = string> {
-  readonly type: "enum";
-  readonly values: readonly V[];
-  readonly default: V;
-  readonly description: string;
-}
-
-### dist/strategy.chunk.d.ts#MeasuredChild
-interface MeasuredChild {
-  readonly id: string;
-  readonly box: Size;
-  readonly extent: Rect;
-  readonly mode: Mode;
-  readonly shape?: Shape;
-}
-
-### dist/strategy.chunk.d.ts#NumberOption
-interface NumberOption {
-  readonly type: "number";
-  readonly default: number;
-  readonly min?: number;
-  readonly max?: number;
-  readonly integer?: boolean;
-  readonly description: string;
-}
-
-### dist/strategy.chunk.d.ts#OptionSchema
-type OptionSchema<O> = { readonly [K in keyof O]-?: OptionSpecFor<O[K]>; };
-
-### dist/strategy.chunk.d.ts#OptionSpec
-type OptionSpec = NumberOption | BooleanOption | EnumOption;
-
-### dist/strategy.chunk.d.ts#OptionSpecFor
-type OptionSpecFor<T> = [T] extends [number] ? NumberOption : [T] extends [boolean] ? BooleanOption : [T] extends [string] ? EnumOption<T> : never;
-
-### dist/strategy.chunk.d.ts#Shape
-interface Shape {
-  readonly rows: readonly Band[];
-  readonly columns: readonly Band[];
-}
-
-### dist/strategy.chunk.d.ts#Strategy
-interface Strategy<O = Record<string, never>> {
-  readonly type: string;
-  readonly description: string;
-  readonly options: OptionSchema<O>;
-  readonly shapes?: boolean;
-  arrange(input: ArrangeInput<O>): Arrangement;
-  audit?(input: AuditInput<O>): readonly Issue[];
-}
-
-### dist/strategy.chunk.d.ts#defaultsOf
-declare function defaultsOf<O>(schema: OptionSchema<O>): O;
-
-### dist/strategy.chunk.d.ts#defineStrategy
-declare function defineStrategy<O>(strategy: Strategy<O>): Strategy<O>;
 
 ### dist/svg.d.ts#SvgOptions
 export interface SvgOptions {
