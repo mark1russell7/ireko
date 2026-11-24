@@ -3,6 +3,7 @@
  * All types are plain data. JSON can hold each value without loss.
  */
 import type { Point, Rect, Size } from "./geometry.ts";
+import type { GraphRouter } from "./router.ts";
 
 /** The place of the children of a node. In the `nested` mode, the children are inside the node box. In the `linked` mode, they are around it. */
 export type Mode = "nested" | "linked";
@@ -70,6 +71,11 @@ export interface LayoutOptions {
   readonly header?: number;
   /** The router of the edges. The default is `straight`. */
   readonly router?: string;
+  /**
+   * A router that routes all the edges together, after the router `router`. It gets each box but a root in the nested mode.
+   * Its routes replace the points of the edges, and the bounds grow to hold them. The default is none.
+   */
+  readonly graphRouter?: GraphRouter;
   /** The tree edges of the output. The default is `linked`. */
   readonly treeEdges?: TreeEdges;
   /** The position of the top-left corner of the root box. The default is the origin. */
@@ -118,6 +124,7 @@ export type IssueCode =
   | "LIMIT_CHILDREN"
   | "STRATEGY_FAILED"
   | "ROUTER_FAILED"
+  | "EDGE_THROUGH_BOX"
   | "NON_FINITE"
   | "OVERLAP"
   | "ESCAPE"

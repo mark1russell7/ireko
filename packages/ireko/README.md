@@ -29,6 +29,7 @@ const result = layout({ root, edges: [{ source: "cart", target: "orders", label:
 result.nodes;  // a box for each node: { id, x, y, width, height, container, depth, ... }
 result.edges;  // a route for each edge: { source, target, kind, points, label }
 // The router avoid draws edges around the other boxes: layout(input, { router: "avoid" })
+// A graph router routes all edges together: layout(input, { graphRouter: cornersRouter(...) }) with @mark1russell7/highways
 result.issues; // the findings of the audit: [] for this input
 document.body.innerHTML = toSVG(result);
 ```
