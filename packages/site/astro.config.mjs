@@ -17,7 +17,7 @@ import rehypeBase from "./scripts/rehype-base.mjs";
  */
 const normalizeBase = (value) => `/${value.replace(/^.*[\\/](?=[^\\/]+[\\/]?$)/, "").replace(/^\/+|\/+$/g, "")}`;
 const base = normalizeBase(process.env.SITE_BASE ?? "ireko");
-const site = "https://mark1russell7.github.io";
+const site = "https://metrograph-labs.github.io";
 // The share card of the pages without their own card. scripts/og-image.mjs draws each card with ireko itself.
 const card = `${site}${base}/og/index.png`;
 const docs = fileURLToPath(new URL("./src/content/docs/", import.meta.url));
@@ -81,10 +81,10 @@ export default defineConfig({
       logo: { src: "./src/assets/mark.svg", replacesTitle: false },
       favicon: "/favicon.svg",
       social: [
-        { icon: "github", label: "GitHub", href: "https://github.com/mark1russell7/ireko" },
+        { icon: "github", label: "GitHub", href: "https://github.com/metrograph-labs/ireko" },
         { icon: "npm", label: "npm", href: "https://www.npmjs.com/package/ireko" },
       ],
-      editLink: { baseUrl: "https://github.com/mark1russell7/ireko/edit/main/packages/site/" },
+      editLink: { baseUrl: "https://github.com/metrograph-labs/ireko/edit/main/packages/site/" },
       customCss: [
         "@fontsource-variable/atkinson-hyperlegible-next",
         "@fontsource-variable/atkinson-hyperlegible-mono",

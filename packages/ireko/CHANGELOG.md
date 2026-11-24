@@ -12,6 +12,10 @@ This file records the changes to `ireko` in each version. The release workflow c
 
 A prerelease version (`0.2.0-beta.1`) goes to the npm tag `next`. Each other version goes to `latest`.
 
+## 0.2.8
+
+This version is a patch with no code change. The repository moved to metrograph-labs. The fields `repository`, `homepage` and `bugs` of `package.json` and the links of the README name the new repository.
+
 ## 0.2.7
 
 This version is a patch. It adds the option `graphRouter` of `layout`. A graph router routes all edges together, with all boxes in view. Without the option, each layout stays the same.

@@ -143,7 +143,7 @@ jobs:
     name: Module bytes
     permissions:
       contents: read
-    uses: mark1russell7/vex/.github/workflows/module-bytes.yml@ead65a70bde9f31b9fef4a8cc35cb69289167298 # main
+    uses: metrograph-labs/vex/.github/workflows/module-bytes.yml@ead65a70bde9f31b9fef4a8cc35cb69289167298 # main
     with:
       vex-ref: ead65a70bde9f31b9fef4a8cc35cb69289167298
 
