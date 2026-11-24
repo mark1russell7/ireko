@@ -2,9 +2,9 @@
 
 **Composable graph and tree layout for TypeScript. Select a layout for each container, and get boxes and routed edges for any renderer.**
 
-![A system architecture laid out by ireko: nested containers with services, and extra edges between them](https://raw.githubusercontent.com/mark1russell7/ireko/main/packages/ireko/src/__golden__/architecture.svg)
+![A system architecture laid out by ireko: nested containers with services, and extra edges between them](https://raw.githubusercontent.com/metrograph-labs/ireko/main/packages/ireko/src/__golden__/architecture.svg)
 
-[Guide](https://mark1russell7.github.io/ireko/learn/tour/) · [Playground](https://mark1russell7.github.io/ireko/playground/) · [Gallery](https://mark1russell7.github.io/ireko/gallery/) · [API](https://mark1russell7.github.io/ireko/reference/api/) · [React Flow](https://mark1russell7.github.io/ireko/guides/react-flow/)
+[Guide](https://metrograph-labs.github.io/ireko/learn/tour/) · [Playground](https://metrograph-labs.github.io/ireko/playground/) · [Gallery](https://metrograph-labs.github.io/ireko/gallery/) · [API](https://metrograph-labs.github.io/ireko/reference/api/) · [React Flow](https://metrograph-labs.github.io/ireko/guides/react-flow/)
 
 ireko (入れ子) is the Japanese word for a set of boxes that fit inside each other. The library lays out trees of nested boxes: a grid of rings of trees, an architecture diagram, a tidy organization chart or React Flow sub-flows. It has no runtime dependencies. The core is approximately 13 kB after minification and gzip.
 
@@ -47,7 +47,7 @@ The two choices apply to one node only, so each container has its own layout. Th
 
 ## A text language
 
-The same input in a few lines. The [playground](https://mark1russell7.github.io/ireko/playground/) uses it.
+The same input in a few lines. The [playground](https://metrograph-labs.github.io/ireko/playground/) uses it.
 
 ```ts
 import { layout } from "ireko";
@@ -108,11 +108,11 @@ const { nodes, edges } = layoutFlow(myNodes, myEdges, {
 <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes} fitView />;
 ```
 
-The [React Flow guide](https://mark1russell7.github.io/ireko/guides/react-flow/) has a live demo.
+The [React Flow guide](https://metrograph-labs.github.io/ireko/guides/react-flow/) has a live demo.
 
 ## When to use another library
 
-This library lays out trees of containers. For a large directed graph with layers, for example a flow chart with long chains, use dagre or ELK. The strategy `layers` has a barycenter crossing reduction, but no exact crossing minimization, no straight long edges and no ports. The [comparison](https://mark1russell7.github.io/ireko/compare/) has the details.
+This library lays out trees of containers. For a large directed graph with layers, for example a flow chart with long chains, use dagre or ELK. The strategy `layers` has a barycenter crossing reduction, but no exact crossing minimization, no straight long edges and no ports. The [comparison](https://metrograph-labs.github.io/ireko/compare/) has the details.
 
 ## Requirements
 
@@ -122,11 +122,11 @@ This library lays out trees of containers. For a large directed graph with layer
 
 ## Links
 
-- [The guide](https://mark1russell7.github.io/ireko/learn/tour/): a tour, the modes, the strategies, the text language, edges and renderers
-- [Why two passes](https://mark1russell7.github.io/ireko/design/two-passes/): how the engine prevents overlaps, with a test in your browser
-- [Write a strategy](https://mark1russell7.github.io/ireko/learn/custom-strategy/)
-- [The changelog](https://github.com/mark1russell7/ireko/blob/main/packages/ireko/CHANGELOG.md)
-- [The source](https://github.com/mark1russell7/ireko)
+- [The guide](https://metrograph-labs.github.io/ireko/learn/tour/): a tour, the modes, the strategies, the text language, edges and renderers
+- [Why two passes](https://metrograph-labs.github.io/ireko/design/two-passes/): how the engine prevents overlaps, with a test in your browser
+- [Write a strategy](https://metrograph-labs.github.io/ireko/learn/custom-strategy/)
+- [The changelog](https://github.com/metrograph-labs/ireko/blob/main/packages/ireko/CHANGELOG.md)
+- [The source](https://github.com/metrograph-labs/ireko)
 
 ## License
 

@@ -4,7 +4,7 @@
 import type { APIRequestContext } from "@playwright/test";
 
 /** The origin and the base path of the published site. The sitemap gives absolute URLs with them. */
-export const PUBLISHED = "https://mark1russell7.github.io/ireko/";
+export const PUBLISHED = "https://metrograph-labs.github.io/ireko/";
 
 const locsOf = (xml: string): string[] => [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1] ?? "");
 

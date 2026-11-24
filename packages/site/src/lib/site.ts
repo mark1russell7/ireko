@@ -3,7 +3,7 @@ export const NAME = "ireko";
 export const ORIGIN = "https://mark1russell7.github.io";
 /** The absolute URL of the home page, with a slash at the end. */
 export const SITE: string = `${ORIGIN}${import.meta.env.BASE_URL.replace(/\/?$/, "/")}`;
-export const REPOSITORY = "https://github.com/mark1russell7/ireko";
+export const REPOSITORY = "https://github.com/metrograph-labs/ireko";
 export const NPM = "https://www.npmjs.com/package/ireko";
 export const AUTHOR = { name: "Mark Russell", url: "https://github.com/mark1russell7" } as const;
 export const TAGLINE = "Composable graph and tree layout for TypeScript. Select a layout for each container, and get boxes and routed edges for any renderer.";

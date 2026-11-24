@@ -4,7 +4,7 @@
 
 ireko (入れ子) is the Japanese word for a set of boxes that fit inside each other. The project had the name Jqy before.
 
-**The guide, the gallery and the playground:** [mark1russell7.github.io/ireko](https://mark1russell7.github.io/ireko/)
+**The guide, the gallery and the playground:** [metrograph-labs.github.io/ireko](https://metrograph-labs.github.io/ireko/)
 
 ![A system architecture laid out by ireko: nested containers with services, and extra edges between them](./packages/ireko/src/__golden__/architecture.svg)
 

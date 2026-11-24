@@ -3,7 +3,7 @@
 # and a CPU profile of the arm theta on the case picture-800.
 # The job fails when the result of the head is not the same as the result of ireko 0.2.4 on a case, or has no read.
 # The time verdicts are a report. A limit on a time comes from 5 or more jobs of this workflow.
-# Start it on a branch with: gh workflow run bench-relax.yml -R mark1russell7/ireko --ref <branch>
+# Start it on a branch with: gh workflow run bench-relax.yml -R metrograph-labs/ireko --ref <branch>
 name: Bench relax
 
 on:

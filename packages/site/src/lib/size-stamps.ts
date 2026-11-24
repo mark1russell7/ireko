@@ -30,7 +30,7 @@ export interface PageStamp {
   readonly noLimit?: NoLimit;
 }
 
-const COMMITS = "https://github.com/mark1russell7/ireko/commit";
+const COMMITS = "https://github.com/metrograph-labs/ireko/commit";
 
 /** The pages that show a size from the build. */
 export const PAGES_WITH_A_SIZE: readonly string[] = [

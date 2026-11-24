@@ -81,10 +81,10 @@ export default defineConfig({
       logo: { src: "./src/assets/mark.svg", replacesTitle: false },
       favicon: "/favicon.svg",
       social: [
-        { icon: "github", label: "GitHub", href: "https://github.com/mark1russell7/ireko" },
+        { icon: "github", label: "GitHub", href: "https://github.com/metrograph-labs/ireko" },
         { icon: "npm", label: "npm", href: "https://www.npmjs.com/package/ireko" },
       ],
-      editLink: { baseUrl: "https://github.com/mark1russell7/ireko/edit/main/packages/site/" },
+      editLink: { baseUrl: "https://github.com/metrograph-labs/ireko/edit/main/packages/site/" },
       customCss: [
         "@fontsource-variable/atkinson-hyperlegible-next",
         "@fontsource-variable/atkinson-hyperlegible-mono",

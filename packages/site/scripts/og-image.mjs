@@ -217,7 +217,7 @@ const titleSize = (title, band) => {
   return n <= 22 ? 64 : n <= 40 ? 56 : n <= 64 ? 48 : 42;
 };
 
-const FOOT = `<span class="url">mark1russell7.github.io/ireko</span><span class="chip"><b>npm</b> install ireko</span>`;
+const FOOT = `<span class="url">metrograph-labs.github.io/ireko</span><span class="chip"><b>npm</b> install ireko</span>`;
 const BRAND = `<div class="brand">${MARK}<span>ireko</span></div>`;
 
 function cardHtml(path, title, description) {

@@ -1,4 +1,4 @@
-# The deployment of the site to GitHub Pages, at https://mark1russell7.github.io/<repository>/.
+# The deployment of the site to GitHub Pages, at https://metrograph-labs.github.io/<repository>/.
 #   build   the site, with the base path from the name of the repository, and the share cards
 #   deploy  the upload to Pages
 # The deployment starts after a green CI run of a push to the main branch, after a release, and on each day.
