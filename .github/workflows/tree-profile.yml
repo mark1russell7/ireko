@@ -1,0 +1,60 @@
+# A CPU profile of the strategy tree: the module of Vex (branch) and the code of ireko (base), one process for each.
+# Each process runs one group of scripts/bench-tree.mjs for a fixed count of passes, under node --cpu-prof.
+name: Tree profile
+
+on:
+  push:
+    branches: [tree-swap]
+    paths:
+      - ".github/workflows/tree-profile.yml"
+      - "packages/ireko/scripts/**"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  profile:
+    name: Profile
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: One process for each group and arm
+        working-directory: packages/ireko
+        run: |
+          set -euo pipefail
+          node --version
+          lscpu | grep "Model name" || true
+          mkdir -p profiles
+          run() {
+            local slug="$1" group="$2" passes="$3"
+            for arm in base branch; do
+              node --cpu-prof --cpu-prof-interval 100 --cpu-prof-dir profiles --cpu-prof-name "$slug-$arm.cpuprofile" \
+                scripts/bench-tree.mjs --group "$group" --arm "$arm" --passes "$passes"
+            done
+          }
+          run arrange-12 "arrange, 12 children" 300000
+          run arrange-1000 "arrange, 1000 children" 1000
+          run tree-11111-nested "tree, 11111 nodes, nested" 100
+      - name: The 15 functions with the most self time
+        working-directory: packages/ireko
+        run: |
+          set -euo pipefail
+          for f in profiles/*.cpuprofile; do
+            node scripts/profile-summary.mjs "$f" --top 15 --title "$(basename "$f" .cpuprofile)"
+          done
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: tree-profiles
+          path: packages/ireko/profiles/*.cpuprofile
+          retention-days: 30
