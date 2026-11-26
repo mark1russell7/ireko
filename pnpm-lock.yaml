@@ -174,7 +174,7 @@ importers:
         version: 0.5.22
       '@mark1russell7/conventions':
         specifier: ^0.54.0
-        version: 0.54.0
+        version: 0.54.1
       '@mark1russell7/cue':
         specifier: github:mark1russell7/cue#da04dd56699a2ae806ab64da5b1d677476afe69e
         version: https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e
@@ -183,7 +183,7 @@ importers:
         version: https://codeload.github.com/mark1russell7/ste-lint/tar.gz/f597d6c1e09bcfcb487bb575825d6d5f29e9e0c7
       '@mark1russell7/template-cli':
         specifier: ^0.1.2
-        version: 0.1.9
+        version: 0.1.10
       '@size-limit/preset-small-lib':
         specifier: ^14.1.0
         version: 14.1.0(size-limit@14.1.0)
@@ -216,13 +216,13 @@ importers:
     dependencies:
       '@mark1russell7/rigor-bench':
         specifier: ^0.3.1
-        version: 0.3.11(esbuild@0.28.2)
+        version: 0.3.12(esbuild@0.28.2)
       '@mark1russell7/rigor-generators':
         specifier: ^0.2.0
         version: 0.2.7
       '@mark1russell7/rigor-statistics':
         specifier: ^0.2.12
-        version: 0.2.30
+        version: 0.2.32
       ireko:
         specifier: workspace:*
         version: link:../ireko
@@ -1330,8 +1330,8 @@ packages:
     resolution: {integrity: sha512-uOqrK6ZYqgbG8DLchTU2FO8DcNeeeLbNAqR8E3YTe/HKK3rk4ZpR0M0GlYG/7ApiWfrFkVhW1rCF6opaeiL16g==}
     engines: {node: '>=22.12'}
 
-  '@mark1russell7/conventions@0.54.0':
-    resolution: {integrity: sha512-pqdCwKE5ejF5Bf0pYvpbykFpzW8zgBh3MCRmpiOzuXgIYCnoEPAHmPFB316BohXS9HMV6o5OJsjfXJPq+gR+Vw==}
+  '@mark1russell7/conventions@0.54.1':
+    resolution: {integrity: sha512-E0yy1BWw6wM2Y2L2MysbgId+C2v1ACFMCvm3nXch1PUqYbWXkDrca9kN5OlBhMfohvsHyHgW2tZYI+KZxPMWBw==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -1369,8 +1369,8 @@ packages:
     resolution: {integrity: sha512-S28nfQFfRax40wbV9UTw711ZwnVB3rCW/SPpAuJtyKBh/zFbQx69+qnAeLF7u2B9GccaY75nIMZtN8mvgSRA1Q==}
     engines: {node: '>=22'}
 
-  '@mark1russell7/rigor-bench@0.3.11':
-    resolution: {integrity: sha512-xyD9Je9A/q7hrAMh+yQWV5h3lY+CUMoV66K2SsPZ1HHaH77xebGLz+rTmy76IoPiY/EWn0NSLFZ+ma2jU8au/A==}
+  '@mark1russell7/rigor-bench@0.3.12':
+    resolution: {integrity: sha512-yptlEIy1I+wgDqpA+rkc3oJOIwIt75GJrhUHAYUI5K/GT2mKVf93+yTj5LDR3K6EtilEYSnD6IsgAd81y5+/+w==}
     engines: {node: '>=22'}
     hasBin: true
     peerDependencies:
@@ -1391,8 +1391,8 @@ packages:
     resolution: {integrity: sha512-Wh91NJIwxIRN3+a5V2bqUkMhdPcjHI+gVZBCnohf12ZegdSTNqGlpqS2WXYmrRVjasF9EBgm1lC8GQNYpBSg7Q==}
     engines: {node: '>=22'}
 
-  '@mark1russell7/rigor-statistics@0.2.30':
-    resolution: {integrity: sha512-D4XptMmKLiPZpsxwgW51Mpp21WEcZIRnifqKUEv5zK5uLm7dLPfxzItxpdgBIASDu0QJJ6vKRE3E7Q02pX20Vw==}
+  '@mark1russell7/rigor-statistics@0.2.32':
+    resolution: {integrity: sha512-CERYoh7Azv+1EMgx5EriH6c17DDj6EVJljxNVaWPC0HnkmmkzUCCGtUTY+1UNO8a1/kreuUytoH/AnvleeyrDQ==}
     engines: {node: '>=22'}
 
   '@mark1russell7/ste-lint@https://codeload.github.com/mark1russell7/ste-lint/tar.gz/f597d6c1e09bcfcb487bb575825d6d5f29e9e0c7':
@@ -1405,8 +1405,8 @@ packages:
     resolution: {integrity: sha512-E3zTfOPDRFE/KdvETa4PqXMu5Vm9eG7Ipy+oMAptB1kDMAQX9y2By+sH17sIezHoqODFWldi2+GwPNMaW301Vg==}
     engines: {node: '>=22'}
 
-  '@mark1russell7/template-cli@0.1.9':
-    resolution: {integrity: sha512-7ebtLlCmT6KYhbpoI2SZHXCQC6/7Rc660SvKwQvfslseSQrXMRlmBj+1/F5KOCep6aB+LtvGWg+HmTKi6uZjyQ==}
+  '@mark1russell7/template-cli@0.1.10':
+    resolution: {integrity: sha512-KOSH9YXVOtIbpDAJtGIaycUsQ6lEM4XE5bVnBW4vPdaY8u0g7Edx032srzRrp9j+u9UYyDkDQTyniFhdUJoE7A==}
     engines: {node: '>=22.12'}
     hasBin: true
 
@@ -5216,7 +5216,7 @@ snapshots:
 
   '@mark1russell7/api-report@0.5.22':
     dependencies:
-      '@mark1russell7/conventions': 0.54.0
+      '@mark1russell7/conventions': 0.54.1
 
   '@mark1russell7/collections@0.10.2(zod@4.6.6)':
     dependencies:
@@ -5226,7 +5226,7 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  '@mark1russell7/conventions@0.54.0':
+  '@mark1russell7/conventions@0.54.1':
     dependencies:
       '@mark1russell7/text': 0.0.20
       yaml: 2.9.1
@@ -5238,7 +5238,7 @@ snapshots:
       '@mark1russell7/layout-contract': 0.10.6(zod@4.6.6)
       '@mark1russell7/predicates': 0.1.5
       '@mark1russell7/rigor-generators': 0.2.7
-      '@mark1russell7/rigor-statistics': 0.2.30
+      '@mark1russell7/rigor-statistics': 0.2.32
     transitivePeerDependencies:
       - zod
 
@@ -5264,10 +5264,10 @@ snapshots:
 
   '@mark1russell7/rational@0.1.3': {}
 
-  '@mark1russell7/rigor-bench@0.3.11(esbuild@0.28.2)':
+  '@mark1russell7/rigor-bench@0.3.12(esbuild@0.28.2)':
     dependencies:
       '@mark1russell7/rigor-generators': 0.2.7
-      '@mark1russell7/rigor-statistics': 0.2.30
+      '@mark1russell7/rigor-statistics': 0.2.32
       '@mark1russell7/text': 0.0.20
     optionalDependencies:
       esbuild: 0.28.2
@@ -5280,7 +5280,7 @@ snapshots:
     dependencies:
       '@mark1russell7/rigor-generators': 0.1.19
 
-  '@mark1russell7/rigor-statistics@0.2.30':
+  '@mark1russell7/rigor-statistics@0.2.32':
     dependencies:
       '@mark1russell7/rigor-generators': 0.2.7
 
@@ -5293,7 +5293,7 @@ snapshots:
       '@mark1russell7/rigor-generators': 0.1.19
       '@mark1russell7/rigor-statistics': 0.1.29
 
-  '@mark1russell7/template-cli@0.1.9':
+  '@mark1russell7/template-cli@0.1.10':
     dependencies:
       '@clack/prompts': 1.8.1
 
