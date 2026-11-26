@@ -1,5 +1,3 @@
-// A plain ES module, not TypeScript: Node.js 22.12 (the floor of "engines") cannot load a TypeScript config without the
-// package unrun. defineConfig gives the editor the types.
 import { defineConfig } from "tsdown";
 
 // The build of the package for npm: one ES module and its declarations for each entry point, in dist/.
