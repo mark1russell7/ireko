@@ -18,6 +18,7 @@
     "lint:ste": "ste-lint",
     "check": "pnpm typecheck && pnpm lint && pnpm test:coverage && pnpm test && pnpm lint:ste",
     "check:api": "api-report check",
+    "check:conventions": "conventions check",
     "dump:src": "cd packages/ireko/src && node ../../../external/concat-src/concat-src.js ../../../src-catalog.md",
     "test:coverage": "pnpm --filter ireko test:coverage",
     "size": "pnpm --filter ireko size",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
     "@mark1russell7/api-report": "^0.5.3",
+    "@mark1russell7/conventions": "^0.53.1",
     "@mark1russell7/cue": "github:mark1russell7/cue",
     "@mark1russell7/ste-lint": "github:mark1russell7/ste-lint",
     "@mark1russell7/template-cli": "^0.1.2",
@@ -38,6 +40,15 @@
     "tsdown": "^0.23.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
+  },
+  "conventions": {
+    "rules": {
+      "no-console": {
+        "baseline": 0,
+        "failFrom": "2026-12-23",
+        "reason": "The sources of ireko had 0 console calls on 2026-11-25, and the count stays at 0. Each console call fails from 2026-12-23. Output for a person goes to the printer of @mark1russell7/text, and a diagnostic goes to a log record of @mark1russell7/otel-ts."
+      }
+    }
   },
   "apiReport": {
     "packages": [

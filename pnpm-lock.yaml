@@ -172,6 +172,9 @@ importers:
       '@mark1russell7/api-report':
         specifier: ^0.5.3
         version: 0.5.20
+      '@mark1russell7/conventions':
+        specifier: ^0.53.1
+        version: 0.53.1
       '@mark1russell7/cue':
         specifier: github:mark1russell7/cue
         version: https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e
@@ -1329,6 +1332,11 @@ packages:
     engines: {node: '>=22'}
     hasBin: true
 
+  '@mark1russell7/conventions@0.53.1':
+    resolution: {integrity: sha512-rywU3MGbWOX5G5bmEpr0QdHyVs1X3IePJDdC4ALjBtFW6yPCxIUdRBJjYZo+cT27rYikbQ5ZDTcQxHbndXS+Ow==}
+    engines: {node: '>=22'}
+    hasBin: true
+
   '@mark1russell7/cue@https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e':
     resolution: {gitHosted: true, integrity: sha512-qEi0JRgyXKmNAiLlIKy1mKKeaEc/4AIUh8pNKR+JfMooaq/Ovpztp4tVNY1e23yi6PeuacrrR2e8/j0AA0f0nA==, tarball: https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e}
     version: 1.0.0
@@ -1406,6 +1414,10 @@ packages:
 
   '@mark1russell7/text@0.0.18':
     resolution: {integrity: sha512-sIOsTkBOhWLSDyE4qKyiokUT84NPJgPuhLPDyh2Y+mjGnNbGhF9Q6dt9NnSBtSW8C1D0rZfx8fPJ53g0gQGWfQ==}
+    engines: {node: '>=22.12'}
+
+  '@mark1russell7/text@0.0.19':
+    resolution: {integrity: sha512-pPJV318wzfEcsnnzlqVu+OBp/o9VLKWsAo1Wkf4rNaerOjgINDo+vErhmtPVQw6BzcVmGn4brXmMLcosCT9sAw==}
     engines: {node: '>=22.12'}
 
   '@mark1russell7/typeset@0.5.3':
@@ -5215,6 +5227,11 @@ snapshots:
       '@mark1russell7/text': 0.0.18
       yaml: 2.9.1
 
+  '@mark1russell7/conventions@0.53.1':
+    dependencies:
+      '@mark1russell7/text': 0.0.19
+      yaml: 2.9.1
+
   '@mark1russell7/cue@https://codeload.github.com/mark1russell7/cue/tar.gz/da04dd56699a2ae806ab64da5b1d677476afe69e': {}
 
   '@mark1russell7/highways@0.19.3(zod@4.6.6)':
@@ -5282,6 +5299,8 @@ snapshots:
       '@clack/prompts': 1.8.1
 
   '@mark1russell7/text@0.0.18': {}
+
+  '@mark1russell7/text@0.0.19': {}
 
   '@mark1russell7/typeset@0.5.3(zod@4.6.6)':
     dependencies:
