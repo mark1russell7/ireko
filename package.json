@@ -68,12 +68,11 @@
       },
       "typed-files": {
         "ignore": [
-          "packages/ireko/tsdown.config.ts",
           "packages/ireko/vitest.config.ts",
           "packages/site/scripts/measure-size.ts",
           "packages/site/vitest.config.ts"
         ],
-        "reason": "The two configs of packages/ireko and two files of packages/site of 2026-11-26 are in no tsconfig that the typecheck script examines. The list only gets shorter, and a new file fails. The end: a tsconfig.test.json in each package, with its typecheck."
+        "reason": "The config of Vitest of packages/ireko and two files of packages/site of 2026-11-26 are in no tsconfig that the typecheck script examines. The list only gets shorter, and a new file fails. The end: a tsconfig.test.json in each package, with its typecheck."
       },
       "tsconfig-test": {
         "ignore": [
