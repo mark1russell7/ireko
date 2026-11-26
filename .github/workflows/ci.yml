@@ -1,6 +1,7 @@
 # The gates of each change.
-#   check   the type check, Oxlint, the tests and the prose lint, on each supported Node.js version
-#   package the package as npm gives it: the build, the size budgets, publint, attw and the smoke test
+#   node    the Node.js version of .nvmrc, for the release check of the job ci
+#   ci      the shared CI of the template (reusable-ci.yml, its CI.md): the scripts on each supported Node.js version,
+#           the size budgets and the smoke test of the package, and the release check on a pull request
 #   site    the type check and the build of the site, the share cards and the browser tests
 #   bytes   each committed module of Vex equals the print of the pinned commit of vex
 #   ci-ok   the one check that a pull request must pass
@@ -22,76 +23,44 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  check:
-    name: Check (Node.js ${{ matrix.node }})
+  # The release build of release.yml reads .nvmrc (its input node-version-file). The release check of the job ci gets
+  # the same version from this job, so the two cannot drift.
+  node:
+    name: Node.js version of the release build
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 3
     permissions:
       contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        # 22.12 is the floor of "engines".
-        node: ["22.12", "24", "26"]
+    outputs:
+      version: ${{ steps.nvmrc.outputs.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      # The pnpm version comes from "packageManager" in package.json
-      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: ${{ matrix.node }}
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      # The source and the tests of each package (tsconfig.json and tsconfig.test.json)
-      - run: pnpm typecheck
-      # Oxlint, with the type-aware rules
-      - run: pnpm lint
-      - run: pnpm test
-      # The coverage of the core and the SVG export, with the gates of vitest.config.ts
-      - run: pnpm test:coverage
-      # The function report (coverage-final.json) for the coverage view of the code atlas. The atlas reads the
-      # artifact "coverage" of the newest run on main. One cell uploads it, and a failed gate still leaves the file.
-      - name: Coverage reports
-        if: always() && matrix.node == '24'
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: coverage
-          path: |
-            packages/ireko/coverage/coverage-summary.json
-            packages/ireko/coverage/coverage-final.json
-          if-no-files-found: error
-          retention-days: 14
-      # The writing rules (ASD-STE100) of the README files, the docs and the doc comments
-      - run: pnpm lint:ste
+          sparse-checkout: .nvmrc
+          sparse-checkout-cone-mode: false
+      - id: nvmrc
+        run: echo "version=$(tr -d '[:space:]' < .nvmrc)" >> "$GITHUB_OUTPUT"
 
-  package:
-    name: Package
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+  ci:
+    needs: node
     permissions:
       contents: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      # Each rule of @mark1russell7/conventions, with the settings in package.json. It reads the files, so it needs no build.
-      - run: pnpm check:conventions
-      # tsdown writes an ES module and its declarations for each entry point to packages/ireko/dist
-      - run: pnpm build
-      # The report of the API is current, and the API page shows each export of the package
-      - run: pnpm check:api
-      # The budgets of .size-limit.json, minified and gzipped
-      - run: pnpm size
-      # pnpm pack, publint, attw, an install in an empty project, plain Node.js and two TypeScript consumers
-      - run: pnpm --filter ireko smoke
+    uses: mark1russell7/template/.github/workflows/reusable-ci.yml@7c83f30551e066c06852ea75bf0140eadfc49961 # main
+    with:
+      # 22.12 is the floor of "engines".
+      node-versions: '["22.12", "24", "26"]'
+      # The type check, Oxlint, the conventions, the tests, the build, the API report and the writing rules (ASD-STE100).
+      # The build comes before check:api, because the API report reads the built declarations.
+      scripts: typecheck lint check:conventions test build check:api lint:ste
+      # The budgets of .size-limit.json, then pnpm pack, publint, attw, an install in an empty project, plain Node.js
+      # and two TypeScript consumers. The two commands read the build of the scripts.
+      run: |
+        pnpm size
+        pnpm --filter ireko smoke
+      # The release check runs the build of release.yml. That file gives no input build, so the default build runs.
+      release-build: ""
+      release-node-version: ${{ needs.node.outputs.version }}
 
   site:
     name: Site
@@ -118,15 +87,12 @@ jobs:
         env:
           SITE_BASE: ireko
           ASTRO_TELEMETRY_DISABLED: "1"
-      - name: The version of Playwright
-        id: playwright
-        run: echo "version=$(node -p "require('./packages/site/node_modules/@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      # Chromium and its system libraries, from a cache, with a time limit and one more try. The share cards and the
+      # browser tests use it. The command gives the Playwright version of the site.
+      - uses: mark1russell7/template/.github/actions/setup-playwright@7c83f30551e066c06852ea75bf0140eadfc49961 # main
         with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
-      # Chromium and its system libraries. The share cards and the browser tests use it.
-      - run: pnpm --filter @ireko/site exec playwright install --with-deps chromium
+          browsers: chromium
+          command: pnpm --filter @ireko/site exec playwright
       # One share card (1200 by 630) for each page, in dist/og
       - run: pnpm --filter @ireko/site og
       # The smoke tests, the head of each page, axe in both themes and the budgets (packages/site/e2e)
@@ -149,38 +115,16 @@ jobs:
     with:
       vex-ref: ead65a70bde9f31b9fef4a8cc35cb69289167298
 
-  # On a pull request, start the release build on the commit, as the job build of release.yml does: the install, the
-  # build, pack.ts and tags.ts of the template. It fails when the release build fails on the same commit, for example when
-  # a dependency update changes a shipped file and the version is already on npm (ireko#101 on 11-13). The release on main
-  # then stops, so this job finds the fault before the merge. The template keeps the code (actions/release-check).
-  release-check:
-    name: release-check
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      # The release build reads .nvmrc (node-version-file of release.yml), so the check uses the same version.
-      - name: Node.js version of the release build
-        id: node
-        run: echo "version=$(cat .nvmrc)" >> "$GITHUB_OUTPUT"
-      # The same template commit as the job build of release.yml, so the check runs the scripts of the release.
-      - uses: mark1russell7/template/.github/actions/release-check@b00e6c77be906feac2a505888bab26be99d5c4c5 # main
-        with:
-          node-version: ${{ steps.node.outputs.version }}
-
+  # The summary check of the ruleset of main: each job passed (CI.md of the template, "The check of the ruleset").
+  # The release check is a job inside ci, so a skip of it on a push does not make ci skipped.
   ci-ok:
     name: CI OK
     if: ${{ !cancelled() }}
-    needs: [check, package, site, bytes, release-check]
+    needs: [ci, site, bytes]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     permissions: {}
     steps:
-      # release-check runs only on a pull request, so only its result can be skipped.
-      - name: All jobs passed
-        run: test "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || needs.check.result == 'skipped' || needs.package.result == 'skipped' || needs.site.result == 'skipped' || needs.bytes.result == 'skipped' }}" = "false"
+      - uses: mark1russell7/template/.github/actions/gate-summary@7c83f30551e066c06852ea75bf0140eadfc49961 # main
+        with:
+          needs: ${{ toJSON(needs) }}

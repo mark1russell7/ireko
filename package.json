@@ -124,21 +124,11 @@
         ],
         "reason": "The site has no tsconfig.test.json on 2026-11-25. The end: the same change as typed-files adds it, with its typecheck."
       },
-      "runner-budget": {
-        "ignore": [
-          ".github/workflows/ci.yml"
-        ],
-        "reason": "The matrix of the job check in ci.yml has no max-parallel (3 versions of Node.js, so the budget holds). The end: ci.yml calls reusable-ci.yml of the template (rule shared-ci), which sets it."
-      },
       "playwright-install": {
         "ignore": [
-          ".github/workflows/ci.yml",
           ".github/workflows/pages.yml"
         ],
-        "reason": "ci.yml and pages.yml install Chromium with their own command. The end: ci.yml calls reusable-ci.yml (rule shared-ci) and pages.yml calls reusable-pages.yml (rule pages-site): the shared workflows use setup-playwright."
-      },
-      "shared-ci": {
-        "off": "ci.yml runs its own jobs: the Node.js matrix, the package smoke, the site with e2e tests, the module bytes and the release check. release.yml calls ci.yml as its verify job. The end: a pull request that moves ci.yml to reusable-ci.yml of the template, with its differences as inputs, and the word of the owner for the change to the release path."
+        "reason": "pages.yml installs Chromium with its own command. The end: pages.yml calls reusable-pages.yml (rule pages-site), and the shared workflow uses setup-playwright."
       },
       "pages-site": {
         "off": "pages.yml builds and deploys the site with its own jobs (share cards, e2e tests). The end: a pull request that moves pages.yml to reusable-pages.yml of the template, with .github/site.json."
