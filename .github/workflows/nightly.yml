@@ -87,18 +87,24 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       # Stryker runs for each mutant only the tests that cover it (coverageAnalysis perTest). IREKO_FAST=1 makes the property tests 10 times shorter.
-      # A cancelled job uploads no artifact, so the step writes the use of the runner to its own log each minute:
+      # A mutant can make a loop that never ends and fills the memory. On 11-23, 11-24 and 11-26 the runner of
+      # one shard got a shutdown signal within 2 minutes of the start of the mutants (shard 4 of 11-26: at 168
+      # of 727 mutants, three times in a row), and the time-out of a mutant (timeoutMS) did not stop it first.
+      # A heap limit for each node process and a memory limit for the whole run (below) stop such a mutant in its own
+      # test process: Stryker then counts the mutant and starts a new process, and the runner keeps its memory.
+      # A cancelled job uploads no artifact, so the step writes the use of the runner to its own log each 10 s:
       # memory, swap, free disk and the node processes.
       - name: The mutation tests of the files of the shard
         working-directory: packages/ireko
         env:
           IREKO_FAST: "1"
           FORCE_COLOR: "0"
+          NODE_OPTIONS: --max-old-space-size=2048
           SHARD: ${{ matrix.shard }}
           SHARDS: "6"
         run: |
           (
-            while sleep 60; do
+            while sleep 10; do
               mem=$(free -m | awk '/^Mem:/ {print "memory used " $3 " MB, available " $7 " MB of " $2 " MB"}')
               swap=$(free -m | awk '/^Swap:/ {print "swap used " $3 " MB"}')
               disk=$(df -m / | awk 'NR == 2 {print "disk free " $4 " MB"}')
@@ -110,7 +116,16 @@ jobs:
           trap 'kill "$sampler" 2>/dev/null || true' EXIT
           files=$(node scripts/mutation-shards.mjs list "$SHARD" "$SHARDS")
           echo "The files of shard $SHARD of $SHARDS: $files"
-          pnpm exec stryker run --mutate "$files"
+          # The heap limit alone did not hold (run 45782070119: shard 4 lost its runner after 47 minutes), since a
+          # buffer is outside the heap. A cgroup of 13 GB of the 16 GB of the runner holds each byte: the kernel then
+          # stops the largest process in it (a test process of Stryker), Stryker counts the mutant and starts a new
+          # process, and the runner keeps the rest. No swap, so the limit acts at once.
+          # OOMPolicy=continue: the default policy of a scope is stop, so in run 45865927798 the first kill of the
+          # kernel stopped the whole scope (exit code 143, 50 seconds after the start of shard 4) and the shard gave
+          # no report. With continue, the kernel kills only the test process, and the scope goes on.
+          sudo systemd-run --scope --quiet -p MemoryMax=13G -p MemorySwapMax=0 -p OOMPolicy=continue --uid="$(id -u)" --gid="$(id -g)" -- \
+            env "PATH=$PATH" "HOME=$HOME" "IREKO_FAST=$IREKO_FAST" "FORCE_COLOR=$FORCE_COLOR" "NODE_OPTIONS=$NODE_OPTIONS" \
+            pnpm exec stryker run --mutate "$files"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
