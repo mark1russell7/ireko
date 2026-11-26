@@ -58,6 +58,9 @@ jobs:
       run: |
         pnpm size
         pnpm --filter ireko smoke
+      # The tests with coverage, with the thresholds of vitest.config.ts, on each pull request. A failure fails the CI,
+      # as pnpm test:coverage did in the old job check. The artifact coverage has the reports.
+      coverage: true
       # The release check runs the build of release.yml. That file gives no input build, so the default build runs.
       release-build: ""
       release-node-version: ${{ needs.node.outputs.version }}
