@@ -74,7 +74,10 @@ jobs:
       matrix:
         # The count of shards is 6 here and in SHARDS below. One runner tested 1,545 of the 4,071 mutants of 11-22
         # in 78 minutes, about 7 h for all, and the runner got a shutdown signal before the end on 11-19 to 11-22.
-        # 6 shards give each job about 70 minutes.
+        # 6 shards give each job about 70 minutes with 4 Stryker workers.
+        # On 11-23, 11-24 and 11-26 a shard lost its runner ("The hosted runner lost communication with the
+        # server"). GitHub names a starved runner process as a cause, and 4 workers took the 4 cores. Thus
+        # stryker.config.json has 3 workers, and a job takes about 95 minutes, in the time-out of 240.
         shard: [0, 1, 2, 3, 4, 5]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
