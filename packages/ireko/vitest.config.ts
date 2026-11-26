@@ -4,7 +4,6 @@ export default defineConfig({
   test: {
     // The tests of the scripts of the package, for example the shards of the mutation tests, are with them.
     include: ["src/**/*.{test,spec}.{ts,tsx}", "scripts/**/*.test.mjs"],
-    passWithNoTests: true,
     // The property tests make thousands of random layouts. The coverage makes them slower.
     testTimeout: 60_000,
     // The benchmarks (pnpm bench). CI reports them each night and does not fail on them.

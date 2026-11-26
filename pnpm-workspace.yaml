@@ -12,3 +12,11 @@ minimumReleaseAgeExclude:
   - "@mark1russell7/*"
   - "@procedures/*"
   - ireko@0.2.4
+
+# A version of the last 7 days must have at least the trust evidence of the version before it (no-downgrade).
+# The scopes of the release train publish with their own release, so the rule does not apply to them.
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 10080
+trustPolicyExclude:
+  - "@mark1russell7/*"
+  - "@procedures/*"
