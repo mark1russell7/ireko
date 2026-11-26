@@ -120,7 +120,10 @@ jobs:
           # buffer is outside the heap. A cgroup of 13 GB of the 16 GB of the runner holds each byte: the kernel then
           # stops the largest process in it (a test process of Stryker), Stryker counts the mutant and starts a new
           # process, and the runner keeps the rest. No swap, so the limit acts at once.
-          sudo systemd-run --scope --quiet -p MemoryMax=13G -p MemorySwapMax=0 --uid="$(id -u)" --gid="$(id -g)" -- \
+          # OOMPolicy=continue: the default policy of a scope is stop, so in run 45865927798 the first kill of the
+          # kernel stopped the whole scope (exit code 143, 50 seconds after the start of shard 4) and the shard gave
+          # no report. With continue, the kernel kills only the test process, and the scope goes on.
+          sudo systemd-run --scope --quiet -p MemoryMax=13G -p MemorySwapMax=0 -p OOMPolicy=continue --uid="$(id -u)" --gid="$(id -g)" -- \
             env "PATH=$PATH" "HOME=$HOME" "IREKO_FAST=$IREKO_FAST" "FORCE_COLOR=$FORCE_COLOR" "NODE_OPTIONS=$NODE_OPTIONS" \
             pnpm exec stryker run --mutate "$files"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
