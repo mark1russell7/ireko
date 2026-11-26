@@ -17,7 +17,7 @@ on:
     branches: [main]
   # Each day, in case a release fails after it publishes, and for the open work of the Status page
   schedule:
-    - cron: "17 5 * * *"
+    - cron: "32 5 * * *"
   workflow_dispatch:
   pull_request:
 

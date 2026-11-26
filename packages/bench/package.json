@@ -20,7 +20,7 @@
     "ireko-base": "npm:ireko@0.2.4"
   },
   "devDependencies": {
-    "@mark1russell7/cue": "github:mark1russell7/cue",
+    "@mark1russell7/cue": "github:mark1russell7/cue#da04dd56699a2ae806ab64da5b1d677476afe69e",
     "@types/node": "^26.6.4",
     "@vitest/coverage-v8": "^5.0.3",
     "typescript": "^7.0.2",

@@ -8,10 +8,15 @@ name: Nightly
 
 on:
   schedule:
-    - cron: "17 4 * * *"
+    - cron: "48 4 * * *"
   workflow_dispatch:
 
 permissions: {}
+
+# One night at a time. A night that started always completes.
+concurrency:
+  group: nightly
+  cancel-in-progress: false
 
 defaults:
   run:

@@ -5,7 +5,7 @@
 // Usage, in packages/ireko:
 //   node scripts/mutation-shards.mjs list <index> <count>             the files of shard <index>, separated by commas
 //   node scripts/mutation-shards.mjs merge <count> <out> <report>...  one report from the report of each shard
-import { readFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, readdirSync, realpathSync, statSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -74,4 +74,4 @@ const main = (args) => {
   throw new Error(`the command must be list or merge, not ${command}`);
 };
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) main(process.argv.slice(2));
+if (process.argv[1] !== undefined && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) main(process.argv.slice(2));

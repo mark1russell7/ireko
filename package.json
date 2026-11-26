@@ -18,6 +18,7 @@
     "lint:ste": "ste-lint",
     "check": "pnpm typecheck && pnpm lint && pnpm test:coverage && pnpm test && pnpm lint:ste",
     "check:api": "api-report check",
+    "check:conventions": "conventions check",
     "dump:src": "cd packages/ireko/src && node ../../../external/concat-src/concat-src.js ../../../src-catalog.md",
     "test:coverage": "pnpm --filter ireko test:coverage",
     "size": "pnpm --filter ireko size",
@@ -26,8 +27,9 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
     "@mark1russell7/api-report": "^0.5.3",
-    "@mark1russell7/cue": "github:mark1russell7/cue",
-    "@mark1russell7/ste-lint": "github:mark1russell7/ste-lint",
+    "@mark1russell7/conventions": "^0.53.1",
+    "@mark1russell7/cue": "github:mark1russell7/cue#da04dd56699a2ae806ab64da5b1d677476afe69e",
+    "@mark1russell7/ste-lint": "github:mark1russell7/ste-lint#f597d6c1e09bcfcb487bb575825d6d5f29e9e0c7",
     "@mark1russell7/template-cli": "^0.1.2",
     "@size-limit/preset-small-lib": "^14.1.0",
     "@vitest/coverage-v8": "^5.0.3",
@@ -38,6 +40,110 @@
     "tsdown": "^0.23.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
+  },
+  "conventions": {
+    "rules": {
+      "no-console": {
+        "baseline": 0,
+        "failFrom": "2026-12-23",
+        "reason": "The sources of ireko had 0 console calls on 2026-11-25, and the count stays at 0. Each console call fails from 2026-12-23. Output for a person goes to the printer of @mark1russell7/text, and a diagnostic goes to a log record of @mark1russell7/otel-ts."
+      },
+      "typed-scripts": {
+        "ignore": [
+          "packages/ireko/scripts/changelog.mjs",
+          "packages/ireko/scripts/mutation-score.mjs",
+          "packages/ireko/scripts/mutation-shards.mjs",
+          "packages/ireko/scripts/mutation-shards.test.mjs",
+          "packages/ireko/scripts/smoke.mjs",
+          "packages/ireko/src/core/engine/measure.generated.js",
+          "packages/ireko/src/core/engine/place.generated.js",
+          "packages/ireko/src/core/engine/shape.generated.js",
+          "packages/ireko/src/core/strategies/grid.generated.js",
+          "packages/ireko/src/core/strategies/radial.generated.js",
+          "packages/site/astro.config.mjs",
+          "packages/site/scripts/og-image.mjs",
+          "packages/site/scripts/rehype-base.mjs"
+        ],
+        "reason": "The 13 JavaScript files of 2026-11-25: 8 scripts and configs, and 5 modules that @mark1russell7/vex-compiler writes as JavaScript with a .d.ts file. The list only gets shorter, and a new JavaScript file fails. The end: each script and config is TypeScript, and the compiler writes TypeScript or the files leave the rule as generated output."
+      },
+      "typed-files": {
+        "ignore": [
+          "packages/site/tsconfig.json",
+          "packages/ireko/tsdown.config.ts",
+          "packages/ireko/vitest.config.ts",
+          "packages/site/e2e/a11y.spec.ts",
+          "packages/site/e2e/budget.spec.ts",
+          "packages/site/e2e/links.spec.ts",
+          "packages/site/e2e/pages.ts",
+          "packages/site/e2e/seo.spec.ts",
+          "packages/site/e2e/serve.ts",
+          "packages/site/e2e/smoke.spec.ts",
+          "packages/site/playwright.config.ts",
+          "packages/site/scripts/measure-size.ts",
+          "packages/site/src/components/Configurator.tsx",
+          "packages/site/src/components/CopyInstall.tsx",
+          "packages/site/src/components/Editor.tsx",
+          "packages/site/src/components/FlowDemo.tsx",
+          "packages/site/src/components/FuzzMeter.tsx",
+          "packages/site/src/components/LiveHero.tsx",
+          "packages/site/src/components/LiveStage.tsx",
+          "packages/site/src/components/Morph.tsx",
+          "packages/site/src/components/PipelineScrubber.tsx",
+          "packages/site/src/components/RendererParity.tsx",
+          "packages/site/src/components/SourceView.tsx",
+          "packages/site/src/components/SpiralTry.tsx",
+          "packages/site/src/components/Try.tsx",
+          "packages/site/src/content.config.ts",
+          "packages/site/src/lib/docs.ts",
+          "packages/site/src/lib/follow.ts",
+          "packages/site/src/lib/highlight.ts",
+          "packages/site/src/lib/llms.ts",
+          "packages/site/src/lib/share.ts",
+          "packages/site/src/lib/site.ts",
+          "packages/site/src/lib/size-stamps.ts",
+          "packages/site/src/lib/size.test.ts",
+          "packages/site/src/lib/size.ts",
+          "packages/site/src/lib/spiral.ts",
+          "packages/site/src/lib/theme.ts",
+          "packages/site/src/pages/llms-full.txt.ts",
+          "packages/site/src/pages/llms.txt.ts",
+          "packages/site/src/playground/Inspector.tsx",
+          "packages/site/src/playground/Playground.tsx",
+          "packages/site/src/playground/XYFlowPane.tsx",
+          "packages/site/src/playground/fuzz.ts",
+          "packages/site/src/playground/spec.ts",
+          "packages/site/src/playground/state.ts",
+          "packages/site/src/routeData.ts",
+          "packages/site/vitest.config.ts"
+        ],
+        "reason": "The 47 TypeScript files of packages/site and the two configs of packages/ireko of 2026-11-25. The tsconfig of the site needs astro sync before tsc can list its files. The list only gets shorter, and a new file fails. The end: the site and its e2e specs are in a tsconfig that the typecheck script examines."
+      },
+      "tsconfig-test": {
+        "ignore": [
+          "packages/site/tsconfig.test.json"
+        ],
+        "reason": "The site has no tsconfig.test.json on 2026-11-25. The end: the same change as typed-files adds it, with its typecheck."
+      },
+      "runner-budget": {
+        "ignore": [
+          ".github/workflows/ci.yml"
+        ],
+        "reason": "The matrix of the job check in ci.yml has no max-parallel (3 versions of Node.js, so the budget holds). The end: ci.yml calls reusable-ci.yml of the template (rule shared-ci), which sets it."
+      },
+      "playwright-install": {
+        "ignore": [
+          ".github/workflows/ci.yml",
+          ".github/workflows/pages.yml"
+        ],
+        "reason": "ci.yml and pages.yml install Chromium with their own command. The end: ci.yml calls reusable-ci.yml (rule shared-ci) and pages.yml calls reusable-pages.yml (rule pages-site): the shared workflows use setup-playwright."
+      },
+      "shared-ci": {
+        "off": "ci.yml runs its own jobs: the Node.js matrix, the package smoke, the site with e2e tests, the module bytes and the release check. release.yml calls ci.yml as its verify job. The end: a pull request that moves ci.yml to reusable-ci.yml of the template, with its differences as inputs, and the word of the owner for the change to the release path."
+      },
+      "pages-site": {
+        "off": "pages.yml builds and deploys the site with its own jobs (share cards, e2e tests). The end: a pull request that moves pages.yml to reusable-pages.yml of the template, with .github/site.json."
+      }
+    }
   },
   "apiReport": {
     "packages": [
