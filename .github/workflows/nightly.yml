@@ -90,8 +90,8 @@ jobs:
       # A mutant can make a loop that never ends and fills the memory. On 11-23, 11-24 and 11-26 the runner of
       # one shard got a shutdown signal within 2 minutes of the start of the mutants (shard 4 of 11-26: at 168
       # of 727 mutants, three times in a row), and the time-out of a mutant (timeoutMS) did not stop it first.
-      # A heap limit for each node process stops such a mutant in its own test process: Stryker then counts the
-      # mutant and starts a new process, and the runner keeps its memory.
+      # A heap limit for each node process and a memory limit for the whole run (below) stop such a mutant in its own
+      # test process: Stryker then counts the mutant and starts a new process, and the runner keeps its memory.
       # A cancelled job uploads no artifact, so the step writes the use of the runner to its own log each 10 s:
       # memory, swap, free disk and the node processes.
       - name: The mutation tests of the files of the shard
@@ -116,7 +116,13 @@ jobs:
           trap 'kill "$sampler" 2>/dev/null || true' EXIT
           files=$(node scripts/mutation-shards.mjs list "$SHARD" "$SHARDS")
           echo "The files of shard $SHARD of $SHARDS: $files"
-          pnpm exec stryker run --mutate "$files"
+          # The heap limit alone did not hold (run 45782070119: shard 4 lost its runner after 47 minutes), since a
+          # buffer is outside the heap. A cgroup of 13 GB of the 16 GB of the runner holds each byte: the kernel then
+          # stops the largest process in it (a test process of Stryker), Stryker counts the mutant and starts a new
+          # process, and the runner keeps the rest. No swap, so the limit acts at once.
+          sudo systemd-run --scope --quiet -p MemoryMax=13G -p MemorySwapMax=0 --uid="$(id -u)" --gid="$(id -g)" -- \
+            env "PATH=$PATH" "HOME=$HOME" "IREKO_FAST=$IREKO_FAST" "FORCE_COLOR=$FORCE_COLOR" "NODE_OPTIONS=$NODE_OPTIONS" \
+            pnpm exec stryker run --mutate "$files"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
